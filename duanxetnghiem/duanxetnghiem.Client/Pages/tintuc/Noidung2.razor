@@ -1,0 +1,368 @@
+﻿@page "/NhungLoiIchKhiXetNghiemMauTaiNha"
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        margin-right: 2px;
+        padding: 0;
+        max-width: 100%;
+    }
+
+    .container {
+        max-width: 100%;
+        margin-right: 6px;
+        padding: 20px;
+    }
+
+    h1 {
+        color: #333;
+    }
+
+    .meta {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .share {
+        display: flex;
+        align-items: center;
+    }
+
+        .share a,
+        .zalo-share-button {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+    .date {
+        font-size: 14px;
+        color: #666;
+    }
+
+    .shortdescription {
+        margin-top: 20px;
+        text-align: justify;
+        font-size: 16px;
+    }
+
+    .description {
+        margin-top: 20px;
+        text-align: justify;
+        font-size: 16px;
+    }
+
+    .post-review {
+        margin-top: 20px;
+    }
+
+    .post-review-form textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        resize: vertical;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .note {
+        font-size: 12px;
+        color: #666;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .btn-primary:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+    .post-review-items {
+        margin-top: 20px;
+    }
+
+    .post-review-item {
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    .review-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .like,
+    .dislike {
+        cursor: pointer;
+        color: #007bff;
+    }
+
+        .like:after,
+        .dislike:after {
+            content: " Thích";
+            margin-left: 5px;
+        }
+</style>
+<div class="container">
+    <div class="row columns">
+        <div class="col-xs-12 col-md-15 column-main">
+            <div class="block-posts-single">
+                <h1 class="page-title">"Người hùng" thầm lặng thực hiện sứ mệnh cao cả suốt gần 30 năm</h1>
+                <div class="meta">
+                    <div class="share">
+                        <a id="fbShareLink" style="cursor: pointer;">
+                            <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M32 16C32 7.16253 24.8375 0 16 0C7.16253 0 0 7.16253 0 16C0 23.9875 5.85 30.6063 13.5 31.8063V20.625H9.43747V16H13.5V12.475C13.5 8.4656 15.8875 6.25 19.5437 6.25C21.2937 6.25 23.125 6.5625 23.125 6.5625V10.5H21.1063C19.1187 10.5 18.5 11.7344 18.5 13V16H22.9375L22.2281 20.625H18.5V31.8063C26.15 30.6063 32 23.9875 32 16Z" fill="#3B5998"></path>
+                                <path d="M22.2282 20.625L22.9375 16H18.5V13C18.5 11.7344 19.1188 10.5 21.1063 10.5H23.125V6.5625C23.125 6.5625 21.2938 6.25 19.5438 6.25C15.8876 6.25 13.5 8.4656 13.5 12.475V16H9.4375V20.625H13.5V31.8063C14.3156 31.9344 15.15 32 16 32C16.85 32 17.6844 31.9344 18.5 31.8063V20.625H22.2282Z" fill="white"></path>
+                            </svg>
+
+                        </a>
+                        <div class="zalo-share-button" data-href="" data-oaid="2830811318419977487" data-layout="3" data-color="blue" data-customize="false">
+                            <iframe id="7e9e623c-f214-4e09-89ec-a570af163eba" name="7e9e623c-f214-4e09-89ec-a570af163eba" frameborder="0" allowfullscreen="" scrolling="no" width="30px" height="30px" src="https://button-share.zalo.me/share_inline?id=7e9e623c-f214-4e09-89ec-a570af163eba&amp;layout=3&amp;color=blue&amp;customize=false&amp;width=30&amp;height=30&amp;isDesktop=true&amp;url=https%3A%2F%2Fmedlatec.vn%2Ftin-tuc%2F-nguoi-hung-tham-lang-thuc-hien-su-menh-cao-ca-suot-gan-30-nam&amp;d=eyJ1cmwiOiJodHRwczovL21lZGxhdGVjLnZuL3Rpbi10dWMvLW5ndW9pLWh1bmctdGhhbS1sYW5nLXRodWMtaGllbi1zdS1tZW5oLWNhby1jYS1zdW90LWdhbi0zMC1uYW0ifQ%253D%253D&amp;shareType=0"></iframe>
+                        </div>
+                    </div>
+                    <div class="date">
+                        Ngày 21/12/2023
+                    </div>
+                </div>
+                <div class="shortdescription">
+                    Trong bối cảnh đại dịch toàn cầu, vai trò của y tá không chỉ là những người hỗ trợ y tế mà còn là những chiến sĩ đứng đầu trong cuộc chiến chống lại virus. Một trong những nhiệm vụ quan trọng là việc lấy xét nghiệm máu tại nhà, và những bộ y tá kiên trì và nhạy bén đã vượt qua những khó khăn để đảm bảo rằng mọi người có thể được kiểm tra một cách an toàn và thuận tiện.
+                </div>
+                <ul class="single-new"></ul>
+                <div class="description">
+                    <h2 class="">Sự Nỗ Lực Không Ngừng</h2>
+                    <p style="text-align: justify; ">
+                        Những bộ y tá không ngừng phấn đấu, không chỉ trong các cơ sở y tế mà còn tận tâm thực hiện nhiệm vụ quan trọng của mình tại những nơi mà người dân cần sự hỗ trợ nhất.&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
+                    </p>
+                    <p style="text-align: justify; ">
+                        Họ đã đối mặt với những thách thức của thời tiết, giao thông, và những rủi ro liên quan đến việc thực hiện xét nghiệm máu tại những nơi khác nhau.Nhưng những cán bộ lại không từ bỏ nhiệm vụ của mình.
+                        <span style="font-size: 0.875rem;">&nbsp;&nbsp;</span>
+                    </p>
+                    <p style="text-align: center; ">
+                        <img src="anhtintuc5.jpg" style="">
+                        <span style="font-size: 0.875rem;">
+                            <br>
+                        </span>
+                    </p>
+                    <p style="text-align: center; ">
+                        <i>Bạn đồng hành mang sức khỏe đến mọi nhà trong gần 30 năm qua</i>
+                    </p>
+                    <h2 class="">Sự Nỗ Lực Không Ngừng</h2>
+                    <p style="text-align: justify; ">
+                        Những bộ y tá không ngừng phấn đấu, không chỉ trong các cơ sở y tế mà còn tận tâm thực hiện nhiệm vụ quan trọng của mình tại những nơi mà người dân cần sự hỗ trợ nhất.&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
+                    </p>
+                    <p style="text-align: justify; ">
+                        Họ đã đối mặt với những thách thức của thời tiết, giao thông, và những rủi ro liên quan đến việc thực hiện xét nghiệm máu tại những nơi khác nhau.Nhưng những cán bộ lại không từ bỏ nhiệm vụ của mình.
+                        <span style="font-size: 0.875rem;">&nbsp;&nbsp;</span>
+                    </p>
+                    <p style="text-align: center; ">
+                        <img src="anhtintuc5.jpg" style="">
+                        <span style="font-size: 0.875rem;">
+                            <br>
+                        </span>
+                    </p>
+                    <p style="text-align: center; ">
+                        <i>Bạn đồng hành mang sức khỏe đến mọi nhà trong gần 30 năm qua</i>
+                    </p>
+                    <p style="text-align: center; ">
+                        <i>Nhân viên lấy mẫu xét nghiệm tận nơi miệt mài làm việc bằng tất cả tâm huyết và trách nhiệm</i>
+                    </p>
+                    <p style="text-align: justify; ">
+                        Chia sẻ về kỷ niệm khó quên trong quá trình làm việc, anh Trần Đình Tiến tại Hải Phòng cho biết: “Tôi nhớ có hôm trời mưa to, gió lớn, đường xá vừa ngập vừa tắc. Mặc dù đã cố gắng đi sớm hơn dự kiến nhưng nhìn dòng người cứ thi nhau “điền” vào chỗ trống tôi đành phải gọi điện xin lỗi khách hàng vì đến muộn. Tới nơi, tôi phải gửi xe ở đầu ngõ để lội nước đi vào nhà khách lấy mẫu. Vào tới nơi thì thấy nhà hai cụ già cụ niềm nở chào đón và hỏi han rối rít, nghĩ thầm trong lòng bao công sức bon chen gần tiếng đồng hồ của tôi quả không hề lãng phí”.
+                        <span style="white-space:pre"></span>
+                    </p>
+                    <p style="text-align: center; ">
+                        <img src="anhtintuc2.jpg"> style="">
+                        <span style="white-space:pre">
+                            <br>
+                        </span>
+                    </p>
+                    <p style="text-align: center; ">
+                        <i>Hình ảnh chân thực cán bộ y tế lội nước vào nhà người dân để lấy mẫu xét nghiệm ngày&nbsp; mưa lũ</i>
+                    </p>
+                    <p style="text-align: justify; ">
+                        Không chỉ có cánh màu râu, các “nữ chiến binh” cũng xông xáo lên đường làm nhiệm vụ. Cán bộ Hồ Ngọc Châu, tại Thừa Thiên Huế nhớ như in tình cảnh “dở khóc dở cười” khi phải chèo thuyền đi lấy mẫu xét nghiệm trong những ngày Huế chìm trong biển nước hồi tháng 11 vừa qua.&nbsp; &nbsp; &nbsp;
+
+                    </p>
+                    <p style="text-align: justify;">
+                        Chị Châu bồi hồi kể lại:“Hôm đó, cơn mưa lớn như trút khiến cả thành phố Huế ngập trong biển nước. Giao thông bị chia cắt, hàng ngàn nhà dân bị cô lập. Rồi bỗng chuông điện thoại reo, báo có lịch đi lấy mẫu xét nghiệm cấp cứu. Đứng hình mất vài giây, nhìn dòng nước lũ và “con ngựa” chiến quen thuộc mà chỉ thấy lực bất tòng tâm. Nhanh chóng nảy số, tôi lội nước ra đầu ngõ rồi chèo thuyền tới nhà khách hàng. Tuy mất thời gian di chuyển hơn nhưng may sao vẫn tới được nhà khách hàng kịp thời”.
+                    </p>
+                    <h2 class="">4 triệu lượt sử dụng dịch vụ mỗi năm - Sự nỗ lực được thừa nhận</h2>
+                    <p style="text-align: justify; ">
+                        Được khai sinh tại Việt Nam từ năm 1996, đến nay sau hành trình gần 30 năm phát triển, dịch vụ lấy mẫu xét nghiệm tận nơi  (chèn Link đến https://medlatec.vn/) đã khẳng định vị thế khi nhận được sự tin chọn của 4 triệu người dân trên toàn quốc mỗi năm. Cùng với đó là những bước tiến vượt bậc trong việc mở rộng tầm vóc, vị thế của thương hiệu phủ sóng toàn quốc và vươn tầm quốc tế.
+                        <span style="white-space:pre"></span>
+                    </p>
+                    <p style="text-align: justify; ">
+                        Với mạng lưới 31 Trung tâm Xét nghiệm chi nhánh, 44 văn phòng lấy mẫu xét nghiệm tận nơi tại Hà Nội, hơn 200 văn phòng trên toàn quốc, 01 Trung tâm Xét nghiệm tại Campuchia, được phục vụ bởi đội ngũ gần 500 nhân viên lấy mẫu xét nghiệm có tay nghề cao, dịch vụ lấy mẫu xét nghiệm tận nơi (Chèn link https://medlatec.vn/dat-lich-lay-mau) đáp ứng nhanh chóng, kịp thời mọi nhu cầu của người dân.
+                    </p>
+                    <p style="text-align: center; ">
+                        <img src="anhtintuc4.jpg " style="">
+                        <br>
+                    </p>
+                    <p style="text-align: center; ">
+                        <i>Gần 500 “chiến binh” sẵn sàng đi đến từng nẻo đường phục vụ chăm sóc sức khỏe người dân</i>
+                    </p>
+                    <p style="text-align: center; ">
+                        <img src="anhtintuc3.jpg" style="">
+                        <i>
+                            <br>
+                        </i>
+                    </p>
+                    <p style="text-align: center; ">
+                        <i>Với những điểm cộng vượt trội, dịch vụ lấy mẫu xét nghiệm tận nơi là bạn đồng hành chăm sóc sức khỏe của mọi nhà</i>
+                    </p>
+                    <p style="text-align: center; "></p>
+                    <div style="text-align: justify;">
+                        <span style="font-size: 0.875rem; text-align: left;">
+                            Sự hài lòng và tin chọn của hàng triệu người dân chính là minh chứng cho chất lượng và tiện ích mà dịch vụ đem lại. Đây cũng là nguồn khích lệ, động viên tinh thần đội ngũ y, bác sĩ, nhân viên y tế Hệ thống Y tế MEDLATEC tiếp tục quyết tâm, nỗ lực, dành trọn tâm huyết nâng cao chất lượng dịch vụ y tế phục vụ khách hàng, vững bước trên hành trình nâng cao sức khỏe người dân Việt.
+                        </span>
+                    </div>
+                    <p>
+                    </p>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <p style="text-align: justify; ">Những tiện ích vượt trội của dịch vụ lấy mẫu xét nghiệm tận nơi </p>
+                                    <ul>
+                                        <li style="text-align: justify; ">
+                                            <b>Tiện lợi:</b> Đặt lịch dễ dàng qua hotline 1900 56 56 56, hoặc thao tác nhanh chóng tại ứng dụng ; tra cứu kết quả online hoặc trả tại nhà theo yêu cầu.
+                                        </li>
+                                        <li style="text-align: justify; ">
+                                            <b>Nhanh chóng:</b> Sau khi đặt lịch thành công, nhân viên đến lấy mẫu đúng theo lịch hẹn. Khách hàng nhận kết quả chỉ từ 2 giờ kể từ khi mẫu chuyển về Trung tâm Xét nghiệm (tùy từng loại xét nghiệm).
+                                        </li>
+                                        <li style="text-align: justify; ">
+                                            <b>Chi phí hợp lý: </b>Chi phí dịch vụ xét nghiệm tận nơi được niêm yết theo đúng bảng giá tại bệnh viện.
+                                        </li>
+                                        <li style="text-align: justify; ">
+                                            <b>An toàn:</b> Hạn chế tối đa nguy cơ lây nhiễm chéo tại các cơ sở y tế trong những thời điểm có nhiều dịch bệnh truyền nhiễm;
+                                        </li>
+                                        <li style="text-align: justify; ">
+                                            <b>Chất lượng:</b> Chất lượng xét nghiệm cam kết chính xác, do quy tụ đội ngũ chuyên gia giàu kinh nghiệm trên toàn quốc; thực hiện trên hệ thống trang thiết bị hiện đại, tự động hoàn toàn.
+                                        </li>
+                                    </ul>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="post-review">
+                    <div class="block-title">
+                        <h2>Bình luận (<span id="commentsCount">0</span>)</h2>
+                        <div class="action" id="loginOrRegisBtn">
+                            <a href="#" class="action action-login" data-toggle="modal" data-target="#myLogin">
+                                Đăng nhập
+                            </a>
+                            <span class="line"></span>
+                            <a href="#" class="action action-register" data-toggle="modal" data-target="#myRegister">
+                                Đăng ký
+                            </a>&nbsp;
+                            <span>để bình luận</span>
+                        </div>
+                    </div>
+                    <form id="CommentForm" action="/news/newscommentadd/" method="post">
+                        <input type="hidden" name="newsId" value="30821">
+                        <div class="post-review-form">
+                            <div>
+                                <textarea name="CommentText" id="comment" placeholder="Bạn nghĩ gì về tin này?" class="form-control"></textarea>
+                            </div>
+                            <span class="text-danger" id="commentMsg"></span>
+                            <div class="actions">
+                                <div class="note">
+                                    Ý kiến của bạn sẽ được xét duyệt trước khi đăng.
+                                </div>
+                                <div id="btnCommnent">
+                                    <button type="submit" class="btn btn-primary" disabled="">
+                                        Gửi bình luận
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <input name="__RequestVerificationToken" type="hidden" value="CfDJ8I96NPLj20pGgc_93Gw0US3xUUDPR54OueMp0iHWOH5_tl1slD3XXPQbUVycmO5ehcj8FSOCV4TMKrOJ5Jr3-6-kIRxkZMk2L4Bv2KalJanUF0JlEf6UKXnE89WfaXXMAoZidJD38QKVEi8LXKbm3X0">
+                    </form>
+                    <div class="post-review-items" id="comments">
+                        <style type="text/css">
+                            .post-review-item .review-actions .like:after {
+                                background-color: white;
+                            }
+                        </style>
+                        <script type="text/javascript">
+                            $("#btnLoadMore").click(function () {
+                                $(".hidden-comment").show();
+                                $(this).hide();
+                            });
+                            $(".like").click(function () {
+                                var el = $(this);
+                                var commentId = el.data("id");
+                                if (el.hasClass('like')) {
+                                    $.ajax({
+                                        async: false,
+                                        cache: false,
+                                        type: 'POST',
+                                        url: '/news/likecomment/',
+                                        data: {
+                                            commentId: commentId
+                                        },
+                                        success: function (res) {
+                                            if (res.Success) {
+                                                el.text(res.LikeCount + " Thích");
+                                                el.attr('class', 'dislike');
+                                            }
+                                        }
+                                    });
+                                }
+                                else {
+                                    $.ajax({
+                                        async: false,
+                                        cache: false,
+                                        type: 'POST',
+                                        url: '/news/unlikecomment/',
+                                        data: {
+                                            commentId: commentId
+                                        },
+                                        success: function (res) {
+                                            if (res.Success) {
+                                                el.text(res.LikeCount + " Thích");
+                                                el.attr('class', 'like');
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        </script>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@code {
+
+}
