@@ -1,0 +1,85 @@
+﻿@page "/BSedit/{id:int}"
+@inject IConfiguration config
+<div class="container">
+    <p>@img</p>
+    <div class="row">
+        <div class="col-md-4">
+            <img src="@Input.Anh" class="profile-image" alt="Avatar">
+            <InputFile class="form-control mt-2" />
+
+        </div>
+        <div class="col-md-8">
+            <h2 class="mb-4">Thông tin bác sĩ</h2>
+            <EditForm Model="Input" method="post" onchange="edit" FormName="register" class="profile-form">
+                <DataAnnotationsValidator />
+                <hr />
+                <ValidationSummary class="text-danger" role="alert" />
+                <div class="mb-3">
+                    <label for="Hoten" class="form-label">Họ Tên</label>
+                    <InputText @bind-Value="Input.Hoten" class="form-control" id="Hoten" />
+                    <ValidationMessage For="() => Input.Hoten" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="Chucvu" class="form-label">Chức Vụ</label>
+                    <InputText @bind-Value="Input.Chucvu" class="form-control" id="Chucvu" />
+                    <ValidationMessage For="() => Input.Chucvu" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="SDT" class="form-label">Số Điện Thoại</label>
+                    <InputText @bind-Value="Input.SDT" class="form-control" id="SDT" />
+                    <ValidationMessage For="() => Input.SDT" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="Email" class="form-label">Email</label>
+                    <InputText @bind-Value="Input.Email" class="form-control" id="Email" />
+                    <ValidationMessage For="() => Input.Email" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="Anh" class="form-label">Chọn Ảnh</label>
+                    <InputFile OnChange='LoadFiles' class="form-control" />
+                </div>
+                <button type="submit" class="btn btn-primary">Lưu</button>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    public BacSi Input { get; set; } = new();
+
+    [Parameter]
+    public int id { get; set; }
+
+    string img="aa";
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadBS();
+    }
+    private async Task edit()
+    {
+        
+    }
+    public IBrowserFile file;
+    private async void LoadFiles(InputFileChangeEventArgs e)
+    {
+        file = e.File;
+        if (file is not null)
+        {
+            string filename = Path.ChangeExtension(
+                Path.GetRandomFileName(),
+                Path.GetExtension(file.Name)
+            );
+            string path = Path.Combine(config.GetValue<string>("Fileupload")!, "BS", filename);
+            string re = Path.Combine("BS", filename);
+            Directory.CreateDirectory(Path.Combine(config.GetValue<string>("Fileupload")!, "BS"));
+            await using FileStream fileStream = new(path, FileMode.Create);
+            await file.OpenReadStream().CopyToAsync(fileStream);
+
+        }
+    }
+    public async Task LoadBS()
+    {
+        Input = await bacsiservice.getbyid(id);
+    }
+}

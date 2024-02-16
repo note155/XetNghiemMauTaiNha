@@ -1,1 +1,40 @@
-﻿
+﻿@page "/img"
+@inject IConfiguration config
+@rendermode InteractiveAuto
+
+<InputFile OnChange="LoadFiles" multiple />
+<p>@currentCount</p>
+<p>@a</p>
+@code {
+    private int currentCount = 0;
+    string a = "";
+    private async Task LoadFiles(InputFileChangeEventArgs e)
+    {
+        currentCount++;
+        if (e.File is not null)
+        {
+            try
+            {
+                a = e.File.Name;
+                string filename = Path.ChangeExtension(Path.GetRandomFileName(), Path.GetExtension(a));
+                string basePath = "D:\\khoaluan\\duanxetnghiem\\duanxetnghiem\\duanxetnghiem.Client\\wwwroot\\img\\Bacsi";
+                Directory.CreateDirectory(basePath); // Ensure directory exists
+                string filePath = Path.Combine(basePath, filename); // Use Path.Combine for path concatenation
+                a = filePath;
+                using (FileStream fs = new(filePath, FileMode.Create))
+                {
+                    await e.File.OpenReadStream(3 * 1024 * 1024).CopyToAsync(fs);
+                }
+                currentCount++;
+            }
+            catch (Exception ex)
+            {
+                // Log or display the exception message for debugging
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
+    }
+
+}
+
+

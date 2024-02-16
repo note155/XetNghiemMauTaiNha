@@ -1,9 +1,9 @@
-﻿@page "/counter"
+﻿@page "/mlem"
 @rendermode InteractiveAuto
 @inject IConfiguration config
 @using System.IO
 
-<InputFile OnChange="LoadFilesAsync"  multiple />
+<InputFile OnChange="LoadFilesAsync" multiple />
 
 <p>@currentCount</p>
 
@@ -28,7 +28,7 @@
 
             try
             {
-                string newFileName = Path.ChangeExtension(Path.GetRandomFileName(), Path.GetExtension(file.Name));
+                string newFileName = Path.ChangeExtension(DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss"), Path.GetExtension(file.Name));
                 string directoryPath = Path.Combine("D:\\khoaluan", "test");
                 string filePath = Path.Combine(directoryPath, newFileName);
                 Directory.CreateDirectory(directoryPath);

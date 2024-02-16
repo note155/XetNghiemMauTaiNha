@@ -1,0 +1,22 @@
+﻿.profile-image {
+    max-width: 100%;
+    border-radius: 50%;
+}
+
+.profile-form {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+    border: none;
+}
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        color: #fff;
+    }
