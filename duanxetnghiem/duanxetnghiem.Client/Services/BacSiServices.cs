@@ -34,9 +34,17 @@ namespace duanxetnghiem.Client.Services
 
         public async Task<BacSi> getbyid(int Id)
         {
-            var onestudent = await _httpClient.GetAsync("api/BacSi/Single-BacSi");
-            var respone = await onestudent.Content.ReadFromJsonAsync<BacSi>();
-            return respone;
+            var response = await _httpClient.GetAsync($"api/BacSi/Single-BacSi/{Id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var respone = await response.Content.ReadFromJsonAsync<BacSi>();
+                return respone;
+            }
+            else
+            {
+                // Xử lý khi không thành công, ví dụ: trả về null hoặc throw exception
+                return null;
+            }
         }
 
         public async Task<BacSi> updateAsync(BacSi User)

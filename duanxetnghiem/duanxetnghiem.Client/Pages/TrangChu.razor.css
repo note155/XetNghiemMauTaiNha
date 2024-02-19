@@ -25,61 +25,6 @@
     flex-direction: column;
 }
 
-.xntn-why-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
-
-.xntn-why-item {
-    background-color: #FFFFFF;
-    border: 1px solid #CEE8FA;
-    width: calc(33.33% - 5px);
-    padding: 20px;
-    min-height: 180px;
-    font-weight: 500;
-    font-size: 16px;
-    box-sizing: border-box;
-    margin-bottom: 5px;
-    transition: box-shadow 0.3s ease, background-color 0.3s ease;
-}
-
-    .xntn-why-item:hover {
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        background-color: #66B2FF;
-    }
-
-.xntn-why-item-image {
-    margin-bottom: 10px;
-    height: 80px;
-}
-
-    .xntn-why-item-image img,
-    .xntn-why-item-image svg {
-        max-width: 100%;
-        max-height: 100%;
-        display: block;
-    }
-
-.xntn-why-item-title {
-    display: block;
-    margin: 0;
-    color: #132432;
-    font-weight: 600;
-    font-size: 20px;
-    line-height: 1.5;
-}
-
-.xntn-why-item-des {
-    margin-top: 12px;
-}
-
-.xntn-why-item-detail {
-    position: relative;
-    z-index: 2;
-    font-size: 14px;
-    width: 100%;
-}
 .row {
     margin-bottom: 5px;
     display: flex;
@@ -123,6 +68,7 @@
     transform: scale(1.1);
     transition: transform 0.3s ease-in-out;
 }
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -181,3 +127,40 @@ iframe {
 
 
 /* Thêm CSS để căn chỉnh nút về phía bên phải của bảng */
+/*Tai sao chhon chung toi*/
+.card {
+    transition: transform 0.3s ease-in-out;
+    height: 100%;
+}
+    /*
+    .card:not(.no-hover):hover {
+        background-color: #66b2ff;
+        Màu nền khi di chuột qua 
+        color: #fff;
+    }
+    */
+    .card:hover {
+        transform: scale(1.05);
+    }
+
+    .card img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+    }
+
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.card-title {
+    font-size: 2.5vw; /* Sử dụng vw để tự động điều chỉnh kích thước theo chiều rộng của viewport */
+}
+
+.card-text {
+    flex-grow: 1;
+}

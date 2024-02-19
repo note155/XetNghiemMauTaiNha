@@ -1,8 +1,10 @@
-﻿.profile-image {
+﻿/* Styling for the profile image */
+.profile-image {
     max-width: 100%;
     border-radius: 50%;
 }
 
+/* Styling for the profile form */
 .profile-form {
     padding: 20px;
     border: 1px solid #ccc;
@@ -10,13 +12,26 @@
     background-color: #f9f9f9;
 }
 
+/* Styling for primary buttons */
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition on hover */
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+/* Styling for secondary buttons */
 .btn-secondary {
     background-color: #6c757d;
     color: #fff;
     border: none;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition on hover */
 }
 
     .btn-secondary:hover {
         background-color: #5a6268;
-        color: #fff;
     }
