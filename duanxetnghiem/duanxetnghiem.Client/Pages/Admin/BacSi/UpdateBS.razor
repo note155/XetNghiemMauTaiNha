@@ -1,7 +1,7 @@
 ﻿@page "/BSedit/{id:int}"
 @inject HttpClient client
 @rendermode InteractiveAuto
-
+@inject NavigationManager navigation;
 <div class="container">
     <div class="row">
         <div class="col-md-4">
@@ -14,11 +14,19 @@
             </EditForm>
         </div>
         <div class="col-md-8">
-            <h2 class="mb-4">Thông tin bác sĩ</h2>
-            <EditForm Model="Input" method="post" onchange="edit" FormName="register" class="profile-form">
+            <h2 class="mb-4">Thêm bác sĩ</h2>
+            <EditForm Model="Input" method="post" OnValidSubmit="add" FormName="register" class="profile-form">
                 <DataAnnotationsValidator />
                 <hr />
-                <ValidationSummary class="text-danger" role="alert" />
+                @if (err.Any())
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @foreach (var error in err)
+                        {
+                            <p>@error</p>
+                        }
+                    </div>
+                }
                 <div class="mb-3">
                     <label for="Hoten" class="form-label">Họ Tên</label>
                     <InputText @bind-Value="Input.Hoten" class="form-control" id="Hoten" />
@@ -52,41 +60,66 @@
     [Parameter]
     public int id { get; set; }
 
+    string a = "";
     public string img="img/Bacsi/";
     private WebAssemblyTicket Ticket { get; set; } = new();
     private WebAssemblyTicket load { get; set; } = new();
     private long maxFileSize = 5120000;
-    private string Message { get; set; } = String.Empty;
+    private List<string> err = new List<string>();
     string safeFileName = "";
     protected override async Task OnInitializedAsync()
     {
         await LoadBS();
     }
-    private async Task edit()
+    private async Task add()
     {
-        await bacsiservice.updateAsync(Input);
+        err.Clear(); // Xóa thông báo lỗi cũ
+        if (string.IsNullOrEmpty(Input.Hoten))
+        {
+            err.Add("Họ Tên không được để trống");
+        }
+        if (string.IsNullOrEmpty(Input.Chucvu))
+        {
+            err.Add("Chức Vụ không được để trống");
+        }
+        if (string.IsNullOrEmpty(Input.SDT))
+        {
+            err.Add("Số Điện Thoại không được để trống");
+        }
+        if (string.IsNullOrEmpty(Input.Email))
+        {
+            err.Add("Email không được để trống");
+        }
+
+        if (err.Count == 0)
+        {
+
+            await bacsiservice.updateAsync(Input);
+            navigation.NavigateTo("/ListBS");
+        }
     }
     public async Task LoadBS()
     {
         Input = await bacsiservice.getbyid(id);
     }
- 
+
     private void setfile(InputFileChangeEventArgs e)
     {
         Ticket.Attachments = e.GetMultipleFiles();
     }
     private async Task OnSubmit()
     {
+        err.Clear();
         try
         {
             using MultipartFormDataContent content = new();
 
-          
+
             foreach (var file in Ticket.Attachments)
             {
                 // Add file attachment
                 string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-                 safeFileName = $"{timestamp}{Path.GetExtension(file.Name)}";
+                safeFileName = $"{timestamp}{Path.GetExtension(file.Name)}";
                 var fileContent = new StreamContent(file.OpenReadStream(maxFileSize));
                 fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse(file.ContentType);
                 content.Add(fileContent, "Attachments", safeFileName);
@@ -95,14 +128,16 @@
             // Send to API endpoint
             var response = await client.PostAsync("/upload", content);
 
-            Message = response.IsSuccessStatusCode ? "Upload successful!" : response.ReasonPhrase;
+            string Message = response.IsSuccessStatusCode ? "Đổi ảnh thành công" : response.ReasonPhrase;
+            err.Add(Message);
             Ticket = new();
             Input.Anh = img + safeFileName;
             await bacsiservice.updateAsync(Input);
         }
         catch (Exception e)
         {
-            Message = "Upload failed. Error: " + e.Message;
+            String Message = "Upload failed. Error: " + e.Message;
+            err.Add(Message);
         }
     }
 

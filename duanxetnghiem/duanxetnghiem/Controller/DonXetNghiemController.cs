@@ -52,7 +52,6 @@ namespace duanxetnghiem.Controller
         public async Task<ActionResult<DonXetNghiem>> UpdateStudentAsync(DonXetNghiem user)
         {
             var updatestudent = await _DXNRepository.updateAsync(user);
-
             return Ok(updatestudent);
         }
     }

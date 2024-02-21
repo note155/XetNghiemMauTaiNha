@@ -48,11 +48,11 @@ namespace duanxetnghiem.Services
         {
             if (donXetNghiem == null) return null;
 
-            var updateDonXetNghiem = _context.DonXetNghiems.Update(donXetNghiem).Entity;
+            var updateuser = _context.DonXetNghiems.Update(donXetNghiem).Entity;
 
             await _context.SaveChangesAsync();
 
-            return updateDonXetNghiem;
+            return updateuser;
         }
     }
 }

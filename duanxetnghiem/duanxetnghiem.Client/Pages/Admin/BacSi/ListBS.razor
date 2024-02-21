@@ -1,7 +1,7 @@
 ﻿@page "/ListBS"
 @rendermode InteractiveAuto
-
-
+ @inject IJSRuntime JS
+ @inject NavigationManager navigation;
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -29,8 +29,8 @@
                                                 <th>Họ Tên</th>
                                                 <th>Chức Vụ</th>
                                                 <th>Số Điện Thoại</th>
-                                                <th>Edit</th>
-                                                <th>Delete</th>
+                                                <th></th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -46,7 +46,7 @@
                                                         <a class="btn btn-success" href="/BSedit/@DXN.Id"> Edit </a>
                                                     </td>
                                                     <td>
-                                                        <a class="btn btn-danger" href=""> Delete </a>
+                                                        <a class="btn btn-danger" href="#" @onclick="() => ConfirmDelete(DXN.Id)"> Delete </a>
                                                     </td>
                                                 </tr>
                                             }
@@ -67,11 +67,12 @@
 </div>
 @code {
     public List<BacSi> AllBS { get; set; } = new();
+
     protected override async Task OnInitializedAsync()
     {
         await LoadAlLBS();
-    }
 
+    }
 
 
     public async Task LoadAlLBS()
@@ -85,5 +86,16 @@
             AllBS.Add(student);
         }
     }
+    public async Task ConfirmDelete(int id)
+    {
+        var doctorToDelete = AllBS.FirstOrDefault(d => d.Id == id);
+        if (await JS.InvokeAsync<bool>("confirm", "Bạn có chắc muốn xóa?"))
+        {
+            AllBS.Remove(doctorToDelete);
+            navigation.NavigateTo("/BSdelete/" + id);
+        }
+    }
 }
+
+
 

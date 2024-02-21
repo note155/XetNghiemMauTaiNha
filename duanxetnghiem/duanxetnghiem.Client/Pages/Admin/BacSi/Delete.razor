@@ -1,0 +1,24 @@
+﻿@page "/BSdelete/{id:int}"
+@inject NavigationManager navigation;
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+    private bool dataLoaded = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await DeleteAndReloadData();
+    }
+
+    private async Task DeleteAndReloadData()
+    {
+        await LoadAllBS();
+        navigation.NavigateTo("/ListBS");
+    }
+
+    private async Task LoadAllBS()
+    {
+        await bacsiservice.deleteAsync(id);
+    }
+}

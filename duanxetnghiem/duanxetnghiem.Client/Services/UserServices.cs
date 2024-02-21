@@ -14,35 +14,35 @@ namespace duanxetnghiem.Client.Services
         }
         public async Task<int> adduserAsync(User user)
         {
-            var newstudent = await _httpClient.PostAsJsonAsync("api/Studen/Add-User", user);
+            var newstudent = await _httpClient.PostAsJsonAsync("api/User/Add-User", user);
             var respone = await newstudent.Content.ReadFromJsonAsync<int>();
             return respone;
         }
        
         public async Task<User> deleteuserAsync(int id)
         {
-            var newstudent = await _httpClient.PostAsJsonAsync("api/Studen/Delete-User", id);
+            var newstudent = await _httpClient.PostAsJsonAsync("api/User/Delete-User", id);
             var respone = await newstudent.Content.ReadFromJsonAsync<User>();
             return respone;
         }
 
         public async Task<List<User>> getalluserAsync()
         {
-            var allstudent = await _httpClient.GetAsync("api/Studen/All-User");
+            var allstudent = await _httpClient.GetAsync("api/User/All-User");
             var respone = await allstudent.Content.ReadFromJsonAsync<List<User>>();
             return respone;
         }
 
         public async Task<User> getuserbyid(int Id)
         {
-            var onestudent = await _httpClient.GetAsync("api/Studen/Single-User");
+            var onestudent = await _httpClient.GetAsync($"api/User/Single-User/{Id}");
             var respone = await onestudent.Content.ReadFromJsonAsync<User>();
             return respone;
         }
 
         public async Task<int> IsUserExistsAsync(User user)
         {
-            var allstudent = await _httpClient.PostAsJsonAsync("api/Studen/EmailExists", user);
+            var allstudent = await _httpClient.PostAsJsonAsync("api/User/EmailExists", user);
             var respone = await allstudent.Content.ReadFromJsonAsync<int>();
             return respone;
         }

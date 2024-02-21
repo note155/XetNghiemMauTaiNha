@@ -1,7 +1,9 @@
 ﻿/* Styling for the profile image */
 .profile-image {
-    max-width: 100%;
+    max-width: 300px;
     border-radius: 50%;
+    height:300px;
+    width :300px;
 }
 
 /* Styling for the profile form */

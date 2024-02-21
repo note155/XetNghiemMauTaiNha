@@ -1,12 +1,9 @@
 ﻿@page "/AddBS"
-@using Microsoft.AspNetCore.Authorization
-@inject IConfiguration config
-@attribute [Authorize]
-@inject NavigationManager navigation;
 @rendermode InteractiveAuto
+@inject NavigationManager navigation;
 <div class="container">
     <div class="col-md-8">
-        <h2 class="mb-4">Thông tin bác sĩ</h2>
+        <h2 class="mb-4">Thêm bác sĩ</h2>
         <EditForm Model="Input" method="post" OnValidSubmit="add" FormName="register" class="profile-form">
             <DataAnnotationsValidator />
             <hr />
@@ -38,10 +35,6 @@
                 <label for="Email" class="form-label">Email</label>
                 <InputText @bind-Value="Input.Email" class="form-control" id="Email" />
                 <ValidationMessage For="() => Input.Email" class="text-danger" />
-            </div>
-            <div class="mb-3">
-                <label for="Anh" class="form-label">Chọn Ảnh</label>
-                <InputFile OnChange='LoadFiles' class="form-control" />
             </div>
             <button type="submit" class="btn btn-primary">Lưu</button>
         </EditForm>

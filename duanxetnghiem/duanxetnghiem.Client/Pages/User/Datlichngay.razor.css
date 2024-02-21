@@ -1,0 +1,32 @@
+﻿body {
+    font-size: 16px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+}
+
+.card {
+    text-align: center;
+    width: 100%;
+    height: 800%;
+}
+
+.card-body {
+    background-color: #fff;
+    padding: 1rem;
+}
+
+.btn-datlịch {
+    background-color: #66b2ff;
+    color: #fff;
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+    .btn-datlịch:active {
+        background-color: #1a8cff !important; /* Màu đỏ */
+    }
+
+    .btn-datlịch:hover {
+        background-color: #66b2ff;
+        color: #fff;
+    }

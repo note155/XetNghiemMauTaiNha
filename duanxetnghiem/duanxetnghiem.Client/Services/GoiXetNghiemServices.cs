@@ -27,14 +27,14 @@ namespace duanxetnghiem.Client.Services
 
         public async Task<List<GoiXetNghiem>> getallAsync()
         {
-            var allstudent = await _httpClient.GetAsync("api/GXN/All-GXN");
+            var allstudent = await _httpClient.GetAsync("api/GoiXetNghiem/All-GXN");
             var respone = await allstudent.Content.ReadFromJsonAsync<List<GoiXetNghiem>>();
             return respone;
         }
 
         public async Task<GoiXetNghiem> getbyid(int Id)
         {
-            var onestudent = await _httpClient.GetAsync("api/GXN/Single-GXN");
+            var onestudent = await _httpClient.GetAsync($"api/GoiXetNghiem/Single-GXN/{Id}");
             var respone = await onestudent.Content.ReadFromJsonAsync<GoiXetNghiem>();
             return respone;
         }
