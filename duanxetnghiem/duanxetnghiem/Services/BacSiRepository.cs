@@ -39,6 +39,12 @@ namespace duanxetnghiem.Services
             return await _context.BacSis.ToListAsync();
         }
 
+        public async Task<BacSi> getbyemail(string email)
+        {
+            return await _context.BacSis.FirstOrDefaultAsync(b => b.Email == email);
+        }
+
+
         public async Task<BacSi> getbyid(int Id)
         {
             return await _context.BacSis.FindAsync(Id);

@@ -27,6 +27,7 @@ builder.Services.AddScoped<IGoiXetNghiem, GoiXetNghiemRepository>();
 builder.Services.AddScoped<IBacSi, BacSiRepository>();
 builder.Services.AddScoped<IDonXetNghiem, DonXetNghiemRepository>();
 builder.Services.AddScoped<IKetQuaXetNghiem, KetQuaXetNghiemRepository>();
+builder.Services.AddScoped<ITuChoi, TuChoiRepository>();
 builder.Services.AddScoped(http => new HttpClient
 {
     BaseAddress = new Uri(builder.Configuration.GetSection("BaseAdress").Value)

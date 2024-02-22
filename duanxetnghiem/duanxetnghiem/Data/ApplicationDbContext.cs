@@ -1,6 +1,7 @@
 using duanxetnghiem.Data.Model;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Shared.Model;
 
 
 namespace duanxetnghiem.Data
@@ -14,6 +15,7 @@ namespace duanxetnghiem.Data
         public DbSet<GoiXetNghiem> GoiXetNghiems { get; set; }
         public DbSet<DonXetNghiem> DonXetNghiems { get; set; }
         public DbSet<KetQuaXetNghiem> KetQuaXetNghiems { get; set; }
+        public DbSet<TuChoi> TuChois { get; set; }
         public object User { get; internal set; }
     }
 

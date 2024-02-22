@@ -14,5 +14,6 @@ namespace Shared.ketnoi
         Task<BacSi> deleteAsync(int id);
         Task<List<BacSi>> getallAsync();
         Task<BacSi> getbyid(int Id);
+        Task<BacSi> getbyemail(string email);
     }
 }

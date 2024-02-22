@@ -31,6 +31,14 @@ namespace duanxetnghiem.Controller
             return Ok(student);
         }
 
+        [HttpGet("SingleEmail-BacSi/{email}")]
+        public async Task<ActionResult<BacSi>> GetSingleBacSitAsync(string email)
+        {
+            var student = await _BacSiRepository.getbyemail(email);
+
+            return Ok(student);
+        }
+
         [HttpPost("Add-BacSi")]
         public async Task<ActionResult<BacSi>> AddNewBacSiAsync(BacSi user)
         {

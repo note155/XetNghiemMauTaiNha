@@ -21,6 +21,7 @@
                             @if (AllBS.Any())
                             {
                                 <div class="card-body">
+                                   <div class="table-responsive">
                                     <table class="table table-striped table-hover">
                                         <thead>
                                             <tr>
@@ -52,6 +53,7 @@
                                             }
                                         </tbody>
                                     </table>
+                                    </div>
                                 </div>
                             }
                             else
@@ -93,6 +95,10 @@
         {
             AllBS.Remove(doctorToDelete);
             navigation.NavigateTo("/BSdelete/" + id);
+        }
+        else
+        {
+            navigation.NavigateTo("/ListBS");
         }
     }
 }

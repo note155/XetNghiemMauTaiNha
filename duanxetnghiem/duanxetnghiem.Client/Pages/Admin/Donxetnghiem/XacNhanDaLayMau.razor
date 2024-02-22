@@ -1,0 +1,139 @@
+﻿@page "/XacNhanLayMau/{id:int}"
+@rendermode InteractiveAuto
+ @inject NavigationManager navigation;
+<div id="map" style="height: 400px;"></div>
+<div class="patient-registration-container">
+    <div class="patient-info">
+        <h2>Thông tin bệnh nhân</h2>
+        <div class="info">
+            <p><strong>Họ tên:</strong> @user.Hoten</p>
+            <p><strong>Tuổi:</strong> @user.Tuoi</p>
+            <p><strong>Số điện thoại:</strong> @user.SDT</p>
+            <p><strong>Địa chỉ:</strong> @user.Diachi</p>
+            <p><strong>Email:</strong> @user.Email</p>
+            <p><strong>Giới tính:</strong> @gioitinh(@user.Gioitinh)</p>
+        </div>
+    </div>
+
+    <div class="test-registration-form">
+        <h2>Thông tin đơn đăng ký xét nghiệm</h2>
+        <EditForm Model="Input" method="post" OnValidSubmit="add" FormName="register" class="profile-form">
+            <DataAnnotationsValidator />
+            <hr />
+
+
+            <div class="form-group">
+                <label for="ngaytaodon">Ngày tạo đơn</label>
+                <InputDate @bind-Value="Input.ngaytaodon" class="form-control" id="Ngaytaodon" readonly />
+                <ValidationMessage For="() => Input.ngaytaodon" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label for="Ngaydat">Ngày Lấy Máu</label>
+                <InputDate @bind-Value="Input.Ngaydat" class="form-control" id="Ngaydat" min="@DateTime.Now.ToString("yyyy-MM-dd")" readonly />
+                <ValidationMessage For="() => Input.Ngaydat" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label for="giolaymau">Giờ lấy máu</label>
+                <InputText @bind-Value="Input.giolaymau" class="form-control" id="giolaymau" readonly />
+                <ValidationMessage For="() => Input.giolaymau" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label for="ghiChu">Ghi chú của bệnh nhân</label>
+                <InputTextArea @bind-Value="Input.ghiChu" class="form-control" id="ghiChu" readonly />
+                <ValidationMessage For="() => Input.ghiChu" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label for="GoiXetNghiemId">Gói xét nghiệm</label>
+                <InputNumber @bind-Value="Input.GoiXetNghiemId" class="form-control" id="GoiXetNghiemId" readonly />
+                <label>Tên Gói Xét Nghiệm: @loadGXN(Input.GoiXetNghiemId)</label>
+                <ValidationMessage For="() => Input.GoiXetNghiemId" class="text-danger" />
+            </div>
+        </EditForm>
+    </div>
+</div>
+@code {
+    string diachi1 = "23 Lý Nhân Tông,Tp Huế";
+    string diachi2 = "";
+    private List<string> err = new List<string>();
+    private User user = new User();
+    public List<GoiXetNghiem> allGXN { get; set; } = new();
+    string valor, idbs;
+
+    [SupplyParameterFromForm]
+    public DonXetNghiem Input { get; set; } = new();
+
+    [Parameter]
+    public int id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Input = await DXNservice.getbyid(id);
+        user = await Usertservice.getuserbyid(Input.UserId);
+        allGXN = await GXNservice.getallAsync();
+        diachi2 = user.Diachi;
+    }
+    private async Task add()
+    {
+
+    }
+    public String loadGXN(int id)
+    {
+        foreach (var gxn in allGXN)
+        {
+            if (gxn.Id == id)
+            {
+                return gxn.TenGoi;
+            }
+        }
+        return null;
+    }
+    private String gioitinh(bool a)
+    {
+        if (a)
+        {
+            return "Nam";
+        }
+        else
+        {
+            return "Nữ";
+        }
+    }
+    private void LoadBSInfo(string id)
+    {
+        idbs = id;
+        valor = id;
+    }
+}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        initMap();
+    });
+    function initMap() {
+        var diachi1 = "@diachi1"; // Lấy giá trị diachi1 từ code Blazor
+        var diachi2 = "@diachi2"; // Lấy giá trị diachi2 từ code Blazor
+        var directionsService = new google.maps.DirectionsService();
+        var directionsRenderer = new google.maps.DirectionsRenderer();
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+        directionsRenderer.setMap(map);
+
+        var request = {
+            origin: diachi1,
+            destination: diachi2,
+            travelMode: google.maps.TravelMode.DRIVING
+        };
+
+        directionsService.route(request, function (result, status) {
+            if (status == 'OK') {
+                directionsRenderer.setDirections(result);
+            } else {
+                alert('Directions request failed due to ' + status);
+            }
+        });
+    }
+
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap" async defer></script>

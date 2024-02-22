@@ -46,13 +46,27 @@ namespace duanxetnghiem.Client.Services
                 return null;
             }
         }
-
+        public async Task<BacSi> getbyemail(string email)
+        {
+            var response = await _httpClient.GetAsync($"api/BacSi/SingleEmail-BacSi/{email}");
+            if (response.IsSuccessStatusCode)
+            {
+                var respone = await response.Content.ReadFromJsonAsync<BacSi>();
+                return respone;
+            }
+            else
+            {
+                // Xử lý khi không thành công, ví dụ: trả về null hoặc throw exception
+                return null;
+            }
+        }
         public async Task<BacSi> updateAsync(BacSi User)
         {
             var newstudent = await _httpClient.PostAsJsonAsync("api/BacSi/Update-BacSi", User);
             var respone = await newstudent.Content.ReadFromJsonAsync<BacSi>();
             return respone;
         }
+
     }
 
 }

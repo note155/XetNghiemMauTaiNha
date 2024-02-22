@@ -118,7 +118,9 @@
                     <!-- Thêm các trường thông tin khác của bác sĩ nếu cần -->
                 </div>
             }
+            <a href="/ListDXN"><button style="background-color:red" class="btn btn-primary"> Hủy </button></a>
             <button type="submit" class="btn btn-primary">Duyệt</button>
+            
         </EditForm>
     </div>
 </div>
@@ -149,7 +151,7 @@
     {
         err.Clear(); // Xóa danh sách lỗi trước đó
                      // Kiểm tra ngày lấy máu
-        // Kiểm tra giờ lấy máu
+                     // Kiểm tra giờ lấy máu
         if (string.IsNullOrWhiteSpace(Input.giolaymau))
         {
             err.Add("Giờ lấy máu không được để trống.");
@@ -189,6 +191,7 @@
     private void LoadBSInfo(int id)
     {
         idbs = id;
+        valor = id;
         if (id != 0)
         {
             SelectedDoctor = AllBS.FirstOrDefault(bs => bs.Id == id)!;
