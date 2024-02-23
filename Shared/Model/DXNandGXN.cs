@@ -8,13 +8,12 @@ using duanxetnghiem.Data.Model;
 
 namespace Shared.Model
 {
-	internal class DXN_GXN
+	public class DXNandGXN
 	{
 		[Key]
 		public int Id { get; set; }
 		public int DonXetNghiemId { get; set; }
 		public DonXetNghiem DonXetNghiem { get; set; }
 		public int GoiXetNghiemId { get; set; }
-		public GoiXetNghiem? GoiXetNghiem { get; set; }
 	}
 }

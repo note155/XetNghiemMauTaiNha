@@ -1,111 +1,230 @@
 ﻿@page "/dichvu"
-
-<div class="row d-flex align-items-center justify-content-center">
-    <div class="col-md-6 d-flex flex-column align-items-center">
+<div class="background-container" style="background-image: url('anhnen.jpg');">
+    <div class="row d-flex align-items-center justify-content-center" style="width: 100%; height: 300px;margin:auto;">
+        <div class="col-md-6 d-flex flex-column align-items-center">
             <!-- title -->
-            <div class="title" style="font-family: 'Roboto'; font-weight: 700; font-size: 40px; line-height: 48px; color: #000000;">
+            <div class="title">
                 Xét nghiệm máu tại nhà
             </div>
             <!-- description -->
-            <div class="description" style="font-family: 'Roboto'; font-weight: 400; font-size: 20px; line-height: 24px; color: #000000;">
+            <div class="description">
                 Chẩn đoán sớm, chăm sóc sức khỏe của bạn
             </div>
             <div class="d-flex flex-row gap-3">
-                <a href="quytrinh" class="secondary btn" style="width: 160px; height: 48px; border: 1px solid #000000; border-radius: 8px; display: flex; justify-content: center; align-items: center;">
-                    <div style="font-family: 'Roboto'; font-weight: 500; font-size: 16px; line-height: 24px; color: #000000;">
+                <a href="quytrinh" class="secondary btn" style="width: 140px; height: 48px; border: 1px solid #000000; border-radius: 8px; display: flex; justify-content: center; align-items: center; margin-top: 30px;">
+                    <div style="font-family: 'Roboto'; font-weight: 500; font-size: 20px; line-height: 24px; color: #000000;">
                         Chi tiết
                     </div>
                 </a>
-                <a href="datlich" class="secondary btn" style="width: 160px; height: 48px; display: flex; justify-content: center; align-items: center; text-decoration: none; background-color: #000000; color: #FFFFFF;">
-                    <div style="font-family: 'Roboto'; font-weight: 500; font-size: 16px; line-height: 24px;">
+                <a href="quytrinh" class="secondary btn" style="width: 140px; height: 48px; border-radius: 8px; display: flex; justify-content: center; align-items: center; text-decoration: none; background-color: #000000; color: #FFFFFF;  margin-top: 30px;">
+                    <div style="font-family: 'Roboto'; font-weight: 500; font-size: 20px; line-height: 24px;">
                         Đặt lịch hẹn
                     </div>
                 </a>
             </div>
-    <div style="height:30px"></div>
-    </div>
-
-        <!-- image-->
-    <div class="col-md-6 d-flex flex-column align-items-center">
-            <!-- image -->
-            <div class="image" style="width: 80%; height: auto; background: rgba(217, 217, 217, 0.5); border-radius: 6px;">
-                <img src="1.jpg" style= "width: 100%">
-            </div>
         </div>
+    </div>
 </div>
+<!-- các gói dịch vụ-->
 
-<!--Các gói dịch vụ-->
-<div class="container">
+<div class="container" style="width: 100%;">
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <div class="section text-center py-5">
-                <h1 class="title">Dịch vụ xét nghiệm máu</h1>
+                <h1 class="title">Gói Dịch Vụ Xét Nghiệm Sức Khỏe</h1>
                 <p class="description">Cung cấp các gói xét nghiệm máu phù hợp với nhu cầu của bạn</p>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="row justify-content-center">
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <a href="#">
-                    <div class="image-container">
-                        <img src="goixetnghiemmau.jpg" class="img-fluid">
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Gói xét nghiệm tổng quát</h5>
-                        <p class="card-subtitle" style="color: black;">Thời gian: 1 ngày</p>
-                        <p class="card-subtitle" style="color: red; font-weight: bold;">Giá: 500.000VND</p>
-                    </div>
-                </a>
+<div class="package-container">
+    <div class="package-item">
+        <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
+            <div class="package-item-photo">
+                <img src="https://cdn.medon.vn/images/2023/04/27/4a89c892-783a-4625-9481-471504f4b2d0.png" alt="" loading="lazy" style="width: 100%;">
+            </div>
+        </a>
+        <div class="package-item-detail">
+            <div class="package-item-price">5.700.000 ₫ </div>
+            <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
+                <h3 class="package-item-title">
+                    SLTS không xâm lấn (NIPT-Twin)
+                </h3>
+            </a>
+            <div class="plus-icon-container">
+                <span class="plus-icon">&#10133;</span>
             </div>
         </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <a href="#">
-                    <div class="image-container">
-                        <img src="goixetnghiemmau.jpg"class="img-fluid">
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Gói xét nghiệm nhanh</h5>
-                        <p class="card-subtitle" style="color: black;">Thời gian: 4 giờ</p>
-                        <p class="card-subtitle" style="color: red; font-weight: bold;">Giá: 1.000.000VND</p>
-                    </div>
-                </a>
+    </div>
+    <div class="package-item">
+        <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
+            <div class="package-item-photo">
+                <img src="https://cdn.medon.vn/images/2023/04/27/4a89c892-783a-4625-9481-471504f4b2d0.png" alt="" loading="lazy" style="width: 100%;">
+            </div>
+        </a>
+        <div class="package-item-detail">
+            <div class="package-item-price">5.700.000 ₫ </div>
+            <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
+                <h3 class="package-item-title">
+                    SLTS không xâm lấn (NIPT-Twin)
+                </h3>
+            </a>
+            <div class="plus-icon-container">
+                <span class="plus-icon">&#10133;</span>
             </div>
         </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <a href="#">
-                    <div class="image-container">
-                        <img src="goixetnghiemmau.jpg" class="img-fluid">
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Gói xét nghiệm đặc biệt</h5>
-                        <p class="card-subtitle" style="color: black;">Thời gian: 2 ngày</p>
-                        <p class="card-subtitle" style="color: red; font-weight: bold;">Giá: 2.000.000VND</p>
-                    </div>
-                </a>
+    </div>
+    <div class="package-item">
+        <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
+            <div class="package-item-photo">
+                <img src="https://cdn.medon.vn/images/2023/04/27/4a89c892-783a-4625-9481-471504f4b2d0.png" alt="" loading="lazy" style="width: 100%;">
+            </div>
+        </a>
+        <div class="package-item-detail">
+            <div class="package-item-price">5.700.000 ₫ </div>
+            <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
+                <h3 class="package-item-title">
+                    SLTS không xâm lấn (NIPT-Twin)
+                </h3>
+            </a>
+            <div class="plus-icon-container">
+                <span class="plus-icon">&#10133;</span>
+            </div>
+        </div>
+    </div>
+    <div class="package-item">
+        <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
+            <div class="package-item-photo">
+                <img src="https://cdn.medon.vn/images/2023/04/27/4a89c892-783a-4625-9481-471504f4b2d0.png" alt="" loading="lazy" style="width: 100%;">
+            </div>
+        </a>
+        <div class="package-item-detail">
+            <div class="package-item-price">5.700.000 ₫ </div>
+            <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
+                <h3 class="package-item-title">
+                    SLTS không xâm lấn (NIPT-Twin)
+                </h3>
+            </a>
+            <div class="plus-icon-container">
+                <span class="plus-icon">&#10133;</span>
+            </div>
+        </div>
+    </div>
+    <div class="package-item">
+        <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
+            <div class="package-item-photo">
+                <img src="https://cdn.medon.vn/images/2023/04/27/4a89c892-783a-4625-9481-471504f4b2d0.png" alt="" loading="lazy" style="width: 100%;">
+            </div>
+        </a>
+        <div class="package-item-detail">
+            <div class="package-item-price">5.700.000 ₫ </div>
+            <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
+                <h3 class="package-item-title">
+                    SLTS không xâm lấn (NIPT-Twin)
+                </h3>
+            </a>
+            <div class="plus-icon-container">
+                <span class="plus-icon">&#10133;</span>
+            </div>
+        </div>
+    </div>
+    <div class="package-item">
+        <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
+            <div class="package-item-photo">
+                <img src="https://cdn.medon.vn/images/2023/04/27/4a89c892-783a-4625-9481-471504f4b2d0.png" alt="" loading="lazy" style="width: 100%;">
+            </div>
+        </a>
+        <div class="package-item-detail">
+            <div class="package-item-price">5.700.000 ₫ </div>
+            <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
+                <h3 class="package-item-title">
+                    SLTS không xâm lấn (NIPT-Twin)
+                </h3>
+            </a>
+            <div class="plus-icon-container">
+                <span class="plus-icon">&#10133;</span>
+            </div>
+        </div>
+    </div>
+    <div class="package-item">
+        <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
+            <div class="package-item-photo">
+                <img src="https://cdn.medon.vn/images/2023/04/27/4a89c892-783a-4625-9481-471504f4b2d0.png" alt="" loading="lazy" style="width: 100%;">
+            </div>
+        </a>
+        <div class="package-item-detail">
+            <div class="package-item-price">5.700.000 ₫ </div>
+            <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
+                <h3 class="package-item-title">
+                    SLTS không xâm lấn (NIPT-Twin)
+                </h3>
+            </a>
+            <div class="plus-icon-container">
+                <span class="plus-icon">&#10133;</span>
+            </div>
+        </div>
+    </div>
+    <div class="package-item">
+        <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
+            <div class="package-item-photo">
+                <img src="https://cdn.medon.vn/images/2023/04/27/4a89c892-783a-4625-9481-471504f4b2d0.png" alt="" loading="lazy" style="width: 100%;">
+            </div>
+        </a>
+        <div class="package-item-detail">
+            <div class="package-item-price">5.700.000 ₫ </div>
+            <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
+                <h3 class="package-item-title">
+                    SLTS không xâm lấn (NIPT-Twin)
+                </h3>
+            </a>
+            <div class="plus-icon-container">
+                <span class="plus-icon">&#10133;</span>
+            </div>
+        </div>
+    </div>
+    <div class="package-item">
+        <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
+            <div class="package-item-photo">
+                <img src="https://cdn.medon.vn/images/2023/04/27/4a89c892-783a-4625-9481-471504f4b2d0.png" alt="" loading="lazy" style="width: 100%;">
+            </div>
+        </a>
+        <div class="package-item-detail">
+            <div class="package-item-price">5.700.000 ₫ </div>
+            <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
+                <h3 class="package-item-title">
+                    SLTS không xâm lấn (NIPT-Twin)
+                </h3>
+            </a>
+            <div class="plus-icon-container">
+                <span class="plus-icon">&#10133;</span>
             </div>
         </div>
     </div>
 </div>
-<div style="height:50px" class="row"></div>
-<div class="row d-flex align-items-center justify-content-center">
-    <div class="row d-flex align-items-center justify-content-center">
-        <div class="col-md-4 text-center">
-            <p>Địa chỉ: 123 Đường ABC, Phường XYZ, Quận TUV, TP.Huế</p>
-        </div>
-        <div class="col-md-4 text-center">
-            <p>Điện thoại: 0123 456 789</p>
-        </div>
-        <div class="col-md-4 text-center">
-            <p>Email: Contact@gmail.com</p>
-        </div>
-    </div>
-</div>
-@code {
-   
 }
+<nav aria-label="Page navigation">
+    <nav id="pagination-7960274864" aria-label="Page navigation" class="text-center">
+        <ul class="pagination mb-0 justify-content-center">
+            <span></span>
+            <li class="disabled page-item">
+                <a aria-label="Trước
+" class="page-nav previous page-link" href="#" rel="tooltip" tab-index="-1" title="Trước
+"><i class="fa fa-angle-left"></i></a>
+            </li>
+            <li class="active page-item"><a class="page-link" href="/danh-sach-goi-kham-suc-khoe?pagenumber=1">1</a></li>
+            <li class="page-item"><a class="page-link" href="/danh-sach-goi-kham-suc-khoe?pagenumber=2">2</a></li>
+            <li class="page-item"><a class="page-link" href="/danh-sach-goi-kham-suc-khoe?pagenumber=3">3</a></li>
+            <li class="page-item"><a class="page-link" href="/danh-sach-goi-kham-suc-khoe?pagenumber=4">4</a></li>
+            <li class="page-item"><a class="page-link" href="/danh-sach-goi-kham-suc-khoe?pagenumber=5">5</a></li>
+            <span></span>
+            <li class="page-item">
+                <a aria-label="Kế tiếp
+" class="page-nav next page-link" href="/danh-sach-goi-kham-suc-khoe?pagenumber=2" rel="tooltip" tab-index="-1" title="Kế tiếp
+"><i class="fa fa-angle-right"></i></a>
+            </li>
+        </ul>
+    </nav>
+</nav>
+
+Đang hiển thị 3330896895370567329.

@@ -1,0 +1,116 @@
+﻿@page "/giohang"
+@using Shared.Model
+@rendermode InteractiveAuto
+@using Microsoft.AspNetCore.Authorization
+@using Shared.form
+@attribute [Authorize]
+
+<h1>Đơn Xét Nghiệm</h1>
+@if (!gioHangList.Any())
+{
+    <p>Đơn xét nghiệm của bạn đang trống</p>
+}
+@if (gioHangList.Any())
+{
+    <button class="btn btn-danger" @onclick="DeleteSelected">Xóa các mục được chọn</button>
+    <table class="table table-striped mt-3">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Chọn</th> <!-- Thêm cột chọn -->
+                <th scope="col">Gói xét nghiệm</th>
+                <th scope="col">Giá</th>
+                <th scope="col">Thời Gian</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ghang in gioHangt.ToList())
+            {
+                <tr>
+                    <td><input type="checkbox" @bind="ghang.IsSelected" /></td>
+                    <td>@ghang.TenGoiXetNghiem</td>
+                    <td>@ghang.Gia</td>
+                    <td>@ghang.ThoiGian</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <p class="total-amount">Tổng tiền: @TinhTongTien() VND</p>
+
+    <a class="btn btn-success float-end mt-3" href="/datlich"> Tạo đơn </a>
+}
+
+
+@code {
+    [Inject]
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+    public List<GioHang> gioHangList { get; set; } = new();
+    public List<giohangtam> gioHangt { get; set; } = new();
+    public string UserName { get; set; }
+    public User user { get; set; } = new();
+    public giohangtam aa = new();
+    Dictionary<int, GoiXetNghiem> goiXetNghiemDict = new Dictionary<int, GoiXetNghiem>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        UserName = authState.User.Identity.Name;
+        user = await Usertservice.getuserbyemail(UserName);
+        gioHangList = await GHservice.getallAsyncbyiduser(user.Id);
+
+        var allGXN = await GXNservice.getallAsync();
+        foreach (var gxn in allGXN)
+        {
+            goiXetNghiemDict[gxn.Id] = gxn;
+        }
+
+        LoadAllStudents();
+    }
+
+    public void LoadAllStudents()
+    {
+        gioHangt.Clear();
+        foreach (var student in gioHangList)
+        {
+            gioHangt.Add(new giohangtam
+                {
+                    Id = student.Id,
+                    UserId = student.UserId,
+                    GoiXetNghiemId = student.GoiXetNghiemId,
+                    IsSelected = false,
+                    TenGoiXetNghiem = GetGoiXetNghiemName(student.GoiXetNghiemId),
+                    Gia = GetGia(student.GoiXetNghiemId),
+                    ThoiGian = GetThoiGian(student.GoiXetNghiemId)
+                });
+        }
+    }
+
+    private async void DeleteSelected()
+    {
+        var itemsToRemove = gioHangt.Where(student => student.IsSelected==true).ToList();
+
+        foreach (var student in itemsToRemove)
+        {
+            gioHangt.Remove(student);
+            gioHangList.RemoveAll(item => item.Id == student.Id);
+            await GHservice.deleteAsync(student.Id);
+        }
+    }
+
+    public string GetGoiXetNghiemName(int id) => goiXetNghiemDict.ContainsKey(id) ? goiXetNghiemDict[id].TenGoi : null;
+    public long GetGia(int id) => goiXetNghiemDict.ContainsKey(id) ? goiXetNghiemDict[id].Gia : 0;
+    public string GetThoiGian(int id) => goiXetNghiemDict.ContainsKey(id) ? goiXetNghiemDict[id].ThoiGian : null;
+
+    public long? TinhTongTien()
+    {
+        long? tongTien = 0;
+        foreach (var item in gioHangt)
+        {
+            if (item.IsSelected==true)
+            {
+                tongTien += item.Gia;
+            }
+        }
+        return tongTien;
+    }
+}

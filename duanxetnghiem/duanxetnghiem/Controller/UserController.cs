@@ -35,6 +35,14 @@ namespace duanxetnghiem.Controller
             return Ok(student);
         }
 
+        [HttpGet("Single-UserEM/{email}")]
+        public async Task<ActionResult<User>> GetSingleuserbyemailAsync(string email)
+        {
+            var student = await _UserRepository.getuserbyemail(email);
+
+            return Ok(student);
+        }
+
         [HttpGet("EmailExists")]
         public async Task<ActionResult<int>> IsUserExistsAsync(User user)
         {

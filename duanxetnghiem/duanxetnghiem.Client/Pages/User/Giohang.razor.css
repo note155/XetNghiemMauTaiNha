@@ -1,0 +1,58 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa; /* Màu nền nhẹ nhàng */
+    padding: 20px;
+}
+
+h1 {
+    color: #007bff; /* Màu chủ đạo của trang web về y tế */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff; /* Màu nền cho bảng */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Đổ bóng bảng */
+    border-radius: 5px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6; /* Đường viền cho các ô */
+}
+
+th {
+    background-color: #007bff; /* Màu nền cho hàng tiêu đề */
+    color: #fff; /* Màu chữ của tiêu đề */
+}
+
+tr:hover {
+    background-color: #f2f2f2; /* Màu nền khi di chuột qua hàng */
+}
+
+.btn {
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.btn-success {
+    background-color: #28a745; /* Màu nút thành công */
+    color: #fff; /* Màu chữ nút thành công */
+}
+
+.float-end {
+    float: right;
+}
+
+.empty-cart {
+    color: #dc3545; /* Màu chữ khi giỏ hàng trống */
+}
+.total-amount {
+    font-size: 18px;
+    font-weight: bold;
+    color: #28a745; /* Màu nổi bật */
+    float: right; /* Đặt bên phải */
+    margin-top: 20px; /* Khoảng cách từ các phần tử trên xuống */
+}

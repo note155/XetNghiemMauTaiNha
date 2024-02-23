@@ -72,8 +72,10 @@ namespace duanxetnghiem.Services
             return existingUser?.Id ?? -1;
         }
 
-       
-
-  
+        public async Task<User> getuserbyemail(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(b => b.Email == email);
+        }
+    
     }
 }

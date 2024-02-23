@@ -241,6 +241,52 @@ namespace duanxetnghiem.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GioHangs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    GoiXetNghiemId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GioHangs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GioHangs_GoiXetNghiems_GoiXetNghiemId",
+                        column: x => x.GoiXetNghiemId,
+                        principalTable: "GoiXetNghiems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GioHangs_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DXNandGXNs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DonXetNghiemId = table.Column<int>(type: "int", nullable: false),
+                    GoiXetNghiemId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DXNandGXNs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DXNandGXNs_DonXetNghiems_DonXetNghiemId",
+                        column: x => x.DonXetNghiemId,
+                        principalTable: "DonXetNghiems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "KetQuaXetNghiems",
                 columns: table => new
                 {
@@ -257,6 +303,48 @@ namespace duanxetnghiem.Migrations
                     table.PrimaryKey("PK_KetQuaXetNghiems", x => x.Id);
                     table.ForeignKey(
                         name: "FK_KetQuaXetNghiems_DonXetNghiems_DonXetNghiemId",
+                        column: x => x.DonXetNghiemId,
+                        principalTable: "DonXetNghiems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "thanhToans",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    DonXetNghiemId = table.Column<int>(type: "int", nullable: false),
+                    Tongtien = table.Column<long>(type: "bigint", nullable: false),
+                    trangthai = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_thanhToans", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_thanhToans_DonXetNghiems_DonXetNghiemId",
+                        column: x => x.DonXetNghiemId,
+                        principalTable: "DonXetNghiems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TuChois",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DonXetNghiemId = table.Column<int>(type: "int", nullable: false),
+                    Lydo = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TuChois", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TuChois_DonXetNghiems_DonXetNghiemId",
                         column: x => x.DonXetNghiemId,
                         principalTable: "DonXetNghiems",
                         principalColumn: "Id",
@@ -313,8 +401,33 @@ namespace duanxetnghiem.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DXNandGXNs_DonXetNghiemId",
+                table: "DXNandGXNs",
+                column: "DonXetNghiemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GioHangs_GoiXetNghiemId",
+                table: "GioHangs",
+                column: "GoiXetNghiemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GioHangs_UserId",
+                table: "GioHangs",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_KetQuaXetNghiems_DonXetNghiemId",
                 table: "KetQuaXetNghiems",
+                column: "DonXetNghiemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_thanhToans_DonXetNghiemId",
+                table: "thanhToans",
+                column: "DonXetNghiemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TuChois_DonXetNghiemId",
+                table: "TuChois",
                 column: "DonXetNghiemId");
         }
 
@@ -340,7 +453,19 @@ namespace duanxetnghiem.Migrations
                 name: "BacSis");
 
             migrationBuilder.DropTable(
+                name: "DXNandGXNs");
+
+            migrationBuilder.DropTable(
+                name: "GioHangs");
+
+            migrationBuilder.DropTable(
                 name: "KetQuaXetNghiems");
+
+            migrationBuilder.DropTable(
+                name: "thanhToans");
+
+            migrationBuilder.DropTable(
+                name: "TuChois");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

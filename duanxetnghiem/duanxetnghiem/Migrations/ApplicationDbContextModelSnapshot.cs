@@ -155,6 +155,78 @@ namespace duanxetnghiem.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Shared.Model.DXNandGXN", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DonXetNghiemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GoiXetNghiemId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DonXetNghiemId");
+
+                    b.ToTable("DXNandGXNs");
+                });
+
+            modelBuilder.Entity("Shared.Model.GioHang", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("GoiXetNghiemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GoiXetNghiemId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("GioHangs");
+                });
+
+            modelBuilder.Entity("Shared.Model.ThanhToan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DonXetNghiemId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("Tongtien")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("trangthai")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DonXetNghiemId");
+
+                    b.ToTable("thanhToans");
+                });
+
             modelBuilder.Entity("Shared.Model.TuChoi", b =>
                 {
                     b.Property<int>("Id")
@@ -466,6 +538,47 @@ namespace duanxetnghiem.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Shared.Model.DXNandGXN", b =>
+                {
+                    b.HasOne("duanxetnghiem.Data.Model.DonXetNghiem", "DonXetNghiem")
+                        .WithMany()
+                        .HasForeignKey("DonXetNghiemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DonXetNghiem");
+                });
+
+            modelBuilder.Entity("Shared.Model.GioHang", b =>
+                {
+                    b.HasOne("duanxetnghiem.Data.Model.GoiXetNghiem", "GoiXetNghiem")
+                        .WithMany()
+                        .HasForeignKey("GoiXetNghiemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("duanxetnghiem.Data.Model.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GoiXetNghiem");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Shared.Model.ThanhToan", b =>
+                {
+                    b.HasOne("duanxetnghiem.Data.Model.DonXetNghiem", "DonXetNghiem")
+                        .WithMany()
+                        .HasForeignKey("DonXetNghiemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DonXetNghiem");
                 });
 
             modelBuilder.Entity("Shared.Model.TuChoi", b =>

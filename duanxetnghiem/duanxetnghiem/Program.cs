@@ -1,5 +1,6 @@
 using System.Net;
 using duanxetnghiem.Client.Pages;
+using duanxetnghiem.Client.Services;
 using duanxetnghiem.Components;
 using duanxetnghiem.Components.Account;
 using duanxetnghiem.Data;
@@ -28,6 +29,7 @@ builder.Services.AddScoped<IBacSi, BacSiRepository>();
 builder.Services.AddScoped<IDonXetNghiem, DonXetNghiemRepository>();
 builder.Services.AddScoped<IKetQuaXetNghiem, KetQuaXetNghiemRepository>();
 builder.Services.AddScoped<ITuChoi, TuChoiRepository>();
+builder.Services.AddScoped<IGioHang, GioHangRepository>();
 builder.Services.AddScoped(http => new HttpClient
 {
     BaseAddress = new Uri(builder.Configuration.GetSection("BaseAdress").Value)

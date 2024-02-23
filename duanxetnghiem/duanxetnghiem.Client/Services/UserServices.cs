@@ -33,6 +33,13 @@ namespace duanxetnghiem.Client.Services
             return respone;
         }
 
+        public async Task<User> getuserbyemail(string email)
+        {
+            var onestudent = await _httpClient.GetAsync($"api/User/Single-UserEM/{email}");
+            var respone = await onestudent.Content.ReadFromJsonAsync<User>();
+            return respone;
+        }
+
         public async Task<User> getuserbyid(int Id)
         {
             var onestudent = await _httpClient.GetAsync($"api/User/Single-User/{Id}");

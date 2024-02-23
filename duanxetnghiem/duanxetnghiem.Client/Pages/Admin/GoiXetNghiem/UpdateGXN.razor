@@ -1,0 +1,144 @@
+﻿@page "/Goiedit/{id:int}"
+@inject HttpClient client
+@rendermode InteractiveAuto
+@inject NavigationManager navigation;
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <img src=@Input.Anh class="profile-image" alt="Avatar">
+            <EditForm Model="@Ticket" method="post" OnValidSubmit="@OnSubmit" enctype="multipart/form-data">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <InputFile class="form-control mt-2" OnChange="@setfile" multiple />
+                <button class="btn btn-primary mt-2" type="submit">Xác Nhận Đổi Ảnh</button>
+            </EditForm>
+        </div>
+        <div class="col-md-8">
+            <h2 class="mb-4">Sửa đổi gói xét nghiệm</h2>
+            <EditForm Model="Input" method="post" OnValidSubmit="add" FormName="register" class="profile-form">
+                <DataAnnotationsValidator />
+                <hr />
+                @if (err.Any())
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @foreach (var error in err)
+                        {
+                            <p>@error</p>
+                        }
+                    </div>
+                }
+                <div class="mb-3">
+                    <label for="TenGoi" class="form-label">Tên gói</label>
+                    <InputText @bind-Value="Input.TenGoi" class="form-control" id="TenGoi" />
+                    <ValidationMessage For="() => Input.TenGoi" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="Gia" class="form-label">Giá</label>
+                    <InputNumber @bind-Value="Input.Gia" class="form-control" id="Gia" oninput="if(this.value < 0) this.value = 0" />
+                    <ValidationMessage For="@(() => Input.Gia)" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="ThoiGian" class="form-label">Thời gian</label>
+                    <InputText @bind-Value="Input.ThoiGian" class="form-control" id="ThoiGian" />
+                    <ValidationMessage For="() => Input.ThoiGian" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="Mota" class="form-label">Mô tả</label>
+                    <InputText @bind-Value="Input.Mota" class="form-control" id="Mota" />
+                    <ValidationMessage For="() => Input.Mota" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Lưu</button>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    public GoiXetNghiem Input { get; set; } = new();
+
+    [Parameter]
+    public int id { get; set; }
+
+    string a = "";
+    public string img = "img/Goixetnghiem/";
+    private WebAssemblyTicket Ticket { get; set; } = new();
+    private WebAssemblyTicket load { get; set; } = new();
+    private long maxFileSize = 5120000;
+    private List<string> err = new List<string>();
+    string safeFileName = "";
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadGXN();
+    }
+    private async Task add()
+    {
+        err.Clear(); // Xóa thông báo lỗi cũ
+        if (string.IsNullOrEmpty(Input.TenGoi))
+        {
+            err.Add("Tên gói không được để trống");
+        }
+
+        if (string.IsNullOrEmpty(Input.ThoiGian))
+        {
+            err.Add("Thời gian không được để trống");
+        }
+        if (string.IsNullOrEmpty(Input.Mota))
+        {
+            err.Add("Mô tả không được để trống");
+        }
+
+        if (err.Count == 0)
+        {
+            await GXNservice.updateAsync(Input);
+            navigation.NavigateTo("/ListGoixetnghiem");
+        }
+    }
+    public async Task LoadGXN()
+    {
+        Input = await GXNservice.getbyid(id);
+    }
+
+    private void setfile(InputFileChangeEventArgs e)
+    {
+        Ticket.Attachments = e.GetMultipleFiles();
+    }
+    private async Task OnSubmit()
+    {
+        err.Clear();
+        try
+        {
+            using MultipartFormDataContent content = new();
+
+
+            foreach (var file in Ticket.Attachments)
+            {
+                // Add file attachment
+                string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+                safeFileName = $"{timestamp}{Path.GetExtension(file.Name)}";
+                var fileContent = new StreamContent(file.OpenReadStream(maxFileSize));
+                fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse(file.ContentType);
+                content.Add(fileContent, "Attachments", safeFileName);
+            }
+
+            // Send to API endpoint
+            var response = await client.PostAsync("/upload", content);
+
+            string Message = response.IsSuccessStatusCode ? "Đổi ảnh thành công" : response.ReasonPhrase;
+            err.Add(Message);
+            Ticket = new();
+            Input.Anh = img + safeFileName;
+            await GXNservice.updateAsync(Input);
+        }
+        catch (Exception e)
+        {
+            String Message = "Upload failed. Error: " + e.Message;
+            err.Add(Message);
+        }
+    }
+
+    private class WebAssemblyTicket
+    {
+        public IReadOnlyList<IBrowserFile> Attachments { get; set; }
+    }
+}

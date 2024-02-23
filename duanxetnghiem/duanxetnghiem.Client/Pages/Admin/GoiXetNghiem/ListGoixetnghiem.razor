@@ -1,0 +1,102 @@
+﻿@page "/ListGoixetnghiem"
+@rendermode InteractiveAuto
+ @inject IJSRuntime JS
+ @inject NavigationManager navigation;
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Danh sách gói xét nghiệm</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <p><a class="btn btn-success float-end" href="/AddGXN"> Thêm gói xét nghiệm </a></p>
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header"></div>
+                            @if (!AllGoi.Any())
+                            {
+                                <p><em>Loading ...</em></p>
+                            }
+                            @if (AllGoi.Any())
+                            {
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th>Tên gói</th>
+                                                    <th>Giá</th>
+                                                    <th>Thời gian</th>
+                                                    <th>Ảnh</th>
+                                                    <th>Mô tả</th>
+                                                    <th></th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var goi in AllGoi)
+                                                {
+                                                    <tr>
+                                                        <td>@goi.Id</td>
+                                                        <td>@goi.TenGoi</td>
+                                                        <td>@goi.Gia</td>
+                                                        <td>@goi.ThoiGian</td>
+                                                        <td><img src="@goi.Anh"></td>
+                                                        <td>@goi.Mota</td>
+                                                        <td>
+                                                            <a class="btn btn-success" href="/Goiedit/@goi.Id"> Edit </a>
+                                                        </td>
+                                                        <td>
+                                                            <a class="btn btn-danger" href="#" @onclick="() => ConfirmDelete(goi.Id)"> Delete </a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-info"> There is not GoiXetNghiem List Availlable</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    public List<GoiXetNghiem> AllGoi { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAlLGoi();
+
+    }
+    public async Task LoadAlLGoi()
+    {
+        var goi = await GXNservice.getallAsync();
+        AllGoi.Clear();
+
+        if (goi is null) return;
+        foreach (var g in goi)
+        {
+            AllGoi.Add(g);
+        }
+    }
+    public async Task ConfirmDelete(int id)
+    {
+        var goiToDelete = AllGoi.FirstOrDefault(d => d.Id == id);
+        if (await JS.InvokeAsync<bool>("confirm", "Bạn có chắc muốn xóa?"))
+        {
+            AllGoi.Remove(goiToDelete);
+            navigation.NavigateTo("/Goidelete/" + id);
+        }
+    }
+}
