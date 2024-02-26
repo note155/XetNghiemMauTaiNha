@@ -187,3 +187,114 @@ button.btn-primary {
     max-width: 100px; /* Đặt chiều rộng tối đa cho ảnh của bác sĩ */
     height: auto;
 }
+.selected-packages {
+    margin-top: 10px; /* Add margin to create space between packages */
+}
+
+.price {
+    font-weight: bold; /* Make price bold */
+    color: #4CAF50; /* Set price color to green */
+}
+
+.total {
+    font-weight: bold; /* Make total bold */
+    font-size: 18px; /* Increase font size for total */
+    color: #f00; /* Set total color to red */
+}
+
+.package {
+    margin-bottom: 10px; /* Add margin to create space between packages */
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+.package {
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Place content at each end of the container */
+    align-items: center; /* Center items vertically */
+    padding: 10px; /* Add padding for spacing */
+}
+
+.package-content {
+    flex: 1; /* Allow content to grow */
+}
+
+.remove-btn {
+    background-color: #ff3333;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5px; /* Điều chỉnh khoảng cách với nội dung */
+}
+
+.package {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.package-content {
+    flex: 1;
+}
+
+.total-mobile {
+    margin-top: 10px; /* Điều chỉnh khoảng cách với phần tổng tiền */
+}
+@media only screen and (max-width: 768px) {
+    .patient-registration-container {
+        flex-direction: column; /* Hiển thị các phần tử dọc theo nhau */
+    }
+
+    .patient-info,
+    .test-registration-form {
+        width: 95%; /* Đảm bảo rằng phần thông tin đơn đăng ký xét nghiệm chiếm toàn bộ chiều rộng của màn hình */
+        margin-right: 0; /* Xóa bỏ margin nếu cần thiết */
+    }
+
+    .test-registration-form {
+        margin-top: 20px; /* Tạo khoảng cách giữa các phần tử */
+    }
+
+    .patient-info {
+        max-width: 100%; /* Thiết lập chiều rộng tối đa là 100% */
+    }
+
+    .selected-packages {
+        flex-direction: column; 
+        width:100%;/* Hiển thị các gói đã chọn dọc theo nhau */
+    }
+
+    .selected-packages {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .package {
+        margin-bottom: 10px;
+        width: 100%;
+    }
+
+
+    .remove-btn {
+        margin-left: 0; /* Không cần thiết với thiết bị di động */
+        margin-top: 5px; /* Khoảng cách giữa nút "X" và nội dung */
+    }
+
+    .selected-packages-header {
+        margin-bottom: 10px;
+    }
+
+    .total-mobile {
+        margin-top: 20px; /* Khoảng cách từ phần tổng tiền đến các gói đã chọn */
+    }
+}

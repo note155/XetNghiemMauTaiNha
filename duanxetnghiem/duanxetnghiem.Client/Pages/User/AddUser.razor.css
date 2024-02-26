@@ -1,0 +1,24 @@
+﻿.section-title {
+    margin-bottom: 20px;
+}
+
+.error-message {
+    color: red;
+    margin-top: 10px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+.form-control {
+    width: 100%;
+}
+
+.btn-primary {
+    margin-top: 20px;
+}

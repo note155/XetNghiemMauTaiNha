@@ -9,10 +9,10 @@ namespace Shared.form
 {
     public class donXNform
     {
-        public string Hoten { get; set; }
-        public string Diachi { get; set; }
-        public string Email { get; set; }
-        public string SDT { get; set; }
+        public string? Hoten { get; set; }
+        public string? Diachi { get; set; }
+        public string? Email { get; set; }
+        public string? SDT { get; set; }
         public bool Gioitinh { get; set; }
         public int Tuoi { get; set; }
         public int idgoixetnghiem {  get; set; }

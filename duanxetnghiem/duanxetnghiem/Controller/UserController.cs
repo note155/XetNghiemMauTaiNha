@@ -39,8 +39,9 @@ namespace duanxetnghiem.Controller
         public async Task<ActionResult<User>> GetSingleuserbyemailAsync(string email)
         {
             var student = await _UserRepository.getuserbyemail(email);
-
+            if(student == null) { return BadRequest(); }
             return Ok(student);
+
         }
 
         [HttpGet("EmailExists")]

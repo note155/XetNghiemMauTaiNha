@@ -24,9 +24,9 @@
                                             <tr>
                                                 <th>id</th>
                                                 <th>Họ Tên Khách Hàng</th>
-                                                <th>Gói xét nghiệm</th>
                                                 <th>Trạng thái</th>
                                                 <th>Ngày lấy máu </th>
+                                                <th>Giờ lấy máu </th>
                                                 <th></th>
                                                 <th></th>
                                             </tr>
@@ -36,10 +36,10 @@
                                             {
                                                 <tr>
                                                     <td>@DXN.Id</td>
-                                                    <td>@loadhoten(DXN.UserId)</td>
-                                                    <td>@loadGXN(@DXN.GoiXetNghiemId)</td>
+                                                    <td>@loadhoten(DXN.UserId)</td>>
                                                     <td>@DXN.Trangthai</td>
                                                     <td>@DXN.Ngaydat.ToString("dd/MM/yyyy")</td>
+                                                     <td>@DXN.giolaymau</td>
                                                     <td>
                                                         <a class="btn btn-success" href="/XetDuyetDXN/@DXN.Id"> Duyệt </a>
                                                     </td>

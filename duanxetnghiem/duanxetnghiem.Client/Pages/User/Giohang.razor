@@ -3,6 +3,7 @@
 @rendermode InteractiveAuto
 @using Microsoft.AspNetCore.Authorization
 @using Shared.form
+ @inject NavigationManager navigation;
 @attribute [Authorize]
 
 <h1>Đơn Xét Nghiệm</h1>
@@ -38,6 +39,10 @@
 
     <a class="btn btn-success float-end mt-3" href="/datlich"> Tạo đơn </a>
 }
+else
+{
+    
+}
 
 
 @code {
@@ -56,15 +61,27 @@
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         UserName = authState.User.Identity.Name;
         user = await Usertservice.getuserbyemail(UserName);
-        gioHangList = await GHservice.getallAsyncbyiduser(user.Id);
-
-        var allGXN = await GXNservice.getallAsync();
-        foreach (var gxn in allGXN)
+        if (user == null)
         {
-            goiXetNghiemDict[gxn.Id] = gxn;
+            navigation.NavigateTo("/AddUser");
         }
+        gioHangList = await GHservice.getallAsyncbyiduser(user.Id);
+        if (gioHangList != null)
+        {
+            var allGXN = await GXNservice.getallAsync();
+            foreach (var gxn in allGXN)
+            {
+                goiXetNghiemDict[gxn.Id] = gxn;
+            }
 
-        LoadAllStudents();
+            LoadAllStudents();
+        }
+        else
+        {
+            // Handle the case where gioHangList is null
+            // For example, display a message to the user
+        }
+       
     }
 
     public void LoadAllStudents()

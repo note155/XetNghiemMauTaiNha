@@ -44,8 +44,9 @@ namespace duanxetnghiem.Client.Services
 			try
 			{
 				var response = await _httpClient.GetAsync($"api/GioHang/All-GH/{iduser}");
-				response.EnsureSuccessStatusCode();
-				return await response.Content.ReadFromJsonAsync<List<GioHang>>();
+				var a= await response.Content.ReadFromJsonAsync<List<GioHang>>();
+				if (a != null) return a;
+				else return null;
 			}
 			catch (Exception ex)
 			{

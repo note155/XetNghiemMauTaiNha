@@ -13,7 +13,9 @@ namespace Shared.Model
 		[Key]
 		public int Id { get; set; }
 		public int DonXetNghiemId { get; set; }
-		public DonXetNghiem DonXetNghiem { get; set; }
+		public DonXetNghiem? DonXetNghiem { get; set; }
 		public int GoiXetNghiemId { get; set; }
-	}
+        public GoiXetNghiem? GoiXetNghiem { get; set; }
+
+    }
 }

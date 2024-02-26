@@ -81,16 +81,43 @@
             <InputTextArea @bind-Value="Input.ghiChu" class="form-control" id="ghiChu" />
             <ValidationMessage For="() => Input.ghiChu" class="text-danger" />
         </div>
-        <div class="form-group">
-            <label for="GoiXetNghiemId">Gói xét nghiệm</label>
-            <InputSelect class="form-control" id="GoiXetNghiemId" @bind-Value="Input.GoiXetNghiemId">
-                <option value="@Input.GoiXetNghiemId">@loadGXN(@Input.GoiXetNghiemId)</option>
-                @foreach (var gxn in allGXN)
+            <InputSelect ValueChanged="@((int value)=>LoadgxnInfo(value))" ValueExpression="@(()=>valorgxn)" Value="valorgxn" class="form-control">
+                <option value="0">Chọn Gói Xét Nghiệm</option>
+                @foreach (var bs in allGXN)
                 {
-                    <option value="@gxn.Id">@gxn.TenGoi</option>
+                    <option value="@bs.Id">
+                        <div class="option-content">
+                            <div class="option-name">Tên: @bs.TenGoi</div>
+                            <div class="option-price">Giá: @bs.Gia VND</div>
+                            <div class="option-time">Thời Gian: @bs.ThoiGian</div>
+                        </div>
+                    </option>
                 }
             </InputSelect>
-        </div>
+            @if (gxndachon.Count != 0)
+            {
+                <div class="doctor-info">
+                    <div class="selected-packages-header">
+                        <h3>Các gói đã chọn:</h3>
+                    </div>
+                    <div class="selected-packages">
+                        @foreach (var bs in gxndachon)
+                        {
+                            <div class="package">
+                                <div class="package-content">
+                                    <p><strong>Tên Gói:</strong> @bs.TenGoi</p>
+                                    <div class="price">Giá: @bs.Gia VND</div>
+                                </div>
+                                <button type="button" @onclick="@( () => remove(bs.Id) )" class="remove-btn">X</button>
+                            </div>
+                        }
+                    </div>
+                    <div class="total-mobile">
+                        <p>Tổng tiền: <span class="total">@tongtien VND</span></p>
+                    </div>
+                </div>
+
+            }
         <div class="form-group">
             <label for="BacSiId">Nhân viên lấy máu</label>
             <InputSelect ValueChanged="@((int value)=>LoadBSInfo(value))" ValueExpression="@(()=>valor)" Value="valor" class="form-control" id="BacSiId">
@@ -133,6 +160,12 @@
     public List<BacSi> AllBS { get; set; } = new();
     private BacSi SelectedDoctor = null;
     int valor,idbs;
+    int valorgxn,idgxn;
+    public List<GoiXetNghiem> gxndachon { get; set; } = new();
+    public List<DXNandGXN> dxn { get; set; } = new();
+    public List<DXNandGXN> dxn1 { get; set; } = new();
+    public long tongtien = 0;
+
 
     [SupplyParameterFromForm]
     public DonXetNghiem Input { get; set; } = new();
@@ -146,6 +179,25 @@
         user = await Usertservice.getuserbyid(Input.UserId);
         allGXN = await GXNservice.getallAsync();
         AllBS = await bacsiservice.getallAsync();
+        dxn = await DXNservice.getallGXNAsync(id);
+        dxn1 = dxn;
+        loadgxndachon();
+    }
+    private void loadgxndachon()
+    {
+        foreach (var a in dxn)
+        {
+
+            foreach(var b in allGXN)
+            {
+                if (b.Id == a.GoiXetNghiemId)
+                {
+                    gxndachon.Add(b);
+                    tongtien += b.Gia;
+                }
+            }
+            allGXN.RemoveAll(item => item.Id == a.GoiXetNghiemId);
+        }
     }
     private async Task add()
     {
@@ -157,10 +209,6 @@
             err.Add("Giờ lấy máu không được để trống.");
         }
         // Kiểm tra gói xét nghiệm
-        if (Input.GoiXetNghiemId == 0)
-        {
-            err.Add("Vui lòng chọn gói xét nghiệm.");
-        }
         // Kiểm tra nhân viên lấy máu
         if (idbs == 0)
         {
@@ -196,7 +244,6 @@
         {
             SelectedDoctor = AllBS.FirstOrDefault(bs => bs.Id == id)!;
         }
-
     }
     private String gioitinh(bool a)
     {
@@ -208,5 +255,33 @@
         {
             return "Nữ";
         }
+    }
+    private async void remove(int id)
+    {
+        foreach (var gxn in gxndachon)
+        {
+            if (gxn.Id == id)
+            {
+                allGXN.Add(gxn);
+                tongtien -= gxn.Gia;
+            }
+        }
+        gxndachon.RemoveAll(item => item.Id == id);
+    }
+    private void LoadgxnInfo(int id)
+    {
+        idgxn = id;
+        valorgxn = id;
+
+        foreach (var xn in allGXN)
+        {
+            if (xn.Id == id)
+            {
+                gxndachon.Add(xn);
+                tongtien += xn.Gia;
+            }
+        }
+        allGXN.RemoveAll(item => item.Id == id);
+        valorgxn = 0;
     }
 }

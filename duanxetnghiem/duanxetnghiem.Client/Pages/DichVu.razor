@@ -1,4 +1,7 @@
 ﻿@page "/dichvu"
+@rendermode InteractiveAuto
+ @inject IJSRuntime JS
+ @inject NavigationManager navigation;
 <div class="background-container" style="background-image: url('anhnen.jpg');">
     <div class="row d-flex align-items-center justify-content-center" style="width: 100%; height: 300px;margin:auto;">
         <div class="col-md-6 d-flex flex-column align-items-center">
@@ -39,170 +42,32 @@
 </div>
 
 <div class="package-container">
-    <div class="package-item">
-        <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
-            <div class="package-item-photo">
-                <img src="https://cdn.medon.vn/images/2023/04/27/4a89c892-783a-4625-9481-471504f4b2d0.png" alt="" loading="lazy" style="width: 100%;">
+        @if (!AllGoi.Any())
+        {
+            <p><em>Loading ...</em></p>
+        }
+        @if (AllGoi.Any())
+        {
+            @foreach (var goi in AllGoi)
+            {
+            <div class="package-item">
+                <div class="package-item-photo">
+                    <img src="@goi.Anh" alt="" loading="lazy">
+                    <div class="package-item-sale">- 20% </div>
+                    <a href="#">Xem chi tiết </a>
+                </div>
+                <div class="package-item-detail">
+                    <div class="package-item-price">@goi.Gia VND</div>
+                    <h3 class="package-item-title">@goi.TenGoi</h3>
+                    <div class="package-item-meta">
+                        <div class="package-item-gender">@goi.ThoiGian</div>
+                    </div> 
+                </div>
             </div>
-        </a>
-        <div class="package-item-detail">
-            <div class="package-item-price">5.700.000 ₫ </div>
-            <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
-                <h3 class="package-item-title">
-                    SLTS không xâm lấn (NIPT-Twin)
-                </h3>
-            </a>
-            <div class="plus-icon-container">
-                <span class="plus-icon">&#10133;</span>
-            </div>
-        </div>
-    </div>
-    <div class="package-item">
-        <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
-            <div class="package-item-photo">
-                <img src="https://cdn.medon.vn/images/2023/04/27/4a89c892-783a-4625-9481-471504f4b2d0.png" alt="" loading="lazy" style="width: 100%;">
-            </div>
-        </a>
-        <div class="package-item-detail">
-            <div class="package-item-price">5.700.000 ₫ </div>
-            <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
-                <h3 class="package-item-title">
-                    SLTS không xâm lấn (NIPT-Twin)
-                </h3>
-            </a>
-            <div class="plus-icon-container">
-                <span class="plus-icon">&#10133;</span>
-            </div>
-        </div>
-    </div>
-    <div class="package-item">
-        <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
-            <div class="package-item-photo">
-                <img src="https://cdn.medon.vn/images/2023/04/27/4a89c892-783a-4625-9481-471504f4b2d0.png" alt="" loading="lazy" style="width: 100%;">
-            </div>
-        </a>
-        <div class="package-item-detail">
-            <div class="package-item-price">5.700.000 ₫ </div>
-            <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
-                <h3 class="package-item-title">
-                    SLTS không xâm lấn (NIPT-Twin)
-                </h3>
-            </a>
-            <div class="plus-icon-container">
-                <span class="plus-icon">&#10133;</span>
-            </div>
-        </div>
-    </div>
-    <div class="package-item">
-        <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
-            <div class="package-item-photo">
-                <img src="https://cdn.medon.vn/images/2023/04/27/4a89c892-783a-4625-9481-471504f4b2d0.png" alt="" loading="lazy" style="width: 100%;">
-            </div>
-        </a>
-        <div class="package-item-detail">
-            <div class="package-item-price">5.700.000 ₫ </div>
-            <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
-                <h3 class="package-item-title">
-                    SLTS không xâm lấn (NIPT-Twin)
-                </h3>
-            </a>
-            <div class="plus-icon-container">
-                <span class="plus-icon">&#10133;</span>
-            </div>
-        </div>
-    </div>
-    <div class="package-item">
-        <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
-            <div class="package-item-photo">
-                <img src="https://cdn.medon.vn/images/2023/04/27/4a89c892-783a-4625-9481-471504f4b2d0.png" alt="" loading="lazy" style="width: 100%;">
-            </div>
-        </a>
-        <div class="package-item-detail">
-            <div class="package-item-price">5.700.000 ₫ </div>
-            <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
-                <h3 class="package-item-title">
-                    SLTS không xâm lấn (NIPT-Twin)
-                </h3>
-            </a>
-            <div class="plus-icon-container">
-                <span class="plus-icon">&#10133;</span>
-            </div>
-        </div>
-    </div>
-    <div class="package-item">
-        <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
-            <div class="package-item-photo">
-                <img src="https://cdn.medon.vn/images/2023/04/27/4a89c892-783a-4625-9481-471504f4b2d0.png" alt="" loading="lazy" style="width: 100%;">
-            </div>
-        </a>
-        <div class="package-item-detail">
-            <div class="package-item-price">5.700.000 ₫ </div>
-            <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
-                <h3 class="package-item-title">
-                    SLTS không xâm lấn (NIPT-Twin)
-                </h3>
-            </a>
-            <div class="plus-icon-container">
-                <span class="plus-icon">&#10133;</span>
-            </div>
-        </div>
-    </div>
-    <div class="package-item">
-        <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
-            <div class="package-item-photo">
-                <img src="https://cdn.medon.vn/images/2023/04/27/4a89c892-783a-4625-9481-471504f4b2d0.png" alt="" loading="lazy" style="width: 100%;">
-            </div>
-        </a>
-        <div class="package-item-detail">
-            <div class="package-item-price">5.700.000 ₫ </div>
-            <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
-                <h3 class="package-item-title">
-                    SLTS không xâm lấn (NIPT-Twin)
-                </h3>
-            </a>
-            <div class="plus-icon-container">
-                <span class="plus-icon">&#10133;</span>
-            </div>
-        </div>
-    </div>
-    <div class="package-item">
-        <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
-            <div class="package-item-photo">
-                <img src="https://cdn.medon.vn/images/2023/04/27/4a89c892-783a-4625-9481-471504f4b2d0.png" alt="" loading="lazy" style="width: 100%;">
-            </div>
-        </a>
-        <div class="package-item-detail">
-            <div class="package-item-price">5.700.000 ₫ </div>
-            <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
-                <h3 class="package-item-title">
-                    SLTS không xâm lấn (NIPT-Twin)
-                </h3>
-            </a>
-            <div class="plus-icon-container">
-                <span class="plus-icon">&#10133;</span>
-            </div>
-        </div>
-    </div>
-    <div class="package-item">
-        <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
-            <div class="package-item-photo">
-                <img src="https://cdn.medon.vn/images/2023/04/27/4a89c892-783a-4625-9481-471504f4b2d0.png" alt="" loading="lazy" style="width: 100%;">
-            </div>
-        </a>
-        <div class="package-item-detail">
-            <div class="package-item-price">5.700.000 ₫ </div>
-            <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
-                <h3 class="package-item-title">
-                    SLTS không xâm lấn (NIPT-Twin)
-                </h3>
-            </a>
-            <div class="plus-icon-container">
-                <span class="plus-icon">&#10133;</span>
-            </div>
-        </div>
-    </div>
+        }
+    }
 </div>
-}
+
 <nav aria-label="Page navigation">
     <nav id="pagination-7960274864" aria-label="Page navigation" class="text-center">
         <ul class="pagination mb-0 justify-content-center">
@@ -212,19 +77,38 @@
 " class="page-nav previous page-link" href="#" rel="tooltip" tab-index="-1" title="Trước
 "><i class="fa fa-angle-left"></i></a>
             </li>
-            <li class="active page-item"><a class="page-link" href="/danh-sach-goi-kham-suc-khoe?pagenumber=1">1</a></li>
-            <li class="page-item"><a class="page-link" href="/danh-sach-goi-kham-suc-khoe?pagenumber=2">2</a></li>
-            <li class="page-item"><a class="page-link" href="/danh-sach-goi-kham-suc-khoe?pagenumber=3">3</a></li>
-            <li class="page-item"><a class="page-link" href="/danh-sach-goi-kham-suc-khoe?pagenumber=4">4</a></li>
-            <li class="page-item"><a class="page-link" href="/danh-sach-goi-kham-suc-khoe?pagenumber=5">5</a></li>
+            <li class="active page-item"><a class="page-link" href="/dichvu?pagenumber=1">1</a></li>
+            <li class="page-item"><a class="page-link" href="/dichvu?pagenumber=2">2</a></li>
+            <li class="page-item"><a class="page-link" href="/dichvu?pagenumber=3">3</a></li>
+            <li class="page-item"><a class="page-link" href="/dichvu?pagenumber=4">4</a></li>
+            <li class="page-item"><a class="page-link" href="/dichvu?pagenumber=5">5</a></li>
             <span></span>
             <li class="page-item">
                 <a aria-label="Kế tiếp
-" class="page-nav next page-link" href="/danh-sach-goi-kham-suc-khoe?pagenumber=2" rel="tooltip" tab-index="-1" title="Kế tiếp
+" class="page-nav next page-link" href="/dichvu?pagenumber=2" rel="tooltip" tab-index="-1" title="Kế tiếp
 "><i class="fa fa-angle-right"></i></a>
             </li>
         </ul>
     </nav>
 </nav>
 
-Đang hiển thị 3330896895370567329.
+@code {
+    public List<GoiXetNghiem> AllGoi { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAlLGoi();
+
+    }
+    public async Task LoadAlLGoi()
+    {
+        var goi = await GXNservice.getallAsync();
+        AllGoi.Clear();
+
+        if (goi is null) return;
+        foreach (var g in goi)
+        {
+            AllGoi.Add(g);
+        }
+    }
+}

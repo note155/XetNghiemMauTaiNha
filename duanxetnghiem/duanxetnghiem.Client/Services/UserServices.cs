@@ -37,7 +37,8 @@ namespace duanxetnghiem.Client.Services
         {
             var onestudent = await _httpClient.GetAsync($"api/User/Single-UserEM/{email}");
             var respone = await onestudent.Content.ReadFromJsonAsync<User>();
-            return respone;
+            if (respone.Hoten == null) return null;
+            else return respone;
         }
 
         public async Task<User> getuserbyid(int Id)

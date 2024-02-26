@@ -1,7 +1,9 @@
-﻿using duanxetnghiem.Data;
+﻿using duanxetnghiem.Client.Pages.User;
+using duanxetnghiem.Data;
 using duanxetnghiem.Data.Model;
 using Microsoft.EntityFrameworkCore;
 using Shared.ketnoi;
+using Shared.Model;
 
 namespace duanxetnghiem.Services
 {
@@ -22,6 +24,15 @@ namespace duanxetnghiem.Services
             return newstudent;
         }
 
+        public async Task<DXNandGXN> addnew(DXNandGXN a)
+        {
+            if (a == null) return null;
+            var newstudent = _context.DXNandGXNs.Add(a).Entity;
+            await _context.SaveChangesAsync();
+
+            return newstudent;
+        }
+
         public async Task<DonXetNghiem> deleteAsync(int id)
         {
             var donXetNghiemToDelete = await _context.DonXetNghiems.FindAsync(id);
@@ -37,6 +48,12 @@ namespace duanxetnghiem.Services
         public async Task<List<DonXetNghiem>> getallAsync()
         {
             return await _context.DonXetNghiems.ToListAsync();
+        }
+
+        public async Task<List<DXNandGXN>> getallGXNAsync(int idDXN)
+        {
+            var gioHangs = await _context.DXNandGXNs.Where(g => g.DonXetNghiemId == idDXN).ToListAsync();
+            return gioHangs;
         }
 
         public async Task<DonXetNghiem> getbyid(int Id)

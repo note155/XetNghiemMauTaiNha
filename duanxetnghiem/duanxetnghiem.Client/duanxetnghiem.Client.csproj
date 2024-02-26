@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Folder Include="Pages\Admin\GoiXetNghiem\" />
+    <Folder Include="Pages\Admin\Donxetnghiem\" />
   </ItemGroup>
 
 </Project>

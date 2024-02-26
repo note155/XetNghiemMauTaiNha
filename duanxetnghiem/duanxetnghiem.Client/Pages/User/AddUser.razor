@@ -1,74 +1,119 @@
-﻿@page "/Add-User"
-
-
+﻿@page "/AddUser"
+@attribute [Authorize]
 @using duanxetnghiem.Data.Model;
 @inject NavigationManager navigation;
-<h3>Component</h3>
-
-@if (err != "")
+<h3>Thông Tin Cá Nhân </h3>
+ <div class="alert alert-danger" role="alert">
+<p>Bạn vui lòng cập nhật thông tin để sử dụng dịch vụ</p>
+</div>
+@if (errors.Count > 0)
 {
-    <p>Lỗi</p>
+    <div class="alert alert-danger" role="alert">
+   
+        @foreach (var error in errors)
+        {
+            <p>@error</p>
+        }
+    </div>
 }
 
 <div class="row">
-    <div class="col-md-4">
-        <EditForm Model="Input" method="post" OnValidSubmit="add" FormName="register">
+    <div class="col-md-6">
+        <EditForm Model="Input" class="needs-validation" method="post" OnValidSubmit="add" FormName="register">
             <DataAnnotationsValidator />
             <hr />
             <ValidationSummary class="text-danger" role="alert" />
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="Input.Hoten" class="form-control"  />
-                <label for="Hoten">Họ Tên</label>
+            <div class="form-group">
+                <label class="form-label" for="Hoten">Họ Tên</label>
+                <InputText @bind-Value="Input.Hoten" class="form-control" placeholder="" />
                 <ValidationMessage For="() => Input.Hoten" class="text-danger" />
             </div>
 
-            <div class="form-floating mb-3">
-                <InputText  @bind-Value="Input.Diachi" class="form-control"  />
-                <label for="Diachi">Địa Chỉ</label>
+            <div class="form-group">
+                <label class="form-label" for="Diachi">Địa Chỉ</label>
+                <InputText @bind-Value="Input.Diachi" class="form-control" placeholder="" />
+               
                 <ValidationMessage For="() => Input.Diachi" class="text-danger" />
             </div>
-            <div class="form-floating mb-3">
-                <InputText  @bind-Value="Input.SDT" class="form-control"  />
-                <label for="confirm-password">Số Điện Thoại</label>
+            <div class="form-group">
+                <label class="form-label" for="SDT">Số Điện Thoại</label>
+                <InputText @bind-Value="Input.SDT" class="form-control" placeholder="" />       
                 <ValidationMessage For="() => Input.SDT" class="text-danger" />
             </div>
-            <div class="form-floating mb-3">
-                <InputText  @bind-Value="Input.Email" class="form-control"  />
-                <label for="confirm-password">Email</label>
-                <ValidationMessage For="() => Input.Email" class="text-danger" />
-            </div>
-            <div class="form-floating mb-3">
+            <div class="form-group">
+                <label class="form-label" for="Tuoi">Giới tính</label>
                 <InputSelect id="Gioitinh" @bind-Value="Input.Gioitinh" class="form-control">
-                    <option value="true">Nam</option>
-                    <option value="false">Nữ</option>
+                    <option class="form-check-label" value="true">Nam</option>
+                    <option class="form-check-label"  value="false">Nữ</option>
                 </InputSelect>
             </div>
-            <div class="form-floating mb-3">
-                <InputNumber  @bind-Value="Input.Tuoi" class="form-control" />
+            <div class="form-group">
+                <label class="form-label" for="Tuoi">Tuổi của bạn</label>
+                <InputNumber @bind-Value="Input.Tuoi" class="form-control" placeholder="" />
                 <ValidationMessage For="() => Input.Tuoi" class="text-danger" />
             </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+            <button type="submit" class="w-100 btn btn-lg btn-primary">Cập Nhật Thông Tin</button>
         </EditForm>
     </div>
-    
+
 </div>
 
 @code {
+    [Inject]
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
     [SupplyParameterFromForm]
     public User Input { get; set; } = new();
-    String err = "";
+
+    public string UserName { get; set; }
+    List<string> errors = new List<string>();
+    int a;
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        UserName = authState.User.Identity.Name;
+    }
     private async Task add()
     {
-        if (string.IsNullOrEmpty(Input.Diachi))
+        errors.Clear(); // Clear previous errors
+        ValidateInput(); // Validate input fields
+
+        if (errors.Count == 0)
         {
+            Input.Email = UserName;
+             a= await Usertservice.IsUserExistsAsync(Input);
+            if (a != -1)
+            {
+                errors.Add("Thông tin bệnh nhân này đã có");
+            }
+            else
+            {
+                await Usertservice.adduserAsync(Input);
+            }
 
         }
-        else
+    }
+    private void ValidateInput()
+    {
+        if (string.IsNullOrWhiteSpace(Input.Hoten))
         {
-
-
+            errors.Add("Vui lòng nhập họ tên.");
         }
-
+        if (string.IsNullOrWhiteSpace(Input.Diachi))
+        {
+            errors.Add("Vui lòng nhập địa chỉ.");
+        }
+        if (string.IsNullOrWhiteSpace(Input.SDT))
+        {
+            errors.Add("Vui lòng nhập số điện thoại.");
+        }
+        if (Input.Gioitinh == null)
+        {
+            errors.Add("Vui lòng chọn giới tính.");
+        }
+        if (Input.Tuoi <= 0)
+        {
+            errors.Add("Vui lòng nhập tuổi hợp lệ.");
+        }
     }
 }
-

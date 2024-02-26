@@ -12,8 +12,8 @@ using duanxetnghiem.Data;
 namespace duanxetnghiem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240223023613_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20240226035056_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -175,6 +175,8 @@ namespace duanxetnghiem.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DonXetNghiemId");
+
+                    b.HasIndex("GoiXetNghiemId");
 
                     b.ToTable("DXNandGXNs");
                 });
@@ -360,9 +362,6 @@ namespace duanxetnghiem.Migrations
                     b.Property<int?>("BacSiId")
                         .HasColumnType("int");
 
-                    b.Property<int>("GoiXetNghiemId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Ngaydat")
                         .HasColumnType("datetime2");
 
@@ -384,8 +383,6 @@ namespace duanxetnghiem.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("GoiXetNghiemId");
 
                     b.HasIndex("UserId");
 
@@ -551,7 +548,15 @@ namespace duanxetnghiem.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("duanxetnghiem.Data.Model.GoiXetNghiem", "GoiXetNghiem")
+                        .WithMany()
+                        .HasForeignKey("GoiXetNghiemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("DonXetNghiem");
+
+                    b.Navigation("GoiXetNghiem");
                 });
 
             modelBuilder.Entity("Shared.Model.GioHang", b =>
@@ -597,19 +602,11 @@ namespace duanxetnghiem.Migrations
 
             modelBuilder.Entity("duanxetnghiem.Data.Model.DonXetNghiem", b =>
                 {
-                    b.HasOne("duanxetnghiem.Data.Model.GoiXetNghiem", "GoiXetNghiem")
-                        .WithMany()
-                        .HasForeignKey("GoiXetNghiemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("duanxetnghiem.Data.Model.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("GoiXetNghiem");
 
                     b.Navigation("User");
                 });

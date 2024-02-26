@@ -58,11 +58,6 @@ namespace duanxetnghiem.Controller
 			try
 			{
 				var gioHangs = await _GioHangRepository.getallAsyncbyiduser(iduser);
-				if (gioHangs == null || gioHangs.Count == 0)
-				{
-					return NotFound($"No GioHang found for user with ID = {iduser}");
-				}
-
 				return Ok(gioHangs);
 			}
 			catch (Exception ex)

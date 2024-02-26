@@ -18,7 +18,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
-
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
@@ -30,6 +29,7 @@ builder.Services.AddScoped<IDonXetNghiem, DonXetNghiemRepository>();
 builder.Services.AddScoped<IKetQuaXetNghiem, KetQuaXetNghiemRepository>();
 builder.Services.AddScoped<ITuChoi, TuChoiRepository>();
 builder.Services.AddScoped<IGioHang, GioHangRepository>();
+builder.Services.AddScoped<IThanhToan, ThanhToanRepository>();
 builder.Services.AddScoped(http => new HttpClient
 {
     BaseAddress = new Uri(builder.Configuration.GetSection("BaseAdress").Value)
@@ -72,6 +72,7 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
 
 app.UseHttpsRedirection();
 app.MapControllers();

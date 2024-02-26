@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using duanxetnghiem.Data.Model;
+using Shared.Model;
 
 namespace Shared.ketnoi
 {
@@ -14,5 +15,7 @@ namespace Shared.ketnoi
         Task<DonXetNghiem> deleteAsync(int id);
         Task<List<DonXetNghiem>> getallAsync();
         Task<DonXetNghiem> getbyid(int Id);
+        Task<DXNandGXN> addnew(DXNandGXN a);
+        Task<List<DXNandGXN>> getallGXNAsync(int idDXN);
     }
 }

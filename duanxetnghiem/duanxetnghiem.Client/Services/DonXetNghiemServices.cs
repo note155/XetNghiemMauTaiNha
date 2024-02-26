@@ -1,10 +1,11 @@
 ﻿using duanxetnghiem.Data.Model;
 using Shared.ketnoi;
+using Shared.Model;
 using System.Net.Http.Json;
 
 namespace duanxetnghiem.Client.Services
 {
-    public class DonXetNghiemServices :IDonXetNghiem
+    public class DonXetNghiemServices : IDonXetNghiem
     {
         private readonly HttpClient _httpClient;
         public DonXetNghiemServices(HttpClient httpClient)
@@ -19,6 +20,13 @@ namespace duanxetnghiem.Client.Services
             return respone;
         }
 
+        public async Task<DXNandGXN> addnew(DXNandGXN a)
+        {
+            var newstudent = await _httpClient.PostAsJsonAsync("api/DonXetNghiem/Add-DXNandGXN", a);
+            var respone = await newstudent.Content.ReadFromJsonAsync<DXNandGXN>();
+            return respone;
+        }
+
         public async Task<DonXetNghiem> deleteAsync(int id)
         {
             var newstudent = await _httpClient.PostAsJsonAsync("api/DonXetNghiem/Delete-DXN", id);
@@ -30,6 +38,13 @@ namespace duanxetnghiem.Client.Services
         {
             var allstudent = await _httpClient.GetAsync("api/DonXetNghiem/All-DXN");
             var respone = await allstudent.Content.ReadFromJsonAsync<List<DonXetNghiem>>();
+            return respone;
+        }
+
+        public async Task<List<DXNandGXN>> getallGXNAsync(int idDXN)
+        {
+            var allstudent = await _httpClient.GetAsync($"api/DonXetNghiem/All-DXNandGXN/{idDXN}");
+            var respone = await allstudent.Content.ReadFromJsonAsync<List<DXNandGXN>>();
             return respone;
         }
 

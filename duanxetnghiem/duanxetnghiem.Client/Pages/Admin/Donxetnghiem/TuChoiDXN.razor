@@ -43,13 +43,27 @@
                 <InputTextArea @bind-Value="Input.ghiChu" class="form-control" id="ghiChu" readonly />
                 <ValidationMessage For="() => Input.ghiChu" class="text-danger" />
             </div>
-            <div class="form-group">
-                <label for="GoiXetNghiemId">Gói xét nghiệm</label>
-                <InputNumber @bind-Value="Input.GoiXetNghiemId" class="form-control" id="GoiXetNghiemId" readonly />
-                <label>Tên Gói Xét Nghiệm: @loadGXN(Input.GoiXetNghiemId)</label>
-                <ValidationMessage For="() => Input.GoiXetNghiemId" class="text-danger" />
-            </div>
+
         </EditForm>
+        <div class="doctor-info">
+            <div class="selected-packages-header">
+                <h3>Các gói đã chọn:</h3>
+            </div>
+            <div class="selected-packages">
+                @foreach (var bs in gxndachon)
+                {
+                    <div class="package">
+                        <div class="package-content">
+                            <p><strong>Tên Gói:</strong> @bs.TenGoi</p>
+                            <div class="price">Giá: @bs.Gia VND</div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="total-mobile">
+                <p>Tổng tiền: <span class="total">@tongtien VND</span></p>
+            </div>
+        </div>
         <EditForm Model="Xoadxn" method="post" OnValidSubmit="xoa" FormName="register">
             <DataAnnotationsValidator />
             <hr />
@@ -94,6 +108,9 @@
     private User user = new User();
     public List<GoiXetNghiem> allGXN { get; set; } = new();
     string valor, idbs;
+    public List<GoiXetNghiem> gxndachon { get; set; } = new();
+    public List<DXNandGXN> dxn { get; set; } = new();
+    public long tongtien = 0;
 
     [SupplyParameterFromForm]
     public DonXetNghiem Input { get; set; } = new();
@@ -109,6 +126,24 @@
         Input = await DXNservice.getbyid(id);
         user = await Usertservice.getuserbyid(Input.UserId);
         allGXN = await GXNservice.getallAsync();
+        dxn = await DXNservice.getallGXNAsync(id);
+        loadgxndachon();
+    }
+    private void loadgxndachon()
+    {
+        foreach (var a in dxn)
+        {
+
+            foreach (var b in allGXN)
+            {
+                if (b.Id == a.GoiXetNghiemId)
+                {
+                    gxndachon.Add(b);
+                    tongtien += b.Gia;
+                }
+            }
+            allGXN.RemoveAll(item => item.Id == a.GoiXetNghiemId);
+        }
     }
     private async Task add()
     {

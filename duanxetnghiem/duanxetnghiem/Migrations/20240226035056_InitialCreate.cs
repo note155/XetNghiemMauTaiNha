@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace duanxetnghiem.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -216,7 +216,6 @@ namespace duanxetnghiem.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     BacSiId = table.Column<int>(type: "int", nullable: true),
-                    GoiXetNghiemId = table.Column<int>(type: "int", nullable: false),
                     Ngaydat = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ghiChu = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Trangthai = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -226,12 +225,6 @@ namespace duanxetnghiem.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DonXetNghiems", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DonXetNghiems_GoiXetNghiems_GoiXetNghiemId",
-                        column: x => x.GoiXetNghiemId,
-                        principalTable: "GoiXetNghiems",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_DonXetNghiems_Users_UserId",
                         column: x => x.UserId,
@@ -282,6 +275,12 @@ namespace duanxetnghiem.Migrations
                         name: "FK_DXNandGXNs_DonXetNghiems_DonXetNghiemId",
                         column: x => x.DonXetNghiemId,
                         principalTable: "DonXetNghiems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DXNandGXNs_GoiXetNghiems_GoiXetNghiemId",
+                        column: x => x.GoiXetNghiemId,
+                        principalTable: "GoiXetNghiems",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -391,11 +390,6 @@ namespace duanxetnghiem.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DonXetNghiems_GoiXetNghiemId",
-                table: "DonXetNghiems",
-                column: "GoiXetNghiemId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_DonXetNghiems_UserId",
                 table: "DonXetNghiems",
                 column: "UserId");
@@ -404,6 +398,11 @@ namespace duanxetnghiem.Migrations
                 name: "IX_DXNandGXNs_DonXetNghiemId",
                 table: "DXNandGXNs",
                 column: "DonXetNghiemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DXNandGXNs_GoiXetNghiemId",
+                table: "DXNandGXNs",
+                column: "GoiXetNghiemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GioHangs_GoiXetNghiemId",
@@ -474,10 +473,10 @@ namespace duanxetnghiem.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "DonXetNghiems");
+                name: "GoiXetNghiems");
 
             migrationBuilder.DropTable(
-                name: "GoiXetNghiems");
+                name: "DonXetNghiems");
 
             migrationBuilder.DropTable(
                 name: "Users");
