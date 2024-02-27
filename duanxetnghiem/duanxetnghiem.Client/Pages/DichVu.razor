@@ -2,7 +2,7 @@
 @rendermode InteractiveAuto
  @inject IJSRuntime JS
  @inject NavigationManager navigation;
-<div class="background-container" style="background-image: url('anhnen.jpg');">
+<div class="background-container" >
     <div class="row d-flex align-items-center justify-content-center" style="width: 100%; height: 300px;margin:auto;">
         <div class="col-md-6 d-flex flex-column align-items-center">
             <!-- title -->
@@ -42,63 +42,73 @@
 </div>
 
 <div class="package-container">
-        @if (!AllGoi.Any())
+    @if (!AllGoi.Any())
+    {
+        <p><em>Loading ...</em></p>
+    }
+    @if (AllGoi.Any())
+    {
+        @foreach (var goi in AllGoi)
         {
-            <p><em>Loading ...</em></p>
-        }
-        @if (AllGoi.Any())
-        {
-            @foreach (var goi in AllGoi)
-            {
             <div class="package-item">
                 <div class="package-item-photo">
-                    <img src="@goi.Anh" alt="" loading="lazy">
-                    <div class="package-item-sale">- 20% </div>
-                    <a href="#">Xem chi tiết </a>
+                    <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
+                        <div class="package-item-photo">
+                            <img src="@goi.Anh" alt="" loading="lazy">
+                        </div>
+                    </a>
                 </div>
                 <div class="package-item-detail">
                     <div class="package-item-price">@goi.Gia VND</div>
-                    <h3 class="package-item-title">@goi.TenGoi</h3>
+                    <a href="/Goixetnghiemcoban" class="post-image-container" tabindex="-1">
+                        <h3 class="package-item-title">@goi.TenGoi</h3>
+                    </a>
+
                     <div class="package-item-meta">
                         <div class="package-item-gender">@goi.ThoiGian</div>
-                    </div> 
+                    </div>
+                    <div class="plus-icon-container">
+                        <span class="plus-icon">&#10133;</span>
+                    </div>
+
                 </div>
             </div>
         }
     }
 </div>
-
 <nav aria-label="Page navigation">
     <nav id="pagination-7960274864" aria-label="Page navigation" class="text-center">
         <ul class="pagination mb-0 justify-content-center">
-            <span></span>
-            <li class="disabled page-item">
-                <a aria-label="Trước
-" class="page-nav previous page-link" href="#" rel="tooltip" tab-index="-1" title="Trước
-"><i class="fa fa-angle-left"></i></a>
+            <!-- Nút trang trước -->
+            <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                <a aria-label="Trước" class="page-nav previous page-link"  rel="tooltip" tabindex="-1" title="Trước" @onclick="(() => ChangePage(currentPage - 1))"><i class="fa fa-angle-left"></i></a>
             </li>
-            <li class="active page-item"><a class="page-link" href="/dichvu?pagenumber=1">1</a></li>
-            <li class="page-item"><a class="page-link" href="/dichvu?pagenumber=2">2</a></li>
-            <li class="page-item"><a class="page-link" href="/dichvu?pagenumber=3">3</a></li>
-            <li class="page-item"><a class="page-link" href="/dichvu?pagenumber=4">4</a></li>
-            <li class="page-item"><a class="page-link" href="/dichvu?pagenumber=5">5</a></li>
-            <span></span>
-            <li class="page-item">
-                <a aria-label="Kế tiếp
-" class="page-nav next page-link" href="/dichvu?pagenumber=2" rel="tooltip" tab-index="-1" title="Kế tiếp
-"><i class="fa fa-angle-right"></i></a>
+            <!-- Các nút trang -->
+            @for (var pageNumber = 1; pageNumber <= totalPages; pageNumber++)
+            {
+                var localPageNumber = pageNumber; // Tạo biến cục bộ ở đây
+                <li class="page-item @(pageNumber == currentPage ? "active" : "")">
+                    <a class="page-link" @onclick="(() => ChangePage(localPageNumber))">@pageNumber</a>
+                </li>
+            }
+
+            <!-- Nút trang tiếp theo -->
+            <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                <a aria-label="Kế tiếp" class="page-nav next page-link" rel="tooltip" tabindex="-1" title="Kế tiếp" @onclick="(() => ChangePage(currentPage + 1))"><i class="fa fa-angle-right"></i></a>
             </li>
         </ul>
     </nav>
 </nav>
-
 @code {
     public List<GoiXetNghiem> AllGoi { get; set; } = new();
+    private int itemsPerPage = 6; // Số lượng mục trên mỗi trang
+    private int currentPage = 1;
+    private int totalPages;
+    private bool hasRendered = false;
 
     protected override async Task OnInitializedAsync()
     {
         await LoadAlLGoi();
-
     }
     public async Task LoadAlLGoi()
     {
@@ -106,9 +116,23 @@
         AllGoi.Clear();
 
         if (goi is null) return;
-        foreach (var g in goi)
+
+        totalPages = (int)Math.Ceiling((double)goi.Count / itemsPerPage);
+
+        foreach (var g in goi.Skip((currentPage - 1) * itemsPerPage).Take(itemsPerPage))
         {
             AllGoi.Add(g);
         }
+    }
+    private async Task ChangePage(int pageNumber)
+    {
+        if (pageNumber < 1 || pageNumber > totalPages || pageNumber == currentPage)
+        {
+            return;
+        }
+
+        currentPage = pageNumber;
+        await LoadAlLGoi();  // Gọi phương thức để load dữ liệu cho trang mới
+        StateHasChanged();
     }
 }

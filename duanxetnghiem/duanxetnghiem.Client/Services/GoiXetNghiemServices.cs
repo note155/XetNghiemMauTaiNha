@@ -13,7 +13,7 @@ namespace duanxetnghiem.Client.Services
         }
         public async Task<GoiXetNghiem> addAsync(GoiXetNghiem user)
         {
-            var newstudent = await _httpClient.PostAsJsonAsync("api/GXN/Add-GXN", user);
+            var newstudent = await _httpClient.PostAsJsonAsync("api/GoiXetNghiem/Add-GXN", user);
             var respone = await newstudent.Content.ReadFromJsonAsync<GoiXetNghiem>();
             return respone;
         }
@@ -41,7 +41,7 @@ namespace duanxetnghiem.Client.Services
 
         public async Task<GoiXetNghiem> updateAsync(GoiXetNghiem User)
         {
-            var newstudent = await _httpClient.PostAsJsonAsync("api/GXN/Update-GXN", User);
+            var newstudent = await _httpClient.PostAsJsonAsync("api/GoiXetNghiem/Update-GXN", User);
             var respone = await newstudent.Content.ReadFromJsonAsync<GoiXetNghiem>();
             return respone;
         }

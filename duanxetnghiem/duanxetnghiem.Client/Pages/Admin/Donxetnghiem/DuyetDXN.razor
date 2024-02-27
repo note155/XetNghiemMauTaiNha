@@ -209,6 +209,10 @@
         {
             err.Add("Giờ lấy máu không được để trống.");
         }
+        if (gxndachon.Count == 0)
+        {
+            err.Add("Vui lòng chọn gói xét nghiệm.");
+        }
         // Kiểm tra gói xét nghiệm
         // Kiểm tra nhân viên lấy máu
         if (idbs == 0)
