@@ -1,0 +1,45 @@
+﻿
+body {
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.row {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    margin-bottom: 20px;
+}
+
+.col-6 {
+    width: 50%; /* Ensure each column takes up 50% of the row */
+    border: 1px solid #ccc; /* Border for the div elements */
+    padding: 10px; /* Add some padding for better spacing */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.info p {
+    margin-bottom: 5px;
+}
+
+.info strong {
+    margin-right: 5px;
+}
+
+h2 {
+    color: #007bff; /* Change text color for h2 elements */
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 576px) {
+    .col-6 {
+        width: 100%;
+    }
+}
+
+Đang hiển thị 4171253600543269347.

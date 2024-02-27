@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using duanxetnghiem.Data.Model;
+using duanxetnghiem.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared.ketnoi;
 using Shared.Model;
@@ -65,5 +67,27 @@ namespace duanxetnghiem.Controller
 				return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving GioHangs");
 			}
 		}
-	}
+
+        [HttpPost("Update-GH")]
+        public async Task<ActionResult<GioHang>> UpdateBacSiAsync(GioHang user)
+        {
+            var updatestudent = await _GioHangRepository.updateAsync(user);
+
+            return Ok(updatestudent);
+        }
+
+        [HttpGet("All-GHtrue/{iduser}")]
+        public async Task<ActionResult<List<GioHang>>> GetAllGioHangistrue(int iduser)
+        {
+            try
+            {
+                var gioHangs = await _GioHangRepository.getallistrue(iduser);
+                return Ok(gioHangs);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving GioHangs");
+            }
+        }
+    }
 }

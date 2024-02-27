@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using duanxetnghiem.Data.Model;
 using Shared.ketnoi;
 using Shared.Model;
 
@@ -53,5 +54,27 @@ namespace duanxetnghiem.Client.Services
 				throw new Exception("Error getting GioHangs by UserId", ex);
 			}
 		}
-	}
+
+        public async Task<List<GioHang>> getallistrue(int iduser)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"api/GioHang/All-GHtrue/{iduser}");
+                var a = await response.Content.ReadFromJsonAsync<List<GioHang>>();
+                if (a != null) return a;
+                else return null;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error getting GioHangs by UserId", ex);
+            }
+        }
+
+        public async Task<GioHang> updateAsync(GioHang User)
+        {
+            var newstudent = await _httpClient.PostAsJsonAsync("api/GioHang/Update-GH", User);
+            var respone = await newstudent.Content.ReadFromJsonAsync<GioHang>();
+            return respone;
+        }
+    }
 }

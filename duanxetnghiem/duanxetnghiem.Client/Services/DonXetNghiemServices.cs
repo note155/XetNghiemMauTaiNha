@@ -34,6 +34,16 @@ namespace duanxetnghiem.Client.Services
             return respone;
         }
 
+        public async Task<DXNandGXN> deletegxnAsync(int id)
+        {
+            var response = await _httpClient.DeleteAsync($"api/DonXetNghiem/Delete-DXNGXN/{id}");
+
+            // Handle the response here if needed
+
+            return null; // or return any appropriate result
+        }
+
+
         public async Task<List<DonXetNghiem>> getallAsync()
         {
             var allstudent = await _httpClient.GetAsync("api/DonXetNghiem/All-DXN");

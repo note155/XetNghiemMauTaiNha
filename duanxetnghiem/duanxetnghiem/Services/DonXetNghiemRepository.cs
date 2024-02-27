@@ -45,6 +45,18 @@ namespace duanxetnghiem.Services
             return null;
         }
 
+        public async Task<DXNandGXN> deletegxnAsync(int id)
+        {
+            var donXetNghiemToDelete = await _context.DXNandGXNs.FindAsync(id);
+            if (donXetNghiemToDelete != null)
+            {
+                _context.DXNandGXNs.Remove(donXetNghiemToDelete);
+                await _context.SaveChangesAsync();
+                return donXetNghiemToDelete;
+            }
+            return null;
+        }
+
         public async Task<List<DonXetNghiem>> getallAsync()
         {
             return await _context.DonXetNghiems.ToListAsync();

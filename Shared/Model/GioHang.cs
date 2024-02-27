@@ -16,6 +16,6 @@ namespace Shared.Model
 		public User? User { get; set; }
 		public int GoiXetNghiemId { get; set; }
 		public GoiXetNghiem? GoiXetNghiem { get; set; }
-		
-	}
+        public bool? IsSelected { get; set; }
+    }
 }

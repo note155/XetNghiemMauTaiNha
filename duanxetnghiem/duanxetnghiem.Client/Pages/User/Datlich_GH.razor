@@ -1,4 +1,4 @@
-﻿@page "/datlich"
+﻿@page "/datlichGH"
 @using Shared.form
 @rendermode InteractiveAuto
 @inject NavigationManager navigation;
@@ -16,25 +16,25 @@
             }
         </div>
     }
-<div class="patient-registration-container">
-    <div class="patient-info">
-        <h2>Thông tin bệnh nhân</h2>
-         @if (user!=null)
-         {
-            <div class="info">
-                <p><strong>Họ tên:</strong> @user.Hoten</p>
-                <p><strong>Tuổi:</strong> @user.Tuoi</p>
-                <p><strong>Số điện thoại:</strong> @user.SDT</p>
-                <p><strong>Địa chỉ:</strong> @user.Diachi</p>
-                <p><strong>Email:</strong> @user.Email</p>
-                <p><strong>Giới tính:</strong> @gioitinh(@user.Gioitinh)</p>
-            </div>
-         }
-         
+    <div class="patient-registration-container">
+        <div class="patient-info">
+            <h2>Thông tin bệnh nhân</h2>
+            @if (user != null)
+            {
+                <div class="info">
+                    <p><strong>Họ tên:</strong> @user.Hoten</p>
+                    <p><strong>Tuổi:</strong> @user.Tuoi</p>
+                    <p><strong>Số điện thoại:</strong> @user.SDT</p>
+                    <p><strong>Địa chỉ:</strong> @user.Diachi</p>
+                    <p><strong>Email:</strong> @user.Email</p>
+                    <p><strong>Giới tính:</strong> @gioitinh(@user.Gioitinh)</p>
+                </div>
+            }
+
         </div>
-        
-    <div class="test-registration-form">
-        <h2>Đơn đăng ký đặt lịch xét nghiệm</h2>
+
+        <div class="test-registration-form">
+            <h2>Đơn đăng ký đặt lịch xét nghiệm</h2>
 
             <div class="form-group">
                 <label for="Ngaydat">Ngày Lấy Máu</label>
@@ -97,8 +97,8 @@
                     </option>
                 }
             </InputSelect>
-             @if (gxndachon.Count != 0)
-             {
+            @if (gxndachon.Count != 0)
+            {
                 <div class="doctor-info">
                     <div class="selected-packages-header">
                         <h3>Các gói đã chọn:</h3>
@@ -125,8 +125,8 @@
             <button type="submit" class="btn btn-primary">Đăng Ký</button>
 
 
+        </div>
     </div>
-</div>
 </EditForm>
 
 @code {
@@ -139,12 +139,12 @@
     public List<BacSi> AllBS { get; set; } = new();
     public string UserName { get; set; }
     public List<GoiXetNghiem> gxndachon { get; set; } = new();
-    int valor=0, idbs;
+    int valor = 0, idbs;
     public long tongtien = 0;
+    public List<GioHang> gh { get; set; } = new();
 
     [SupplyParameterFromForm]
     public donXNform Input { get; set; } = new();
-
 
     protected override async Task OnInitializedAsync()
     {
@@ -157,7 +157,25 @@
         }
         allGXN = await GXNservice.getallAsync();
         Input.Ngaydat = DateTime.Now;
+        gh = await GHservice.getallistrue(user.Id);
+        loadGH();
+
     }
+    private void loadGH()
+    {
+        foreach( var a in gh)
+        {
+            foreach(var b in allGXN)
+            {
+                if (b.Id == a.GoiXetNghiemId)
+                {
+                    gxndachon.Add(b);
+                    tongtien += b.Gia;
+                }
+            }
+        }
+    }
+
     private void remove(int id)
     {
         foreach (var gxn in gxndachon)
@@ -165,7 +183,7 @@
             if (gxn.Id == id)
             {
                 allGXN.Add(gxn);
-                tongtien-= gxn.Gia;
+                tongtien -= gxn.Gia;
             }
         }
         gxndachon.RemoveAll(item => item.Id == id);
@@ -199,20 +217,24 @@
         foreach (var gxn in gxndachon)
         {
             DXNandGXN a = new DXNandGXN
-            {
-                DonXetNghiemId=don.Id,
-                GoiXetNghiemId=gxn.Id
-            };
+                {
+                    DonXetNghiemId = don.Id,
+                    GoiXetNghiemId = gxn.Id
+                };
             await DXNservice.addnew(a);
         }
         ThanhToan tt = new ThanhToan
-        {
-            UserId=user.Id,
-            DonXetNghiemId=don.Id,
-            Tongtien=tongtien,
-            trangthai="Chưa Thanh Toán"
-        };
+            {
+                UserId = user.Id,
+                DonXetNghiemId = don.Id,
+                Tongtien = tongtien,
+                trangthai = "Chưa Thanh Toán"
+            };
         await TTservice.addAsync(tt);
+        foreach (var s in gh)
+        {
+            await GHservice.deleteAsync(s.Id); 
+        }
         navigation.NavigateTo("/camon");
     }
     public String loadGXN(int id)
@@ -244,7 +266,7 @@
 
         foreach (var xn in allGXN)
         {
-            if(xn.Id==id)
+            if (xn.Id == id)
             {
                 gxndachon.Add(xn);
                 tongtien += xn.Gia;

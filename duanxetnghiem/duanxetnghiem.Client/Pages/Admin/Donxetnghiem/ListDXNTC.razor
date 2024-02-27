@@ -1,0 +1,122 @@
+﻿@page "/ListDXNTC"
+@using Shared.Model
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title" style="color:red">Đơn yêu cầu đã từ chối</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header"></div>
+                            @if (!AllDXN.Any())
+                            {
+                                <p><em>Loading ...</em></p>
+                            }
+                            @if (AllDXN.Any())
+                            {
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Id Đơn</th>
+                                                    <th>Họ Tên Khách Hàng</th>
+                                                    <th>Lý do</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var DXN in AllDXN)
+                                                {
+                                                    <tr>
+                                                        <td>@DXN.Id</td>
+                                                        <td>@loadhoten(DXN.UserId)</td>
+                                                        <td>@loadTC(@DXN.Id)</td>
+                                                        <td>
+                                                            <a class="btn btn-dark" href="/ChitietDXNTC/@DXN.Id"> Chi tiết </a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-info"> There is not DXN List Availlable</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    public List<DonXetNghiem> AllDXN { get; set; } = new();
+    public List<GoiXetNghiem> allGXN { get; set; } = new();
+    public List<User> allUser { get; set; } = new();
+    public List<TuChoi> allTC { get; set; } = new();
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAlLStudents();
+        allGXN = await GXNservice.getallAsync();
+        allUser = await Usertservice.getalluserAsync();
+        allTC = await TCservice.getallAsync();
+    }
+
+    public async Task LoadAlLStudents()
+    {
+        // var students = await GenericService.GetAllAsync(student, "api/Student/All-Students");
+        var DXN = await DXNservice.getallAsync();
+        AllDXN.Clear();
+
+        if (DXN is null) return;
+        foreach (var student in DXN)
+        {
+            if (student.Trangthai == "Từ Chối")
+            {
+                AllDXN.Add(student);
+            }
+        }
+    }
+    public String loadGXN(int id)
+    {
+        foreach (var gxn in allGXN)
+        {
+            if (gxn.Id == id)
+            {
+                return gxn.TenGoi;
+            }
+        }
+        return null;
+    }
+    public String loadhoten(int id)
+    {
+        foreach (var us in allUser)
+        {
+            if (us.Id == id)
+            {
+                return us.Hoten;
+            }
+        }
+        return null;
+    }
+    public String loadTC(int id)
+    {
+        foreach (var us in allTC)
+        {
+            if (us.DonXetNghiemId == id)
+            {
+                return us.Lydo;
+            }
+        }
+        return null;
+    }
+}

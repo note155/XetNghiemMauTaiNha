@@ -17,5 +17,6 @@ namespace Shared.ketnoi
         Task<DonXetNghiem> getbyid(int Id);
         Task<DXNandGXN> addnew(DXNandGXN a);
         Task<List<DXNandGXN>> getallGXNAsync(int idDXN);
+        Task<DXNandGXN> deletegxnAsync(int id);
     }
 }

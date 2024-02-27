@@ -37,7 +37,7 @@
     </table>
     <p class="total-amount">Tổng tiền: @TinhTongTien() VND</p>
 
-    <a class="btn btn-success float-end mt-3" href="/datlich"> Tạo đơn </a>
+    <a class="btn btn-success float-end mt-3" @onclick="add"> Tạo đơn </a>
 }
 else
 {
@@ -50,6 +50,7 @@ else
     protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
     public List<GioHang> gioHangList { get; set; } = new();
+    public List<GioHang> gh { get; set; } = new();
     public List<giohangtam> gioHangt { get; set; } = new();
     public string UserName { get; set; }
     public User user { get; set; } = new();
@@ -73,7 +74,8 @@ else
             {
                 goiXetNghiemDict[gxn.Id] = gxn;
             }
-
+            gh = await GHservice.getallistrue(user.Id);
+            removegh();
             LoadAllStudents();
         }
         else
@@ -81,9 +83,32 @@ else
             // Handle the case where gioHangList is null
             // For example, display a message to the user
         }
-       
-    }
 
+    }
+    private async void removegh()
+    {
+        foreach (var a in gh)
+        {
+            a.IsSelected = false;
+            await GHservice.updateAsync(a);
+        }
+    }
+    private async void add()
+    {
+        var itemsToRemove = gioHangt.Where(student => student.IsSelected == true).ToList();
+        foreach (var student in itemsToRemove)
+        {
+            GioHang a = new GioHang
+                {
+                    Id=student.Id,
+                    UserId = student.UserId,
+                    GoiXetNghiemId = student.GoiXetNghiemId,
+                    IsSelected = student.IsSelected
+                };
+            await GHservice.updateAsync(a);
+        }
+        navigation.NavigateTo("/datlichGH");
+    }
     public void LoadAllStudents()
     {
         gioHangt.Clear();
@@ -105,13 +130,14 @@ else
     private async void DeleteSelected()
     {
         var itemsToRemove = gioHangt.Where(student => student.IsSelected==true).ToList();
-
         foreach (var student in itemsToRemove)
         {
             gioHangt.Remove(student);
             gioHangList.RemoveAll(item => item.Id == student.Id);
             await GHservice.deleteAsync(student.Id);
+            navigation.NavigateTo(navigation.Uri, true);
         }
+
     }
 
     public string GetGoiXetNghiemName(int id) => goiXetNghiemDict.ContainsKey(id) ? goiXetNghiemDict[id].TenGoi : null;

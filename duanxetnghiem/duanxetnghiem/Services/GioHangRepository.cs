@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using duanxetnghiem.Data;
+using duanxetnghiem.Data.Model;
 using Microsoft.EntityFrameworkCore;
 using Shared.ketnoi;
 using Shared.Model;
@@ -22,8 +23,17 @@ namespace duanxetnghiem.Services
 			await _context.SaveChangesAsync();
 			return newGioHang;
 		}
+        public async Task<GioHang> updateAsync(GioHang Giohang)
+        {
+            if (Giohang == null) return null;
 
-		public async Task<GioHang> deleteAsync(int id)
+            var updateuser = _context.GioHangs.Update(Giohang).Entity;
+
+            await _context.SaveChangesAsync();
+
+            return updateuser;
+        }
+        public async Task<GioHang> deleteAsync(int id)
 		{
 			var gioHangToDelete = await _context.GioHangs.FindAsync(id);
 			if (gioHangToDelete == null) return null;
@@ -37,5 +47,14 @@ namespace duanxetnghiem.Services
 			var gioHangs = await _context.GioHangs.Where(g => g.UserId == iduser).ToListAsync();
 			return gioHangs;
 		}
-	}
+
+        public async Task<List<GioHang>> getallistrue(int iduser)
+        {
+            var gioHangs = await _context.GioHangs
+                                        .Where(g => g.UserId == iduser && (g.IsSelected == true || g.IsSelected == null))
+                                        .ToListAsync();
+            return gioHangs;
+        }
+
+    }
 }

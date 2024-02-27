@@ -1,6 +1,7 @@
 ﻿@page "/XetDuyetDXN/{id:int}"
 @rendermode InteractiveAuto
  @inject NavigationManager navigation;
+
 <div class="patient-registration-container">
 <div class="patient-info">
     <h2>Thông tin bệnh nhân</h2>
@@ -16,6 +17,7 @@
 
 <div class="test-registration-form">
     <h2>Thông tin đơn đăng ký xét nghiệm</h2>
+        <div style="background-color:yellow;color:black" class="btn btn-primary btn-lg disabled">  <strong>Trạng Thái: </strong>@Input.Trangthai</div>
     <EditForm Model="Input" method="post" OnValidSubmit="add" FormName="register" class="profile-form">
         <DataAnnotationsValidator />
         <hr />
@@ -36,7 +38,7 @@
         </div>
         <div class="form-group">
             <label for="Ngaydat">Ngày Lấy Máu</label>
-                <InputDate @bind-Value="Input.Ngaydat" class="form-control" id="Ngaydat" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                <InputDate @bind-Value="Input.Ngaydat" class="form-control" id="Ngaydat" />
             <ValidationMessage For="() => Input.Ngaydat" class="text-danger" />
         </div>
         <div class="form-group">
@@ -163,9 +165,8 @@
     int valorgxn,idgxn;
     public List<GoiXetNghiem> gxndachon { get; set; } = new();
     public List<DXNandGXN> dxn { get; set; } = new();
-    public List<DXNandGXN> dxn1 { get; set; } = new();
     public long tongtien = 0;
-
+    private List<GoiXetNghiem> previousGxndachon = new List<GoiXetNghiem>();
 
     [SupplyParameterFromForm]
     public DonXetNghiem Input { get; set; } = new();
@@ -180,7 +181,6 @@
         allGXN = await GXNservice.getallAsync();
         AllBS = await bacsiservice.getallAsync();
         dxn = await DXNservice.getallGXNAsync(id);
-        dxn1 = dxn;
         loadgxndachon();
     }
     private void loadgxndachon()
@@ -198,6 +198,7 @@
             }
             allGXN.RemoveAll(item => item.Id == a.GoiXetNghiemId);
         }
+        previousGxndachon = new List<GoiXetNghiem>(gxndachon);
     }
     private async Task add()
     {
@@ -220,8 +221,34 @@
         {
             return;
         }
+        // Kiểm tra thay đổi của gxndachon
+        foreach (var newItem in gxndachon.Except(previousGxndachon))
+        {
+            DXNandGXN a = new DXNandGXN
+                {
+                    DonXetNghiemId = id,
+                    GoiXetNghiemId = newItem.Id
+                };
+            await DXNservice.addnew(a);
+        }
+
+        foreach (var removedItem in previousGxndachon.Except(gxndachon))
+        {
+            // removedItem là phần tử đã bị xóa
+            // Thực hiện hành động tương ứng, ví dụ: xóa khỏi cơ sở dữ liệu
+            foreach(var a in dxn)
+            {
+                if (a.GoiXetNghiemId == removedItem.Id)
+                {
+                    await DXNservice.deletegxnAsync(a.Id);
+                }
+            }
+        }
+
+        // Đặt lại danh sách trước đó để chuẩn bị cho lần lặp tiếp theo
+        previousGxndachon = new List<GoiXetNghiem>(gxndachon);
         Input.BacSiId = idbs;
-        Input.Trangthai = "Đã Duyệt";
+        Input.Trangthai = "Chờ lấy mẫu";
         await DXNservice.updateAsync(Input);
         navigation.NavigateTo("/ListDXN");
     }

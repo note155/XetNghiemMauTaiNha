@@ -11,7 +11,9 @@ namespace Shared.ketnoi
 	public interface IGioHang
 	{
 		Task<GioHang> addAsync(GioHang Giohang);
-		Task<GioHang> deleteAsync(int id);
+        Task<GioHang> updateAsync(GioHang Giohang);
+        Task<GioHang> deleteAsync(int id);
 		Task<List<GioHang>> getallAsyncbyiduser(int iduser);
-	}
+        Task<List<GioHang>> getallistrue(int iduser);
+    }
 }
