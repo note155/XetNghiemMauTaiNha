@@ -1,4 +1,5 @@
 using System.Net;
+using Append.Blazor.Printing;
 using duanxetnghiem.Client.Pages;
 using duanxetnghiem.Client.Services;
 using duanxetnghiem.Components;
@@ -30,6 +31,7 @@ builder.Services.AddScoped<IKetQuaXetNghiem, KetQuaXetNghiemRepository>();
 builder.Services.AddScoped<ITuChoi, TuChoiRepository>();
 builder.Services.AddScoped<IGioHang, GioHangRepository>();
 builder.Services.AddScoped<IThanhToan, ThanhToanRepository>();
+builder.Services.AddScoped<IPrintingService, PrintingService>();
 builder.Services.AddScoped(http => new HttpClient
 {
     BaseAddress = new Uri(builder.Configuration.GetSection("BaseAdress").Value)

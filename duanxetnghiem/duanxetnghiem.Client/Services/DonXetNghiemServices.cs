@@ -51,6 +51,14 @@ namespace duanxetnghiem.Client.Services
             return respone;
         }
 
+
+        public async Task<List<DonXetNghiem>> getallbyiduserAsync(int id)
+        {
+            var allstudent = await _httpClient.GetAsync($"api/DonXetNghiem/All-DXNbyiduser/{id}");
+            var respone = await allstudent.Content.ReadFromJsonAsync<List<DonXetNghiem>>();
+            return respone;
+        }
+
         public async Task<List<DXNandGXN>> getallGXNAsync(int idDXN)
         {
             var allstudent = await _httpClient.GetAsync($"api/DonXetNghiem/All-DXNandGXN/{idDXN}");

@@ -1,0 +1,185 @@
+﻿@page "/ThanhToan/{id:int}"
+@rendermode InteractiveAuto
+@inject NavigationManager navigation;
+<div class="container">
+    <div class="left-panel">
+        <div class="panel">
+            <div class="panel-header">Thông Tin Khách Hàng</div>
+            <div class="panel-body">
+                <div>
+                    <label>Họ Tên</label>
+                    <input value="@user.Hoten" class="form-control" readonly>
+                </div>
+                <div>
+                    <label>Tuổi</label>
+                    <input value="@user.Tuoi" class="form-control" readonly>
+                </div>
+                <div>
+                    <label>Số Điện Thoại</label>
+                    <input value="@user.SDT" class="form-control" readonly>
+                </div>
+                <div>
+                    <label>Địa Chỉ</label>
+                    <input value="@user.Diachi" class="form-control" readonly>
+                </div>
+                <div>
+                    <label>Email</label>
+                    <input value="@user.Email" class="form-control" readonly>
+                </div>
+                <div>
+                    <label>Giới Tính</label>
+                    <input value="@gioitinh(user.Gioitinh)" class="form-control" readonly>
+                </div>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="panel-header">Các Gói Đã Đăng Ký</div>
+            <div class="panel-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                Tên Gói
+                            </th>
+                            <th>
+                                Số Tiền
+                            </th>
+                        </tr>
+                    </thead>
+                    @foreach (var goi in gxndachon)
+                    {
+                        <tr>
+                            <td>@goi.TenGoi</td>
+                            <td>@goi.Gia</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="2">Tổng Thành Tiền : @tongtien VND</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="right-panel">
+        <div class="panel">
+            <div class="panel-header">Thanh Toán</div>
+            <div class="panel-body">
+                <div class="panel-body payment-content">
+                    <img src="QR.jpg" alt="QR Code" class="qr-code">
+                    <div class="payment-info">
+                        <div>Nội Dung Chuyển Tiền : @Input.Id</div>
+                        <!-- Bạn có thể thêm các phần khác tùy ý ở đây -->
+                    </div>
+                    <div class="payment-methods">
+                        Chọn Hình Thức Thanh Toán Trước:
+                        <div>
+                            <button @onclick="bamuoi" class="@class1">30%</button>
+                            <button @onclick="mottram" class="@class2">100%</button>
+                        </div>
+                    </div>
+                    <div class="payment-amount">
+                        <div>Số Tiền Cần Chuyển: @tientttruoc VND</div>
+                        <!-- Bạn có thể thêm các phần khác tùy ý ở đây -->
+                    </div>
+                </div>
+                <button @onclick="xacnhan" class="btn btn-success" style="width:100%">Đã Chuyển Tiền</button>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="panel-header">Hướng Dẫn Thanh Toán</div>
+            <div class="panel-body">
+                <!-- Thêm hướng dẫn thanh toán -->
+                <div>
+                    <div class="section-title">Bước 1: Truy cập app ngân hàng bạn đang sử dụng hoặc bất kỳ ví điện tử mà bạn có, chọn chức năng quét mã QR:(Minh họa:app ViettinBank Ipay)</div>
+                    <img style="width:100%" src="HD1.jpg" alt="Hướng dẫn bước 1">
+                </div>
+                <div>
+                    <div class="section-title">Bước 2: Nhập số tiền cần chuyển và nội dung chuyển tiền chính xác để thực hiện thanh toán</div>
+                    <img style="width:100%" src="HD2.jpg" alt="Hướng dẫn bước 2">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    private User user = new User();
+    public DonXetNghiem Input { get; set; } = new();
+    public List<GoiXetNghiem> allGXN { get; set; } = new ();
+    public List<GoiXetNghiem> gxndachon { get; set; } = new();
+    public List<DXNandGXN> dxn { get; set; } = new();
+    public long tongtien = 0;
+    public long tientttruoc;
+    string class1 = "btn btn-success";
+    string class2 = "btn btn-outline-success";
+    public ThanhToan tt { get; set; } = new ThanhToan();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Input = await DXNservice.getbyid(id);
+        user = await Usertservice.getuserbyid(Input.UserId);
+        allGXN = await GXNservice.getallAsync();
+        dxn = await DXNservice.getallGXNAsync(id);
+        loadgxndachon();
+        tientttruoc = tongtien * 30 / 100;
+        tt = await TTservice.getbyidDXNAsync(id);
+
+    }
+    private async void xacnhan()
+    {
+        Input.Trangthai = "Đã Chuyển Tiền";
+        await DXNservice.updateAsync(Input);
+        tt.NgayTT = DateTime.Now;
+        if (tientttruoc < tongtien)
+        {
+            tt.trangthai = "30%";
+        }
+        else
+        {
+            tt.trangthai = "Đã Thanh Toán";
+        }
+        tt.DaTT = tientttruoc;
+        await TTservice.updateAsync(tt);
+        navigation.NavigateTo("/camon");
+    }
+    private void loadgxndachon()
+	{
+		foreach (var a in dxn)
+		{
+
+			foreach (var b in allGXN)
+			{
+				if (b.Id == a.GoiXetNghiemId)
+				{
+					gxndachon.Add(b);
+					tongtien += b.Gia;
+				}
+			}
+		}
+	}
+	private void bamuoi()
+	{
+		tientttruoc = tongtien * 30/100 ;
+		 class1 = "btn btn-success";
+		 class2 = "btn btn-outline-success";
+	}
+	private void mottram()
+	{
+		tientttruoc = tongtien ;
+		class2 = "btn btn-success";
+		class1 = "btn btn-outline-success";
+	}
+	private String gioitinh(bool a)
+	{
+		if (a)
+		{
+			return "Nam";
+		}
+		else
+		{
+			return "Nữ";
+		}
+	}
+}

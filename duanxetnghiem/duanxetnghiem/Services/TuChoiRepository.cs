@@ -27,5 +27,10 @@ namespace duanxetnghiem.Services
         {
             return await _context.TuChois.ToListAsync();
         }
+
+        public async Task<TuChoi> getbyidAsync(int iddon)
+        {
+            return await _context.TuChois.FirstOrDefaultAsync(t => t.DonXetNghiemId == iddon);
+        }
     }
 }

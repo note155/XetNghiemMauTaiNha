@@ -1,0 +1,69 @@
+﻿@page "/patient-info"
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="activity-history">
+                <h3>Lịch sử hoạt động</h3>
+                <ul>
+                    <li>Số đơn đã đăng ký: @AllDXN.Count</li>
+                    <li>Đơn đăng ký gần đây: @time.ToString("dd/MM/yyyy HH:mm:ss tt")</li>
+                    <!-- Thêm các mục hoạt động khác tại đây -->
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="patient-info">
+                <h3>Thông tin cá nhân của bệnh nhân</h3>
+
+                <div class="form-group">
+                    <label>Họ và tên:</label>
+                    <p>@patient.Hoten</p>
+                </div>
+                <div class="form-group">
+                    <label>Tuổi:</label>
+                    <p>@patient.Tuoi</p>
+                </div>
+                <div class="form-group">
+                    <label>Giới tính:</label>
+                    <p>@patient.Gioitinh</p>
+                </div>
+                <div class="form-group">
+                    <label>Địa Chỉ:</label>
+                    <p>@patient.Diachi</p>
+                </div>
+                <div class="form-group">
+                    <label>Số Điện Thoại:</label>
+                    <p>@patient.SDT</p>
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <p>@patient.Email</p>
+                </div>
+                <div class="text-center">
+                    <button class="btn edit-btn">Chỉnh sửa thông tin</button>
+                    <button class="btn add-btn">Thêm thông tin cho người thân</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Inject]
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+    User patient = new User();
+    public string UserName { get; set; }
+    public List<DonXetNghiem> AllDXN { get; set; } = new();
+    DateTime time;
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        UserName = authState.User.Identity.Name;
+        patient = await Usertservice.getuserbyemail(UserName);
+        AllDXN = await DXNservice.getallbyiduserAsync(patient.Id);
+        var dxnWithMaxId = AllDXN.OrderByDescending(dxn => dxn.Id).First();
+        time = dxnWithMaxId.ngaytaodon;
+    }
+}

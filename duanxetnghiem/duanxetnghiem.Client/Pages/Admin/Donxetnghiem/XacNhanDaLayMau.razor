@@ -17,6 +17,7 @@
 
     <div class="test-registration-form">
         <h2>Thông tin đơn đăng ký xét nghiệm</h2>
+        <div style="background-color:greenyellow;color:black" class="btn btn-primary btn-lg disabled">  <strong>Trạng Thái: </strong>@Input.Trangthai</div>
         <EditForm Model="Input" method="post" OnValidSubmit="add" FormName="register" class="profile-form">
             <DataAnnotationsValidator />
             <hr />

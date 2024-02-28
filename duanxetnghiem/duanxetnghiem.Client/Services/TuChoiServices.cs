@@ -27,5 +27,20 @@ namespace duanxetnghiem.Client.Services
             var respone = await allstudent.Content.ReadFromJsonAsync<List<TuChoi>>();
             return respone;
         }
+
+        public async Task<TuChoi> getbyidAsync(int iddon)
+        {
+            var response = await _httpClient.GetAsync($"api/TuChoi/Single-TC/{iddon}");
+            if (response.IsSuccessStatusCode)
+            {
+                var respone = await response.Content.ReadFromJsonAsync<TuChoi>();
+                return respone;
+            }
+            else
+            {
+                // Xử lý khi không thành công, ví dụ: trả về null hoặc throw exception
+                return null;
+            }
+        }
     }
 }

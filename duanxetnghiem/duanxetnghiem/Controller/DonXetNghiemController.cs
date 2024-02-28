@@ -22,6 +22,13 @@ namespace duanxetnghiem.Controller
             return Ok(users);
         }
 
+        [HttpGet("All-DXNbyiduser/{id}")]
+        public async Task<ActionResult<List<DonXetNghiem>>> GetAllbyiduserAsync(int id)
+        {
+            var users = await _DXNRepository.getallbyiduserAsync(id);
+            return Ok(users);
+        }
+
         [HttpGet("All-DXNandGXN/{idDXN}")]
         public async Task<ActionResult<List<DonXetNghiem>>> GetAllDXNAsync(int idDXN)
         {

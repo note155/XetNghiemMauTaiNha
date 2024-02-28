@@ -1,3 +1,4 @@
+using Append.Blazor.Printing;
 using duanxetnghiem.Client;
 using duanxetnghiem.Client.Services;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -17,6 +18,7 @@ builder.Services.AddScoped<IKetQuaXetNghiem, KetQuaXetNghiemServices>();
 builder.Services.AddScoped<ITuChoi, TuChoiServices>();
 builder.Services.AddScoped<IGioHang, GioHangServices>();
 builder.Services.AddScoped<IThanhToan, ThanhToanServices>();
+builder.Services.AddScoped<IPrintingService, PrintingService>();
 builder.Services.AddScoped(http => new HttpClient
 {
     BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)

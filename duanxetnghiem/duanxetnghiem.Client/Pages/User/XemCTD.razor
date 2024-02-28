@@ -1,0 +1,280 @@
+﻿@page "/XCTDon/{id:int}"
+@rendermode InteractiveAuto
+ @inject NavigationManager navigation;
+
+<div class="patient-registration-container">
+    <div class="patient-info">
+        <h2>Thông tin bệnh nhân</h2>
+        <div class="info">
+            <p><strong>Họ tên:</strong> @user.Hoten</p>
+            <p><strong>Tuổi:</strong> @user.Tuoi</p>
+            <p><strong>Số điện thoại:</strong> @user.SDT</p>
+            <p><strong>Địa chỉ:</strong> @user.Diachi</p>
+            <p><strong>Email:</strong> @user.Email</p>
+            <p><strong>Giới tính:</strong> @gioitinh(@user.Gioitinh)</p>
+        </div>
+    </div>
+
+    <div class="test-registration-form">
+        <h2>Thông tin đơn đăng ký xét nghiệm</h2>
+        <div style="background-color:@a;color:black" class="btn btn-primary btn-lg disabled">  <strong>Trạng Thái: </strong>@Input.Trangthai</div>
+        <EditForm Model="Input" method="post" OnValidSubmit="add" FormName="register" class="profile-form">
+            <DataAnnotationsValidator />
+            <hr />
+
+            @if (err.Any())
+            {
+                <div class="alert alert-danger" role="alert">
+                    @foreach (var error in err)
+                    {
+                        <p>@error</p>
+                    }
+                </div>
+            }
+            <div class="form-group">
+                <label for="ngaytaodon">Ngày tạo đơn</label>
+                <InputDate @bind-Value="Input.ngaytaodon" class="form-control" id="Ngaytaodon" readonly />
+                <ValidationMessage For="() => Input.ngaytaodon" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label for="Ngaydat">Ngày Lấy Máu</label>
+                <InputDate @bind-Value="Input.Ngaydat" class="form-control" id="Ngaydat" readonly />
+                <ValidationMessage For="() => Input.Ngaydat" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label for="giolaymau">Giờ lấy máu</label>
+                <InputText @bind-Value="Input.giolaymau" class="form-control" id="giolaymau" readonly />
+                <ValidationMessage For="() => Input.giolaymau" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label for="ghiChu">Ghi chú của bệnh nhân</label>
+                <InputTextArea @bind-Value="Input.ghiChu" class="form-control" id="ghiChu" readonly />
+                <ValidationMessage For="() => Input.ghiChu" class="text-danger" />
+            </div>
+            @if (gxndachon.Count != 0)
+            {
+                <div class="doctor-info">
+                    <div class="selected-packages-header">
+                        <h3>Các gói đã chọn:</h3>
+                    </div>
+                    <div class="selected-packages">
+                        @foreach (var bs in gxndachon)
+                        {
+                            <div class="package">
+                                <div class="package-content">
+                                    <p><strong>Tên Gói:</strong> @bs.TenGoi</p>
+                                    <div class="price">Giá: @bs.Gia VND</div>
+                                </div>
+                               
+                            </div>
+                        }
+                    </div>
+                    <div class="total-mobile">
+                        <p>Tổng tiền: <span class="total">@tongtien VND</span></p>
+                    </div>
+                </div>
+
+            }
+            @if(Input.Trangthai=="Từ Chối")
+            {
+                <div class="reason-for-rejection">
+                    <h2>Lý do từ chối:</h2>
+                    <p>@lydo.Lydo</p>
+                </div>
+            }
+            @if (SelectedDoctor != null)
+            {
+                <div class="doctor-info">
+                    <div class="doctor-details">
+                        <h3>Thông tin bác sĩ:</h3>
+                        <p><strong>Họ tên:</strong> @SelectedDoctor.Hoten</p>
+                        <p><strong>Chức vụ:</strong> @SelectedDoctor.Chucvu</p>
+                        <p><strong>Số điện thoại:</strong> @SelectedDoctor.SDT</p>
+                        <p><strong>Email:</strong> @SelectedDoctor.Email</p>
+                    </div>
+                    <div class="doctor-image">
+                        <img src="@SelectedDoctor.Anh" alt="Ảnh bác sĩ">
+                    </div>
+
+                    <!-- Thêm các trường thông tin khác của bác sĩ nếu cần -->
+                </div>
+            }
+        </EditForm>
+    </div>
+</div>
+
+
+@code {
+    private List<string> err = new List<string>();
+    private User user = new User();
+    public List<GoiXetNghiem> allGXN { get; set; } = new();
+    public List<BacSi> AllBS { get; set; } = new();
+    private BacSi SelectedDoctor = null;
+    int valor, idbs;
+    int valorgxn, idgxn;
+    public List<GoiXetNghiem> gxndachon { get; set; } = new();
+    public List<DXNandGXN> dxn { get; set; } = new();
+    public long tongtien = 0;
+    private List<GoiXetNghiem> previousGxndachon = new List<GoiXetNghiem>();
+    public TuChoi lydo = new();
+    string a;
+
+    [SupplyParameterFromForm]
+    public DonXetNghiem Input { get; set; } = new();
+
+    [Parameter]
+    public int id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Input = await DXNservice.getbyid(id);
+        user = await Usertservice.getuserbyid(Input.UserId);
+        allGXN = await GXNservice.getallAsync();
+        AllBS = await bacsiservice.getallAsync();
+        dxn = await DXNservice.getallGXNAsync(id);
+        loadgxndachon();
+        valor = Input.BacSiId ?? 0;
+        if(Input.Trangthai=="Từ Chối")
+        {
+            a = "red";
+            lydo = await TCservice.getbyidAsync(Input.Id);
+        }
+        else
+        {
+            a = "greenyellow";
+            SelectedDoctor = AllBS.FirstOrDefault(bs => bs.Id == valor)!;
+        }
+
+    }
+    private void loadgxndachon()
+    {
+        foreach (var a in dxn)
+        {
+
+            foreach (var b in allGXN)
+            {
+                if (b.Id == a.GoiXetNghiemId)
+                {
+                    gxndachon.Add(b);
+                    tongtien += b.Gia;
+                }
+            }
+            allGXN.RemoveAll(item => item.Id == a.GoiXetNghiemId);
+        }
+        previousGxndachon = new List<GoiXetNghiem>(gxndachon);
+    }
+    private async Task add()
+    {
+        err.Clear(); // Xóa danh sách lỗi trước đó
+                     // Kiểm tra ngày lấy máu
+                     // Kiểm tra giờ lấy máu
+        if (string.IsNullOrWhiteSpace(Input.giolaymau))
+        {
+            err.Add("Giờ lấy máu không được để trống.");
+        }
+        if (gxndachon.Count == 0)
+        {
+            err.Add("Vui lòng chọn gói xét nghiệm.");
+        }
+        // Kiểm tra gói xét nghiệm
+        // Kiểm tra nhân viên lấy máu
+        if (idbs == 0)
+        {
+            err.Add("Vui lòng chọn nhân viên lấy máu.");
+        }
+
+        // Nếu có lỗi, hiển thị thông báo lỗi và không tiếp tục thực hiện việc cập nhật dữ liệu
+        if (err.Any())
+        {
+            return;
+        }
+        // Kiểm tra thay đổi của gxndachon
+        foreach (var newItem in gxndachon.Except(previousGxndachon))
+        {
+            DXNandGXN a = new DXNandGXN
+                {
+                    DonXetNghiemId = id,
+                    GoiXetNghiemId = newItem.Id
+                };
+            await DXNservice.addnew(a);
+        }
+
+        foreach (var removedItem in previousGxndachon.Except(gxndachon))
+        {
+            // removedItem là phần tử đã bị xóa
+            // Thực hiện hành động tương ứng, ví dụ: xóa khỏi cơ sở dữ liệu
+            foreach (var a in dxn)
+            {
+                if (a.GoiXetNghiemId == removedItem.Id)
+                {
+                    await DXNservice.deletegxnAsync(a.Id);
+                }
+            }
+        }
+
+        // Đặt lại danh sách trước đó để chuẩn bị cho lần lặp tiếp theo
+        previousGxndachon = new List<GoiXetNghiem>(gxndachon);
+        Input.BacSiId = idbs;
+        await DXNservice.updateAsync(Input);
+        navigation.NavigateTo("/ListDXN");
+    }
+    public String loadGXN(int id)
+    {
+        foreach (var gxn in allGXN)
+        {
+            if (gxn.Id == id)
+            {
+                return gxn.TenGoi;
+            }
+        }
+        return null;
+    }
+    private void LoadBSInfo(int id)
+    {
+        idbs = id;
+        valor = id;
+        if (id != 0)
+        {
+            SelectedDoctor = AllBS.FirstOrDefault(bs => bs.Id == id)!;
+        }
+    }
+    private String gioitinh(bool a)
+    {
+        if (a)
+        {
+            return "Nam";
+        }
+        else
+        {
+            return "Nữ";
+        }
+    }
+    private async void remove(int id)
+    {
+        foreach (var gxn in gxndachon)
+        {
+            if (gxn.Id == id)
+            {
+                allGXN.Add(gxn);
+                tongtien -= gxn.Gia;
+            }
+        }
+        gxndachon.RemoveAll(item => item.Id == id);
+    }
+    private void LoadgxnInfo(int id)
+    {
+        idgxn = id;
+        valorgxn = id;
+
+        foreach (var xn in allGXN)
+        {
+            if (xn.Id == id)
+            {
+                gxndachon.Add(xn);
+                tongtien += xn.Gia;
+            }
+        }
+        allGXN.RemoveAll(item => item.Id == id);
+        valorgxn = 0;
+    }
+}

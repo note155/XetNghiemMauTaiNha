@@ -40,9 +40,15 @@ namespace duanxetnghiem.Services
 
         public async Task<List<ThanhToan>> getallAsync(int id)
         {
-            var thanhToans = await _context.thanhToans.Where(t => t.Id == id).ToListAsync();
+            var thanhToans = await _context.thanhToans.Where(t => t.UserId == id).ToListAsync();
             return thanhToans;
         }
+
+        public async Task<ThanhToan> getbyidDXNAsync(int id)
+        {
+            return await _context.thanhToans.FirstOrDefaultAsync(t => t.DonXetNghiemId == id);
+        }
+
 
         public async Task<ThanhToan> updateAsync(ThanhToan thanhToan)
         {

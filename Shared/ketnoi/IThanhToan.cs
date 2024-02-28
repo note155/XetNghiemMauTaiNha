@@ -12,6 +12,7 @@ namespace Shared.ketnoi
     {
         Task<ThanhToan> addAsync(ThanhToan thanhToan);
         Task<List<ThanhToan>> getallAsync(int id);
+        Task <ThanhToan> getbyidDXNAsync(int id);
         Task<ThanhToan> updateAsync(ThanhToan thanhToan);
         Task<ThanhToan> deleteAsync(int id);
     }

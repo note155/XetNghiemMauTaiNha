@@ -12,5 +12,6 @@ namespace Shared.ketnoi
     {
         Task<TuChoi> addAsync(TuChoi tuchoi);
         Task<List<TuChoi>> getallAsync();
+        Task<TuChoi> getbyidAsync(int iddon);
     }
 }

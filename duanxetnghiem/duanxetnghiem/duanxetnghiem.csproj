@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\Shared.csproj" />
     <ProjectReference Include="..\duanxetnghiem.Client\duanxetnghiem.Client.csproj" />
+    <PackageReference Include="Append.Blazor.Printing" Version="6.3.0" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="BlazorGoogleMaps" Version="4.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.1" />

@@ -1,0 +1,115 @@
+﻿@page "/ListDXNDD"
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Đơn Đã Duyệt</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header"></div>
+                            @if (!AllDXN.Any())
+                            {
+                                <p><em>Loading ...</em></p>
+                            }
+                            @if (AllDXN.Any())
+                            {
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Họ Tên Khách Hàng</th>
+                                                    <th>Trạng thái</th>
+                                                    <th>Ngày lấy máu </th>
+                                                    <th>Giờ lấy máu </th>
+                                                    <th>Bác sĩ đảm nhận</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var DXN in AllDXN)
+                                                {
+                                                    var bs = laybs(@DXN.BacSiId);
+                                                    <tr>
+                                                        <td>@DXN.Id</td>
+                                                        <td>@loadhoten(DXN.UserId)</td>>
+                                                        <td>@DXN.Trangthai</td>
+                                                        <td>@DXN.Ngaydat.ToString("dd/MM/yyyy")</td>
+                                                        <td>@DXN.giolaymau</td>
+                                                        <td class="doctor-info">
+                                                            <img src="@bs.Anh" alt="@bs.Hoten">
+                                                            <span>@bs.Hoten</span>
+                                                        </td>
+                                                        <td>
+                                                            <a class="btn btn-success" href="/DXNDD/@DXN.Id"> Chi Tiết </a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-info"> There is not DXN List Available</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    public List<DonXetNghiem> AllDXN { get; set; } = new();
+    public List<BacSi> allBS { get; set; } = new();
+    public List<User> allUser { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAlLStudents();
+        allUser = await Usertservice.getalluserAsync();
+        allBS = await bacsiservice.getallAsync();
+    }
+
+
+
+    public async Task LoadAlLStudents()
+    {
+        // var students = await GenericService.GetAllAsync(student, "api/Student/All-Students");
+        var DXN = await DXNservice.getallAsync();
+        AllDXN.Clear();
+
+        if (DXN is null) return;
+        foreach (var student in DXN)
+        {
+            if (student.Trangthai != "Từ Chối" && student.Trangthai != "Chờ Thanh Toán")
+            {
+                AllDXN.Add(student);
+            }
+        }
+    }
+    public BacSi laybs(int? id)
+    {
+        var bs = allBS.FirstOrDefault(b => b.Id == id);
+        return bs;
+    }
+    public String loadhoten(int id)
+    {
+        foreach (var us in allUser)
+        {
+            if (us.Id == id)
+            {
+                return us.Hoten;
+            }
+        }
+        return null;
+    }
+}

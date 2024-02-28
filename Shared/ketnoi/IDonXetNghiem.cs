@@ -14,6 +14,7 @@ namespace Shared.ketnoi
         Task<DonXetNghiem> updateAsync(DonXetNghiem DonXetNghiem);
         Task<DonXetNghiem> deleteAsync(int id);
         Task<List<DonXetNghiem>> getallAsync();
+        Task<List<DonXetNghiem>> getallbyiduserAsync(int id);
         Task<DonXetNghiem> getbyid(int Id);
         Task<DXNandGXN> addnew(DXNandGXN a);
         Task<List<DXNandGXN>> getallGXNAsync(int idDXN);

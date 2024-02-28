@@ -3,10 +3,30 @@
 @rendermode InteractiveAuto
 @using Microsoft.AspNetCore.Authorization
 @using Shared.form
- @inject NavigationManager navigation;
+@inject NavigationManager navigation;
 @attribute [Authorize]
 
 <h1>Đơn Xét Nghiệm</h1>
+@if (ChuaChonGoi)
+{
+    <div class="modal fade show" style="display: block; background: rgba(0, 0, 0, 0.5);">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thông báo</h5>
+                    <button type="button" class="btn-close" @onclick="(() => ChuaChonGoi = false)"></button>
+                </div>
+                <div class="modal-body">
+                    Bạn chưa chọn gói xét nghiệm nào.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" @onclick="(() => ChuaChonGoi = false)">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 @if (!gioHangList.Any())
 {
     <p>Đơn xét nghiệm của bạn đang trống</p>
@@ -56,6 +76,8 @@ else
     public User user { get; set; } = new();
     public giohangtam aa = new();
     Dictionary<int, GoiXetNghiem> goiXetNghiemDict = new Dictionary<int, GoiXetNghiem>();
+    public bool ChuaChonGoi = false;
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -96,6 +118,11 @@ else
     private async void add()
     {
         var itemsToRemove = gioHangt.Where(student => student.IsSelected == true).ToList();
+        if (itemsToRemove.Count == 0)
+        {
+            ChuaChonGoi = true;
+            return;
+        }
         foreach (var student in itemsToRemove)
         {
             GioHang a = new GioHang

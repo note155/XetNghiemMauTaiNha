@@ -33,6 +33,21 @@ namespace duanxetnghiem.Client.Services
             return respone;
         }
 
+        public async Task<ThanhToan> getbyidDXNAsync(int id)
+        {
+            var response = await _httpClient.GetAsync($"api/ThanhToan/Single-ThanhToanbyidDXN/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var respone = await response.Content.ReadFromJsonAsync<ThanhToan>();
+                return respone;
+            }
+            else
+            {
+                // Xử lý khi không thành công, ví dụ: trả về null hoặc throw exception
+                return null;
+            }
+        }
+
         public async Task<ThanhToan> updateAsync(ThanhToan thanhToan)
         {
             var newstudent = await _httpClient.PostAsJsonAsync("api/ThanhToan/Update-ThanhToan", thanhToan);

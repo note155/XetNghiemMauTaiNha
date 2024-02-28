@@ -1,108 +1,26 @@
 ﻿@page "/test"
-@using Shared.Model
+@using Append.Blazor.Printing
+@inject IPrintingService PrintingService
 @rendermode InteractiveAuto
- @inject IJSRuntime JS
- @inject NavigationManager navigation;
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Danh sách bác sĩ</h3>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <p><a class="btn btn-success float-end" href="/AddBS"> Thêm bác sĩ </a></p>
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header"></div>
-                            @if (!AllBS.Any())
-                            {
-                                <p><em>Loading ...</em></p>
-                            }
-                            @if (AllBS.Any())
-                            {
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-striped table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>id</th>
-                                                    <th>Ảnh</th>
-                                                    <th>Họ Tên</th>
-                                                    <th>Chức Vụ</th>
-                                                    <th>Số Điện Thoại</th>
-                                                    <th></th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (var DXN in AllBS)
-                                                {
-                                                    <tr>
-                                                        <td>@DXN.Id</td>
-                                                       <td></td>
-                                                        <td>@DXN.User</td>
-                                                        <td>@DXN.GoiXetNghiemId</td>
-                                                        <td></td>
-                                                        <td>
-                                                            <a class="btn btn-success" href="/BSedit/@DXN.Id"> Edit </a>
-                                                        </td>
-                                                        <td>
-                                                            <a class="btn btn-danger" href="#" @onclick="() => ConfirmDelete(DXN.Id)"> Delete </a>
-                                                        </td>
-                                                    </tr>
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="alert alert-info"> There is not DXN List Availlable</div>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@code {
-    public List<GioHang> AllBS { get; set; } = new();
 
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadAlLBS();
-
-    }
-
-
-    public async Task LoadAlLBS()
-    {
-        var bs = await GHservice.getallAsyncbyiduser(1);
-        AllBS.Clear();
-
-        if (bs is null) return;
-        foreach (var student in bs)
-        {
-            AllBS.Add(student);
+<Example Name="@this.GetType().Name">
+    <Documentation>
+        <h3>Raw HTML</h3>
+        <p>Print raw HTML.</p>
+    </Documentation>
+    <Code>
+        @{
+            string rawHtml = String.Join(
+                Environment.NewLine,
+                "<h1>Print.js Raw HTML Print Test</h1>",
+                "<p style=\"color: blue;\">Lorem ipsum dolor sit amet, consectetur adipiscing elit,</p>",
+                "<p>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>",
+            "<table><td>1<td></table>"
+            );
         }
-    }
-    public async Task ConfirmDelete(int id)
-    {
-        var doctorToDelete = AllBS.FirstOrDefault(d => d.Id == id);
-        if (await JS.InvokeAsync<bool>("confirm", "Bạn có chắc muốn xóa?"))
-        {
-            AllBS.Remove(doctorToDelete);
-            navigation.NavigateTo("/BSdelete/" + id);
-        }
-        else
-        {
-            navigation.NavigateTo("/ListBS");
-        }
-    }
-}
 
-
-
+        <button @onclick="@(_ => PrintingService.Print(rawHtml, PrintType.RawHtml))">
+            Print Raw Html
+        </button>
+    </Code>
+</Example>

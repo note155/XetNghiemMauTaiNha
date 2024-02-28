@@ -1,4 +1,7 @@
-﻿@page "/camon"
+﻿@page "/camon/{id:int}"
+@using Append.Blazor.Printing
+@inject IPrintingService PrintingService
+@rendermode InteractiveAuto
 @using System.Security.Claims
 
 <div class="card text-center">
@@ -6,6 +9,9 @@
         <h5 class="card-title">Cảm ơn bạn đặt lịch </h5>
         <p class="card-text">Chúng tôi sẽ liên hệ bạn trong thời gian sớm nhất</p>
         <img style="width:40px" src="tich.webp">
+        <button @onclick="@(_ => PrintingService.Print(rawHtml, PrintType.RawHtml))">
+            Tải Hóa Đơn
+        </button>
     </div>
 </div>
 <br >
@@ -69,5 +75,107 @@
     </NotAuthorized>
 </AuthorizeView>
 @code {
+    [Parameter]
+    public int id { get; set; }
 
+    private User user = new User();
+    public DonXetNghiem Input { get; set; } = new();
+    public List<GoiXetNghiem> allGXN { get; set; } = new();
+    public List<GoiXetNghiem> gxndachon { get; set; } = new();
+    public List<DXNandGXN> dxn { get; set; } = new();
+    public long tongtien = 0;
+    string rawHtml = "";
+    public ThanhToan tt { get; set; } = new ThanhToan();
+    int stt = 0;
+    protected override async Task OnInitializedAsync()
+    {
+        Input = await DXNservice.getbyid(id);
+        user = await Usertservice.getuserbyid(Input.UserId);
+        allGXN = await GXNservice.getallAsync();
+        dxn = await DXNservice.getallGXNAsync(id);
+        tt = await TTservice.getbyidDXNAsync(id);
+        loadgxndachon();
+        rawHtml = "<h1 style=\"text-align: center;\">Âu Lạc</h1>" +
+            "<h2 style=\"text-align: center;\">PHIẾU THU</h2>" +
+            "<p style=\"text-align: center;\">Ngày: " + tt.NgayTT + " -- Số hóa đơn:" + tt.Id + "</p>" +
+            "<p> <span style=\"float: left;\">Họ Tên:" + user.Hoten +
+            "</span><span style=\"float: right;\">Giới Tính: " + gioitinh(user.Gioitinh) + "</span></p>" +
+            "<br><p >Địa Chỉ: " + user.Diachi + "</p>" +
+            "<table style=\"width:100%;border-collapse: collapse; border: 1px solid black;\">" +
+            "<thead>" +
+            "<tr>" +
+            "<th style=\"border: 1px solid black;\">STT</th>" +
+            "<th style=\"border: 1px solid black;\">Tên Gói</th>" +
+            "<th style=\"border: 1px solid black;\">Đơn vị</th>" +
+            "<th style=\"border: 1px solid black;\">Số Lượng</th>" +
+            "<th style=\"border: 1px solid black;\">Số Tiền</th>" +
+            "</tr>" +
+            "</thead>";
+
+        foreach (var goi in gxndachon)
+        {
+            stt++;
+            rawHtml += "<tr>" +
+                       "<td style=\"border: 1px solid black;\">"+stt+"</td>" +
+                       "<td style=\"border: 1px solid black;\">" + goi.TenGoi + "</td>" +
+                       "<td style=\"border: 1px solid black;\">gói</td>" +
+                       "<td style=\"border: 1px solid black;\">1</td>" +
+                       "<td style=\"border: 1px solid black;\">" + goi.Gia + "</td>" +
+                       "</tr>";
+        }
+
+        rawHtml += "</table>" +
+                   "<p>Tổng Thành Tiền: " + tongtien + "VND</p>"+
+                   "<p>Bằng Chữ: " + ConvertNumberToWords(tongtien) + "Đồng</p>"
+                   ;
+
+
+    }
+    private void loadgxndachon()
+    {
+        foreach (var a in dxn)
+        {
+
+            foreach (var b in allGXN)
+            {
+                if (b.Id == a.GoiXetNghiemId)
+                {
+                    gxndachon.Add(b);
+                    tongtien += b.Gia;
+                }
+            }
+        }
+    }
+    private String gioitinh(bool a)
+    {
+        if (a)
+        {
+            return "Nam";
+        }
+        else
+        {
+            return "Nữ";
+        }
+    }
+    static string[] ones = { "", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín" };
+    static string[] teens = { "", "mười", "mười một", "mười hai", "mười ba", "mười bốn", "mười lăm", "mười sáu", "mười bảy", "mười tám", "mười chín" };
+    static string[] tens = { "", "mười", "hai mươi", "ba mươi", "bốn mươi", "năm mươi", "sáu mươi", "bảy mươi", "tám mươi", "chín mươi" };
+    static string ConvertNumberToWords(long number)
+    {
+        if (number < 10)
+            return ones[number];
+        else if (number < 20)
+            return teens[number - 10];
+        else if (number < 100)
+            return tens[number / 10] + " " + ones[number % 10];
+        else if (number < 1000)
+            return ones[number / 100] + " trăm " + ConvertNumberToWords(number % 100);
+        else if (number < 1000000)
+            return ConvertNumberToWords(number / 1000) + " nghìn " + ConvertNumberToWords(number % 1000);
+        else if (number < 1000000000)
+            return ConvertNumberToWords(number / 1000000) + " triệu " + ConvertNumberToWords(number % 1000000);
+        else
+            return ConvertNumberToWords(number / 1000000000) + " tỷ " + ConvertNumberToWords(number % 1000000000);
+    }
 }
+

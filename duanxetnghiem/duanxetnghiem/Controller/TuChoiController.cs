@@ -25,12 +25,19 @@ namespace duanxetnghiem.Controller
         }
 
         [HttpPost("Add-TuChoi")]
-        public async Task<ActionResult<BacSi>> AddNewBacSiAsync(TuChoi user)
+        public async Task<ActionResult<TuChoi>> AddNewBacSiAsync(TuChoi user)
         {
             var newstudent = await _TuChoiRepository.addAsync(user);
 
             return Ok(newstudent);
 
+        }
+        [HttpGet("Single-TC/{id}")]
+        public async Task<ActionResult<TuChoi>> GetSingleStudentAsync(int id)
+        {
+            var student = await _TuChoiRepository.getbyidAsync(id);
+
+            return Ok(student);
         }
     }
 }

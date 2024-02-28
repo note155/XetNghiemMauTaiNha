@@ -15,5 +15,7 @@ namespace Shared.Model
         public DonXetNghiem? DonXetNghiem { get; set; }
         public long Tongtien {  get; set; }
         public string trangthai { get; set; }
+        public DateTime? NgayTT { get; set; }
+        public long? DaTT { get; set; }
     }
 }

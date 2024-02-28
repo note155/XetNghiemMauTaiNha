@@ -1,0 +1,154 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1000px;
+    margin: auto;
+    gap: 20px;
+}
+
+.section {
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #f8f8f8;
+    color: #333;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+    table th, table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+.qr-code {
+    width: 100%;
+    max-width: 200px;
+    margin-bottom: 10px;
+}
+
+.payment-methods {
+    margin-top: 10px;
+}
+
+    .payment-methods button {
+        margin-right: 10px;
+        padding: 8px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+.instructions img {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.panel {
+    flex-grow: 1;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.panel-header {
+    background-color: #f0f0f0;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.panel-body {
+    padding: 20px;
+}
+.right-panel {
+    width: 650px; /* Định chiều rộng cố định của phần thanh toán */
+}
+.left-panel {
+    flex: 1;
+    margin-right: 10px; /* Để tạo khoảng cách giữa các panel */
+}
+
+.panel {
+    flex-grow: 1;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 10px; /* Để giảm khoảng cách giữa các panel */
+}
+.qr-code {
+    width: 100%;
+    max-width: 300px; /* Để làm cho ảnh QR to ra */
+    margin-bottom: 10px;
+}
+
+.panel {
+    flex-grow: 1;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.payment-methods {
+    margin-top: 10px;
+}
+
+    .payment-methods button {
+        margin-right: 10px;
+        padding: 8px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+.instructions {
+    margin-top: 20px;
+}
+    .instructions img {
+        max-width: 100%; /* Đặt kích thước tối đa cho ảnh */
+        height: auto; /* Đảm bảo tỷ lệ khung hình được duy trì */
+        margin-top: 10px;
+    }
+.payment-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Căn lề giữa theo chiều dọc */
+    align-items: center; /* Căn lề giữa theo chiều ngang */
+}
+
+.payment-info,
+.payment-amount {
+    margin-bottom: 10px; /* Khoảng cách giữa các phần nội dung */
+}
+
+    .payment-info div,
+    .payment-amount div {
+        font-weight: bold; /* Đậm */
+        color: #333; /* Màu chữ */
+    }

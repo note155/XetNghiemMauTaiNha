@@ -1,4 +1,5 @@
-﻿using duanxetnghiem.Client.Pages.User;
+﻿using duanxetnghiem.Client.Pages.Admin.GoiXetNghiem;
+using duanxetnghiem.Client.Pages.User;
 using duanxetnghiem.Data;
 using duanxetnghiem.Data.Model;
 using Microsoft.EntityFrameworkCore;
@@ -60,6 +61,12 @@ namespace duanxetnghiem.Services
         public async Task<List<DonXetNghiem>> getallAsync()
         {
             return await _context.DonXetNghiems.ToListAsync();
+        }
+
+        public async Task<List<DonXetNghiem>> getallbyiduserAsync(int id)
+        {
+            var gioHangs = await _context.DonXetNghiems.Where(g => g.UserId == id).ToListAsync();
+            return gioHangs;
         }
 
         public async Task<List<DXNandGXN>> getallGXNAsync(int idDXN)

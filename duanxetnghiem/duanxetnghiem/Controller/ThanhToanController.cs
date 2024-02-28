@@ -25,6 +25,14 @@ namespace duanxetnghiem.Controller
             return Ok(newstudent);
         }
 
+        [HttpGet("Single-ThanhToanbyidDXN/{id}")]
+        public async Task<ActionResult<ThanhToan>> GetSinglettAsync(int id)
+        {
+            var student = await _ThanhToanRepository.getbyidDXNAsync(id);
+
+            return Ok(student);
+        }
+
         [HttpPost("Update-ThanhToan")]
         public async Task<ActionResult<ThanhToan>> UpdatethanhtoanAsync(ThanhToan user)
         {
