@@ -1,5 +1,6 @@
 ﻿using duanxetnghiem.Data.Model;
 using Shared.ketnoi;
+using Shared.Model;
 using System.Net.Http.Json;
 
 namespace duanxetnghiem.Client.Services
@@ -29,6 +30,13 @@ namespace duanxetnghiem.Client.Services
         {
             var allstudent = await _httpClient.GetAsync("api/GoiXetNghiem/All-GXN");
             var respone = await allstudent.Content.ReadFromJsonAsync<List<GoiXetNghiem>>();
+            return respone;
+        }
+
+        public async Task<List<GXNandCS>> getallCSbyidAsync(int id)
+        {
+            var allstudent = await _httpClient.GetAsync($"api/GoiXetNghiem/All-GXNaCS/{id}");
+            var respone = await allstudent.Content.ReadFromJsonAsync<List<GXNandCS>>();
             return respone;
         }
 

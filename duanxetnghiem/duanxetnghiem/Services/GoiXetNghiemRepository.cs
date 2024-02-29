@@ -1,7 +1,9 @@
-﻿using duanxetnghiem.Data;
+﻿using duanxetnghiem.Client.Pages.Admin.GoiXetNghiem;
+using duanxetnghiem.Data;
 using duanxetnghiem.Data.Model;
 using Microsoft.EntityFrameworkCore;
 using Shared.ketnoi;
+using Shared.Model;
 
 namespace duanxetnghiem.Services
 {
@@ -38,6 +40,12 @@ namespace duanxetnghiem.Services
         public async Task<List<GoiXetNghiem>> getallAsync()
         {
             return await _context.GoiXetNghiems.ToListAsync();
+        }
+
+        public async Task<List<GXNandCS>> getallCSbyidAsync(int id)
+        {
+            var gioHangs = await _context.GXNandCSs.Where(g => g.GoiXetNghiemId == id).ToListAsync();
+            return gioHangs;
         }
 
         public async Task<GoiXetNghiem> getbyid(int Id)

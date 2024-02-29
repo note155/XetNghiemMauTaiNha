@@ -19,6 +19,9 @@ namespace duanxetnghiem.Data
 		public DbSet<GioHang> GioHangs { get; set; }
         public DbSet<ThanhToan> thanhToans { get; set; }
         public DbSet<DXNandGXN> DXNandGXNs { get; set; }
+        public DbSet<Chiso> chisos { get; set; }
+        public DbSet<GXNandCS> GXNandCSs { get; set; }
+        public DbSet<KQandCS> KQandCSs { get; set; }
         public object User { get; internal set; }
     }
 

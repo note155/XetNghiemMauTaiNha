@@ -1,88 +1,95 @@
-﻿@page "/Lichlaymau"
+﻿@page "/Lichlaymau/{id:int}"
 @using System.Globalization
 @rendermode InteractiveAuto
-
-<h3>Lịch làm việc</h3>
-
-<EditForm Model="@this" OnValidSubmit="LoadSchedule" FormName="myForm">
-    <label for="NgayPicker">Chọn ngày:</label>
-    <InputDate id="NgayPicker" @bind-Value="selectedDate" />
-    <button type="submit" class="btn btn-primary" @onclick="HandleButtonClick">Load</button>
+<div class="background-container" style="background-image: url('yte1.png');">
+    <div class="row" style="width: 100%; height: 300px; margin: auto;max-width:100%;">
+        <div class="col-md-6 d-flex flex-column align-items-center">
+            <!-- title -->
+            <div class="title">
+                LỊCH LẤY MẪU
+            </div>
+        </div>
+    </div>
+</div>
+<EditForm Model="@this" OnValidSubmit="LoadSchedule" FormName="myForm" class="custom-edit-form">
+    <div class="form-group">
+        <label for="NgayPicker" class="form-label">Chọn ngày:</label>
+        <InputDate id="NgayPicker" @bind-Value="selectedDate" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary custom-btn" @onclick="HandleButtonClick">Load</button>
 </EditForm>
-
-<table class="schedule-table">
-    <thead>
-        <tr>
-            @for (int i = 0; i < 7; i++)
-            {
-                <th>@(startOfWeek.AddDays(i).ToString("dddd (dd/MM/yyyy)"))</th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            @for (int i = 0; i < 7; i++)
-            {
-                <td>
-                    @{
-                        bool found = false;
-                        foreach (var dxn in allDXN)
-                        {
-                            if (dxn.Trangthai == "Chờ lấy mẫu" && dxn.Ngaydat.Date == startOfWeek.AddDays(i).Date)
+<div class="table-responsive">
+    <table class="table table-bordered schedule-table">
+        <thead>
+            <tr>
+                @for (int i = 0; i < 7; i++)
+                {
+                    <th>@(startOfWeek.AddDays(i).ToString("dddd (dd/MM/yyyy)"))</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                @for (int i = 0; i < 7; i++)
+                {
+                    <td>
+                        @{
+                            bool found = false;
+                            foreach (var dxn in allDXN)
                             {
-                                int iddon = @dxn.Id;
-                                int idbs = dxn.BacSiId ?? 0;
-                                LoadBSInfo(idbs);
-                                string hoten = null;
-                                <div style="padding: 1px">
-                                    @if (SelectedDoctor != null)
-                                    {
-                                        hoten = @SelectedDoctor.Hoten;
-                                    }
-                                    <a style="color: brown;" href="/DXNDD/@iddon">
-                                    IdDon:@iddon-@dxn.giolaymau-@hoten</a>
-                                </div>
-                                found = true;
+                                if (dxn.Ngaydat.Date == startOfWeek.AddDays(i).Date)
+                                {
+                                    <div style="padding: 1px">
+                                        <a style="color: brown;" href="/XacNhanLayMau/@dxn.Id">
+                                            IdDon:@dxn.Id-@dxn.giolaymau-@bs.Hoten
+                                        </a>
+                                    </div>
+                                    found = true;
+                                }
+                            }
+                            if (!found)
+                            {
+                                <div class="no-info">------</div>
                             }
                         }
-                        if (!found)
-                        {
-                            @("------")
-                        }
-                    }
-                </td>
-            }
-        </tr>
-    </tbody>
-</table>
-
+                    </td>
+                }
+            </tr>
+        </tbody>
+    </table>
+</div>
 @code {
     private DateTime selectedDate = DateTime.Today;
-    //private List<List<string>> schedule;
     private DateTime startOfWeek;
 
-
-    private BacSi SelectedDoctor = null;
-    int valor, idbs;
     //Data
     public List<DonXetNghiem> allDXN { get; set; } = new();
-    public List<BacSi> AllBS { get; set; } = new();
+    public List<GoiXetNghiem> allGXN { get; set; } = new();
+    public BacSi bs { get; set; } = new();
 
-    private void LoadBSInfo(int id)
-    {
-        idbs = id;
-        valor = id;
-        if (id != 0)
-        {
-            SelectedDoctor = AllBS.FirstOrDefault(bs => bs.Id == id)!;
-        }
-    }
+    [Parameter]
+    public int id { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         await LoadSchedule();
         allDXN = await DXNservice.getallAsync();
-        AllBS = await bacsiservice.getallAsync();
+        bs = await bacsiservice.getbyid(id);
+        await LoadAlLStudents();
+    }
+    public async Task LoadAlLStudents()
+    {
+        var DXN = await DXNservice.getallAsync();
+        allDXN.Clear();
+
+        if (DXN is null) return;
+        foreach (var student in DXN)
+        {
+            if (student.BacSiId == bs.Id && student.Trangthai == "Chờ lấy mẫu")
+            {
+                allDXN.Add(student);
+            }
+        }
     }
 
     private async Task LoadSchedule()
@@ -95,8 +102,6 @@
             startOfWeek = startOfWeek.AddDays(-(int)startOfWeek.DayOfWeek + (int)DayOfWeek.Monday);
         }
     }
-
-
     private async Task HandleButtonClick()
     {
         await LoadSchedule();

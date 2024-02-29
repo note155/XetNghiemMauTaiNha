@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared.ketnoi;
+using Shared.Model;
 
 namespace duanxetnghiem.Controller
 {
@@ -21,6 +22,13 @@ namespace duanxetnghiem.Controller
             return Ok(users);
         }
 
+        [HttpGet("All-KQaCS/{id}")]
+        public async Task<ActionResult<List<KQandCS>>> GetAllKQaCSAsync(int id)
+        {
+            var users = await _KQXNRepository.getallCSbyidAsync(id);
+            return Ok(users);
+        }
+
 
         [HttpGet("Single-KQXN/{id}")]
         public async Task<ActionResult<KetQuaXetNghiem>> GetSingleStudentAsync(int id)
@@ -35,6 +43,13 @@ namespace duanxetnghiem.Controller
         {
             var newstudent = await _KQXNRepository.addAsync(user);
 
+            return Ok(newstudent);
+        }
+
+        [HttpPost("Add-KQaCS")]
+        public async Task<ActionResult<KQandCS>> AddNewKQXNaCSAsync(KQandCS user)
+        {
+            var newstudent = await _KQXNRepository.addKQandCS(user);
             return Ok(newstudent);
         }
 

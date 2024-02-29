@@ -21,6 +21,12 @@ namespace duanxetnghiem.Controller
             return Ok(users);
         }
 
+        [HttpGet("All-GXNaCS/{id}")]
+        public async Task<ActionResult<List<GoiXetNghiem>>> GetAllGXNaDXNAsync(int id)
+        {
+            var users = await _GXNRepository.getallCSbyidAsync(id);
+            return Ok(users);
+        }
 
         [HttpGet("Single-GXN/{id}")]
         public async Task<ActionResult<GoiXetNghiem>> GetSingleStudentAsync(int id)

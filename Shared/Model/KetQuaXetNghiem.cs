@@ -7,10 +7,10 @@ namespace duanxetnghiem.Data.Model
         [Key]
         public int Id { get; set; }
         public int DonXetNghiemId { get; set; }
-        public DonXetNghiem DonXetNghiem { get; set; }
-        public string Anhketqua { get; set; }
-        public string KetQua { get; set; }
-        public string ghiChu { get; set; }
+        public DonXetNghiem? DonXetNghiem { get; set; }
+        public string nhommau { get; set; }
+        public string khoa { get; set; }
+        public string? ghiChu { get; set; }
         public DateTime ngaycoKQ { get; set; }
     }
 }
