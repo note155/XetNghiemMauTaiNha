@@ -9,8 +9,9 @@
         <h5 class="card-title">Cảm ơn bạn đặt lịch </h5>
         <p class="card-text">Chúng tôi sẽ liên hệ bạn trong thời gian sớm nhất</p>
         <img style="width:40px" src="tich.webp">
-        <button @onclick="@(_ => PrintingService.Print(rawHtml, PrintType.RawHtml))">
-            Tải Hóa Đơn
+        <br>
+        <button class="btn btn-success" @onclick="@(_ => PrintingService.Print(rawHtml, PrintType.RawHtml))">
+            Phiếu Thu
         </button>
     </div>
 </div>
@@ -87,6 +88,7 @@
     string rawHtml = "";
     public ThanhToan tt { get; set; } = new ThanhToan();
     int stt = 0;
+    long datt;
     protected override async Task OnInitializedAsync()
     {
         Input = await DXNservice.getbyid(id);
@@ -94,14 +96,15 @@
         allGXN = await GXNservice.getallAsync();
         dxn = await DXNservice.getallGXNAsync(id);
         tt = await TTservice.getbyidDXNAsync(id);
+        datt = tt.DaTT ?? 0;
         loadgxndachon();
-        rawHtml = "<h1 style=\"text-align: center;\">Âu Lạc</h1>" +
+        rawHtml = "<h3>CÔNG TY TNHH GIẢI PHÁP PHẦN MỀM ÂU LẠC</h1>" +
             "<h2 style=\"text-align: center;\">PHIẾU THU</h2>" +
             "<p style=\"text-align: center;\">Ngày: " + tt.NgayTT + " -- Số hóa đơn:" + tt.Id + "</p>" +
             "<p> <span style=\"float: left;\">Họ Tên:" + user.Hoten +
             "</span><span style=\"float: right;\">Giới Tính: " + gioitinh(user.Gioitinh) + "</span></p>" +
             "<br><p >Địa Chỉ: " + user.Diachi + "</p>" +
-            "<table style=\"width:100%;border-collapse: collapse; border: 1px solid black;\">" +
+            "<table style=\"text-align: center;width:100%;border-collapse: collapse; border: 1px solid black;\">" +
             "<thead>" +
             "<tr>" +
             "<th style=\"border: 1px solid black;\">STT</th>" +
@@ -125,8 +128,8 @@
         }
 
         rawHtml += "</table>" +
-                   "<p>Tổng Thành Tiền: " + tongtien + "VND</p>"+
-                   "<p>Bằng Chữ: " + ConvertNumberToWords(tongtien) + "Đồng</p>"
+                   "<p>Tổng Thành Tiền: " + tongtien + "VND ------ Bằng Chữ:" + ConvertNumberToWords(tongtien) + " Đồng</p>" +
+                    "<p>Số Tiền Đã Thanh Toán: " + tt.DaTT + "VND ------ Bằng Chữ:" + ConvertNumberToWords(datt) + " Đồng</p>" 
                    ;
 
 
