@@ -1,4 +1,4 @@
-﻿@page "/ListGoixetnghiem"
+﻿@page "/ListGXN"
 @rendermode InteractiveAuto
  @inject IJSRuntime JS
  @inject NavigationManager navigation;
@@ -97,6 +97,10 @@
         {
             AllGoi.Remove(goiToDelete);
             navigation.NavigateTo("/Goidelete/" + id);
+        }
+        else
+        {
+            navigation.NavigateTo("/ListGXN");
         }
     }
 }

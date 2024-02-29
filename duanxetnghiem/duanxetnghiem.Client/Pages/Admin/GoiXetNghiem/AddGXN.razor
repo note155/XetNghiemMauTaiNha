@@ -68,14 +68,14 @@
         {
             if (file == null)
             {
-                Input.Anh = "img/Goixetnghiem/goiXNM.jpg";
+                Input.Anh = "img/1.jpg";
             }
             else
             {
                 Input.Anh = file.Name;
             }
             await GXNservice.addAsync(Input);
-            navigation.NavigateTo("/ListGoixetnghiem");
+            navigation.NavigateTo("/ListGXN");
         }
     }
 

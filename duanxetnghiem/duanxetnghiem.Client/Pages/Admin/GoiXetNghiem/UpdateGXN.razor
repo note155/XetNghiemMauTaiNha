@@ -61,7 +61,7 @@
     public int id { get; set; }
 
     string a = "";
-    public string img = "img/Goixetnghiem/";
+    public string img = "img/";
     private WebAssemblyTicket Ticket { get; set; } = new();
     private WebAssemblyTicket load { get; set; } = new();
     private long maxFileSize = 5120000;
@@ -91,7 +91,7 @@
         if (err.Count == 0)
         {
             await GXNservice.updateAsync(Input);
-            navigation.NavigateTo("/ListGoixetnghiem");
+            navigation.NavigateTo("/ListGXN");
         }
     }
     public async Task LoadGXN()
