@@ -1,6 +1,8 @@
 ﻿@page "/XacNhanLayMau/{id:int}"
 @rendermode InteractiveAuto
  @inject NavigationManager navigation;
+ @attribute [Authorize]
+
 <div id="map" style="height: 400px;"></div>
 <div class="patient-registration-container">
     <div class="patient-info">

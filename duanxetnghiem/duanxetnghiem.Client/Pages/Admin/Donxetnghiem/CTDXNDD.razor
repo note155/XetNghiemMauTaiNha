@@ -1,7 +1,7 @@
 ﻿@page "/DXNDD/{id:int}"
 @rendermode InteractiveAuto
  @inject NavigationManager navigation;
-
+@attribute [Authorize]
 <div class="patient-registration-container">
     <div class="patient-info">
         <h2>Thông tin bệnh nhân</h2>

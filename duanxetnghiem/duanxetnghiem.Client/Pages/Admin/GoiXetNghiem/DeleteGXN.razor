@@ -1,6 +1,6 @@
 ﻿@page "/Goidelete/{id:int}"
 @inject NavigationManager navigation;
-
+@attribute [Authorize]
 @code {
     [Parameter]
     public int id { get; set; }
