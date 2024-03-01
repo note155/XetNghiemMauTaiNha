@@ -92,7 +92,7 @@
         if (DXN is null) return;
         foreach (var student in DXN)
         {
-            if (student.Trangthai != "Từ Chối" && student.Trangthai != "Chờ Thanh Toán" && student.Trangthai != "Đã Chuyển Tiền")
+            if (student.Trangthai == "Chờ lấy mẫu")
             {
                 AllDXN.Add(student);
             }
