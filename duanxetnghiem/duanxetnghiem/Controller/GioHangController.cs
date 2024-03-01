@@ -89,5 +89,19 @@ namespace duanxetnghiem.Controller
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving GioHangs");
             }
         }
+
+        [HttpPost("Check-Existence/{Giohang}")]
+        public async Task<ActionResult<bool>> CheckExistenceAsync(GioHang Giohang)
+        {
+            try
+            {
+                var exists = await _GioHangRepository.kiemtra(Giohang);
+                return Ok(exists);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error checking existence");
+            }
+        }
     }
 }

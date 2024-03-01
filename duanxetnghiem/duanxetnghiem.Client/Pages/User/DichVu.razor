@@ -1,7 +1,10 @@
 ﻿@page "/dichvu"
 @rendermode InteractiveAuto
- @inject IJSRuntime JS
  @inject NavigationManager navigation;
+ @using Shared.Model;
+@using Microsoft.AspNetCore.Authorization
+@using Shared.form
+
 <div class="background-container" style="background-image: url('anhnen.jpg');">
     <div class="row d-flex align-items-center justify-content-center" style="width: 100%; height: 300px;margin:auto;">
         <div class="col-md-6 d-flex flex-column align-items-center">
@@ -29,7 +32,7 @@
     </div>
 </div>
 <!-- các gói dịch vụ-->
-
+@hasRendered
 <div class="container" style="width: 100%;">
     <div class="row justify-content-center">
         <div class="col-lg-8">
@@ -64,8 +67,8 @@
                     <div class="package-item-meta">
                         <div class="package-item-gender">@goi.ThoiGian</div>
                     </div>
-                    <div class="plus-icon-container">
-                        <span class="plus-icon">&#10133;</span>
+                    <div @onclick="@(() => themgio(goi.Id))" class="plus-icon-container">
+                        <span  class="plus-icon">&#10133;</span>
                     </div>
 
                 </div>
@@ -102,16 +105,45 @@
         </ul>
     </nav>
 </nav>
+
 @code {
+    [Inject]
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+    public string UserName { get; set; }
+    public User user { get; set; } = new();
     public List<GoiXetNghiem> AllGoi { get; set; } = new();
     private int itemsPerPage = 6; // Số lượng mục trên mỗi trang
     private int currentPage = 1;
     private int totalPages;
-    private bool hasRendered = false;
+    private bool hasRendered ;
+
 
     protected override async Task OnInitializedAsync()
     {
         await LoadAlLGoi();
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        UserName = authState.User.Identity.Name;
+        user = await Usertservice.getuserbyemail(UserName);
+    }
+    public async void themgio(int id)
+    {
+        GioHang a = new GioHang
+        {
+            GoiXetNghiemId=id,
+            IsSelected=false,
+            UserId=user.Id
+        };
+        hasRendered = await GHservice.kiemtra(a);
+        if (hasRendered)
+        {
+
+        }
+        else
+        {
+            await GHservice.addAsync(a);
+        }
+
     }
     public async Task LoadAlLGoi()
     {
@@ -139,4 +171,3 @@
         StateHasChanged();
     }
 }
-Đang hiển thị 1908236486157437456.

@@ -36,7 +36,10 @@
                 <InputText @bind-Value="Input.Email" class="form-control" id="Email" />
                 <ValidationMessage For="() => Input.Email" class="text-danger" />
             </div>
-            <button type="submit" class="btn btn-primary">Lưu</button>
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-primary">Lưu</button>
+                <a href="/listBS" class="btn btn-secondary">Hủy</a>
+            </div>
         </EditForm>
     </div>
 </div>
@@ -69,14 +72,14 @@
         }
 
         if (err.Count == 0)
-        {        
-            if (file==null)
+        {
+            if (file == null)
             {
                 Input.Anh = "img/Bacsi/1.jpg";
             }
             else
             {
-                Input.Anh =file.Name;
+                Input.Anh = file.Name;
             }
             await bacsiservice.addAsync(Input);
             navigation.NavigateTo("/ListBS");

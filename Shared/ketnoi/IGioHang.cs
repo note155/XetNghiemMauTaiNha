@@ -13,7 +13,8 @@ namespace Shared.ketnoi
 		Task<GioHang> addAsync(GioHang Giohang);
         Task<GioHang> updateAsync(GioHang Giohang);
         Task<GioHang> deleteAsync(int id);
-		Task<List<GioHang>> getallAsyncbyiduser(int iduser);
+        Task<bool> kiemtra(GioHang Giohang);
+        Task<List<GioHang>> getallAsyncbyiduser(int iduser);
         Task<List<GioHang>> getallistrue(int iduser);
     }
 }

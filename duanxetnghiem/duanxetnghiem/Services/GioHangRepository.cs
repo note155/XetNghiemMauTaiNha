@@ -56,5 +56,10 @@ namespace duanxetnghiem.Services
             return gioHangs;
         }
 
+        public async Task<bool> kiemtra(GioHang Giohang)
+        {
+            var exists = await _context.GioHangs.AnyAsync(g => g.GoiXetNghiemId == Giohang.GoiXetNghiemId && g.UserId == Giohang.UserId);
+            return exists;
+        }
     }
 }

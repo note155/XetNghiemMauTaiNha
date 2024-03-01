@@ -36,7 +36,11 @@
                 <InputText @bind-Value="Input.Mota" class="form-control" id="Mota" />
                 <ValidationMessage For="() => Input.Mota" class="text-danger" />
             </div>
-            <button type="submit" class="btn btn-primary">Lưu</button>
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-primary">Lưu</button>
+                <a href="/listBS" class="btn btn-secondary">Hủy</a>
+            </div>
+
         </EditForm>
     </div>
 </div>
@@ -54,7 +58,7 @@
         {
             err.Add("Tên gói không được để trống");
         }
-     
+
         if (string.IsNullOrEmpty(Input.ThoiGian))
         {
             err.Add("Thời gian không được để trống");

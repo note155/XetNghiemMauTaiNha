@@ -17,6 +17,15 @@
 
     <div class="test-registration-form">
         <h2>Thông tin đơn đăng ký xét nghiệm</h2>
+        @if (err.Any())
+        {
+            <div class="alert alert-danger" role="alert">
+                @foreach (var error in err)
+                {
+                    <p>@error</p>
+                }
+            </div>
+        }
         <div style="background-color:greenyellow;color:black" class="btn btn-primary btn-lg disabled">  <strong>Trạng Thái: </strong>@Input.Trangthai</div>
         <EditForm Model="Input" method="post" OnValidSubmit="add" FormName="register" class="profile-form">
             <DataAnnotationsValidator />
@@ -43,25 +52,58 @@
                 <InputTextArea @bind-Value="Input.ghiChu" class="form-control" id="ghiChu" readonly />
                 <ValidationMessage For="() => Input.ghiChu" class="text-danger" />
             </div>
-        </EditForm>
-        <div class="doctor-info">
-            <div class="selected-packages-header">
-                <h3>Các gói đã chọn:</h3>
-            </div>
-            <div class="selected-packages">
-                @foreach (var bs in gxndachon)
-                {
-                    <div class="package">
-                        <div class="package-content">
-                            <p><strong>Tên Gói:</strong> @bs.TenGoi</p>
-                            <div class="price">Giá: @bs.Gia VND</div>
+            <div class="doctor-info">
+                <div class="selected-packages-header">
+                    <h3>Các gói đã chọn:</h3>
+                </div>
+                <div class="selected-packages">
+                    @foreach (var bs in gxndachon)
+                    {
+                        <div class="package">
+                            <div class="package-content">
+                                <p><strong>Tên Gói:</strong> @bs.TenGoi</p>
+                                <div class="price">Giá: @bs.Gia VND</div>
+                            </div>
                         </div>
+                    }
+                </div>
+                <div class="total-mobile">
+                    <p>Tổng tiền: <span class="total">@tongtien VND</span></p>
+                </div>
+            </div>
+
+            <!--Button-->
+            <button type="button" style="background-color:red" class="btn btn-primary" onclick="toggleForm()"> Chưa hoàn thành </button>
+            <button style="background-color:forestgreen" type="submit" class="btn btn-primary">Hoàn thành</button>
+        </EditForm>
+        <!--Nếu chưa hoàn thành-->
+        <div id="rejectForm" style="display:none;">
+            <EditForm Model="Chuathanhcong" method="post" OnValidSubmit="chuathanhcong" FormName="register">
+                <DataAnnotationsValidator />
+                <hr />
+                <ValidationSummary class="text-danger" role="alert" />
+                <div class="form-group">
+                    <label for="Lydo">Lý Do Lấy Mẫu Thất Bại:</label>
+                    <InputSelect ValueChanged="@((String value)=>LoadBSInfo(value))" ValueExpression="@(()=>valor)" Value="valor" class="form-control" id="Lydo">
+                        <option value="">Chọn Lý Do</option>
+                        <option value="Đến địa điểm nhưng không liên lạc được khách">Đến địa điểm nhưng không liên lạc được khách</option>
+                        <option value="Khách hàng bận đột xuất">Khách hàng bận đột xuất</option>
+                        <option value="Khách hàng gặp vấn đề sức khỏe">Khách hàng gặp vấn đề sức khỏe</option>
+                        <option value="Sai sót trong quy trình lấy mẫu từ phía khách hàng">Sai sót trong quy trình lấy mẫu từ phía khách hàng</option>
+                        <option value="Yêu cầu hủy bỏ xét nghiệm từ bên đăng ký">Yêu cầu hủy bỏ xét nghiệm từ bên đăng ký</option>
+                        <option value="0">Khác</option>
+                    </InputSelect>
+                </div>
+                @if (@idbs == "0")
+                {
+                    <div class="form-group">
+                        <label for="ngaytaodon">Lý Do Khác:</label>
+                        <InputText @bind-Value="Chuathanhcong.Lydo" class="form-control" id="Lydo" />
+                        <ValidationMessage For="() =>Chuathanhcong.Lydo" class="text-danger" />
                     </div>
                 }
-            </div>
-            <div class="total-mobile">
-                <p>Tổng tiền: <span class="total">@tongtien VND</span></p>
-            </div>
+                <button type="submit" style="background-color:black" class="btn btn-primary">Xác nhận </button>
+            </EditForm>
         </div>
     </div>
 </div>
@@ -78,6 +120,9 @@
 
     [SupplyParameterFromForm]
     public DonXetNghiem Input { get; set; } = new();
+
+    [SupplyParameterFromForm]
+    public TuChoi Chuathanhcong { get; set; } = new();
 
     [Parameter]
     public int id { get; set; }
@@ -110,7 +155,27 @@
     }
     private async Task add()
     {
+        Input.Trangthai = "Lấy mẫu thành công";
+        await DXNservice.updateAsync(Input);
+        navigation.NavigateTo("/DXNBS");
+    }
+    private async Task chuathanhcong()
+    {
+        if (idbs != "0")
+        {
+            Chuathanhcong.Lydo = valor;
+        }
+        if (string.IsNullOrWhiteSpace(Chuathanhcong.Lydo))
+        {
+            err.Add("Vui Lòng Nhập Lý Do Lấy Mẫu Thất Bại!");
+            return;
+        }
 
+        Chuathanhcong.DonXetNghiemId = id;
+        Input.Trangthai = "Lấy mẫu thất bại";
+        await DXNservice.updateAsync(Input);
+        await TCservice.addAsync(Chuathanhcong);
+        navigation.NavigateTo("/DXNBS");
     }
     public String loadGXN(int id)
     {
@@ -173,3 +238,21 @@
 </script>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap" async defer></script>
+
+@* Chưa hoàn thành *@
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var form = document.getElementById("rejectForm");
+        form.style.display = "none";
+    });
+</script>
+<script>
+    function toggleForm() {
+        var form = document.getElementById("rejectForm");
+        if (form.style.display === "none") {
+            form.style.display = "block";
+        } else {
+            form.style.display = "none";
+        }
+    }
+</script>

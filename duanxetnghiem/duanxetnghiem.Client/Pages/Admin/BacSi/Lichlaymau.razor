@@ -96,11 +96,12 @@
     {
         // Tìm ngày đầu tiên của tuần
         startOfWeek = selectedDate.AddDays(-(int)selectedDate.DayOfWeek);
-        if (startOfWeek.DayOfWeek != DayOfWeek.Monday)
-        {
-            // Nếu ngày đầu tiên không phải là Monday, điều chỉnh để nó là Monday
-            startOfWeek = startOfWeek.AddDays(-(int)startOfWeek.DayOfWeek + (int)DayOfWeek.Monday);
-        }
+        //if (startOfWeek.DayOfWeek != DayOfWeek.Monday)
+        //{
+        // Nếu ngày đầu tiên không phải là Monday, điều chỉnh để nó là Monday
+        //  startOfWeek = startOfWeek.AddDays(-(int)startOfWeek.DayOfWeek + (int)DayOfWeek.Monday);
+        //}
+
     }
     private async Task HandleButtonClick()
     {
