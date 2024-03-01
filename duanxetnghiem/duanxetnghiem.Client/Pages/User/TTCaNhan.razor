@@ -1,4 +1,5 @@
 ﻿@page "/patient-info"
+@inject NavigationManager navigation;
 
 <div class="container">
     <div class="row">
@@ -62,6 +63,10 @@
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         UserName = authState.User.Identity.Name;
         patient = await Usertservice.getuserbyemail(UserName);
+        if (patient == null)
+        {
+            navigation.NavigateTo("/AddUser");
+        }
         AllDXN = await DXNservice.getallbyiduserAsync(patient.Id);
         var dxnWithMaxId = AllDXN.OrderByDescending(dxn => dxn.Id).First();
         time = dxnWithMaxId.ngaytaodon;

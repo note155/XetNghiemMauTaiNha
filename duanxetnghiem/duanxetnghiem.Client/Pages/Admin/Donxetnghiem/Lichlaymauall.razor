@@ -1,0 +1,106 @@
+﻿@page "/Lichlaymau"
+@using System.Globalization
+@rendermode InteractiveAuto
+
+<h3>Lịch làm việc</h3>
+
+<EditForm Model="@this" OnValidSubmit="LoadSchedule" FormName="myForm">
+    <label for="NgayPicker">Chọn ngày:</label>
+    <InputDate id="NgayPicker" @bind-Value="selectedDate" />
+    <button type="submit" class="btn btn-primary" @onclick="HandleButtonClick">Load</button>
+</EditForm>
+
+<table class="schedule-table">
+    <thead>
+        <tr>
+            @for (int i = 0; i < 7; i++)
+            {
+                <th>@(startOfWeek.AddDays(i).ToString("dddd (dd/MM/yyyy)"))</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            @for (int i = 0; i < 7; i++)
+            {
+                <td>
+                    @{
+                        bool found = false;
+                        foreach (var dxn in allDXN)
+                        {
+                            if (dxn.Trangthai == "Chờ lấy mẫu" && dxn.Ngaydat.Date == startOfWeek.AddDays(i).Date)
+                            {
+                                int iddon = @dxn.Id;
+                                int idbs = dxn.BacSiId ?? 0;
+                                LoadBSInfo(idbs);
+                                string hoten = null;
+                                <div style="padding: 1px">
+                                    @if (SelectedDoctor != null)
+                                    {
+                                        hoten = @SelectedDoctor.Hoten;
+                                    }
+                                    <a style="color: brown;" href="/Chitietlichlaymau/@iddon">
+                                        IdDon:@iddon-@dxn.giolaymau-@hoten
+                                    </a>
+                                </div>
+                                found = true;
+                            }
+                        }
+                        if (!found)
+                        {
+                            @("------")
+                        }
+                    }
+                </td>
+            }
+        </tr>
+    </tbody>
+</table>
+
+@code {
+    private DateTime selectedDate = DateTime.Today;
+    //private List<List<string>> schedule;
+    private DateTime startOfWeek;
+
+
+    private BacSi SelectedDoctor = null;
+    int valor, idbs;
+    //Data
+    public List<DonXetNghiem> allDXN { get; set; } = new();
+    public List<BacSi> AllBS { get; set; } = new();
+
+    private void LoadBSInfo(int id)
+    {
+        idbs = id;
+        valor = id;
+        if (id != 0)
+        {
+            SelectedDoctor = AllBS.FirstOrDefault(bs => bs.Id == id)!;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadSchedule();
+        allDXN = await DXNservice.getallAsync();
+        AllBS = await bacsiservice.getallAsync();
+    }
+
+    private async Task LoadSchedule()
+    {
+        // Tìm ngày đầu tiên của tuần
+        startOfWeek = selectedDate.AddDays(-(int)selectedDate.DayOfWeek);
+        if (startOfWeek.DayOfWeek != DayOfWeek.Monday)
+        {
+            // Nếu ngày đầu tiên không phải là Monday, điều chỉnh để nó là Monday
+            startOfWeek = startOfWeek.AddDays(-(int)startOfWeek.DayOfWeek + (int)DayOfWeek.Monday);
+        }
+    }
+
+
+    private async Task HandleButtonClick()
+    {
+        await LoadSchedule();
+    }
+
+}

@@ -1,5 +1,6 @@
 ﻿@page "/lichsuDl"
 @rendermode InteractiveAuto
+@inject NavigationManager navigation;
 <div class="actions">
     <a class="btn btn-success" href="/lichsuDL">Lịch Sử Đặt Lịch</a>
     <a style="border-color:lawngreen" class="btn btn-outline-success" href="/lichsuTT">Lịch Sử Thanh Toán</a>
@@ -87,6 +88,10 @@
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         UserName = authState.User.Identity.Name;
         patient = await Usertservice.getuserbyemail(UserName);
+        if (patient == null)
+        {
+            navigation.NavigateTo("/AddUser");
+        }
         DXN = await DXNservice.getallbyiduserAsync(patient.Id);
          LoadAlLStudents();
     }
@@ -117,7 +122,7 @@
             }
             if (aa == 2)
             {
-                if (student.Trangthai == "Đã Hoàn Thành")
+                if (student.Trangthai == "Hoàn thành")
                 {
                     AllDXN.Add(student);
                 }

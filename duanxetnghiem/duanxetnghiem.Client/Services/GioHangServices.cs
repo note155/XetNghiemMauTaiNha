@@ -70,19 +70,7 @@ namespace duanxetnghiem.Client.Services
             }
         }
 
-        public async Task<bool> kiemtra(GioHang Giohang)
-        {
-            try
-            {
-                var response = await _httpClient.PostAsJsonAsync("api/GioHang/Check-Existence",Giohang);
-                response.EnsureSuccessStatusCode();
-                return await response.Content.ReadFromJsonAsync<bool>();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error checking existence", ex);
-            }
-        }
+
 
         public async Task<GioHang> updateAsync(GioHang User)
         {

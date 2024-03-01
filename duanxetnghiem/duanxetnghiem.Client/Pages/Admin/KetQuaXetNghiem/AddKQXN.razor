@@ -175,6 +175,8 @@
             };
             await KQXNservice.addKQandCS(cs1);
         }
+        Input.Trangthai = "Hoàn thành";
+        await DXNservice.updateAsync(Input);
     }
     private void loadgxndachon()
     {

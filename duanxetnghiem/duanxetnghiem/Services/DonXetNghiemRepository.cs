@@ -1,5 +1,4 @@
 ﻿using duanxetnghiem.Client.Pages.Admin.GoiXetNghiem;
-using duanxetnghiem.Client.Pages.User;
 using duanxetnghiem.Data;
 using duanxetnghiem.Data.Model;
 using Microsoft.EntityFrameworkCore;
