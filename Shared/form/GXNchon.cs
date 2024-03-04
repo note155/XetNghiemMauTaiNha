@@ -1,16 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace duanxetnghiem.Data.Model
+namespace Shared.form
 {
-    public class GoiXetNghiem
+    public class GXNchon
     {
-        [Key]
         public int Id { get; set; }
         public string TenGoi { get; set; }
         public long Gia { get; set; }
         public string ThoiGian { get; set; }
         public string? Mota { get; set; }
         public string? Anh { get; set; }
-
+        public bool? IsSelected { get; set; }
     }
 }

@@ -50,7 +50,7 @@ namespace duanxetnghiem.Client.Services
 
         public async Task<int> IsUserExistsAsync(User user)
         {
-            var allstudent = await _httpClient.PostAsJsonAsync("api/User/EmailExists", user);
+            var allstudent = await _httpClient.PostAsJsonAsync("api/User/UserExists", user);
             var respone = await allstudent.Content.ReadFromJsonAsync<int>();
             return respone;
         }

@@ -427,6 +427,9 @@ namespace duanxetnghiem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("trangthai")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("BacSis");
@@ -541,6 +544,12 @@ namespace duanxetnghiem.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CapHuyen")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CapXa")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Diachi")
                         .IsRequired()

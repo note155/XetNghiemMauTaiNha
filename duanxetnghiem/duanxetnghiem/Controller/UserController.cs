@@ -44,13 +44,13 @@ namespace duanxetnghiem.Controller
 
         }
 
-        [HttpGet("EmailExists")]
+        [HttpPost("UserExists")]
         public async Task<ActionResult<int>> IsUserExistsAsync(User user)
         {
-            var isEmailExists = await _UserRepository.IsUserExistsAsync(user);
-
-            return Ok(isEmailExists);
+            var isUserExists = await _UserRepository.IsUserExistsAsync(user);
+            return Ok(isUserExists);
         }
+
         [HttpPost("Add-User")]
         public async Task<ActionResult<int>> AddNewStudentAsync(User user)
         {

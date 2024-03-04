@@ -12,8 +12,8 @@ using duanxetnghiem.Data;
 namespace duanxetnghiem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240228041534_InitialCreate2")]
-    partial class InitialCreate2
+    [Migration("20240302150137_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,6 +158,31 @@ namespace duanxetnghiem.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Shared.Model.Chiso", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CSBT")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DonVi")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ten")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("chisos");
+                });
+
             modelBuilder.Entity("Shared.Model.DXNandGXN", b =>
                 {
                     b.Property<int>("Id")
@@ -179,6 +204,29 @@ namespace duanxetnghiem.Migrations
                     b.HasIndex("GoiXetNghiemId");
 
                     b.ToTable("DXNandGXNs");
+                });
+
+            modelBuilder.Entity("Shared.Model.GXNandCS", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ChisoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GoiXetNghiemId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChisoId");
+
+                    b.HasIndex("GoiXetNghiemId");
+
+                    b.ToTable("GXNandCSs");
                 });
 
             modelBuilder.Entity("Shared.Model.GioHang", b =>
@@ -205,6 +253,33 @@ namespace duanxetnghiem.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("GioHangs");
+                });
+
+            modelBuilder.Entity("Shared.Model.KQandCS", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ChisoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("KetQua")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("KetQuaXetNghiemId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChisoId");
+
+                    b.HasIndex("KetQuaXetNghiemId");
+
+                    b.ToTable("KQandCSs");
                 });
 
             modelBuilder.Entity("Shared.Model.ThanhToan", b =>
@@ -355,6 +430,9 @@ namespace duanxetnghiem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("trangthai")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("BacSis");
@@ -438,23 +516,22 @@ namespace duanxetnghiem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Anhketqua")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("DonXetNghiemId")
                         .HasColumnType("int");
 
-                    b.Property<string>("KetQua")
-                        .IsRequired()
+                    b.Property<string>("ghiChu")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ghiChu")
+                    b.Property<string>("khoa")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ngaycoKQ")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("nhommau")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -470,6 +547,12 @@ namespace duanxetnghiem.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CapHuyen")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CapXa")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Diachi")
                         .IsRequired()
@@ -568,6 +651,25 @@ namespace duanxetnghiem.Migrations
                     b.Navigation("GoiXetNghiem");
                 });
 
+            modelBuilder.Entity("Shared.Model.GXNandCS", b =>
+                {
+                    b.HasOne("Shared.Model.Chiso", "Chiso")
+                        .WithMany()
+                        .HasForeignKey("ChisoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("duanxetnghiem.Data.Model.GoiXetNghiem", "GoiXetNghiem")
+                        .WithMany()
+                        .HasForeignKey("GoiXetNghiemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chiso");
+
+                    b.Navigation("GoiXetNghiem");
+                });
+
             modelBuilder.Entity("Shared.Model.GioHang", b =>
                 {
                     b.HasOne("duanxetnghiem.Data.Model.GoiXetNghiem", "GoiXetNghiem")
@@ -585,6 +687,25 @@ namespace duanxetnghiem.Migrations
                     b.Navigation("GoiXetNghiem");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Shared.Model.KQandCS", b =>
+                {
+                    b.HasOne("Shared.Model.Chiso", "Chiso")
+                        .WithMany()
+                        .HasForeignKey("ChisoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("duanxetnghiem.Data.Model.KetQuaXetNghiem", "KetQuaXetNghiem")
+                        .WithMany()
+                        .HasForeignKey("KetQuaXetNghiemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chiso");
+
+                    b.Navigation("KetQuaXetNghiem");
                 });
 
             modelBuilder.Entity("Shared.Model.ThanhToan", b =>

@@ -25,14 +25,27 @@
                 <p><strong>Họ tên:</strong> @user.Hoten</p>
                 <p><strong>Tuổi:</strong> @user.Tuoi</p>
                 <p><strong>Số điện thoại:</strong> @user.SDT</p>
-                <p><strong>Địa chỉ:</strong> @user.Diachi</p>
+                <p><strong>Địa chỉ:</strong> @user.Diachi / @user.CapXa / @user.CapHuyen / Thành phố Huế</p>
                 <p><strong>Email:</strong> @user.Email</p>
                 <p><strong>Giới tính:</strong> @gioitinh(@user.Gioitinh)</p>
             </div>
-         }
-         
+         }        
         </div>
-        
+        <div class="patient-info">
+            <h2>Các gói xét nghiệm</h2>
+                <div class="info">
+                <table>
+                    @foreach (var ds in listgxn)
+                    {
+                        <tr>
+                            <td><input type="checkbox" @onchange="@(() => LoadBSInfo(ds.Id))" checked="@ds.IsSelected" /></td>
+                            <td>@ds.TenGoi</td>
+                            <td>@ds.Gia</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
     <div class="test-registration-form">
         <h2>Đơn đăng ký đặt lịch xét nghiệm</h2>
 
@@ -97,8 +110,6 @@
                     </option>
                 }
             </InputSelect>
-             @if (gxndachon.Count != 0)
-             {
                 <div class="doctor-info">
                     <div class="selected-packages-header">
                         <h3>Các gói đã chọn:</h3>
@@ -119,8 +130,6 @@
                         <p>Tổng tiền: <span class="total">@tongtien VND</span></p>
                     </div>
                 </div>
-
-            }
             <a href="/"><button style="background-color:red" class="btn btn-primary"> Hủy </button></a>
             <button type="submit" class="btn btn-primary">Đăng Ký</button>
 
@@ -139,6 +148,7 @@
     public List<BacSi> AllBS { get; set; } = new();
     public string UserName { get; set; }
     public List<GoiXetNghiem> gxndachon { get; set; } = new();
+    public List<GXNchon> listgxn { get; set; } = new();
     int valor=0, idbs;
     public long tongtien = 0;
 
@@ -156,7 +166,25 @@
             navigation.NavigateTo("/AddUser");
         }
         allGXN = await GXNservice.getallAsync();
+        getds();
         Input.Ngaydat = DateTime.Now;
+    }
+    private void getds()
+    {
+        listgxn.Clear();
+        foreach (var a in allGXN)
+        {
+            listgxn.Add(new GXNchon
+            {
+                Id=a.Id,
+                IsSelected=false,
+                Anh=a.Anh,
+                TenGoi=a.TenGoi,
+                Gia=a.Gia,
+                Mota=a.Mota,
+                ThoiGian=a.ThoiGian
+            });
+        }
     }
     private void remove(int id)
     {
@@ -166,6 +194,13 @@
             {
                 allGXN.Add(gxn);
                 tongtien-= gxn.Gia;
+            }
+        }
+        foreach (var gxn in listgxn)
+        {
+            if (gxn.Id == id)
+            {
+                gxn.IsSelected = false;
             }
         }
         gxndachon.RemoveAll(item => item.Id == id);
@@ -243,18 +278,22 @@
     }
     private void LoadBSInfo(int id)
     {
-        idbs = id;
-        valor = id;
-
-        foreach (var xn in allGXN)
+        var selectedPackage = listgxn.FirstOrDefault(p => p.Id == id);
+        var g = allGXN.FirstOrDefault(p => p.Id == id);
+        if (selectedPackage != null)
         {
-            if(xn.Id==id)
+            selectedPackage.IsSelected = !selectedPackage.IsSelected;
+
+            if (selectedPackage.IsSelected==true)
             {
-                gxndachon.Add(xn);
-                tongtien += xn.Gia;
+                gxndachon.Add(g);
+                tongtien += selectedPackage.Gia;
+            }
+            else
+            {
+                gxndachon.Remove(g);
+                tongtien -= selectedPackage.Gia;
             }
         }
-        allGXN.RemoveAll(item => item.Id == id);
-        valor = 0;
     }
 }

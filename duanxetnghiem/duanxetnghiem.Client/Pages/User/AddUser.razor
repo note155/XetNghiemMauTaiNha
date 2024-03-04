@@ -2,6 +2,7 @@
 @attribute [Authorize]
 @using duanxetnghiem.Data.Model;
 @inject NavigationManager navigation;
+@rendermode InteractiveAuto
 
 <h3>Thông Tin Cá Nhân </h3>
  <div class="alert alert-danger" role="alert">
@@ -29,13 +30,34 @@
                 <InputText @bind-Value="Input.Hoten" class="form-control" placeholder="" />
                 <ValidationMessage For="() => Input.Hoten" class="text-danger" />
             </div>
-
+            <div class="form-group">
+                <label class="form-label" for="CapHuyen">Quận/Huyện</label>
+                <InputSelect style="border-color:greenyellow;" class="form-control" ValueChanged="@((string value)=>FilterData(value))" ValueExpression="@(()=>aa)" Value="aa">
+                    <option value="0">Vui Lòng Chọn</option>
+                    @foreach(var qh in Quan)
+                    {
+                        <option value="@qh">@qh</option>
+                    }
+                </InputSelect>
+            </div>
+            @if (aa != "0")
+            {
+                <div class="form-group">
+                    <label class="form-label" for="CapHuyen">Phường/Xã</label>
+                    <InputSelect style="border-color:greenyellow;" class="form-control" ValueChanged="@((string value)=>Filterxa(value))" ValueExpression="@(()=>xa)" Value="xa">
+                        <option value="0">Vui Lòng Chọn</option>
+                        @foreach (var qh in phuong)
+                        {
+                            <option value="@qh">@qh</option>
+                        }
+                    </InputSelect>
+                </div>
+            }
             <div class="form-group">
                 <label class="form-label" for="Diachi">Địa Chỉ</label>
-                <InputText @bind-Value="Input.Diachi" class="form-control" placeholder="" />
-               
+                <InputText @bind-Value="Input.Diachi" class="form-control" placeholder="" />               
                 <ValidationMessage For="() => Input.Diachi" class="text-danger" />
-            </div>
+            </div>       
             <div class="form-group">
                 <label class="form-label" for="SDT">Số Điện Thoại</label>
                 <InputText @bind-Value="Input.SDT" class="form-control" placeholder="" />       
@@ -66,13 +88,72 @@
     [SupplyParameterFromForm]
     public User Input { get; set; } = new();
 
+    private string aa="0",xa;
     public string UserName { get; set; }
     List<string> errors = new List<string>();
+    List<string> phuong = new List<string>();
+    List<string> Quan = new List<string> { "Thành phố Huế", "Phong Điền", "Quảng Điền", "Hương Trà", "Phú Vang", "Hương Thủy", "Phú Lộc", "A Lưới", "Nam Đông" };
+    List<string> XaTPHue = new List<string> { "phường An Cựu", "phường An Đông", "phường An Hòa", "phường An Tây", "phường Đông Ba", "phường Gia Hội", "phường Hương An", "phường Hương Hồ", "phường Hương Long", "phường Hương Sơ", "phường Hương Vinh", "phường Kim Long", "phường Phú Hậu", "phường Phú Hội", "phường Phú Nhuận", "phường Phú Thượng", "phường Phước Vĩnh", "phường Phường Đúc", "phường Tây Lộc", "phường Thuận An", "phường Thuận Hòa", "phường Thuận Lộc", "phường Thủy Biều", "phường Thủy Vân", "phường Thủy Xuân", "phường Trường An", "phường Vĩnh Ninh", "phường Vỹ Dạ", "phường Xuân Phú", "xã Hải Dương", "xã Hương Phong", "xã Hương Thọ", "xã Phú Dương", "xã Phú Mậu", "xã Phú Thanh", "xã Thủy Bằng" };
+    List<string> XaHThuy = new List<string> { "phường Phú Bài", "phường Thủy Châu", "phường Thủy Dương", "phường Thủy Lương", "phường Thủy Phương", "xã Dương Hoà", "xã Phú Sơn", "xã Thủy Phù", "xã Thủy Tân", "xã Thủy Than" };
+    List<string> XaHTra = new List<string> { "phường Hương Chữ", "phường Hương Văn", "phường Hương Vân", "phường Hương Xuân", "phường Tứ Hạ", "xã Bình Thành", "xã Bình Tiến", "xã Hương Bình", "xã Hương Toàn" };
+    List<string> HALuoi = new List<string> { "thị trấn A Lưới", "xã A Ngo", "xã A Roàng", "xã Đông Sơn", "xã Hồng Bắc", "xã Hồng Hạ", "xã Hồng Kim", "xã Hồng Thái", "xã Hồng Thượng", "xã Hồng Thủy", "xã Hồng Vân", "xã Hương Nguyên", "xã Hương Phong", "xã Lâm Đớt", "xã Phú Vinh", "xã Quảng Nhâm", "xã Sơn Thủy", "xã Trung Sơn" };
+    List<string> HNDong = new List<string> { "thị trấn Khe Tre", "xã Hương Hữu", "xã Hương Lộc", "xã Hương Phú", "xã Hương Sơn", "xã Hương Xuân", "xã Thượng Long", "xã Thượng Lộ", "xã Thượng Nhật", "xã Thượng Quảng" };
+    List<string> HPDien = new List<string> { "thị trấn Phong Điền", "xã Điền Hải", "xã Điền Hòa", "xã Điền Hương", "xã Điền Lộc", "xã Điền Môn", "xã Phong An", "xã Phong Bình", "xã Phong Chương", "xã Phong Hải", "xã Phong Hiền", "xã Phong Hòa", "xã Phong Mỹ", "xã Phong Sơn", "xã Phong Thu", "xã Phong Xuân" };
+    List<string> HPLoc = new List<string> { "thị trấn Phú Lộc", "thị trấn Lăng Cô", "xã Giang Hải", "xã Lộc An", "xã Lộc Bình", "xã Lộc Bổn", "xã Lộc Điền", "xã Lộc Hòa", "xã Lộc Sơn", "xã Lộc Thủy", "xã Lộc Tiến", "xã Lộc Trì", "xã Lộc Vĩnh", "xã Vinh Hiền", "xã Vinh Hưng", "xã Vinh Mỹ", "xã Xuân Lộc" };
+    List<string> HPVang = new List<string> { "thị trấn Phú Đa", "xã Phú An", "xã Phú Diên", "xã Phú Gia", "xã Phú Hải", "xã Phú Hồ", "xã Phú Lương", "xã Phú Mỹ", "xã Phú Thuận", "xã Phú Xuân", "xã Vinh An", "xã Vinh Hà", "xã Vinh Thanh", "xã Vinh Xuân" };
+    List<string> HQDien = new List<string> { "thị trấn Sịa", "xã Quảng An", "xã Quảng Công", "xã Quảng Lợi", "xã Quảng Ngạn", "xã Quảng Phú", "xã Quảng Phước", "xã Quảng Thái", "xã Quảng Thành", "xã Quảng Thọ", "xã Quảng Vinh" };
     int a;
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         UserName = authState.User.Identity.Name;
+    }
+
+    private void FilterData(string selectedValue)
+    {
+        aa = selectedValue;
+        Input.CapHuyen = aa;
+        if (aa == "Thành phố Huế")
+        {
+            phuong = XaTPHue;
+        }
+        if (aa == "Phong Điền")
+        {
+            phuong = HPDien;
+        }
+        if (aa == "Quảng Điền")
+        {
+            phuong = HQDien;
+        }
+        if (aa == "Hương Thủy")
+        {
+            phuong = XaHThuy;
+        }
+        if (aa == "Hương Trà")
+        {
+            phuong = XaHTra;
+        }
+        if (aa == "Phú Vang")
+        {
+            phuong = HPVang;
+        }
+        if (aa == "Phú Lộc")
+        {
+            phuong = HPLoc;
+        }
+        if (aa == "A Lưới")
+        {
+            phuong = HALuoi;
+        }
+        if (aa == "Nam Đông")
+        {
+            phuong = HNDong;
+        }
+    }
+    private void Filterxa(string selectedValue)
+    {
+        xa = selectedValue;
+        Input.CapXa = xa;
     }
     private async Task add()
     {

@@ -69,7 +69,6 @@ namespace duanxetnghiem.Services
                 && x.Tuoi == user.Tuoi
                 && x.Gioitinh == user.Gioitinh
             );
-
             return existingUser?.Id ?? -1;
         }
 

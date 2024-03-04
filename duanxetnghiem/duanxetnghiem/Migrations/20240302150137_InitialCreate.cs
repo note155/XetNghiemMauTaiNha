@@ -60,11 +60,27 @@ namespace duanxetnghiem.Migrations
                     Chucvu = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Anh = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SDT = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    trangthai = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BacSis", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "chisos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ten = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CSBT = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DonVi = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_chisos", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -92,6 +108,8 @@ namespace duanxetnghiem.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Hoten = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Diachi = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CapHuyen = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CapXa = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SDT = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Gioitinh = table.Column<bool>(type: "bit", nullable: false),
@@ -209,6 +227,32 @@ namespace duanxetnghiem.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GXNandCSs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GoiXetNghiemId = table.Column<int>(type: "int", nullable: false),
+                    ChisoId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GXNandCSs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GXNandCSs_GoiXetNghiems_GoiXetNghiemId",
+                        column: x => x.GoiXetNghiemId,
+                        principalTable: "GoiXetNghiems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GXNandCSs_chisos_ChisoId",
+                        column: x => x.ChisoId,
+                        principalTable: "chisos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DonXetNghiems",
                 columns: table => new
                 {
@@ -240,7 +284,8 @@ namespace duanxetnghiem.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    GoiXetNghiemId = table.Column<int>(type: "int", nullable: false)
+                    GoiXetNghiemId = table.Column<int>(type: "int", nullable: false),
+                    IsSelected = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -292,9 +337,9 @@ namespace duanxetnghiem.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DonXetNghiemId = table.Column<int>(type: "int", nullable: false),
-                    Anhketqua = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    KetQua = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ghiChu = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    nhommau = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    khoa = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ghiChu = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ngaycoKQ = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -317,7 +362,9 @@ namespace duanxetnghiem.Migrations
                     UserId = table.Column<int>(type: "int", nullable: false),
                     DonXetNghiemId = table.Column<int>(type: "int", nullable: false),
                     Tongtien = table.Column<long>(type: "bigint", nullable: false),
-                    trangthai = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    trangthai = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NgayTT = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DaTT = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -346,6 +393,33 @@ namespace duanxetnghiem.Migrations
                         name: "FK_TuChois_DonXetNghiems_DonXetNghiemId",
                         column: x => x.DonXetNghiemId,
                         principalTable: "DonXetNghiems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "KQandCSs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    KetQuaXetNghiemId = table.Column<int>(type: "int", nullable: false),
+                    ChisoId = table.Column<int>(type: "int", nullable: false),
+                    KetQua = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KQandCSs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_KQandCSs_KetQuaXetNghiems_KetQuaXetNghiemId",
+                        column: x => x.KetQuaXetNghiemId,
+                        principalTable: "KetQuaXetNghiems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_KQandCSs_chisos_ChisoId",
+                        column: x => x.ChisoId,
+                        principalTable: "chisos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -415,9 +489,29 @@ namespace duanxetnghiem.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_GXNandCSs_ChisoId",
+                table: "GXNandCSs",
+                column: "ChisoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GXNandCSs_GoiXetNghiemId",
+                table: "GXNandCSs",
+                column: "GoiXetNghiemId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_KetQuaXetNghiems_DonXetNghiemId",
                 table: "KetQuaXetNghiems",
                 column: "DonXetNghiemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_KQandCSs_ChisoId",
+                table: "KQandCSs",
+                column: "ChisoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_KQandCSs_KetQuaXetNghiemId",
+                table: "KQandCSs",
+                column: "KetQuaXetNghiemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_thanhToans_DonXetNghiemId",
@@ -458,7 +552,10 @@ namespace duanxetnghiem.Migrations
                 name: "GioHangs");
 
             migrationBuilder.DropTable(
-                name: "KetQuaXetNghiems");
+                name: "GXNandCSs");
+
+            migrationBuilder.DropTable(
+                name: "KQandCSs");
 
             migrationBuilder.DropTable(
                 name: "thanhToans");
@@ -474,6 +571,12 @@ namespace duanxetnghiem.Migrations
 
             migrationBuilder.DropTable(
                 name: "GoiXetNghiems");
+
+            migrationBuilder.DropTable(
+                name: "KetQuaXetNghiems");
+
+            migrationBuilder.DropTable(
+                name: "chisos");
 
             migrationBuilder.DropTable(
                 name: "DonXetNghiems");

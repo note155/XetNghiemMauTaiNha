@@ -11,5 +11,6 @@ namespace duanxetnghiem.Data.Model
         public string? Anh { get; set; }
         public string SDT { get; set; }
         public string Email { get; set; }
+        public string? trangthai { get; set; } 
     }
 }
