@@ -33,6 +33,13 @@ namespace duanxetnghiem.Client.Services
             return respone;
         }
 
+        public async Task<List<User>> getalluserbyemailAsync(string email)
+        {
+            var allstudent = await _httpClient.GetAsync($"api/User/All-Userbyemail/{email}");
+            var respone = await allstudent.Content.ReadFromJsonAsync<List<User>>();
+            return respone;
+        }
+
         public async Task<User> getuserbyemail(string email)
         {
             var onestudent = await _httpClient.GetAsync($"api/User/Single-UserEM/{email}");
@@ -69,7 +76,7 @@ namespace duanxetnghiem.Client.Services
 
         public async Task<User> updateuserAsync(User User)
         {
-            var newstudent = await _httpClient.PostAsJsonAsync("api/Studen/Update-User", User);
+            var newstudent = await _httpClient.PostAsJsonAsync("api/User/Update-User", User);
             var respone = await newstudent.Content.ReadFromJsonAsync<User>();
             return respone;
         }

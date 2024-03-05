@@ -1,0 +1,114 @@
+﻿@page "/listdscoKQ"
+@inject NavigationManager navigation;
+@attribute [Authorize]
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Danh sách đơn có kết quả</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header"></div>
+                            @if (!AllDXN.Any())
+                            {
+                                <p><em>Loading ...</em></p>
+                            }
+                            @if (AllDXN.Any())
+                            {
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Họ Tên Khách Hàng</th>
+                                                    <th>Trạng thái</th>
+                                                    <th>Ngày có kết quả </th>
+                                                    <th>Khoa </th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var DXN in AllDXN)
+                                                {
+                                                    foreach (var kq in allKQ)
+                                                    {
+                                                        if (DXN.Id == kq.DonXetNghiemId)
+                                                        {
+                                                            <tr>
+                                                                <td>@DXN.Id</td>
+                                                                <td>@loadhoten(DXN.UserId)</td>>
+                                                                <td>@DXN.Trangthai</td>
+                                                                <td>@kq.ngaycoKQ</td>
+                                                                <td>@kq.khoa</td>
+                                                                <td>
+                                                                    <a class="btn btn-success" href="/xemKQXN/@DXN.Id"> Xem kết quả </a>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-info"> There is not DXN List Available</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    public List<DonXetNghiem> AllDXN { get; set; } = new();
+    public List<User> allUser { get; set; } = new();
+    public List<KetQuaXetNghiem> allKQ { get; set; } = new();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAlLStudents();
+        allUser = await Usertservice.getalluserAsync();
+        allKQ = await KQXNservice.getallAsync();
+    }
+
+
+
+    public async Task LoadAlLStudents()
+    {
+        // var students = await GenericService.GetAllAsync(student, "api/Student/All-Students");
+        var DXN = await DXNservice.getallAsync();
+        AllDXN.Clear();
+
+        if (DXN is null) return;
+        foreach (var student in DXN)
+        {
+            if (student.Trangthai == "Hoàn thành")
+            {
+                AllDXN.Add(student);
+            }
+        }
+    }
+    public String loadhoten(int id)
+    {
+        foreach (var us in allUser)
+        {
+            if (us.Id == id)
+            {
+                return us.Hoten;
+            }
+        }
+        return null;
+    }
+}

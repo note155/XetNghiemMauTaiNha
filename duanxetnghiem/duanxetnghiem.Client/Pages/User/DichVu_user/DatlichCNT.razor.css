@@ -1,0 +1,271 @@
+﻿
+body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    background-color: #f7f7f7;
+    color: #333;
+}
+
+.patient-registration-container {
+    display: flex;
+    align-items: flex-start; /* Căn phần tử theo phía trên */
+}
+
+.info {
+    max-height: 300px; /* Đặt chiều cao tối đa của phần hiển thị */
+    overflow: auto; /* Thêm thanh cuộn nếu nội dung vượt quá chiều cao */
+}
+
+table {
+    width: 100%;
+}
+
+    table td {
+        padding: 10px;
+    }
+
+.patient-info {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    width: 500px;
+    flex: 1; /* Phần thông tin bệnh nhân co giãn để chiếm phần lớn không gian có sẵn */
+    max-width: 80%; /* Đặt chiều rộng tối đa */
+}
+
+    .patient-info h2 {
+        color: #4CAF50;
+        margin-bottom: 10px;
+    }
+
+    .patient-info .info {
+        margin-bottom: 10px;
+    }
+
+        .patient-info .info p {
+            margin-bottom: 5px;
+        }
+
+.test-registration-form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    width: 500px;
+    flex: 2; /* Phần thông tin đơn đăng ký xét nghiệm chiếm phần còn lại */
+    margin-left: 20px; /* Khoảng cách giữa hai phần tử */
+}
+
+    .test-registration-form h2 {
+        color: #4CAF50;
+        margin-bottom: 20px;
+    }
+
+    .test-registration-form .form-group {
+        margin-bottom: 20px;
+    }
+
+    .test-registration-form label {
+        font-weight: bold;
+    }
+
+    .test-registration-form input[type="text"],
+    .test-registration-form textarea,
+    .test-registration-form select {
+        width: 100%;
+        padding: 15px; /* Increase padding for better spacing */
+        border: 1px solid #ccc;
+        border-radius: 8px; /* Increase border radius for smoother edges */
+        box-sizing: border-box;
+    }
+
+    .test-registration-form button {
+        padding: 15px 30px; /* Increase padding for better spacing */
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease; /* Add transition for smoother hover effect */
+    }
+
+        .test-registration-form button:hover {
+            background-color: #45a049;
+        }
+
+.doctor-info {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .doctor-info h3 {
+        color: #4CAF50;
+        margin-bottom: 10px;
+        font-size: 18px;
+    }
+
+    .doctor-info p {
+        margin-bottom: 5px;
+        font-size: 16px;
+    }
+
+    .doctor-info:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add hover effect for better interaction */
+        transform: translateY(-2px); /* Add hover effect for better interaction */
+    }
+
+
+    .doctor-info img {
+        max-width: 100%;
+        height: auto;
+        margin-top: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+.doctor-details {
+    flex: 1;
+    margin-right: 20px; /* Khoảng cách giữa hai phần tử */
+}
+
+.doctor-image img {
+    max-width: 100px; /* Đặt chiều rộng tối đa cho ảnh của bác sĩ */
+    height: auto;
+}
+
+button.btn-primary {
+    width: 49%;
+    margin-top: 40px; /* Khoảng cách từ nút đến các phần tử khác */
+}
+
+.selected-packages {
+    margin-top: 10px; /* Add margin to create space between packages */
+}
+
+.price {
+    font-weight: bold; /* Make price bold */
+    color: #4CAF50; /* Set price color to green */
+}
+
+.total {
+    font-weight: bold; /* Make total bold */
+    font-size: 18px; /* Increase font size for total */
+    color: #f00; /* Set total color to red */
+}
+
+.total-mobile {
+    margin-top: 10px; /* Điều chỉnh khoảng cách với phần tổng tiền */
+}
+
+.package {
+    margin-bottom: 10px; /* Add margin to create space between packages */
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.package-content {
+    flex: 1; /* Allow content to grow */
+}
+
+.remove-btn {
+    background-color: #ff3333;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5px; /* Điều chỉnh khoảng cách với nội dung */
+}
+
+select.form-control option {
+    font-family: Arial, sans-serif; /* Font family */
+    font-size: 16px; /* Kích thước font */
+    color: #333; /* Màu chữ */
+    padding: 10px; /* Khoảng cách bên trong */
+}
+
+.select.form-control option .option-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.select.form-control option .option-name,
+.select.form-control option .option-price,
+.select.form-control option .option-time {
+    margin-bottom: 5px;
+}
+
+.select.form-control option .option-name {
+    font-weight: bold;
+}
+
+.select.form-control option:hover {
+    background-color: #ddd; /* Màu nền khi di chuột qua */
+}
+
+/* Điều chỉnh giao diện cho các thiết bị có độ rộng màn hình nhỏ hơn hoặc bằng 768px (tablets và mobile devices) */
+@media only screen and (max-width: 768px) {
+    .patient-registration-container {
+        flex-direction: column; /* Hiển thị các phần tử dọc theo nhau */
+    }
+
+    .patient-info,
+    .test-registration-form {
+        width: 95%; /* Đảm bảo rằng phần thông tin đơn đăng ký xét nghiệm chiếm toàn bộ chiều rộng của màn hình */
+        margin-right: 0; /* Xóa bỏ margin nếu cần thiết */
+    }
+
+    .test-registration-form {
+        margin-top: 20px; /* Tạo khoảng cách giữa các phần tử */
+    }
+
+    .patient-info {
+        max-width: 100%; /* Thiết lập chiều rộng tối đa là 100% */
+    }
+
+    .selected-packages {
+        flex-direction: column; /* Hiển thị các gói đã chọn dọc theo nhau */
+    }
+
+    .selected-packages {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .package {
+        margin-bottom: 10px;
+    }
+
+    .remove-btn {
+        margin-left: 0; /* Không cần thiết với thiết bị di động */
+        margin-top: 5px; /* Khoảng cách giữa nút "X" và nội dung */
+    }
+
+    .selected-packages-header {
+        margin-bottom: 10px;
+    }
+
+    .total-mobile {
+        margin-top: 20px; /* Khoảng cách từ phần tổng tiền đến các gói đã chọn */
+    }
+}

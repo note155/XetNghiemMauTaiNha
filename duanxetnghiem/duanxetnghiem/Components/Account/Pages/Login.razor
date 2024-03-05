@@ -12,14 +12,14 @@
 
 <PageTitle>Log in</PageTitle>
 
-<h1>Log in</h1>
 <div class="row">
     <div class="col-md-4">
         <section>
             <StatusMessage Message="@errorMessage" />
             <EditForm Model="Input" method="post" OnValidSubmit="LoginUser" FormName="login">
                 <DataAnnotationsValidator />
-                <h2>Use a local account to log in.</h2>
+                <h2>ĐĂNG NHẬP</h2>
+                <p>Bạn chưa có tài khoản? <a href="/Account/Register">Đăng Nhập</a></p>
                 <hr />
                 <ValidationSummary class="text-danger" role="alert" />
                 <div class="form-floating mb-3">
@@ -43,23 +43,10 @@
                 </div>
                 <div>
                     <p>
-                        <a href="Account/ForgotPassword">Forgot your password?</a>
-                    </p>
-                    <p>
-                        <a href="@(NavigationManager.GetUriWithQueryParameters("Account/Register", new Dictionary<string, object?> { ["ReturnUrl"] = ReturnUrl }))">Register as a new user</a>
-                    </p>
-                    <p>
-                        <a href="Account/ResendEmailConfirmation">Resend email confirmation</a>
+                        <a href="Account/ForgotPassword">Quên mật khẩu?</a>
                     </p>
                 </div>
             </EditForm>
-        </section>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to log in.</h3>
-            <hr />
-            <ExternalLoginPicker />
         </section>
     </div>
 </div>
@@ -92,7 +79,7 @@
         var result = await SignInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
         if (result.Succeeded)
         {
-            Logger.LogInformation("User logged in.");
+            Logger.LogInformation("Người dùng đã đăng nhập.");
             RedirectManager.RedirectTo(ReturnUrl);
         }
         else if (result.RequiresTwoFactor)
@@ -103,12 +90,12 @@
         }
         else if (result.IsLockedOut)
         {
-            Logger.LogWarning("User account locked out.");
+            Logger.LogWarning("Tài khoản người dùng bị khóa.");
             RedirectManager.RedirectTo("Account/Lockout");
         }
         else
         {
-            errorMessage = "Error: Invalid login attempt.";
+            errorMessage = "Lỗi: Lần đăng nhập không hợp lệ.";
         }
     }
 

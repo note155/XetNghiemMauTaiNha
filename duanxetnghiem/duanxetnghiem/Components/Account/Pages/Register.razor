@@ -16,15 +16,13 @@
 @inject IdentityRedirectManager RedirectManager
 
 <PageTitle>Register</PageTitle>
-
-<h1>Register</h1>
-
 <div class="row">
     <div class="col-md-4">
         <StatusMessage Message="@Message" />
         <EditForm Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
             <DataAnnotationsValidator />
-            <h2>Create a new account.</h2>
+            <h2>ĐĂNG KÝ</h2>
+            <p>Bạn đã có tài khoản? <a href="/Account/Login">Đăng Nhập</a></p>
             <hr />
             <ValidationSummary class="text-danger" role="alert" />
             <div class="form-floating mb-3">
@@ -42,15 +40,8 @@
                 <label for="confirm-password">Confirm Password</label>
                 <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
             </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+            <button type="submit" class="w-100 btn btn-lg btn-primary">ĐĂNG KÝ</button>
         </EditForm>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr />
-            <ExternalLoginPicker />
-        </section>
     </div>
 </div>
 
@@ -80,7 +71,7 @@
             return;
         }
 
-        Logger.LogInformation("User created a new account with password.");
+        Logger.LogInformation("Người dùng đã tạo một tài khoản mới bằng mật khẩu.");
 
         var userId = await UserManager.GetUserIdAsync(user);
         var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
@@ -110,8 +101,8 @@
         }
         catch
         {
-            throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
-                $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor.");
+            throw new InvalidOperationException($"Không thể tạo một phiên bản của '{nameof(ApplicationUser)}'. " +
+                $"Đảm bảo rằng đó  '{nameof(ApplicationUser)}' không phải là lớp trừu tượng và có hàm tạo không tham số.");
         }
     }
 
@@ -119,7 +110,7 @@
     {
         if (!UserManager.SupportsUserEmail)
         {
-            throw new NotSupportedException("The default UI requires a user store with email support.");
+            throw new NotSupportedException("Giao diện người dùng mặc định yêu cầu cửa hàng người dùng có hỗ trợ qua email.");
         }
         return (IUserEmailStore<ApplicationUser>)UserStore;
     }
@@ -132,14 +123,14 @@
         public string Email { get; set; } = "";
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "Không phải dài ít nhất là {2} và tối đa {1} ký tự.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; } = "";
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Compare("Password", ErrorMessage = "Mật khẩu và mật khẩu xác nhận không khớp.")]
         public string ConfirmPassword { get; set; } = "";
     }
 }

@@ -249,3 +249,40 @@ button.btn-primary {
 .total-mobile {
     margin-top: 10px; /* Điều chỉnh khoảng cách với phần tổng tiền */
 }
+/* CSS for mobile devices */
+@media only screen and (max-width: 768px) {
+    .patient-registration-container {
+        flex-direction: column; /* Hiển thị các phần tử dọc theo nhau */
+    }
+    .container {
+        padding: 10px; /* Giảm padding cho container */
+    }
+
+    .patient-info,
+    .test-registration-form {
+        max-width: 100%; /* Phần tử co giãn hơn trên thiết bị di động */
+        margin-right: 0; /* Xóa margin giữa các phần tử */
+    }
+
+        .test-registration-form button {
+            width: 100%; /* Nút trở thành toàn bộ chiều rộng */
+            margin-top: 10px; /* Khoảng cách giữa các nút */
+        }
+
+    .doctor-info {
+        flex-direction: column; /* Chuyển sang layout dọc */
+        align-items: flex-start; /* Căn trái các phần tử */
+    }
+
+    .doctor-details {
+        margin-right: 0; /* Xóa margin */
+    }
+
+    .doctor-image img {
+        max-width: 80px; /* Giảm kích thước ảnh */
+    }
+
+    .selected-packages {
+        margin-top: 5px; /* Giảm khoảng cách */
+    }
+}

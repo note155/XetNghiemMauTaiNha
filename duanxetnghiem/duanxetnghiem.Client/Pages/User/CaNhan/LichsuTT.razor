@@ -4,112 +4,105 @@
 @attribute [Authorize]
 <div class="actions">
     <a style="border-color:lawngreen" class="btn btn-outline-success" href="/lichsuDL">Lịch Sử Đặt Lịch</a>
-    <a  class="btn btn-success"  href="/lichsuTT">Lịch Sử Thanh Toán</a>
-</div>
-
-<div class="InputSelectWrapper">
-    <InputSelect style="border-color:greenyellow;" class="form-control" ValueChanged="@((int value)=>FilterData(value))" ValueExpression="@(()=>aa)" Value="aa">
-        <option value="0">Tất Cả</option>
-        <option value="1">Chưa Thanh Toán</option>
-        <option value="2">Đã Thanh Toán</option>
-        <option value="3">30%</option>
-    </InputSelect>
+    <a class="btn btn-success" href="/lichsuTT">Lịch Sử Thanh Toán</a>
 </div>
 <div class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Lịch sử thanh toán của @patient.Hoten</h3>
+                <h3 class="card-title">Lịch sử thanh toán : @patient.Hoten</h3>
+                <div class="InputSelectWrapper">
+                    <InputSelect class="form-control" ValueChanged="@((int value)=>FilterData(value))" ValueExpression="@(()=>aa)" Value="aa">
+                        <option value="0">Tất Cả</option>
+                        <option value="1">Chưa Thanh Toán</option>
+                        <option value="2">Đã Thanh Toán</option>
+                        <option value="3">30%</option>
+                    </InputSelect>
+                </div>
             </div>
+
             <div class="card-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header"></div>
-                            @if (!AllDXN.Any())
-                            {
-                                <p><em>Loading ...</em></p>
-                            }
-                            @if (AllDXN.Any())
-                            {
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-striped table-hover">
-                                            <thead>
+                @if (!AllDXN.Any())
+                {
+                    <p><em>Loading ...</em></p>
+                }
+                @if (AllDXN.Any())
+                {
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Id đơn xét nghiệm</th>
+                                        <th>Số hóa đơn</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Trạng thái</th>
+                                        <th>Thông tin thanh toán</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var DXN in AllDXN)
+                                    {
+                                        foreach (var tt in allTT)
+                                        {
+                                            if (DXN.Id == tt.DonXetNghiemId)
+                                            {
                                                 <tr>
-                                                    <th>id đơn xét nghiệm</th>
-                                                    <th>Số hóa đơn</th>
-                                                    <th>Tổng tiền</th>
-                                                    <th>Trạng thái</th>
-                                                    <th>Thông tin thanh toán</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (var DXN in AllDXN)
-                                                {
-                                                    foreach (var tt in allTT)
+                                                    <td>@DXN.Id</td>
+                                                    <td>@tt.Id</td>
+                                                    <td>@tt.Tongtien VND</td>
+                                                    <td>@tt.trangthai</td>
+                                                    @if (tt.trangthai == "Chưa Thanh Toán")
                                                     {
-                                                        if (DXN.Id == tt.DonXetNghiemId)
-                                                        {
-                                                            <tr>
-                                                                <td>@DXN.Id</td>
-                                                                <td>@tt.Id</td>
-                                                                <td>@tt.Tongtien VND</td>
-                                                                <td>@tt.trangthai</td>
-                                                                @if (tt.trangthai == "Chưa Thanh Toán")
-                                                                {
-                                                                    <td>
-                                                                        <p style="color:red">Vui lòng thanh toán trong 24h</p>
-                                                                    </td>
-                                                                    <td>
-                                                                        <a class="btn btn-success" href="/ThanhToan/@DXN.Id"> Thanh toán </a>
-                                                                    </td>
-                                                                }
-                                                                @if (tt.trangthai == "30%")
-                                                                {
-                                                                    <td>
-                                                                        <p style="color:dodgerblue">Đã Thanh toán:@tt.DaTT1 VND -- Ngày: @tt.NgayTT1</p>
-                                                                    </td>
-                                                                    <td>
-                                                                        <a href="/camon/@DXN.Id" class="btn btn-info">In hóa đơn</a> <br>
-                                                                        <a class="btn btn-success" href="/ThanhToan2/@DXN.Id"> Thanh toán hết </a>
-                                                                    </td>
-                                                                }
-                                                                @if (tt.trangthai == "Đã Thanh Toán")
-                                                                {
-                                                                    if (tt.DaTT2!=null)
-                                                                    {
-                                                                        <td>
-                                                                            <p style="color:green">Thanh toán lần 1:@tt.DaTT1 VND -- Ngày: @tt.NgayTT1</p>
-                                                                            <p style="color:green">Thanh toán lần 2:@tt.DaTT2 VND -- Ngày: @tt.NgayTT2</p>
-                                                                        </td>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <td><p style="color:green">Đã Thanh toán:@tt.DaTT1 VND -- Ngày: @tt.NgayTT1</p></td>
-                                                                    }
-                                                                    <td>
-                                                                        <a href="/camon/@DXN.Id" class="btn btn-info">In hóa đơn</a>
-                                                                    </td>
-                                                                }
-                                                            </tr>
-                                                        }
+                                                        <td>
+                                                            <p style="color:red;">Vui lòng thanh toán trong 24h</p>
+                                                        </td>
+                                                        <td>
+                                                            <a class="btn btn-success" style="width: 156px; " href="/ThanhToan/@DXN.Id"> Thanh toán </a>
+                                                        </td>
                                                     }
-                                                    
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="alert alert-info"> There is not DXN List Availlable</div>
-                            }
+                                                    @if (tt.trangthai == "30%")
+                                                    {
+                                                        <td>
+                                                            <p style="color:dodgerblue">Đã Thanh toán:@tt.DaTT1 VND -- Ngày: @tt.NgayTT1</p>
+                                                        </td>
+                                                        <td>
+                                                            <a href="/camon/@DXN.Id" class="btn btn-info">In hóa đơn</a> <br>
+                                                            <a class="btn btn-success" href="/ThanhToan2/@DXN.Id"> Thanh toán hết </a>
+                                                        </td>
+                                                    }
+                                                    @if (tt.trangthai == "Đã Thanh Toán")
+                                                    {
+                                                        if (tt.DaTT2 != null)
+                                                        {
+                                                            <td>
+                                                                <p style="color:green">Thanh toán lần 1:@tt.DaTT1 VND -- Ngày: @tt.NgayTT1</p>
+                                                                <p style="color:green">Thanh toán lần 2:@tt.DaTT2 VND -- Ngày: @tt.NgayTT2</p>
+                                                            </td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td><p style="color:green">Đã Thanh toán:@tt.DaTT1 VND -- Ngày: @tt.NgayTT1</p></td>
+                                                        }
+                                                        <td>
+                                                            <a href="/camon/@DXN.Id" class="btn btn-info">In hóa đơn</a>
+                                                        </td>
+                                                    }
+                                                </tr>
+                                            }
+                                        }
+
+                                    }
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                </div>
+                }
+                else
+                {
+                    <div class="alert alert-info"> Không có danh sách xét nghiệm</div>
+                }
             </div>
         </div>
     </div>
@@ -160,7 +153,7 @@
             {
                 foreach (var tt in allTT)
                 {
-                    if (student.Id==tt.DonXetNghiemId && tt.trangthai=="Chưa Thanh Toán")
+                    if (student.Id == tt.DonXetNghiemId && tt.trangthai == "Chưa Thanh Toán")
                     {
                         AllDXN.Add(student);
                     }

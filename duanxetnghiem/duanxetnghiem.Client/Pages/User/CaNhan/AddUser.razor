@@ -6,7 +6,7 @@
 
 <h3>Thông Tin Cá Nhân </h3>
  <div class="alert alert-danger" role="alert">
-<p>Bạn vui lòng cập nhật thông tin để sử dụng dịch vụ</p>
+<p>Để sử dụng dịch vụ bạn vui lòng nhập chính xác thông tin</p>
 </div>
 @if (errors.Count > 0)
 {
@@ -197,6 +197,14 @@
         if (Input.Tuoi <= 0)
         {
             errors.Add("Vui lòng nhập tuổi hợp lệ.");
+        }
+        if (string.IsNullOrWhiteSpace(Input.CapHuyen))
+        {
+            errors.Add("Vui lòng chọn Quận/Huyện");
+        }
+        if (string.IsNullOrWhiteSpace(Input.CapXa))
+        {
+            errors.Add("Vui lòng chọn Phường/Xã");
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿@page "/datlich"
+﻿@page "/datlichCNT"
 @using Shared.form
 @rendermode InteractiveAuto
 @inject NavigationManager navigation;
@@ -19,6 +19,12 @@
     <div class="patient-registration-container">
         <div class="patient-info-container">
             <div class="patient-info">
+                <InputSelect ValueChanged="@((int value)=>layuser(value))" ValueExpression="@(()=>iduser)" Value="iduser" class="form-control" id="userid">
+                    @foreach(var use in alluser)
+                    {
+                        <option value="@use.Id">@use.Hoten</option>
+                    }
+                </InputSelect>
                 <h2>Thông tin bệnh nhân</h2>
                 @if (user != null)
                 {
@@ -26,9 +32,10 @@
                         <p><strong>Họ tên:</strong> @user.Hoten</p>
                         <p><strong>Tuổi:</strong> @user.Tuoi</p>
                         <p><strong>Số điện thoại:</strong> @user.SDT</p>
-                        <p><strong>Địa chỉ:</strong> @user.Diachi, @user.CapXa, @user.CapHuyen, TT Huế</p>
+                        <p><strong>Địa chỉ:</strong> @user.Diachi / @user.CapXa / @user.CapHuyen / Thành phố Huế</p>
                         <p><strong>Email:</strong> @user.Email</p>
                         <p><strong>Giới tính:</strong> @gioitinh(@user.Gioitinh)</p>
+                        <a href="/adduser" class="btn btn-info">Thêm thông tin người thân</a>
                     </div>
                 }
             </div>
@@ -131,12 +138,14 @@
     private List<string> err = new List<string>();
     private User user = new User();
     public List<GoiXetNghiem> allGXN { get; set; } = new();
+    public List<User> alluser { get; set; } = new();
     public List<BacSi> AllBS { get; set; } = new();
     public string UserName { get; set; }
     public List<GoiXetNghiem> gxndachon { get; set; } = new();
     public List<GXNchon> listgxn { get; set; } = new();
     int valor = 0, idbs;
     public long tongtien = 0;
+    int iduser=0;
 
     [SupplyParameterFromForm]
     public donXNform Input { get; set; } = new();
@@ -147,6 +156,7 @@
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         UserName = authState.User.Identity.Name;
         user = await Usertservice.getuserbyemail(UserName);
+        alluser = await Usertservice.getalluserbyemailAsync(user.Email);
         if (user == null)
         {
             navigation.NavigateTo("/AddUser");
@@ -261,6 +271,11 @@
         {
             return "Nữ";
         }
+    }
+    private void layuser(int id)
+    {
+        iduser=id;
+        user = alluser.FirstOrDefault(p => p.Id == id);
     }
     private void LoadBSInfo(int id)
     {

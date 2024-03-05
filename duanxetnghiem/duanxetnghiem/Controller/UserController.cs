@@ -26,6 +26,12 @@ namespace duanxetnghiem.Controller
             return Ok(users);
         }
 
+        [HttpGet("All-Userbyemail/{email}")]
+        public async Task<ActionResult<List<User>>> GetallbyemailAsync(string email)
+        {
+            var users = await _UserRepository.getalluserbyemailAsync(email);
+            return Ok(users);
+        }
 
         [HttpGet("Single-User/{id}")]
         public async Task<ActionResult<User>> GetSingleStudentAsync(int id)

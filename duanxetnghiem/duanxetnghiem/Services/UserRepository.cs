@@ -76,6 +76,11 @@ namespace duanxetnghiem.Services
         {
             return await _context.Users.FirstOrDefaultAsync(b => b.Email == email);
         }
-    
+
+        public async Task<List<User>> getalluserbyemailAsync(string email)
+        {
+            var gioHangs = await _context.Users.Where(g => g.Email == email).ToListAsync();
+            return gioHangs;
+        }
     }
 }

@@ -1,0 +1,79 @@
+﻿
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+}
+
+/* Khu vực đăng ký */
+.col-md-4 {
+    margin: 40px auto;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Tiêu đề Đăng ký */
+h2 {
+    color: #007bff;
+    font-family: Arial, sans-serif;
+    font-size: 40px;
+    text-align: center;
+}
+
+p {
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    text-align: center;
+}
+
+/* Form đăng ký */
+.form-floating {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+    .form-floating label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        color: #6c757d;
+        padding: 8px;
+        pointer-events: none;
+        transition: all 0.3s ease-out;
+    }
+
+    .form-floating input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        margin-top: 26px;
+    }
+
+/* Nút Đăng ký */
+.btn-primary {
+    margin-top: 40px;
+    background-color: #007bff;
+    border: none;
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+/* Cảnh báo lỗi */
+.text-danger {
+    color: #dc3545;
+}
+
+/* Đường kẻ ngang */
+hr {
+    border: 1px solid #ced4da;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.form-label {
+    margin-left: 20px;
+}

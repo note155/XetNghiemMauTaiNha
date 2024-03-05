@@ -232,6 +232,10 @@
     protected override async Task OnInitializedAsync()
     {
         Input = await DXNservice.getbyid(id);
+        if(Input==null)
+        {
+            navigation.NavigateTo("/lichsuDl");
+        }
         user = await Usertservice.getuserbyid(Input.UserId);
         allGXN = await GXNservice.getallAsync();
         AllBS = await bacsiservice.getallAsync();

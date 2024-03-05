@@ -12,6 +12,6 @@ namespace Shared.ketnoi
         Task<User> getuserbyid(int Id);
         Task<int> IsUserExistsAsync(User user);
         Task<User> getuserbyemail(string email);
-
+        Task<List<User>> getalluserbyemailAsync(string email);
     }
 }

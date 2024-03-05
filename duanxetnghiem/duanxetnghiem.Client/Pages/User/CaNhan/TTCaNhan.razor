@@ -27,11 +27,11 @@
                 </div>
                 <div class="form-group">
                     <label>Giới tính:</label>
-                    <p>@patient.Gioitinh</p>
+                    <p>@gioitinh(@patient.Gioitinh)</p>
                 </div>
                 <div class="form-group">
                     <label>Địa Chỉ:</label>
-                    <p>@patient.Diachi</p>
+                    <p>@patient.Diachi, @patient.CapXa, @patient.CapHuyen, Tỉnh TT Huế</p>
                 </div>
                 <div class="form-group">
                     <label>Số Điện Thoại:</label>
@@ -42,7 +42,7 @@
                     <p>@patient.Email</p>
                 </div>
                 <div class="text-center">
-                    <button class="btn edit-btn">Chỉnh sửa thông tin</button>
+                    <a href="/UpdateUser" class="btn edit-btn">Chỉnh sửa thông tin</a>
                     <button class="btn add-btn">Thêm thông tin cho người thân</button>
                 </div>
             </div>
@@ -70,5 +70,16 @@
         AllDXN = await DXNservice.getallbyiduserAsync(patient.Id);
         var dxnWithMaxId = AllDXN.OrderByDescending(dxn => dxn.Id).First();
         time = dxnWithMaxId.ngaytaodon;
+    }
+    private String gioitinh(bool a)
+    {
+        if (a)
+        {
+            return "Nam";
+        }
+        else
+        {
+            return "Nữ";
+        }
     }
 }

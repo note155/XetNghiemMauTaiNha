@@ -1,5 +1,5 @@
 ﻿@page "/"
-
+@rendermode InteractiveAuto
 @using Microsoft.AspNetCore.Components.Web
 @inject NavigationManager navigation;
 @if (err != "")
@@ -582,11 +582,19 @@
     {
         if (string.IsNullOrEmpty(Input))
         {
-            err = "Address is required.";
+            err = "Không được để trống";
         }
         else
         {
-            err = "aa";
+            if (double.TryParse(Input, out double result))
+            {
+                navigation.NavigateTo("/XCTDon/" + Input);
+            }
+            else
+            {
+                err = "Giá trị nhập vào phải là số";
+            }
+        }
         }
     }
 
