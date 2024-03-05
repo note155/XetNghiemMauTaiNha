@@ -1,4 +1,7 @@
 ﻿@page "/XCTDon/{id:int}"
+@using Shared.form
+@using Append.Blazor.Printing
+@inject IPrintingService PrintingService
 @rendermode InteractiveAuto
  @inject NavigationManager navigation;
 @attribute [Authorize]
@@ -100,11 +103,106 @@
                 </div>
             }
         </EditForm>
+        @if (Input.Trangthai != "Từ Chối")
+        {
+            if (tt.trangthai == "Chưa Thanh Toán")
+            {
+                <h2 style="color:red">Bạn Chưa Thanh Toán Hóa Đơn Để Được Xét Duyệt</h2>
+                <a href="/ThanhToan/@id" class="btn btn-success">
+                    Thanh Toán
+                </a>
+            }
+        }
+        @if(Input.Trangthai=="Hoàn thành")
+        {
+            if (tt.trangthai == "30%")
+            {
+                <h2 style="color:red">Bạn Chưa Thanh Toán Để Xem Kết Quả</h2>
+                <a href="/ThanhToan2/@id" class="btn btn-success">
+                     Thanh Toán
+                </a>
+            }
+            if (tt.trangthai == "Đã Thanh Toán")
+            {
+                <div>
+                    <h2>Kết Quả</h2>
+                    <EditForm Model="Inputkq" method="post" FormName="addkq" class="profile-form">
+                        <DataAnnotationsValidator />
+                        <hr />
+                        <div class="form-group">
+                            <label for="ngaycoKQ">Ngày Có Kết Quả</label>
+                            <InputDate @bind-Value="Inputkq.ngaycoKQ" class="form-control" id="ngaycoKQ" readonly />
+                            <ValidationMessage For="() => Inputkq.ngaycoKQ" class="text-danger" />
+                        </div>
+                        <div class="form-group">
+                            <label for="khoa">Khoa</label>
+                            <InputText @bind-Value="Inputkq.khoa" class="form-control" id="khoa" readonly />
+                            <ValidationMessage For="() => Inputkq.khoa" class="text-danger" />
+                        </div>
+                        <div class="form-group">
+                            <label for="nhommau">Nhóm Máu</label>
+                            <InputText @bind-Value="Inputkq.nhommau" class="form-control" id="nhommau" readonly />
+                            <ValidationMessage For="() => Inputkq.nhommau" class="text-danger" />
+                        </div>
+                        <div class="form-group">
+                            <label for="ghiChu">Ghi chú</label>
+                            <InputTextArea @bind-Value="Inputkq.ghiChu" class="form-control" id="ghiChu" readonly />
+                            <ValidationMessage For="() => Inputkq.ghiChu" class="text-danger" />
+                        </div>
+
+                        <!-- Input for list of KQandCS -->
+                        <h3>Danh sách Kết Quả và Chỉ Số</h3>
+                        @if (Inputkq.kQandCs != null)
+                        {
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Chỉ Số</th>
+                                        <th>Kết Quả</th>
+                                        <th>CSBT</th>
+                                        <th>Đơn Vị</th>
+                                    </tr>
+                                </thead>
+                                @foreach (var kqandcs in Inputkq.kQandCs)
+                                {
+                                    if (kqandcs.goi != goi1)
+                                    {
+                                        goi1 = kqandcs.goi;
+                                        <tr><td colspan="4"><strong>Gói Xét Nghiệm:</strong>@loadtengoi(goi)</td></tr>
+                                    }
+                                    <tr>
+                                        <td>@loadtenchiso(kqandcs.id)</td>
+                                        <td>
+                                            <InputText @bind-Value="kqandcs.kq" class="form-control" readonly />
+                                            <ValidationMessage For="() => kqandcs.kq" class="text-danger" />
+                                        </td>
+                                        <td>
+                                            @loadcsbt(kqandcs.id)
+                                        </td>
+                                        <td>
+                                            @loaddonvi(kqandcs.id)
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+
+
+                        }
+                    </EditForm>
+                    <button class="btn btn-success" @onclick="@(_ => PrintingService.Print(rawHtml, PrintType.RawHtml))">
+                        Tải Kết Quả
+                    </button>
+                </div>
+            }
+        }
+        <a href="/ListDXN"><button style="background-color:red" class="btn btn-primary"> Trở về </button></a>
     </div>
 </div>
 
 
 @code {
+    int goi = -1;
+    int goi1 = -1; 
     private List<string> err = new List<string>();
     private User user = new User();
     public List<GoiXetNghiem> allGXN { get; set; } = new();
@@ -118,6 +216,12 @@
     private List<GoiXetNghiem> previousGxndachon = new List<GoiXetNghiem>();
     public TuChoi lydo = new();
     string a;
+    public KQXN Inputkq { get; set; } = new();
+    public List<Chiso> allchiso { get; set; } = new();
+    private KetQuaXetNghiem kq { get; set; } = new();
+    string rawHtml = "";
+    public int stt = 0;
+    private ThanhToan tt { get; set; } = new();
 
     [SupplyParameterFromForm]
     public DonXetNghiem Input { get; set; } = new();
@@ -132,6 +236,10 @@
         allGXN = await GXNservice.getallAsync();
         AllBS = await bacsiservice.getallAsync();
         dxn = await DXNservice.getallGXNAsync(id);
+        if(Input.Trangthai!="Từ Chối")
+        {
+            tt = await TTservice.getbyidDXNAsync(id);            
+        }
         loadgxndachon();
         valor = Input.BacSiId ?? 0;
         if(Input.Trangthai=="Từ Chối")
@@ -144,8 +252,81 @@
             a = "greenyellow";
             SelectedDoctor = AllBS.FirstOrDefault(bs => bs.Id == valor)!;
         }
+        if(Input.Trangthai=="Hoàn thành")
+        {
+            allchiso = await CSservice.getallAsync();
+            Inputkq.kQandCs = new List<ChisoKq>();
 
-    }
+            foreach (var a in gxndachon)
+            {
+                var listcs = await GXNservice.getallCSbyidAsync(a.Id);
+                foreach (var b in listcs)
+                {
+                    ChisoKq kq = new ChisoKq
+                        {
+                            id = b.ChisoId,
+                            goi = a.Id
+                        };
+                    Inputkq.kQandCs.Add(kq);
+                }
+            }
+            kq = await KQXNservice.getbyid(id);
+            Inputkq.ngaycoKQ = kq.ngaycoKQ;
+            Inputkq.khoa = kq.khoa;
+            Inputkq.nhommau = kq.khoa;
+            Inputkq.ghiChu = kq.ghiChu;
+            var qq = await KQXNservice.getallCSbyidAsync(kq.Id);
+            foreach (var a in Inputkq.kQandCs)
+            {
+                foreach (var b in qq)
+                {
+                    if (a.id == b.ChisoId)
+                    {
+                        a.kq = b.KetQua;
+                    }
+                }
+            }
+
+            rawHtml = "<h3>CÔNG TY TNHH GIẢI PHÁP PHẦN MỀM ÂU LẠC</h1>" +
+            "<h2 style=\"text-align: center;\">KẾT QUẢ XÉT NGHIỆM</h2>" +
+            "<p style=\"text-align: center;\">Ngày có kết quả: " + Inputkq.ngaycoKQ + " -- Số :" + Input.Id + "</p>" +
+            "<p> <span style=\"float: left;\">Họ Tên Người Bệnh:" + user.Hoten +
+            "</span><span style=\"float: right;\">Tuổi:"+user.Tuoi +"........................  Giới Tính: " + gioitinh(user.Gioitinh) + "</span></p>" +
+            "<br><p >Địa Chỉ: " + user.Diachi +" / " +@user.CapXa+ " / "+ @user.CapHuyen +"/ Thành phố Huế" +"</p>" +
+            "<p>Khoa: "+Inputkq.khoa+"..............................................Nhóm máu: "+Inputkq.nhommau+"</p>"+
+            "<p>Ghi chú: "+Inputkq.ghiChu+"</p>"+
+    "<br><h3>Danh sách Kết Quả và Chỉ Số</h3>" +
+    "<table style=\"text-align: center;width:100%;border-collapse: collapse; border: 1px solid black;\">" +
+    "<thead>" +
+    "<tr>" +
+    "<th style=\"border: 1px solid black;\">STT</th>" +
+    "<th style=\"border: 1px solid black;\">Chi số</th>" +
+    "<th style=\"border: 1px solid black;\">Kết Quả</th>" +
+    "<th style=\"border: 1px solid black;\">CSBT</th>" +
+    "<th style=\"border: 1px solid black;\">Đơn Vị</th>" +
+    "</tr>" +
+    "</thead>";
+        foreach (var ss in Inputkq.kQandCs)
+        {
+            if (ss.goi != goi)
+            {
+                goi = ss.goi;
+                rawHtml+= "<tr><td colspan=\"5\"><strong>Gói Xét Nghiệm:</strong>"+loadtengoi(goi)+"</td></tr>";
+            }
+            stt++;
+            rawHtml += "<tr>" +
+                       "<td style=\"border: 1px solid black;\">" + stt + "</td>" +
+                       "<td style=\"border: 1px solid black;\">" + loadtenchiso(ss.id) + "</td>" +
+                       "<td style=\"border: 1px solid black;\">"+ss.kq+"</td>" +
+                       "<td style=\"border: 1px solid black;\">" + loadcsbt(ss.id) + "</td>" +
+                       "<td style=\"border: 1px solid black;\">" + loaddonvi(ss.id) + "</td>" +
+                       "</tr>";
+        }
+
+        rawHtml += "</table>";
+        }
+        
+}
     private void loadgxndachon()
     {
         foreach (var a in dxn)
@@ -216,7 +397,7 @@
         previousGxndachon = new List<GoiXetNghiem>(gxndachon);
         Input.BacSiId = idbs;
         await DXNservice.updateAsync(Input);
-        navigation.NavigateTo("/ListDXN");
+        navigation.NavigateTo("/lichsuDl");
     }
     public String loadGXN(int id)
     {
@@ -276,5 +457,49 @@
         }
         allGXN.RemoveAll(item => item.Id == id);
         valorgxn = 0;
+    }
+    private string loadtengoi(int id)
+    {
+        foreach (var i in gxndachon)
+        {
+            if (i.Id == id)
+            {
+                return i.TenGoi;
+            }
+        }
+        return null;
+    }
+    private string loadcsbt(int id)
+    {
+        foreach (var i in allchiso)
+        {
+            if (i.Id == id)
+            {
+                return i.CSBT;
+            }
+        }
+        return null;
+    }
+    private string loaddonvi(int id)
+    {
+        foreach (var i in allchiso)
+        {
+            if (i.Id == id)
+            {
+                return i.DonVi;
+            }
+        }
+        return null;
+    }
+    private string loadtenchiso(int id)
+    {
+        foreach (var i in allchiso)
+        {
+            if (i.Id == id)
+            {
+                return i.ten;
+            }
+        }
+        return null;
     }
 }

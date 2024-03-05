@@ -59,7 +59,7 @@ namespace duanxetnghiem.Services
 
         public async Task<KetQuaXetNghiem> getbyid(int Id)
         {
-            return await _context.KetQuaXetNghiems.FindAsync(Id);
+            return await _context.KetQuaXetNghiems.FirstOrDefaultAsync(t => t.DonXetNghiemId == Id);
         }
 
         public async Task<KetQuaXetNghiem> updateAsync(KetQuaXetNghiem ketQuaXetNghiem)

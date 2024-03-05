@@ -104,7 +104,7 @@ body {
 
     .test-registration-form button {
         padding: 10px 20px;
-        background-color: #4CAF50;
+        background-color: #ff0000;
         color: #fff;
         border: none;
         border-radius: 5px;
@@ -112,7 +112,7 @@ body {
     }
 
         .test-registration-form button:hover {
-            background-color: #45a049;
+            background-color: #ff0000;
         }
 /* Doctor Info styles */
 .doctor-info {
@@ -168,7 +168,7 @@ body {
 }
 
 button.btn-primary {
-    width: 49%;
+    width: 100%;
     margin-top: 20px; /* Khoảng cách từ nút đến các phần tử khác */
 }
 
@@ -249,44 +249,4 @@ button.btn-primary {
 
 .total-mobile {
     margin-top: 10px; /* Điều chỉnh khoảng cách với phần tổng tiền */
-}
-/* Điều chỉnh giao diện cho các thiết bị có độ rộng màn hình nhỏ hơn hoặc bằng 768px (tablets và mobile devices) */
-.reason-for-rejection {
-    background-color: #fff;
-    padding: 20px;
-    margin-top: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border: 2px solid #e04e22; /* Add border to make it stand out */
-}
-
-    .reason-for-rejection h2 {
-        color: #e04e22;
-        margin-bottom: 10px;
-    }
-
-    .reason-for-rejection p {
-        margin-bottom: 5px;
-        font-weight: bold; /* Increase font weight for better visibility */
-        color: #333; /* Adjust text color for readability */
-    }
-
-@media only screen and (max-width: 768px) {
-    .patient-registration-container {
-        flex-direction: column; /* Hiển thị các phần tử dọc theo nhau */
-    }
-
-    .patient-info,
-    .test-registration-form {
-        width: 95%; /* Đảm bảo rằng phần thông tin đơn đăng ký xét nghiệm chiếm toàn bộ chiều rộng của màn hình */
-        margin-right: 0; /* Xóa bỏ margin nếu cần thiết */
-    }
-
-    .test-registration-form {
-        margin-top: 20px; /* Tạo khoảng cách giữa các phần tử */
-    }
-
-    .patient-info {
-        max-width: 100%; /* Thiết lập chiều rộng tối đa là 100% */
-    }
 }

@@ -97,12 +97,19 @@ body {
     color: #FFF;
     background-color: #4da5ff;
     height: 40px;
-    width: 150px;
+    width: 200px;
     border-radius: 6px;
+    text-align: center
+}
+
+.package-item-gender {
+    font-size: 18px;
+    margin-bottom: 5px;
+    margin-top: 10px;
 }
 
 .package-item-title {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
     margin-bottom: 10px;
     color: #333;
@@ -114,23 +121,21 @@ body {
     }
 }
 
-body {
-}
 
 .plus-icon-container {
     display: inline-block;
-    width: 50px;
-    height: 50px;
     border-radius: 50%;
-    background-color: #4da5ff; /* Màu xanh lá biển */
+    background-color: #ff4e4d; /* Màu xanh lá biển */
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative; /* Add position relative */
     margin-top: 10px; /* Điều chỉnh khoảng cách giữa biểu tượng và nội dung */
     margin-right: 10px; /* Điều chỉnh khoảng cách giữa biểu tượng và cạnh bên phải */
-}
-
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 10px; /* Adjust margin if necessary */
 }
 
 .plus-icon {
@@ -138,18 +143,33 @@ body {
     font-size: 20px;
 }
 
-/* Add new styles for positioning the container */
-.plus-icon-container {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 10px; /* Adjust margin if necessary */
+
+.custom-search-input {
+    height: 40px; /* Điều chỉnh chiều cao của ô tìm kiếm */
+    width: 100%; /* 100% chiều rộng của ô tìm kiếm */
+    border: 2px solid #ccc; /* Đường viền màu xám nhạt */
+    border-radius: 5px; /* Bo góc của ô tìm kiếm */
+    padding: 8px; /* Khoảng cách giữa nội dung và đường viền */
+    box-sizing: border-box; /* Đảm bảo rằng kích thước bao gồm cả đường viền */
 }
 
-    /* Optional: Add transition for a smooth effect */
-    .plus-icon-container:hover {
-        transform: scale(1.1);
-        transition: transform 0.3s ease-in-out;
-    }
+.custom-search-btn {
+    width: 150px;
+    font-size: 18px;
+    /* Thêm các thuộc tính CSS khác nếu cần */
+}
 
-Đang hiển thị 6132607630203159934.
+.search-container {
+    display: flex;
+    align-items: center;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #ffffff;
+    width: 150px;
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }

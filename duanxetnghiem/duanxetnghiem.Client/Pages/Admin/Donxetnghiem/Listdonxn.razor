@@ -1,6 +1,5 @@
 ﻿@page "/ListDXN"
 @attribute [Authorize]
-
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -10,57 +9,72 @@
             <div class="card-body">
                 <div class="row">
                     <p><a class="btn btn-success float-end" href="/datlich"> Tạo đơn </a></p>
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header"></div>
-                            @if (!AllDXN.Any())
-                            {
-                                <p><em>Loading ...</em></p>
-                            }
+    
+                       
                             @if (AllDXN.Any())
                             {
-                                <div class="card-body">
-                                   <div class="table-responsive">
-                                    <table class="table table-striped table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>id</th>
-                                                <th>Họ Tên Khách Hàng</th>
-                                                <th>Trạng thái</th>
-                                                <th>Ngày lấy máu </th>
-                                                <th>Giờ lấy máu </th>
-                                                <th></th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var DXN in AllDXN)
-                                            {
-                                                <tr>
-                                                    <td>@DXN.Id</td>
-                                                    <td>@loadhoten(DXN.UserId)</td>>
-                                                    <td>@DXN.Trangthai</td>
-                                                    <td>@DXN.Ngaydat.ToString("dd/MM/yyyy")</td>
-                                                     <td>@DXN.giolaymau</td>
-                                                    <td>
-                                                        <a class="btn btn-success" href="/XetDuyetDXN/@DXN.Id"> Duyệt </a>
-                                                    </td>
-                                                    <td>
-                                                           <a class="btn btn-danger" href="/TuChoiDXN/@DXN.Id"> Từ Chối </a>
-                                                    </td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                   </div>
+                                var groupedDXN = AllDXN.GroupBy(dxn => new { CapHuyen = dxn.User?.CapHuyen ?? "Unknown" });
+
+                                foreach (var capHuyenGroup in groupedDXN)
+                                {
+                                    <br>
+                                <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header"></div>
+                                    <h4 class="text-primary">@capHuyenGroup.Key.CapHuyen</h4> <!-- Use a different color for each CapHuyen group -->
+                                    <hr /> <!-- Add a horizontal line to separate each CapHuyen group -->
+                                    @foreach (var capXaGroup in capHuyenGroup.GroupBy(g => g.User?.CapXa))
+                                    {
+                                        <h5>@capXaGroup.Key</h5> <!-- Display CapXa as the sub-heading -->
+
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>id</th>
+                                                        <th>Họ Tên Khách Hàng</th>
+                                                        <th>Trạng thái</th>
+                                                        <th>Ngày lấy máu</th>
+                                                        <th>Giờ lấy máu</th>
+                                                        <th></th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var DXN in capXaGroup)
+                                                    {
+                                                        <tr>
+                                                            <td>@DXN.Id</td>
+                                                            <td>@loadhoten(DXN.UserId)</td>
+                                                            <td>@DXN.Trangthai</td>
+                                                            <td>@DXN.Ngaydat.ToString("dd/MM/yyyy")</td>
+                                                            <td>@DXN.giolaymau</td>
+                                                            <td>
+                                                                <a class="btn btn-success" href="/XetDuyetDXN/@DXN.Id">Duyệt</a>
+                                                            </td>
+                                                            <td>
+                                                                <a class="btn btn-danger" href="/TuChoiDXN/@DXN.Id">Từ Chối</a>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                               
+                                    }
+
                                 </div>
+                                </div>
+                            }
                             }
                             else
                             {
-                                <div class="alert alert-info"> There is not DXN List Availlable</div>
+                                <div class="alert alert-info">There are no examination requests available.</div>
                             }
-                        </div>
-                    </div>
+
+
+                        
+                  
                 </div>
             </div>
         </div>
@@ -68,10 +82,12 @@
 </div>
 @code {
     public List<DonXetNghiem> AllDXN { get; set; } = new();
+    public List<DonXetNghiem> DXN { get; set; } = new();
     public List<GoiXetNghiem> allGXN { get; set; } = new();
     public List<User> allUser { get; set; } = new();
     protected override async Task OnInitializedAsync()
     {
+        DXN = await DXNservice.getallAsync();
         await LoadAlLStudents();
         allGXN = await GXNservice.getallAsync();
         allUser = await Usertservice.getalluserAsync();
@@ -81,8 +97,8 @@
 
     public async Task LoadAlLStudents()
     {
+        await Task.Delay(1000);
         // var students = await GenericService.GetAllAsync(student, "api/Student/All-Students");
-        var DXN = await DXNservice.getallAsync();
         AllDXN.Clear();
 
         if (DXN is null) return;

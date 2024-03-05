@@ -1,4 +1,4 @@
-﻿@page "/addKQXN/{id:int}"
+﻿@page "/xemKQXN/{id:int}"
 @using Shared.form
 @rendermode InteractiveAuto
 @inject NavigationManager navigation;
@@ -41,29 +41,29 @@
                 <ValidationMessage For="() => Input.giolaymau" class="text-danger" />
             </div>
         </EditForm>
-        <div >
+        <div>
             <h2>Kết Quả</h2>
-            <EditForm Model="Inputkq" method="post" OnValidSubmit="addkq" FormName="addkq" class="profile-form">
+            <EditForm Model="Inputkq" method="post"  FormName="addkq" class="profile-form">
                 <DataAnnotationsValidator />
                 <hr />
                 <div class="form-group">
                     <label for="ngaycoKQ">Ngày Có Kết Quả</label>
-                    <InputDate @bind-Value="Inputkq.ngaycoKQ" class="form-control" id="ngaycoKQ" />
+                    <InputDate @bind-Value="Inputkq.ngaycoKQ" class="form-control" id="ngaycoKQ" readonly />
                     <ValidationMessage For="() => Inputkq.ngaycoKQ" class="text-danger" />
                 </div>
                 <div class="form-group">
                     <label for="khoa">Khoa</label>
-                    <InputText @bind-Value="Inputkq.khoa" class="form-control" id="khoa" />
+                    <InputText @bind-Value="Inputkq.khoa" class="form-control" id="khoa" readonly />
                     <ValidationMessage For="() => Inputkq.khoa" class="text-danger" />
                 </div>
                 <div class="form-group">
                     <label for="nhommau">Nhóm Máu</label>
-                    <InputText @bind-Value="Inputkq.nhommau" class="form-control" id="nhommau" />
+                    <InputText @bind-Value="Inputkq.nhommau" class="form-control" id="nhommau" readonly />
                     <ValidationMessage For="() => Inputkq.nhommau" class="text-danger" />
                 </div>
                 <div class="form-group">
                     <label for="ghiChu">Ghi chú</label>
-                    <InputTextArea @bind-Value="Inputkq.ghiChu" class="form-control" id="ghiChu" />
+                    <InputTextArea @bind-Value="Inputkq.ghiChu" class="form-control" id="ghiChu" readonly />
                     <ValidationMessage For="() => Inputkq.ghiChu" class="text-danger" />
                 </div>
 
@@ -82,15 +82,16 @@
                         </thead>
                         @foreach (var kqandcs in Inputkq.kQandCs)
                         {
-                            if (kqandcs.goi != goi)
+                           if (kqandcs.goi != goi1)
                             {
-                                goi = kqandcs.goi;
-                                <tr><td colspan="4"><strong>Gói Xét Nghiệm:</strong>@loadtengoi(goi)</td></tr>
+                               
+                                goi1 = kqandcs.goi;
+                                <tr><td colspan="4"><strong>Gói Xét Nghiệm:</strong>@loadtengoi(goi1)</td></tr>
                             }
                             <tr>
                                 <td>@loadtenchiso(kqandcs.id)</td>
                                 <td>
-                                    <InputText @bind-Value="kqandcs.kq" class="form-control" />
+                                    <InputText @bind-Value="kqandcs.kq" class="form-control" readonly />
                                     <ValidationMessage For="() => kqandcs.kq" class="text-danger" />
                                 </td>
                                 <td>
@@ -102,8 +103,7 @@
                             </tr>
                         }
                     </table>
-                    <a href="/ListDXN"><button style="background-color:red" class="btn btn-primary"> Hủy </button></a>
-                    <button type="submit" class="btn btn-primary">Trả kết quả</button>
+                    <a href="/ListDXN"><button style="background-color:red" class="btn btn-primary"> Trở về </button></a>
                 }
             </EditForm>
 
@@ -114,7 +114,8 @@
     [Parameter]
     public int id { get; set; }
 
-    int goi=-1;
+    int goi = -1;
+    int goi1 = -1;
     public List<GoiXetNghiem> allGXN { get; set; } = new();
     public List<GoiXetNghiem> gxndachon { get; set; } = new();
     public List<DXNandGXN> dxn { get; set; } = new();
@@ -122,6 +123,7 @@
     public DonXetNghiem Input { get; set; } = new();
     private User user { get; set; } = new();
     public Chiso cs { get; set; } = new();
+    private KetQuaXetNghiem kq { get; set; } = new();
 
     [SupplyParameterFromForm]
     public KQXN Inputkq { get; set; } = new();
@@ -134,50 +136,41 @@
         dxn = await DXNservice.getallGXNAsync(id);
         loadgxndachon();
         allchiso = await CSservice.getallAsync();
-        Inputkq.ngaycoKQ = DateTime.Now;
         Inputkq.kQandCs = new List<ChisoKq>();
+
         foreach (var a in gxndachon)
         {
             var listcs = await GXNservice.getallCSbyidAsync(a.Id);
-            foreach(var b in listcs)
-            {       
+            foreach (var b in listcs)
+            {
                 ChisoKq kq = new ChisoKq
                     {
                         id = b.ChisoId,
                         goi = a.Id
-            };
+                    };
                 Inputkq.kQandCs.Add(kq);
+            }
+        }
+        kq = await KQXNservice.getbyid(id);
+        Inputkq.ngaycoKQ=kq.ngaycoKQ;
+        Inputkq.khoa=kq.khoa;
+        Inputkq.nhommau=kq.khoa;
+        Inputkq.ghiChu = kq.ghiChu;
+        var qq = await KQXNservice.getallCSbyidAsync(kq.Id);
+        foreach (var a in Inputkq.kQandCs)
+        {
+            foreach(var b in qq)
+            {
+                if (a.id == b.ChisoId)
+                {
+                    a.kq = b.KetQua;
+                }
             }
         }
     }
     private async Task add()
     {
 
-    }
-    private async Task addkq()
-    {
-        KetQuaXetNghiem kqq = new KetQuaXetNghiem
-        {
-            DonXetNghiemId=id,
-            ngaycoKQ=Inputkq.ngaycoKQ,
-            ghiChu=Inputkq.ghiChu,
-            khoa=Inputkq.khoa,
-            nhommau=Inputkq.nhommau
-        };
-        var kq1 = await KQXNservice.addAsync(kqq);
-        foreach(var ab in Inputkq.kQandCs)
-        {
-            KQandCS cs1 = new KQandCS
-            {
-                KetQuaXetNghiemId=kq1.Id,
-                ChisoId=ab.id,
-                KetQua=ab.kq
-            };
-            await KQXNservice.addKQandCS(cs1);
-        }
-        Input.Trangthai = "Hoàn thành";
-        await DXNservice.updateAsync(Input);
-        navigation.NavigateTo("/listDXNKQ");
     }
     private void loadgxndachon()
     {
@@ -196,7 +189,7 @@
     }
     private string loadtengoi(int id)
     {
-        foreach(var i in gxndachon)
+        foreach (var i in gxndachon)
         {
             if (i.Id == id)
             {

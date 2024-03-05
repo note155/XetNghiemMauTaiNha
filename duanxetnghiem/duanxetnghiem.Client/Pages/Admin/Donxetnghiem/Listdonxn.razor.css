@@ -1,0 +1,46 @@
+﻿/* Thiết lập font chữ mặc định */
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Định dạng phần header */
+.header {
+    background-color: #007bff; /* Màu nền header */
+    color: #fff; /* Màu chữ */
+    padding: 20px;
+}
+
+/* Định dạng phần menu */
+.menu {
+    background-color: #f8f9fa; /* Màu nền menu */
+    padding: 10px;
+}
+
+    .menu ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .menu li {
+        display: inline;
+        margin-right: 20px;
+    }
+
+        .menu li a {
+            color: #333; /* Màu chữ menu */
+            text-decoration: none;
+        }
+
+/* Định dạng phần nội dung */
+.content {
+    padding: 20px;
+}
+
+/* Định dạng footer */
+.footer {
+    background-color: #333; /* Màu nền footer */
+    color: #fff; /* Màu chữ */
+    padding: 20px;
+    text-align: center;
+}

@@ -42,14 +42,14 @@ namespace duanxetnghiem.Client.Services
 
         public async Task<List<KQandCS>> getallCSbyidAsync(int id)
         {
-            var allstudent = await _httpClient.GetAsync($"api/DonXetNghiem/All-KQaCS/{id}");
+            var allstudent = await _httpClient.GetAsync($"api/KetQuaXetNghiem/All-KQaCS/{id}");
             var respone = await allstudent.Content.ReadFromJsonAsync<List<KQandCS>>();
             return respone;
         }
 
         public async Task<KetQuaXetNghiem> getbyid(int Id)
         {
-            var onestudent = await _httpClient.GetAsync("api/KetQuaXetNghiem/Single-KQXN");
+            var onestudent = await _httpClient.GetAsync($"api/KetQuaXetNghiem/Single-KQXN/{Id}");
             var respone = await onestudent.Content.ReadFromJsonAsync<KetQuaXetNghiem>();
             return respone;
         }

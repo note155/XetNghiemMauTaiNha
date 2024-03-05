@@ -21,7 +21,7 @@ namespace duanxetnghiem.Client.Services
 
         public async Task<ThanhToan> deleteAsync(int id)
         {
-            var newstudent = await _httpClient.PostAsJsonAsync("api/ThanhToan/Delete-ThanhToan", id);
+            var newstudent = await _httpClient.DeleteAsync($"api/ThanhToan/Delete-ThanhToan/{id}");
             var respone = await newstudent.Content.ReadFromJsonAsync<ThanhToan>();
             return respone;
         }

@@ -1,4 +1,5 @@
-﻿@page "/ThanhToan/{id:int}"
+﻿@page "/ThanhToan2/{id:int}"
+
 @rendermode InteractiveAuto
 @inject NavigationManager navigation;
 @attribute [Authorize]
@@ -68,14 +69,16 @@
                 <div class="panel-body payment-content">
                     <img src="QR.jpg" alt="QR Code" class="qr-code">
                     <div class="payment-info">
+                        <div>
+                            Bạn đã thanh toán lần 1: số tiền :@tt.DaTT1 VND -- ngày : @tt.NgayTT1 
+                        </div>
                         <div>Nội Dung Chuyển Tiền : @Input.Id</div>
                         <!-- Bạn có thể thêm các phần khác tùy ý ở đây -->
                     </div>
                     <div class="payment-methods">
-                        Chọn Hình Thức Thanh Toán Trước:
+                        Hình Thức Thanh Toán :
                         <div>
-                            <button @onclick="bamuoi" class="@class1">30%</button>
-                            <button @onclick="mottram" class="@class2">100%</button>
+                            <button class="@class1">70%</button>
                         </div>
                     </div>
                     <div class="payment-amount">
@@ -114,7 +117,6 @@
     public long tongtien = 0;
     public long tientttruoc;
     string class1 = "btn btn-success";
-    string class2 = "btn btn-outline-success";
     public ThanhToan tt { get; set; } = new ThanhToan();
 
     protected override async Task OnInitializedAsync()
@@ -124,24 +126,14 @@
         allGXN = await GXNservice.getallAsync();
         dxn = await DXNservice.getallGXNAsync(id);
         loadgxndachon();
-        tientttruoc = tongtien * 30 / 100;
+        tientttruoc = tongtien * 70 / 100;
         tt = await TTservice.getbyidDXNAsync(id);
-
     }
     private async void xacnhan()
     {
-        Input.Trangthai = "Đã Chuyển Tiền";
-        await DXNservice.updateAsync(Input);
-        tt.NgayTT = DateTime.Now;
-        if (tientttruoc < tongtien)
-        {
-            tt.trangthai = "30%";
-        }
-        else
-        {
-            tt.trangthai = "Đã Thanh Toán";
-        }
-        tt.DaTT = tientttruoc;
+        tt.NgayTT2 = DateTime.Now;
+        tt.trangthai = "Đã Thanh Toán";
+        tt.DaTT2 = tientttruoc;
         await TTservice.updateAsync(tt);
         navigation.NavigateTo("/camon/" + id);
     }
@@ -159,18 +151,6 @@
                 }
             }
         }
-    }
-    private void bamuoi()
-    {
-        tientttruoc = tongtien * 30 / 100;
-        class1 = "btn btn-success";
-        class2 = "btn btn-outline-success";
-    }
-    private void mottram()
-    {
-        tientttruoc = tongtien;
-        class2 = "btn btn-success";
-        class1 = "btn btn-outline-success";
     }
     private String gioitinh(bool a)
     {

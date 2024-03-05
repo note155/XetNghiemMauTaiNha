@@ -161,9 +161,11 @@
             err.Add("Vui Lòng Nhập Lý Do");
             return;
         }
-        
+
         Xoadxn.DonXetNghiemId = id;
         Input.Trangthai = "Từ Chối";
+        var tt = await TTservice.getbyidDXNAsync(id);
+        await TTservice.deleteAsync(tt.Id);
         await DXNservice.updateAsync(Input);
         await TCservice.addAsync(Xoadxn);
         navigation.NavigateTo("/ListDXN");

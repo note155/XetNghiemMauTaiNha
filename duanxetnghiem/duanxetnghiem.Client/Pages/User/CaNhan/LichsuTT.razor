@@ -1,0 +1,191 @@
+﻿@page "/lichsuTT"
+@rendermode InteractiveAuto
+@inject NavigationManager navigation;
+@attribute [Authorize]
+<div class="actions">
+    <a style="border-color:lawngreen" class="btn btn-outline-success" href="/lichsuDL">Lịch Sử Đặt Lịch</a>
+    <a  class="btn btn-success"  href="/lichsuTT">Lịch Sử Thanh Toán</a>
+</div>
+
+<div class="InputSelectWrapper">
+    <InputSelect style="border-color:greenyellow;" class="form-control" ValueChanged="@((int value)=>FilterData(value))" ValueExpression="@(()=>aa)" Value="aa">
+        <option value="0">Tất Cả</option>
+        <option value="1">Chưa Thanh Toán</option>
+        <option value="2">Đã Thanh Toán</option>
+        <option value="3">30%</option>
+    </InputSelect>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Lịch sử thanh toán của @patient.Hoten</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header"></div>
+                            @if (!AllDXN.Any())
+                            {
+                                <p><em>Loading ...</em></p>
+                            }
+                            @if (AllDXN.Any())
+                            {
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>id đơn xét nghiệm</th>
+                                                    <th>Số hóa đơn</th>
+                                                    <th>Tổng tiền</th>
+                                                    <th>Trạng thái</th>
+                                                    <th>Thông tin thanh toán</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var DXN in AllDXN)
+                                                {
+                                                    foreach (var tt in allTT)
+                                                    {
+                                                        if (DXN.Id == tt.DonXetNghiemId)
+                                                        {
+                                                            <tr>
+                                                                <td>@DXN.Id</td>
+                                                                <td>@tt.Id</td>
+                                                                <td>@tt.Tongtien VND</td>
+                                                                <td>@tt.trangthai</td>
+                                                                @if (tt.trangthai == "Chưa Thanh Toán")
+                                                                {
+                                                                    <td>
+                                                                        <p style="color:red">Vui lòng thanh toán trong 24h</p>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a class="btn btn-success" href="/ThanhToan/@DXN.Id"> Thanh toán </a>
+                                                                    </td>
+                                                                }
+                                                                @if (tt.trangthai == "30%")
+                                                                {
+                                                                    <td>
+                                                                        <p style="color:dodgerblue">Đã Thanh toán:@tt.DaTT1 VND -- Ngày: @tt.NgayTT1</p>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a href="/camon/@DXN.Id" class="btn btn-info">In hóa đơn</a> <br>
+                                                                        <a class="btn btn-success" href="/ThanhToan2/@DXN.Id"> Thanh toán hết </a>
+                                                                    </td>
+                                                                }
+                                                                @if (tt.trangthai == "Đã Thanh Toán")
+                                                                {
+                                                                    if (tt.DaTT2!=null)
+                                                                    {
+                                                                        <td>
+                                                                            <p style="color:green">Thanh toán lần 1:@tt.DaTT1 VND -- Ngày: @tt.NgayTT1</p>
+                                                                            <p style="color:green">Thanh toán lần 2:@tt.DaTT2 VND -- Ngày: @tt.NgayTT2</p>
+                                                                        </td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td><p style="color:green">Đã Thanh toán:@tt.DaTT1 VND -- Ngày: @tt.NgayTT1</p></td>
+                                                                    }
+                                                                    <td>
+                                                                        <a href="/camon/@DXN.Id" class="btn btn-info">In hóa đơn</a>
+                                                                    </td>
+                                                                }
+                                                            </tr>
+                                                        }
+                                                    }
+                                                    
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-info"> There is not DXN List Availlable</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Inject]
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+    User patient = new User();
+    public string UserName { get; set; }
+    private int aa;
+    public List<DonXetNghiem> AllDXN { get; set; } = new();
+    public List<DonXetNghiem> DXN { get; set; } = new();
+    public List<ThanhToan> allTT { get; set; } = new();
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        UserName = authState.User.Identity.Name;
+        patient = await Usertservice.getuserbyemail(UserName);
+        if (patient == null)
+        {
+            navigation.NavigateTo("/AddUser");
+        }
+        DXN = await DXNservice.getallbyiduserAsync(patient.Id);
+        allTT = await TTservice.getallAsync(patient.Id);
+        LoadAlLStudents();
+    }
+    private void FilterData(int selectedValue)
+    {
+        aa = selectedValue;
+        LoadAlLStudents();
+    }
+    public void LoadAlLStudents()
+    {
+        // var students = await GenericService.GetAllAsync(student, "api/Student/All-Students");
+
+        AllDXN.Clear();
+
+        if (DXN is null) return;
+        foreach (var student in DXN)
+        {
+            if (aa == 0)
+            {
+                AllDXN.Add(student);
+            }
+            if (aa == 1)
+            {
+                foreach (var tt in allTT)
+                {
+                    if (student.Id==tt.DonXetNghiemId && tt.trangthai=="Chưa Thanh Toán")
+                    {
+                        AllDXN.Add(student);
+                    }
+                }
+            }
+            if (aa == 2)
+            {
+                foreach (var tt in allTT)
+                {
+                    if (student.Id == tt.DonXetNghiemId && tt.trangthai == "Đã Thanh Toán")
+                    {
+                        AllDXN.Add(student);
+                    }
+                }
+            }
+            if (aa == 3)
+            {
+                foreach (var tt in allTT)
+                {
+                    if (student.Id == tt.DonXetNghiemId && tt.trangthai == "30%")
+                    {
+                        AllDXN.Add(student);
+                    }
+                }
+            }
+        }
+    }
+}

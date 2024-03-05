@@ -1,5 +1,5 @@
 ﻿@page "/XetDuyetDXN/{id:int}"
-@rendermode InteractiveAuto
+@rendermode InteractiveWebAssembly
  @inject NavigationManager navigation;
 @attribute [Authorize]
 <div class="patient-registration-container">
@@ -9,7 +9,7 @@
         <p><strong>Họ tên:</strong> @user.Hoten</p>
         <p><strong>Tuổi:</strong> @user.Tuoi</p>
         <p><strong>Số điện thoại:</strong> @user.SDT</p>
-        <p><strong>Địa chỉ:</strong> @user.Diachi</p>
+            <p><strong>Địa chỉ:</strong> @user.Diachi / @user.CapXa / @user.CapHuyen / Thành phố Huế</p>
         <p><strong>Email:</strong> @user.Email</p>
             <p><strong>Giới tính:</strong> @gioitinh(@user.Gioitinh)</p>
     </div>
@@ -36,6 +36,52 @@
             <InputDate @bind-Value="Input.ngaytaodon" class="form-control" id="Ngaytaodon" readonly />
             <ValidationMessage For="() => Input.ngaytaodon" class="text-danger" />
         </div>
+            <div class="form-group">
+                <label for="BacSiId">Nhân viên lấy máu</label>
+                <InputSelect ValueChanged="@((int value)=>LoadBSInfo(value))" ValueExpression="@(()=>valor)" Value="valor" class="form-control" id="BacSiId">
+                    <option value="">Chọn Bác Sĩ</option>
+                    @foreach (var bs in AllBS)
+                    {
+                        <option value="@bs.Id">@bs.Hoten</option>
+                    }
+                </InputSelect>
+            </div>
+            @if (SelectedDoctor != null)
+            {
+                <div class="doctor-info">
+                    <div class="doctor-details">
+                        <h3>Thông tin bác sĩ:</h3>
+                        <p><strong>Họ tên:</strong> @SelectedDoctor.Hoten</p>
+                        <p><strong>Chức vụ:</strong> @SelectedDoctor.Chucvu</p>
+                        <p><strong>Số điện thoại:</strong> @SelectedDoctor.SDT</p>
+                        <p><strong>Email:</strong> @SelectedDoctor.Email</p>
+                    </div>
+                    <div class="doctor-image">
+                        <img src="@SelectedDoctor.Anh" alt="Ảnh bác sĩ">
+                    </div>
+                </div>
+                <div class="doctor-info">
+                    <div class="doctor-details">
+                        <h3>Các Đơn Đã Nhận trong ngày :@Input.Ngaydat.Date.ToString("dd/MM/yyyy") / Số Đơn: @AllDXN.Count</h3>
+                        @if (AllDXN.Count != 0)
+                        {
+                            @foreach (var dx in AllDXN.GroupBy(g => g.User?.CapXa))
+                            {
+                                <h5>@dx.Key</h5>
+                                @foreach (var dxn in dx)
+                                {
+                                    <p><a href="/XacNhanLayMau/@dxn.Id">Id: @dxn.Id -- Giờ lấy: @dxn.giolaymau -- Ngày lấy: @dxn.Ngaydat.ToString("dd/MM/yyyy")</a></p>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            <p>Không có đơn nào trong ngày : :@Input.Ngaydat.Date.ToString("dd/MM/yyyy")</p>
+                        }
+                    </div>
+                    
+                </div>
+            }
         <div class="form-group">
             <label for="Ngaydat">Ngày Lấy Máu</label>
                 <InputDate @bind-Value="Input.Ngaydat" class="form-control" id="Ngaydat" />
@@ -83,19 +129,6 @@
             <InputTextArea @bind-Value="Input.ghiChu" class="form-control" id="ghiChu" />
             <ValidationMessage For="() => Input.ghiChu" class="text-danger" />
         </div>
-            <InputSelect ValueChanged="@((int value)=>LoadgxnInfo(value))" ValueExpression="@(()=>valorgxn)" Value="valorgxn" class="form-control">
-                <option value="0">Chọn Gói Xét Nghiệm</option>
-                @foreach (var bs in allGXN)
-                {
-                    <option value="@bs.Id">
-                        <div class="option-content">
-                            <div class="option-name">Tên: @bs.TenGoi</div>
-                            <div class="option-price">Giá: @bs.Gia VND</div>
-                            <div class="option-time">Thời Gian: @bs.ThoiGian</div>
-                        </div>
-                    </option>
-                }
-            </InputSelect>
             @if (gxndachon.Count != 0)
             {
                 <div class="doctor-info">
@@ -110,7 +143,7 @@
                                     <p><strong>Tên Gói:</strong> @bs.TenGoi</p>
                                     <div class="price">Giá: @bs.Gia VND</div>
                                 </div>
-                                <button type="button" @onclick="@( () => remove(bs.Id) )" class="remove-btn">X</button>
+                       
                             </div>
                         }
                     </div>
@@ -120,46 +153,21 @@
                 </div>
 
             }
-        <div class="form-group">
-            <label for="BacSiId">Nhân viên lấy máu</label>
-            <InputSelect ValueChanged="@((int value)=>LoadBSInfo(value))" ValueExpression="@(()=>valor)" Value="valor" class="form-control" id="BacSiId">
-                <option value="">Chọn Bác Sĩ</option>
-                @foreach (var bs in AllBS)
-                {
-                    <option value="@bs.Id">@bs.Hoten</option>
-                }
-            </InputSelect>
-        </div>
-            @if (SelectedDoctor != null)
-            {
-                <div class="doctor-info">        
-                    <div class="doctor-details">
-                        <h3>Thông tin bác sĩ:</h3>
-                        <p><strong>Họ tên:</strong> @SelectedDoctor.Hoten</p>
-                        <p><strong>Chức vụ:</strong> @SelectedDoctor.Chucvu</p>
-                        <p><strong>Số điện thoại:</strong> @SelectedDoctor.SDT</p>
-                        <p><strong>Email:</strong> @SelectedDoctor.Email</p>
-                    </div>
-                    <div class="doctor-image">
-                        <img src="@SelectedDoctor.Anh" alt="Ảnh bác sĩ">
-                    </div>
-                    
-                    <!-- Thêm các trường thông tin khác của bác sĩ nếu cần -->
-                </div>
-            }
+       
             <a href="/ListDXN"><button style="background-color:red" class="btn btn-primary"> Hủy </button></a>
             <button type="submit" class="btn btn-primary">Duyệt</button>
             
         </EditForm>
     </div>
 </div>
-       
 
 @code {
     private List<string> err = new List<string>();
     private User user = new User();
     public List<GoiXetNghiem> allGXN { get; set; } = new();
     public List<BacSi> AllBS { get; set; } = new();
+    public List<DonXetNghiem> AllDXN { get; set; } = new();
+    public List<DonXetNghiem> DXN { get; set; } = new();
     private BacSi SelectedDoctor = null;
     int valor,idbs;
     int valorgxn,idgxn;
@@ -181,7 +189,9 @@
         allGXN = await GXNservice.getallAsync();
         AllBS = await bacsiservice.getallAsync();
         dxn = await DXNservice.getallGXNAsync(id);
+        DXN = await DXNservice.getallAsync();
         loadgxndachon();
+        
     }
     private void loadgxndachon()
     {
@@ -200,6 +210,20 @@
         }
         previousGxndachon = new List<GoiXetNghiem>(gxndachon);
     }
+    public async Task LoadAllStudents(int bsid)
+    {
+        AllDXN.Clear();
+        if (DXN is null) return;
+        foreach (var student in DXN)
+        {
+            if (student.BacSiId == bsid && student.Trangthai == "Chờ lấy mẫu" &&
+                student.Ngaydat.Date.ToString() == Input.Ngaydat.Date.ToString())
+            {
+                AllDXN.Add(student);
+            }
+        }
+    }
+
     private async Task add()
     {
         err.Clear(); // Xóa danh sách lỗi trước đó
@@ -267,7 +291,7 @@
         }
         return null;
     }
-    private void LoadBSInfo(int id)
+    private async void LoadBSInfo(int id)
     {
         idbs = id;
         valor = id;
@@ -275,6 +299,7 @@
         {
             SelectedDoctor = AllBS.FirstOrDefault(bs => bs.Id == id)!;
         }
+        await LoadAllStudents(id);
     }
     private String gioitinh(bool a)
     {
@@ -286,18 +311,6 @@
         {
             return "Nữ";
         }
-    }
-    private async void remove(int id)
-    {
-        foreach (var gxn in gxndachon)
-        {
-            if (gxn.Id == id)
-            {
-                allGXN.Add(gxn);
-                tongtien -= gxn.Gia;
-            }
-        }
-        gxndachon.RemoveAll(item => item.Id == id);
     }
     private void LoadgxnInfo(int id)
     {

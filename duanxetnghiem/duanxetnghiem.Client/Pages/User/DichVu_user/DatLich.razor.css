@@ -1,11 +1,4 @@
-﻿/* Reset CSS */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-/* Body styles */
+﻿
 body {
     font-family: Arial, sans-serif;
     font-size: 16px;
@@ -14,56 +7,33 @@ body {
     color: #333;
 }
 
-/* Container styles */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+.patient-registration-container {
+    display: flex;
+    align-items: flex-start; /* Căn phần tử theo phía trên */
 }
 
-/* Header styles */
-.header {
-    .header
-
-{
-    background-color: #4CAF50;
-    color: #fff;
-    padding: 30px 20px; /* Increase padding for better spacing */
-    text-align: center;
-    font-family: 'Arial Black', sans-serif; /* Change font family */
-    font-size: 24px; /* Increase font size */
-    height: 100px; /* Increase height for better visibility */
+.info {
+    max-height: 300px; /* Đặt chiều cao tối đa của phần hiển thị */
+    overflow: auto; /* Thêm thanh cuộn nếu nội dung vượt quá chiều cao */
 }
 
+table {
+    width: 100%;
 }
 
-/* Navigation styles */
-.navbar {
-    background-color: #333;
-    overflow: hidden;
-}
-
-    .navbar a {
-        float: left;
-        display: block;
-        color: #fff;
-        text-align: center;
-        padding: 14px 20px;
-        text-decoration: none;
+    table td {
+        padding: 10px;
     }
 
-        .navbar a:hover {
-            background-color: #ddd;
-            color: #333;
-        }
-
-/* Patient Info styles */
 .patient-info {
     background-color: #fff;
     padding: 20px;
-    margin-bottom: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    width: 500px;
+    flex: 1; /* Phần thông tin bệnh nhân co giãn để chiếm phần lớn không gian có sẵn */
+    max-width: 80%; /* Đặt chiều rộng tối đa */
 }
 
     .patient-info h2 {
@@ -79,12 +49,15 @@ body {
             margin-bottom: 5px;
         }
 
-/* Form styles */
 .test-registration-form {
     background-color: #fff;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    width: 500px;
+    flex: 2; /* Phần thông tin đơn đăng ký xét nghiệm chiếm phần còn lại */
+    margin-left: 20px; /* Khoảng cách giữa hai phần tử */
 }
 
     .test-registration-form h2 {
@@ -123,23 +96,35 @@ body {
         .test-registration-form button:hover {
             background-color: #45a049;
         }
-/* Doctor Info styles */
+
 .doctor-info {
     background-color: #fff;
     padding: 20px;
-    margin-top: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
     .doctor-info h3 {
         color: #4CAF50;
         margin-bottom: 10px;
+        font-size: 18px;
     }
 
     .doctor-info p {
         margin-bottom: 5px;
+        font-size: 16px;
     }
+
+    .doctor-info:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add hover effect for better interaction */
+        transform: translateY(-2px); /* Add hover effect for better interaction */
+    }
+
 
     .doctor-info img {
         max-width: 100%;
@@ -148,44 +133,6 @@ body {
         border-radius: 5px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
-
-.patient-registration-container {
-    display: flex;
-    justify-content: space-between;
-}
-
-.patient-info,
-.test-registration-form {
-    flex: 1;
-    margin-right: 20px; /* Khoảng cách giữa hai phần tử */
-}
-
-.patient-registration-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start; /* Căn phần tử theo phía trên */
-}
-
-.patient-info {
-    flex: 1; /* Phần thông tin bệnh nhân co giãn để chiếm phần lớn không gian có sẵn */
-    max-width: 30%; /* Đặt chiều rộng tối đa */
-}
-
-.test-registration-form {
-    flex: 2; /* Phần thông tin đơn đăng ký xét nghiệm chiếm phần còn lại */
-    margin-left: 20px; /* Khoảng cách giữa hai phần tử */
-}
-
-button.btn-primary {
-    width: 49%;
-    margin-top: 20px; /* Khoảng cách từ nút đến các phần tử khác */
-}
-
-.doctor-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
 
 .doctor-details {
     flex: 1;
@@ -197,29 +144,10 @@ button.btn-primary {
     height: auto;
 }
 
-.doctor-info {
-    background-color: #fff;
-    padding: 20px;
-    margin-top: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+button.btn-primary {
+    width: 49%;
+    margin-top: 40px; /* Khoảng cách từ nút đến các phần tử khác */
 }
-
-    .doctor-info h3 {
-        color: #4CAF50;
-        margin-bottom: 10px;
-        font-size: 18px; /* Increase font size for headings */
-    }
-
-    .doctor-info p {
-        margin-bottom: 5px;
-        font-size: 16px; /* Increase font size for paragraphs */
-    }
-
-    .doctor-info:hover {
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add hover effect for better interaction */
-        transform: translateY(-2px); /* Add hover effect for better interaction */
-    }
 
 .selected-packages {
     margin-top: 10px; /* Add margin to create space between packages */
@@ -236,18 +164,18 @@ button.btn-primary {
     color: #f00; /* Set total color to red */
 }
 
+.total-mobile {
+    margin-top: 10px; /* Điều chỉnh khoảng cách với phần tổng tiền */
+}
+
 .package {
     margin-bottom: 10px; /* Add margin to create space between packages */
     padding: 10px;
     background-color: #f9f9f9;
     border-radius: 5px;
-}
-
-.package {
-    display: flex; /* Use flexbox for layout */
-    justify-content: space-between; /* Place content at each end of the container */
-    align-items: center; /* Center items vertically */
-    padding: 10px; /* Add padding for spacing */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .package-content {
@@ -269,23 +197,6 @@ button.btn-primary {
     margin-left: 5px; /* Điều chỉnh khoảng cách với nội dung */
 }
 
-.package {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-}
-
-.package-content {
-    flex: 1;
-}
-
-.total-mobile {
-    margin-top: 10px; /* Điều chỉnh khoảng cách với phần tổng tiền */
-}
-
-/* CSS cho phần option */
-/* CSS cho phần option */
 select.form-control option {
     font-family: Arial, sans-serif; /* Font family */
     font-size: 16px; /* Kích thước font */
@@ -311,7 +222,6 @@ select.form-control option {
 .select.form-control option:hover {
     background-color: #ddd; /* Màu nền khi di chuột qua */
 }
-
 
 /* Điều chỉnh giao diện cho các thiết bị có độ rộng màn hình nhỏ hơn hoặc bằng 768px (tablets và mobile devices) */
 @media only screen and (max-width: 768px) {

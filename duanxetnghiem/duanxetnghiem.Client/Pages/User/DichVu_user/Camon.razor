@@ -13,6 +13,10 @@
         <button class="btn btn-success" @onclick="@(_ => PrintingService.Print(rawHtml, PrintType.RawHtml))">
             Phiếu Thu
         </button>
+        @if (tt.DaTT2!=null)
+        {
+            <a href="XCTDon/@id"><button class="btn btn-info mx-3">Xem Đơn</button></a>
+        }
     </div>
 </div>
 <br >
@@ -88,7 +92,8 @@
     string rawHtml = "";
     public ThanhToan tt { get; set; } = new ThanhToan();
     int stt = 0;
-    long datt;
+    long datt,datt2;
+    DateTime ngaytt;
     protected override async Task OnInitializedAsync()
     {
         Input = await DXNservice.getbyid(id);
@@ -96,11 +101,17 @@
         allGXN = await GXNservice.getallAsync();
         dxn = await DXNservice.getallGXNAsync(id);
         tt = await TTservice.getbyidDXNAsync(id);
-        datt = tt.DaTT ?? 0;
+        datt = tt.DaTT1 ?? 0;
+        ngaytt = tt.NgayTT1 ?? DateTime.Now;
+        if (tt.DaTT2 != null)
+        {
+            datt2 = tt.DaTT2 ?? 0;
+            ngaytt = tt.NgayTT2 ?? DateTime.Now;
+        }
         loadgxndachon();
         rawHtml = "<h3>CÔNG TY TNHH GIẢI PHÁP PHẦN MỀM ÂU LẠC</h1>" +
             "<h2 style=\"text-align: center;\">PHIẾU THU</h2>" +
-            "<p style=\"text-align: center;\">Ngày: " + tt.NgayTT + " -- Số hóa đơn:" + tt.Id + "</p>" +
+            "<p style=\"text-align: center;\">Ngày: " + ngaytt + " -- Số hóa đơn:" + tt.Id + "</p>" +
             "<p> <span style=\"float: left;\">Họ Tên:" + user.Hoten +
             "</span><span style=\"float: right;\">Giới Tính: " + gioitinh(user.Gioitinh) + "</span></p>" +
             "<br><p >Địa Chỉ: " + user.Diachi + "</p>" +
@@ -127,10 +138,21 @@
                        "</tr>";
         }
 
-        rawHtml += "</table>" +
+        if (tt.DaTT2 == null)
+        {
+            rawHtml += "</table>" +
                    "<p>Tổng Thành Tiền: " + tongtien + "VND ------ Bằng Chữ:" + ConvertNumberToWords(tongtien) + " Đồng</p>" +
-                    "<p>Số Tiền Đã Thanh Toán: " + tt.DaTT + "VND ------ Bằng Chữ:" + ConvertNumberToWords(datt) + " Đồng</p>" 
+                    "<p>Số Tiền Đã Thanh Toán: " + tt.DaTT1 + "VND ------ Bằng Chữ:" + ConvertNumberToWords(datt) + " Đồng</p>"
                    ;
+        }
+        else
+        {
+            rawHtml += "</table>" +
+                   "<p>Tổng Thành Tiền: " + tongtien + "VND ------ Bằng Chữ:" + ConvertNumberToWords(tongtien) + " Đồng</p>" +
+                    "<p>Số Tiền Đã Thanh Toán Lần 1: " + tt.DaTT1 + "VND ------ Bằng Chữ:" + ConvertNumberToWords(datt) + " Đồng</p>" +
+                    "<p>Ngày Thanh Toán: "+tt.NgayTT1+"</p>"+
+                    "<p>Số Tiền Đã Thanh Toán Lần 2: " + tt.DaTT2 + "VND ------ Bằng Chữ:" + ConvertNumberToWords(datt2) + " Đồng</p>";
+        }
 
 
     }
