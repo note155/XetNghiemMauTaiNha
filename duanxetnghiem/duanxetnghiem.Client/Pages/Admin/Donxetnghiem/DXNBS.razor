@@ -28,40 +28,49 @@
                                 @if (AllDXN.Any())
                                 {
                                     <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table table-striped table-hover">
-                                                <thead class="thead-dark">
-                                                    <tr>
-                                                        <th>Id</th>
-                                                        <th>Họ Tên Khách Hàng</th>
-                                                        <th>Trạng thái</th>
-                                                       
-                                                        <th>Ngày lấy máu</th>
-                                                        <th>Giờ lấy máu</th>
-                                                        <th>Địa chỉ</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach (var DXN in AllDXN)
-                                                    {
+                                        @{
+                                            // Nhóm các DXN theo ngày đặt
+                                            var groupedDXN = AllDXN.GroupBy(dxn => dxn.Ngaydat.Date);
+                                        }
+
+                                        @foreach (var group in groupedDXN)
+                                        {
+                                            <h4>@group.Key.ToString("dd/MM/yyyy")</h4>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-hover">
+                                                    <thead class="thead-dark">
                                                         <tr>
-                                                            <td>@DXN.Id</td>
-                                                            <td>@loadhoten(DXN.UserId)</td>
-                                                            <td>@DXN.Trangthai</td>
-                                                            <td>@DXN.Ngaydat.ToString("dd/MM/yyyy")</td>
-                                                            <td>@DXN.giolaymau</td>
-                                                            <td>@loaddiachi(DXN.UserId)</td>
-                                                            <td>
-                                                                <a class="btn btn-info" href="/XacNhanLayMau/@DXN.Id">Xem Chi Tiết</a>
-                                                            </td>
+                                                            <th>Id</th>
+                                                            <th>Họ Tên Khách Hàng</th>
+                                                            <th>Trạng thái</th>
+                                                            <th>Ngày lấy máu</th>
+                                                            <th>Giờ lấy máu</th>
+                                                            <th>Địa chỉ</th>
+                                                            <th></th>
                                                         </tr>
-                                                    }
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var DXN in group)
+                                                        {
+                                                            <tr>
+                                                                <td>@DXN.Id</td>
+                                                                <td>@loadhoten(DXN.UserId)</td>
+                                                                <td>@DXN.Trangthai</td>
+                                                                <td>@DXN.Ngaydat.ToString("dd/MM/yyyy")</td>
+                                                                <td>@DXN.giolaymau</td>
+                                                                <td>@loaddiachi(DXN.UserId)</td>
+                                                                <td>
+                                                                    <a class="btn btn-info" href="/XacNhanLayMau/@DXN.Id">Xem Chi Tiết</a>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
                                     </div>
                                 }
+
                                 else
                                 {
                                     <div class="alert alert-info">There is no DXN List Available</div>
