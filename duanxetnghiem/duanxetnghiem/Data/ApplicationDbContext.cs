@@ -22,6 +22,8 @@ namespace duanxetnghiem.Data
         public DbSet<Chiso> chisos { get; set; }
         public DbSet<GXNandCS> GXNandCSs { get; set; }
         public DbSet<KQandCS> KQandCSs { get; set; }
+        public DbSet<Mau> Maus { get; set; }
+        public DbSet<Tuvan> Tuvans { get; set; }
         public object User { get; internal set; }
     }
 

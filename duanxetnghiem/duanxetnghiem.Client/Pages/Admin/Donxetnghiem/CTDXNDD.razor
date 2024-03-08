@@ -83,19 +83,6 @@
                 <InputTextArea @bind-Value="Input.ghiChu" class="form-control" id="ghiChu" />
                 <ValidationMessage For="() => Input.ghiChu" class="text-danger" />
             </div>
-            <InputSelect ValueChanged="@((int value)=>LoadgxnInfo(value))" ValueExpression="@(()=>valorgxn)" Value="valorgxn" class="form-control">
-                <option value="0">Chọn Gói Xét Nghiệm</option>
-                @foreach (var bs in allGXN)
-                {
-                    <option value="@bs.Id">
-                        <div class="option-content">
-                            <div class="option-name">Tên: @bs.TenGoi</div>
-                            <div class="option-price">Giá: @bs.Gia VND</div>
-                            <div class="option-time">Thời Gian: @bs.ThoiGian</div>
-                        </div>
-                    </option>
-                }
-            </InputSelect>
             @if (gxndachon.Count != 0)
             {
                 <div class="doctor-info">
@@ -110,7 +97,7 @@
                                     <p><strong>Tên Gói:</strong> @bs.TenGoi</p>
                                     <div class="price">Giá: @bs.Gia VND</div>
                                 </div>
-                                <button type="button" @onclick="@( () => remove(bs.Id) )" class="remove-btn">X</button>
+                                
                             </div>
                         }
                     </div>

@@ -1,6 +1,7 @@
 ﻿using duanxetnghiem.Data.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Shared.form;
 using Shared.ketnoi;
 using Shared.Model;
 
@@ -44,6 +45,12 @@ namespace duanxetnghiem.Controller
             var newstudent = await _KQXNRepository.addAsync(user);
 
             return Ok(newstudent);
+        }
+        [HttpPost("gui-KQemail")]
+        public async Task<IActionResult> guiKQEmail([FromBody] gmail gm)
+        {
+            var newStudent = await _KQXNRepository.guiemail(gm);
+            return Ok(newStudent);
         }
 
         [HttpPost("Add-KQaCS")]

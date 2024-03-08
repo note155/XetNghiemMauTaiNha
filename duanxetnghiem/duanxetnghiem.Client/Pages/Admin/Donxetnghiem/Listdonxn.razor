@@ -1,5 +1,10 @@
 ﻿@page "/ListDXN"
 @attribute [Authorize]
+
+
+<NavMenu />
+<div style="height:20px" class="row"></div>
+
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -87,6 +92,8 @@
     public List<User> allUser { get; set; } = new();
     protected override async Task OnInitializedAsync()
     {
+        
+        await base.OnInitializedAsync();
         DXN = await DXNservice.getallAsync();
         await LoadAlLStudents();
         allGXN = await GXNservice.getallAsync();

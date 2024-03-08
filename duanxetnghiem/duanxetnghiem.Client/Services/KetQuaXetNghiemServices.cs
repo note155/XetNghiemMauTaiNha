@@ -1,11 +1,12 @@
 ﻿using duanxetnghiem.Data.Model;
+using Shared.form;
 using Shared.ketnoi;
 using Shared.Model;
 using System.Net.Http.Json;
 
 namespace duanxetnghiem.Client.Services
 {
-    public class KetQuaXetNghiemServices :IKetQuaXetNghiem
+    public class KetQuaXetNghiemServices : IKetQuaXetNghiem
     {
         private readonly HttpClient _httpClient;
         public KetQuaXetNghiemServices(HttpClient httpClient)
@@ -51,6 +52,13 @@ namespace duanxetnghiem.Client.Services
         {
             var onestudent = await _httpClient.GetAsync($"api/KetQuaXetNghiem/Single-KQXN/{Id}");
             var respone = await onestudent.Content.ReadFromJsonAsync<KetQuaXetNghiem>();
+            return respone;
+        }
+
+        public async Task<gmail> guiemail(gmail gm)
+        {
+            var newstudent = await _httpClient.PostAsJsonAsync("api/KetQuaXetNghiem/gui-KQemail", gm);
+            var respone = await newstudent.Content.ReadFromJsonAsync<gmail>();
             return respone;
         }
 

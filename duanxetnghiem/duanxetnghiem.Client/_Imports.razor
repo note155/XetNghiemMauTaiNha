@@ -20,7 +20,11 @@
 @using Microsoft.AspNetCore.Authorization
 @using Shared.Model
 @using static Microsoft.AspNetCore.Components.Web.RenderMode
+@using duanxetnghiem.Client.Pages.Admin
 
+
+@inject IJSRuntime JSRuntime
+@inject NavigationManager navigation;
 @inject IUser Usertservice
 @inject IBacSi bacsiservice
 @inject IDonXetNghiem DXNservice
@@ -30,3 +34,5 @@
 @inject IGioHang GHservice
 @inject IThanhToan TTservice
 @inject IChiso CSservice
+@inject IMau Mauservice
+@inject ITuvan TVservice

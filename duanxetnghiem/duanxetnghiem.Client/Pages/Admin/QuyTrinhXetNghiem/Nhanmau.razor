@@ -1,0 +1,181 @@
+﻿@page "/XNNM/{id:int}"
+@using Shared.form
+@rendermode InteractiveAuto
+@inject NavigationManager navigation;
+@attribute [Authorize]
+
+
+
+@if (err.Any())
+{
+    <div id="errorContainer" class="alert alert-danger" role="alert">
+        @foreach (var error in err)
+        {
+            <p>@error</p>
+        }
+    </div>
+}
+
+
+<div class="patient-registration-container">
+    <div class="patient-info">
+        <h2>Thông tin bệnh nhân</h2>
+        <div class="info">
+            <p><strong>Họ tên:</strong> @user.Hoten</p>
+            <p><strong>Tuổi:</strong> @user.Tuoi</p>
+            <p><strong>Số điện thoại:</strong> @user.SDT</p>
+            <p><strong>Địa chỉ:</strong> @user.Diachi</p>
+            <p><strong>Email:</strong> @user.Email</p>
+            <p><strong>Giới tính:</strong> @gioitinh(@user.Gioitinh)</p>
+        </div>
+    </div>
+
+    <div class="test-registration-form">
+        <h2>Thông tin đơn đăng ký xét nghiệm</h2>
+        <div style="background-color:greenyellow;color:black" class="btn btn-primary btn-lg disabled">  <strong>Trạng Thái: </strong>@Input.Trangthai</div>
+        <EditForm Model="Input" method="post" OnValidSubmit="add" FormName="register" class="profile-form">
+            <DataAnnotationsValidator />
+            <hr />
+
+
+            <div class="form-group">
+                <label for="ngaytaodon">Ngày tạo đơn</label>
+                <InputDate @bind-Value="Input.ngaytaodon" class="form-control" id="Ngaytaodon" readonly />
+                <ValidationMessage For="() => Input.ngaytaodon" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label for="Ngaydat">Ngày Lấy Máu</label>
+                <InputDate @bind-Value="Input.Ngaydat" class="form-control" id="Ngaydat" min="@DateTime.Now.ToString("yyyy-MM-dd")" readonly />
+                <ValidationMessage For="() => Input.Ngaydat" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label for="giolaymau">Giờ lấy máu</label>
+                <InputText @bind-Value="Input.giolaymau" class="form-control" id="giolaymau" readonly />
+                <ValidationMessage For="() => Input.giolaymau" class="text-danger" />
+            </div>
+        </EditForm>
+        <div>
+            <h2>Xác Nhận Nhận Mẫu</h2>
+            <EditForm Model="Inputkq" method="post" OnValidSubmit="addkq" FormName="addkq" class="profile-form">
+                <DataAnnotationsValidator />
+                <hr />
+                <div class="form-group">
+                    <label for="ngaynhanmau">Ngày Nhận Được Mẫu</label>
+                    <InputDate @bind-Value="Inputkq.ngaynhanmau" class="form-control" id="ngaynhanmau" />
+                    <ValidationMessage For="() => Inputkq.ngaynhanmau" class="text-danger" />
+                </div>
+                <div class="form-group">
+                    <label for="khoa">Khoa</label>
+                    <InputText @bind-Value="Inputkq.khoa" class="form-control" id="khoa"  />
+                    <ValidationMessage For="() => Inputkq.khoa" class="text-danger" />
+                </div>
+                <div class="form-group">
+                    <label for="phongthuchien">Phòng Thực Hiện</label>
+                    <InputText @bind-Value="Inputkq.phongthuchien" class="form-control" id="phongthuchien" />
+                    <ValidationMessage For="() => Inputkq.phongthuchien" class="text-danger" />
+                </div>
+                    <a href="/ListDXN"><button style="background-color:red" class="btn btn-primary"> Hủy </button></a>
+                    <button type="submit" style="background-color:lawngreen" class="btn btn-primary">Xác Nhận Đã Nhận Mẫu</button>
+                
+            </EditForm>
+
+        </div>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public int id { get; set; }
+    public List<GoiXetNghiem> allGXN { get; set; } = new();
+    public List<GoiXetNghiem> gxndachon { get; set; } = new();
+    public List<DXNandGXN> dxn { get; set; } = new();
+    public DonXetNghiem Input { get; set; } = new();
+    private User user { get; set; } = new();
+    private List<string> err = new List<string>();
+
+    [SupplyParameterFromForm]
+    public Mau Inputkq { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Input = await DXNservice.getbyid(id);
+        user = await Usertservice.getuserbyid(Input.UserId);
+        allGXN = await GXNservice.getallAsync();
+        dxn = await DXNservice.getallGXNAsync(id);
+        loadgxndachon();
+        Inputkq.ngaynhanmau = DateTime.Now;
+
+    }
+    private async Task add()
+    {
+
+    }
+    private async Task addkq()
+    {
+        err.Clear();
+        if (Inputkq.khoa == null)
+        {
+            err.Add("vui lòng điền Khoa");
+            await JSRuntime.InvokeVoidAsync("scrollToError");
+            return;
+        }
+        if (Inputkq.phongthuchien == null)
+        {
+            err.Add("vui lòng điền phòng thực hiện");
+            await JSRuntime.InvokeVoidAsync("scrollToError");
+            return;
+        }       
+            Inputkq.DonXetNghiemId = id;
+            await Mauservice.addAsync(Inputkq);
+            Input.Trangthai = "Chờ kết quả";
+            await DXNservice.updateAsync(Input);
+            navigation.NavigateTo("/ListchoXN");
+        
+    }
+    private void loadgxndachon()
+    {
+        foreach (var a in dxn)
+        {
+
+            foreach (var b in allGXN)
+            {
+                if (b.Id == a.GoiXetNghiemId)
+                {
+                    gxndachon.Add(b);
+                }
+            }
+            allGXN.RemoveAll(item => item.Id == a.GoiXetNghiemId);
+        }
+    }
+    private string loadtengoi(int id)
+    {
+        foreach (var i in gxndachon)
+        {
+            if (i.Id == id)
+            {
+                return i.TenGoi;
+            }
+        }
+        return null;
+    }
+    
+    private String gioitinh(bool a)
+    {
+        if (a)
+        {
+            return "Nam";
+        }
+        else
+        {
+            return "Nữ";
+        }
+    }
+}
+<script>
+    window.scrollToError = function () {
+        var errorContainer = document.getElementById("errorContainer");
+        if (errorContainer) {
+            errorContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+</script>

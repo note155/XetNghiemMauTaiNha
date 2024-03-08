@@ -195,7 +195,7 @@
                 </div>
             }
         }
-        <a href="/ListDXN"><button style="background-color:red" class="btn btn-primary"> Trở về </button></a>
+        <a href="/lichsuDl"><button style="background-color:red" class="btn btn-primary"> Trở về </button></a>
     </div>
 </div>
 
@@ -277,7 +277,7 @@
             kq = await KQXNservice.getbyid(id);
             Inputkq.ngaycoKQ = kq.ngaycoKQ;
             Inputkq.khoa = kq.khoa;
-            Inputkq.nhommau = kq.khoa;
+            Inputkq.nhommau = kq.nhommau;
             Inputkq.ghiChu = kq.ghiChu;
             var qq = await KQXNservice.getallCSbyidAsync(kq.Id);
             foreach (var a in Inputkq.kQandCs)

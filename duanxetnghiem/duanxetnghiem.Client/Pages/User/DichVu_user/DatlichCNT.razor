@@ -156,11 +156,12 @@
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         UserName = authState.User.Identity.Name;
         user = await Usertservice.getuserbyemail(UserName);
-        alluser = await Usertservice.getalluserbyemailAsync(user.Email);
+        
         if (user == null)
         {
             navigation.NavigateTo("/AddUser");
         }
+        alluser = await Usertservice.getalluserbyemailAsync(user.Email);
         allGXN = await GXNservice.getallAsync();
         getds();
         Input.Ngaydat = DateTime.Now;

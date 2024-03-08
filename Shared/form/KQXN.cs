@@ -15,7 +15,9 @@ namespace Shared.form
 		public string khoa { get; set; }
 		public string ghiChu { get; set; }
 		public DateTime ngaycoKQ { get; set; }
-		public List<ChisoKq> kQandCs { get; set; }
+        public int bsid { get; set; }
+        public string maythuchien  { get; set; }
+        public List<ChisoKq> kQandCs { get; set; }
 
 	}
 }

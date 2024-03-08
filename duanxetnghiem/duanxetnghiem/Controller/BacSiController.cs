@@ -35,8 +35,11 @@ namespace duanxetnghiem.Controller
         public async Task<ActionResult<BacSi>> GetSingleBacSitAsync(string email)
         {
             var student = await _BacSiRepository.getbyemail(email);
-
-            return Ok(student);
+            if (student != null)
+            {
+                return Ok(student);
+            }
+            else return BadRequest();
         }
 
         [HttpPost("Add-BacSi")]

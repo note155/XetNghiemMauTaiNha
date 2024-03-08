@@ -1,6 +1,9 @@
 ﻿@page "/DXNBS"
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
+
+<NavMenu />
+
 <div class="container mt-4">
     <div class="row">
         <div class="col-12">
@@ -73,7 +76,7 @@
 
                                 else
                                 {
-                                    <div class="alert alert-info">There is no DXN List Available</div>
+                                    <div class="alert alert-info">Rỗng.....</div>
                                 }
                             </div>
                         </div>
@@ -88,19 +91,18 @@
 @code {
     [Inject]
     protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    public string UserName { get; set; }
 
     public List<DonXetNghiem> AllDXN { get; set; } = new();
     public List<GoiXetNghiem> allGXN { get; set; } = new();
     public List<User> allUser { get; set; } = new();
     public BacSi bs { get; set; } = new();
-    public string UserName { get; set; }
+    
 
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         UserName = authState.User.Identity.Name;
-
-        
         allGXN = await GXNservice.getallAsync();
         allUser = await Usertservice.getalluserAsync();
         bs = await bacsiservice.getbyemail(UserName);

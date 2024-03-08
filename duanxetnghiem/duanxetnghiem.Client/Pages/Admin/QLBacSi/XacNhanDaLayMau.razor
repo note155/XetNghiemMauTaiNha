@@ -2,7 +2,6 @@
 @rendermode InteractiveAuto
  @inject NavigationManager navigation;
  @attribute [Authorize]
-
 <div id="map" style="height: 400px;"></div>
 <div class="patient-registration-container">
     <div class="patient-info">
@@ -11,7 +10,7 @@
             <p><strong>Họ tên:</strong> @user.Hoten</p>
             <p><strong>Tuổi:</strong> @user.Tuoi</p>
             <p><strong>Số điện thoại:</strong> @user.SDT</p>
-            <p><strong>Địa chỉ:</strong> @user.Diachi</p>
+            <p><strong>Địa chỉ:</strong> @user.Diachi, @user.CapXa, @user.CapHuyen, TT Huế</p>
             <p><strong>Email:</strong> @user.Email</p>
             <p><strong>Giới tính:</strong> @gioitinh(@user.Gioitinh)</p>
         </div>
@@ -159,7 +158,7 @@
     }
     private async Task add()
     {
-        Input.Trangthai = "Chờ kết quả";
+        Input.Trangthai = "Đã Lấy Mẫu";
         await DXNservice.updateAsync(Input);
         navigation.NavigateTo("/DXNBS");
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using duanxetnghiem.Data.Model;
+using Shared.form;
 using Shared.Model;
 
 namespace Shared.ketnoi
@@ -15,6 +16,7 @@ namespace Shared.ketnoi
         Task<KetQuaXetNghiem> deleteAsync(int id);
         Task<List<KetQuaXetNghiem>> getallAsync();
         Task<KetQuaXetNghiem> getbyid(int Id);
+        Task<gmail> guiemail(gmail gm);
         Task<List<KQandCS>> getallCSbyidAsync(int id);
         Task<KQandCS> addKQandCS(KQandCS kQandCs);
     }

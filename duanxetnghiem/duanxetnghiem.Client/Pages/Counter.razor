@@ -1,26 +1,28 @@
 ﻿@page "/test"
 @using Append.Blazor.Printing
+@using System.Net.Mail
 @inject IPrintingService PrintingService
 @rendermode InteractiveAuto
+	
+<html>
+<body>
+    <p>Chào [Tên khách hàng],</p>
+    <p>Chúng tôi hy vọng bạn đang khỏe mạnh và an lành. Xin gửi đến bạn kết quả tư vấn dựa trên thông tin bạn đã cung cấp:</p>
+    <p>Sau khi chuyên gia của chúng tôi đã phân tích, kết quả tư vấn cho thấy:</p>
+    <p></p>
+    <p>Nếu bạn có bất kỳ câu hỏi hoặc cần hỗ trợ thêm, đừng ngần ngại liên hệ với chúng tôi qua email này hoặc số điện thoại dưới đây. Chúng tôi luôn sẵn lòng hỗ trợ bạn.</p>
+    <p>Trân trọng,</p>
+    <p>
+        [Tên của bạn]<br>
+        Bác sĩ<br>
+        CÔNG TY TNHH GIẢI PHÁP PHẦN MỀM ÂU LẠC<br>
+    </p>
+</body>
+</html>
+@code{
 
-<Example Name="@this.GetType().Name">
-    <Documentation>
-        <h3>Raw HTML</h3>
-        <p>Print raw HTML.</p>
-    </Documentation>
-    <Code>
-        @{
-            string rawHtml = String.Join(
-                Environment.NewLine,
-                "<h1>Print.js Raw HTML Print Test</h1>",
-                "<p style=\"color: blue;\">Lorem ipsum dolor sit amet, consectetur adipiscing elit,</p>",
-                "<p>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>",
-            "<table><td>1<td></table>"
-            );
-        }
-
-        <button @onclick="@(_ => PrintingService.Print(rawHtml, PrintType.RawHtml))">
-            Print Raw Html
-        </button>
-    </Code>
-</Example>
+    protected override async Task OnInitializedAsync()
+    {
+        
+    }
+}

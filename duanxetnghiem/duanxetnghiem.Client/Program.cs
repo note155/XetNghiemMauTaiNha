@@ -20,6 +20,8 @@ builder.Services.AddScoped<IGioHang, GioHangServices>();
 builder.Services.AddScoped<IThanhToan, ThanhToanServices>();
 builder.Services.AddScoped<IPrintingService, PrintingService>();
 builder.Services.AddScoped<IChiso, ChisoServices>();
+builder.Services.AddScoped<IMau, MauServices>();
+builder.Services.AddScoped<ITuvan, TuvanServices>();
 builder.Services.AddScoped(http => new HttpClient
 {
     BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)

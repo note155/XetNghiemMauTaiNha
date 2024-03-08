@@ -1,0 +1,96 @@
+﻿@page "/ListNT"
+@attribute [Authorize]
+@inject NavigationManager navigation;
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Danh sách thông tin</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <a href="/adduser" class="btn btn-success ">Thêm thông tin người thân</a>
+                            </div>
+                            @if (!Alluser.Any())
+                            {
+                                <p><em>Loading ...</em></p>
+                            }
+                            @if (Alluser.Any())
+                            {
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Họ Tên</th>
+                                                    <th>Tuổi</th>
+                                                    <th>Giới tính</th>
+                                                    <th>Địa Chỉ </th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var DXN in Alluser)
+                                                {
+                                                    
+                                                    <tr>
+                                                        <td>@DXN.Id</td>
+                                                        <td>@DXN.Hoten</td>>
+                                                        <td>@DXN.Tuoi</td>
+                                                        <td>@gioitinh(@DXN.Gioitinh)</td>
+                                                        <td>@DXN.Diachi, @DXN.CapXa, @DXN.CapHuyen, TT Huế</td>
+                                                        <td>
+                                                            <a class="btn btn-success" href="/SuaUser/@DXN.Id"> Chỉnh Sửa  </a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-info"> Rỗng....</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+    [Inject]
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+    public List<User> Alluser { get; set; } = new();
+    public string UserName { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        UserName = authState.User.Identity.Name;
+        
+        Alluser = await Usertservice.getalluserbyemailAsync(UserName);
+        if (Alluser.Count == 0)
+        {
+            navigation.NavigateTo("/AddUser");
+        }
+    }
+    private String gioitinh(bool a)
+    {
+        if (a)
+        {
+            return "Nam";
+        }
+        else
+        {
+            return "Nữ";
+        }
+    }
+}

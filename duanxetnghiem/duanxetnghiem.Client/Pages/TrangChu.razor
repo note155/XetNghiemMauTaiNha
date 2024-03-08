@@ -1,21 +1,26 @@
 ﻿@page "/"
 @rendermode InteractiveAuto
 @using Microsoft.AspNetCore.Components.Web
+@using duanxetnghiem.Client.Pages.Admin
 @inject NavigationManager navigation;
 @if (err != "")
 {
     <p>@err</p>
+}
+@if (bs != null)
+{
+    <NavMenu />
 }
 <div class="card text-center">
 
     <div style="height: 300px;" class="card-body">
         <h4 class="card-title">Xét Nghiệm Máu Tại Nhà</h4>
         <p class="card-text">Dịch vụ xét nghiệm máu chất lượng cao, tiện lợi và an toàn ngay tại nhà bạn</p>
-        <EditForm Model="Input" method="post" OnValidSubmit="add" FormName="register">
+        <EditForm Model="Inputkq" method="post" OnValidSubmit="add" FormName="register">
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" role="alert" />
-            <InputText style="width: 70%; height: 36px;" @bind-Value="Input" placeholder="Nhập kết quả xét nghiệm                  " />
-            <ValidationMessage For="() => Input" class="text-danger" />
+            <InputText style="width: 70%; height: 36px;" @bind-Value="Inputkq" placeholder="Nhập kết quả xét nghiệm                  " />
+            <ValidationMessage For="() => Inputkq" class="text-danger" />
                 <br>
             <br>
             <br>
@@ -519,38 +524,63 @@
     </div>
 </div>
 <!-- Liên hệ - địa chỉ goodMap-->
+@if (errors.Count > 0)
+{
+    <div class="alert alert-danger" role="alert">
+
+        @foreach (var error in errors)
+        {
+            <p>@error</p>
+        }
+    </div>
+}
 
 <div class="lienhe-info">
     <div class="info-left">
         <div class="guithongtin">
-            <h2 style="font-size: 22px;">Liên hệ với chúng tôi</h2>
+            <h2 style="font-size: 22px;">Liên hệ tư vấn</h2>
 
-            <form name="formlh" onsubmit="return nguoidung()">
+            <EditForm Model="Input" method="post" OnValidSubmit="tuvanKH" FormName="dangky">
+                <DataAnnotationsValidator />
+                <ValidationSummary class="text-danger" role="alert" />
                 <table>
                     <tr>
                         <td>Họ và tên</td>
-                        <td><input type="text" name="ht" placeholder="Họ tên" autocomplete="off" required></td>
+                        <td>
+                            <InputText @bind-Value="Input.hoten" class="form-control" placeholder="" />
+                            <ValidationMessage For="() => Input.hoten" class="text-danger" />
+                        </td>
                     </tr>
                     <tr>
                         <td>Điện thoại liên hệ</td>
-                        <td><input type="text" name="sdt" placeholder="Điện thoại" required></td>
+                        <td>
+                            <InputText @bind-Value="Input.sdt" class="form-control" placeholder="" />
+                            <ValidationMessage For="() => Input.sdt" class="text-danger" />
+                        </td>
                     </tr>
                     <tr>
                         <td>Địa chỉ Email</td>
-                        <td><input type="email" name="em" placeholder="Email" autocomplete="off" required></td>
+                        <td>
+                            <InputText @bind-Value="Input.email" class="form-control" placeholder="" />
+                            <ValidationMessage For="() => Input.noidung" class="text-danger" />
+                        </td>
                     </tr>
                     <tr>
                         <td>Nội dung</td>
-                        <td><textarea name="nd" rows="5" maxlength="500" placeholder="Nội dung liên hệ" required></textarea></td>
+                        <td>
+                            <InputTextArea @bind-Value="Input.noidung" class="form-control" placeholder="" />
+                            <ValidationMessage For="() => Input.noidung" class="text-danger" />
+                        </td>
                     </tr>
                     <!-- Sử dụng thêm class cho hàng chứa nút "Gửi yêu cầu" -->
                     <tr class="button-cell">
-                        <td colspan="2"><button type="submit">Gửi yêu cầu</button></td>
+                        <button type="submit" class="w-100 btn btn-lg btn-primary">Gửi</button>
                     </tr>
                 </table>
-            </form>
+            </EditForm>
         </div>
     </div>
+    
     <div class="info-right">
         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d626.2666466867495!2d107.5921861616567!3d16.45897538255283!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3141a13f5a9746a7%3A0xc608a91b8c7b5498!2zNzcgTmd1eeG7hW4gSHXhu4csIFBow7ogTmh14bqtbiwgVGjDoG5oIHBo4buRIEh14bq_LCBUaOG7q2EgVGhpw6puIEh14bq_LCBWaWV0bmFt!5e0!3m2!1sen!2s!4v1690080716139!5m2!1sen!2s"
                 allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
@@ -576,19 +606,66 @@
 </footer>
 @code {
     [SupplyParameterFromForm]
-    public String Input { get; set; } = new(""); 
+    public Tuvan Input { get; set; } = new();
+
+    [SupplyParameterFromForm]
+    public String Inputkq { get; set; } = new("");
+
     String err = "";
+    List<string> errors = new List<string>();
+    int a = 0;
+
+    [Inject]
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    public string UserName { get; set; }
+    public BacSi bs { get; set; } = new();
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        UserName = authState.User.Identity.Name;
+        bs = await bacsiservice.getbyemail(UserName);
+    }
+    private async Task tuvanKH()
+    {
+        if (a == 0)
+        {
+            errors.Clear();
+        }
+        if (string.IsNullOrEmpty(Input.hoten))
+        {
+            errors.Add("Vui lòng nhập họ tên");
+        }
+        if (string.IsNullOrEmpty(Input.email))
+        {
+            errors.Add("Vui lòng nhập email");
+        }
+        if (string.IsNullOrEmpty(Input.sdt))
+        {
+            errors.Add("Vui lòng nhập số điện thoại");
+        }
+        if (string.IsNullOrEmpty(Input.noidung))
+        {
+            errors.Add("Vui lòng nhập nội dung");
+        }
+        if (errors.Any())
+        {
+            return;
+        }
+        await TVservice.addAsync(Input);
+        a++;
+        errors.Add("Đã gửi thành công");
+    }
     private async Task add()
     {
-        if (string.IsNullOrEmpty(Input))
+        if (string.IsNullOrEmpty(Inputkq))
         {
             err = "Không được để trống";
         }
         else
         {
-            if (double.TryParse(Input, out double result))
+            if (double.TryParse(Inputkq, out double result))
             {
-                navigation.NavigateTo("/XCTDon/" + Input);
+                navigation.NavigateTo("/XCTDon/" + Inputkq);
             }
             else
             {
@@ -596,6 +673,7 @@
             }
         }
         }
-    }
-
+    
 }
+
+

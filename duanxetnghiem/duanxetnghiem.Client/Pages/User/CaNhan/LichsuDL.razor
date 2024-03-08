@@ -76,6 +76,7 @@
     private int aa;
     public List<DonXetNghiem> AllDXN { get; set; } = new();
     public List<DonXetNghiem> DXN { get; set; } = new();
+    public List<User> Alluser { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -86,7 +87,15 @@
         {
             navigation.NavigateTo("/AddUser");
         }
-        DXN = await DXNservice.getallbyiduserAsync(patient.Id);
+        Alluser = await Usertservice.getalluserbyemailAsync(UserName);
+        foreach(var us in Alluser)
+        {
+            var don = await DXNservice.getallbyiduserAsync(us.Id);
+            foreach(var a in don)
+            {
+                DXN.Add(a);
+            }
+        }
         LoadAlLStudents();
     }
     private void FilterData(int selectedValue)

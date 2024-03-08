@@ -4,6 +4,15 @@
 @inject NavigationManager navigation;
 @attribute [Authorize]
 
+@if (err.Any())
+{
+    <div id="errorContainer" class="alert alert-danger" role="alert">
+        @foreach (var error in err)
+        {
+            <p>@error</p>
+        }
+    </div>
+}
 <div class="patient-registration-container">
     <div class="patient-info">
         <h2>Thông tin bệnh nhân</h2>
@@ -46,6 +55,21 @@
             <EditForm Model="Inputkq" method="post" OnValidSubmit="addkq" FormName="addkq" class="profile-form">
                 <DataAnnotationsValidator />
                 <hr />
+                <div class="form-group">
+                    <label for="ngaycoKQ">Bác Sĩ Thực Hiện</label>
+                    <InputSelect id="giolaymau" @bind-Value="Inputkq.bsid" class="form-control">
+                        <option value=0>Chọn</option>
+                        @foreach(var bs in allBS)
+                        {
+                            <option value="@bs.Id">@bs.Hoten</option>
+                        }
+                    </InputSelect>
+                </div>
+                <div class="form-group">
+                    <label for="maythuchien">Máy Thực Hiện Xét Nghiệm</label>
+                    <InputText @bind-Value="Inputkq.maythuchien" class="form-control" id="maythuchien" />
+                    <ValidationMessage For="() => Inputkq.maythuchien" class="text-danger" />
+                </div>
                 <div class="form-group">
                     <label for="ngaycoKQ">Ngày Có Kết Quả</label>
                     <InputDate @bind-Value="Inputkq.ngaycoKQ" class="form-control" id="ngaycoKQ" />
@@ -116,12 +140,15 @@
 
     int goi=-1;
     public List<GoiXetNghiem> allGXN { get; set; } = new();
+    public List<BacSi> allBS { get; set; } = new();
     public List<GoiXetNghiem> gxndachon { get; set; } = new();
     public List<DXNandGXN> dxn { get; set; } = new();
     public List<Chiso> allchiso { get; set; } = new();
     public DonXetNghiem Input { get; set; } = new();
     private User user { get; set; } = new();
     public Chiso cs { get; set; } = new();
+    public Mau mau{ get; set; } = new();
+    private List<string> err = new List<string>();
 
     [SupplyParameterFromForm]
     public KQXN Inputkq { get; set; } = new();
@@ -133,9 +160,12 @@
         allGXN = await GXNservice.getallAsync();
         dxn = await DXNservice.getallGXNAsync(id);
         loadgxndachon();
+        mau = await Mauservice.getbyid(id);
+        allBS = await bacsiservice.getallAsync();
         allchiso = await CSservice.getallAsync();
         Inputkq.ngaycoKQ = DateTime.Now;
         Inputkq.kQandCs = new List<ChisoKq>();
+
         foreach (var a in gxndachon)
         {
             var listcs = await GXNservice.getallCSbyidAsync(a.Id);
@@ -156,6 +186,36 @@
     }
     private async Task addkq()
     {
+        err.Clear();
+        if (string.IsNullOrEmpty(Inputkq.khoa))
+        {
+            err.Add("vui lòng nhập khoa");
+        }
+        if (Inputkq.bsid == 0)
+        {
+            err.Add("vui lòng chọn bác sĩ thực hiện");
+        }
+        if (string.IsNullOrEmpty(Inputkq.maythuchien))
+        {
+            err.Add("vui lòng nhập máy thực hiện");
+        }
+        if (string.IsNullOrEmpty(Inputkq.nhommau))
+        {
+            err.Add("vui lòng nhập nhóm máu");
+        }
+        foreach(var a in Inputkq.kQandCs)
+        {
+            if (string.IsNullOrEmpty(a.kq))
+            {
+                err.Add("Vui lòng điền đủ kết quả");
+                break;
+            }
+        }
+        if (err.Any())
+        {
+            await JSRuntime.InvokeVoidAsync("scrollToError");
+            return;
+        }
         KetQuaXetNghiem kqq = new KetQuaXetNghiem
         {
             DonXetNghiemId=id,
@@ -175,8 +235,18 @@
             };
             await KQXNservice.addKQandCS(cs1);
         }
+        mau.bacsiid=Inputkq.bsid;
+        mau.maythuchien = Inputkq.maythuchien;
+        await Mauservice.updateAsync(mau);
         Input.Trangthai = "Hoàn thành";
         await DXNservice.updateAsync(Input);
+        gmail gm = new gmail
+            {
+                email = user.Email,
+                hoten = user.Hoten,
+                iddon = id
+            };
+        await KQXNservice.guiemail(gm);
         navigation.NavigateTo("/listDXNKQ");
     }
     private void loadgxndachon()
@@ -250,3 +320,12 @@
         }
     }
 }
+<script>
+    window.scrollToError = function () {
+        var errorContainer = document.getElementById("errorContainer");
+        if (errorContainer) {
+            errorContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+</script>

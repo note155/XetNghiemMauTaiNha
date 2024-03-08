@@ -1,0 +1,126 @@
+﻿@page "/traloiTV/{id:int}"
+@attribute [Authorize]
+@using Shared.form
+@using duanxetnghiem.Data.Model;
+@inject NavigationManager navigation;
+@rendermode InteractiveAuto
+
+<h3>Trả lời tư vấn khách hàng</h3>
+<hr />
+@if (errors.Count > 0)
+{
+    <div class="alert alert-danger" role="alert">
+
+        @foreach (var error in errors)
+        {
+            <p>@error</p>
+        }
+    </div>
+}
+<EditForm Model="Input" method="post" OnValidSubmit="tuvanKH" FormName="dangky">
+    <DataAnnotationsValidator />
+    <ValidationSummary class="text-danger" role="alert" />
+    <div class="row">
+        <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Họ và tên</label>
+                    <InputText @bind-Value="Input.hoten" class="form-control" />
+                    <ValidationMessage For="() => Input.hoten" class="text-danger" />
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <InputText @bind-Value="Input.email" class="form-control" />
+                    <ValidationMessage For="() => Input.email" class="text-danger" />
+                </div>
+                <div class="form-group">
+                    <label>Số điện thoại</label>
+                    <InputText @bind-Value="Input.sdt" class="form-control" />
+                    <ValidationMessage For="() => Input.sdt" class="text-danger" />
+                </div>
+                <div class="form-group">
+                    <label>Nội dung</label>
+                    <InputText @bind-Value="Input.noidung" class="form-control" />
+                    <ValidationMessage For="() => Input.noidung" class="text-danger" />
+                </div>
+
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="ngaycoKQ">Bác Sĩ Thực Hiện</label>
+                <InputSelect id="giolaymau" @bind-Value="Input.bacsiid" class="form-control">
+                    <option value=0>Chọn</option>
+                    @foreach (var bs in allBS)
+                    {
+                        <option value="@bs.Id">@bs.Hoten</option>
+                    }
+                </InputSelect>
+            </div>
+            <div class="form-group">
+                <label>Nội dung tư vấn</label>
+                <InputTextArea style="height:213px;" @bind-Value="Input.traloi" class="form-control" />
+                <ValidationMessage For="() => Input.traloi" class="text-danger" />
+            </div>
+            <a style="width:47%;" class="btn btn-danger">Trở về</a>
+            @if (Input.traloi==null)
+            {
+                <button style="width:47%;" type="submit" class="btn btn-primary mx-3">Gửi trả lời tư vấn</button>
+            }
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm]
+    public Tuvan Input { get; set; } = new();
+
+    public List<BacSi> allBS { get; set; } = new();
+    private List<string> errors = new List<string>();
+    [Parameter]
+    public int id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Input = await TVservice.getbyidAsync(id);
+        allBS = await bacsiservice.getallAsync();
+        
+
+    }
+    private async Task tuvanKH()
+    {
+        errors.Clear();
+        if (Input.bacsiid == 0 || Input.bacsiid == null)
+        {
+            errors.Add("vui lòng chọn bác sĩ");
+        }
+        if (string.IsNullOrEmpty(Input.traloi))
+        {
+            errors.Add("vui lòng nhập nội dung trả lời");
+        }
+        if (errors.Any())
+        {
+            return;
+        }
+        Input.thoigian = DateTime.Now;
+        await TVservice.updateAsync(Input);
+        gmailTV gm = new gmailTV
+            {
+                email = Input.email,
+                hotenKH = Input.hoten,
+                hotenBS = loadhoten(Input.bacsiid ?? 0),
+                noidung = Input.traloi
+            };
+        await TVservice.guiemail(gm);
+        navigation.NavigateTo("/listTV");
+    }
+    public String loadhoten(int id)
+    {
+        foreach (var us in allBS)
+        {
+            if (us.Id == id)
+            {
+                return us.Hoten;
+            }
+        }
+        return null;
+    }
+}

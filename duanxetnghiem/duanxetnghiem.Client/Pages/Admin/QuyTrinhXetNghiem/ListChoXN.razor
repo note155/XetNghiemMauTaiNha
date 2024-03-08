@@ -1,11 +1,12 @@
-﻿@page "/ListDXNDD"
+﻿@page "/ListchoXN"
 @attribute [Authorize]
+
 <NavMenu />
 <div class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Đơn Đã Duyệt</h3>
+                <h3 class="card-title">Xác nhận nhận mẫu máu</h3>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -47,7 +48,7 @@
                                                             <span>@bs.Hoten</span>
                                                         </td>
                                                         <td>
-                                                            <a class="btn btn-success" href="/DXNDD/@DXN.Id"> Chi Tiết </a>
+                                                            <a class="btn btn-success" href="/XNNM/@DXN.Id">Xác Nhận </a>
                                                         </td>
                                                     </tr>
                                                 }
@@ -58,7 +59,7 @@
                             }
                             else
                             {
-                                <div class="alert alert-info"> There is not DXN List Available</div>
+                                <div class="alert alert-info"> Rỗng.....</div>
                             }
                         </div>
                     </div>
@@ -92,7 +93,7 @@
         if (DXN is null) return;
         foreach (var student in DXN)
         {
-            if (student.Trangthai == "Chờ lấy mẫu")
+            if (student.Trangthai == "Đã Lấy Mẫu")
             {
                 AllDXN.Add(student);
             }

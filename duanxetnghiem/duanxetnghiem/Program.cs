@@ -33,6 +33,8 @@ builder.Services.AddScoped<IGioHang, GioHangRepository>();
 builder.Services.AddScoped<IThanhToan, ThanhToanRepository>();
 builder.Services.AddScoped<IPrintingService, PrintingService>();
 builder.Services.AddScoped<IChiso, ChisoRepository>();
+builder.Services.AddScoped<IMau, MauRepository>();
+builder.Services.AddScoped<ITuvan, TuvanRepository>();
 builder.Services.AddScoped(http => new HttpClient
 {
     BaseAddress = new Uri(builder.Configuration.GetSection("BaseAdress").Value)
