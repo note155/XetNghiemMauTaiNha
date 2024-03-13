@@ -24,6 +24,9 @@ namespace duanxetnghiem.Data
         public DbSet<KQandCS> KQandCSs { get; set; }
         public DbSet<Mau> Maus { get; set; }
         public DbSet<Tuvan> Tuvans { get; set; }
+        public DbSet<Khoa> Khoas { get; set; }
+        public DbSet<Phong> Phongs { get; set; }
+        public DbSet<MayXetNghiem> Mayxetnghiems { get; set; }
         public object User { get; internal set; }
     }
 

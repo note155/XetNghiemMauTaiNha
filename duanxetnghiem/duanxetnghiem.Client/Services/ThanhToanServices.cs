@@ -26,6 +26,13 @@ namespace duanxetnghiem.Client.Services
             return respone;
         }
 
+        public async Task<List<ThanhToan>> getall()
+        {
+            var allstudent = await _httpClient.GetAsync("api/ThanhToan/All-TT");
+            var respone = await allstudent.Content.ReadFromJsonAsync<List<ThanhToan>>();
+            return respone;
+        }
+
         public async Task<List<ThanhToan>> getallAsync(int id)
         {
             var allstudent = await _httpClient.GetAsync($"api/ThanhToan/All-ThanhToan/{id}");

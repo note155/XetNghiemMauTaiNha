@@ -1,5 +1,6 @@
 ﻿@page "/ListDXNDD"
 @attribute [Authorize]
+@using System.Globalization
 <NavMenu />
 <div class="row">
     <div class="col-12">
@@ -9,6 +10,19 @@
             </div>
             <div class="card-body">
                 <div class="row">
+                    <p>
+                        <div style="float: right; width: 500px;">
+                            <!-- Add width to ensure consistent positioning -->
+                            <EditForm Model="Inputkq" method="post" OnValidSubmit="timkiem" FormName="register">
+                                <DataAnnotationsValidator />
+                                <ValidationSummary class="text-danger" role="alert" />
+                                <InputText @bind-Value="Inputkq" placeholder="tìm kiếm" />
+                                <ValidationMessage For="() => Inputkq" class="text-danger" />
+                                <button type="submit" class=" btn-success">Tìm kiếm</button> <!-- Updated button class -->
+                            </EditForm>
+                        </div>
+                    </p>
+
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header"></div>
@@ -58,7 +72,7 @@
                             }
                             else
                             {
-                                <div class="alert alert-info"> There is not DXN List Available</div>
+                                <div class="alert alert-info"> Rỗng .......</div>
                             }
                         </div>
                     </div>
@@ -74,12 +88,41 @@
     public List<BacSi> allBS { get; set; } = new();
     public List<User> allUser { get; set; } = new();
 
+    [SupplyParameterFromForm]
+    public String Inputkq { get; set; } = new("");
+
     protected override async Task OnInitializedAsync()
     {
         await LoadAlLStudents();
         allUser = await Usertservice.getalluserAsync();
         allBS = await bacsiservice.getallAsync();
     }
+    private async Task timkiem()
+    {
+        if (string.IsNullOrEmpty(Inputkq))
+        {
+            await LoadAlLStudents(); // Load all students if search query is empty
+        }
+        else
+        {
+            // Define array of formats to parse the search query
+            string[] formats = { "dd/MM/yyyy", "d/M/yyyy" };
+
+            // Parse the search query as a date with multiple formats
+            if (DateTime.TryParseExact(Inputkq, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime searchDate))
+            {
+                // Filter AllDXN based on the search date
+                AllDXN = AllDXN.Where(dx => dx.Ngaydat.Date == searchDate.Date).ToList();
+            }
+            else
+            {
+                // Filter AllDXN based on customer's name or doctor's name
+                AllDXN = AllDXN.Where(dx => loadhoten(dx.UserId).Contains(Inputkq, StringComparison.OrdinalIgnoreCase) ||
+                                             laybs(dx.BacSiId)?.Hoten.Contains(Inputkq, StringComparison.OrdinalIgnoreCase) == true).ToList();
+            }
+        }
+    }
+
 
 
 

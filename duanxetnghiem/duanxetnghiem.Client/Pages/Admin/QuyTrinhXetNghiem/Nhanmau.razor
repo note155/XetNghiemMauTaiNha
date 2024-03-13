@@ -66,14 +66,28 @@
                 </div>
                 <div class="form-group">
                     <label for="khoa">Khoa</label>
-                    <InputText @bind-Value="Inputkq.khoa" class="form-control" id="khoa"  />
-                    <ValidationMessage For="() => Inputkq.khoa" class="text-danger" />
+                    <InputSelect @bind-Value="Inputkq.khoaId" class="form-control" id="khoa">
+                        <option value="0">Chọn</option>
+                        @foreach(var khoa in allkhoa)
+                        {
+                            <option value="@khoa.Id">@khoa.ten</option>
+                        }
+                    </InputSelect>
+                    
                 </div>
-                <div class="form-group">
-                    <label for="phongthuchien">Phòng Thực Hiện</label>
-                    <InputText @bind-Value="Inputkq.phongthuchien" class="form-control" id="phongthuchien" />
-                    <ValidationMessage For="() => Inputkq.phongthuchien" class="text-danger" />
-                </div>
+                @if (Inputkq.khoaId != null || Inputkq.khoaId != 0)
+                {
+                    <div class="form-group">
+                        <label for="phongthuchien">Phòng Thực Hiện</label>
+                        <InputSelect @bind-Value="Inputkq.PhongId" class="form-control" id="khoa">
+                            <option value="0">Chọn</option>
+                            @foreach (var phong in allphong.Where(id=>id.Khoaid==Inputkq.khoaId).ToList())
+                            {
+                                <option value="@phong.Id">Phòng: @phong.maphong -- @phong.ten</option>
+                            }
+                        </InputSelect>
+                    </div>
+                }
                     <a href="/ListDXN"><button style="background-color:red" class="btn btn-primary"> Hủy </button></a>
                     <button type="submit" style="background-color:lawngreen" class="btn btn-primary">Xác Nhận Đã Nhận Mẫu</button>
                 
@@ -88,6 +102,8 @@
     public List<GoiXetNghiem> allGXN { get; set; } = new();
     public List<GoiXetNghiem> gxndachon { get; set; } = new();
     public List<DXNandGXN> dxn { get; set; } = new();
+    public List<Khoa> allkhoa { get; set; } = new();
+    public List<Phong> allphong { get; set; } = new();
     public DonXetNghiem Input { get; set; } = new();
     private User user { get; set; } = new();
     private List<string> err = new List<string>();
@@ -103,6 +119,8 @@
         dxn = await DXNservice.getallGXNAsync(id);
         loadgxndachon();
         Inputkq.ngaynhanmau = DateTime.Now;
+        allkhoa = await Khoaservice.getallAsync();
+        allphong = await Phongservice.getallAsync();
 
     }
     private async Task add()
@@ -112,15 +130,15 @@
     private async Task addkq()
     {
         err.Clear();
-        if (Inputkq.khoa == null)
+        if (Inputkq.khoaId == null||Inputkq.khoaId==0)
         {
-            err.Add("vui lòng điền Khoa");
+            err.Add("vui lòng chọn Khoa");
             await JSRuntime.InvokeVoidAsync("scrollToError");
             return;
         }
-        if (Inputkq.phongthuchien == null)
+        if (Inputkq.PhongId == null|| Inputkq.PhongId==0)
         {
-            err.Add("vui lòng điền phòng thực hiện");
+            err.Add("vui lòng chọn phòng thực hiện");
             await JSRuntime.InvokeVoidAsync("scrollToError");
             return;
         }       

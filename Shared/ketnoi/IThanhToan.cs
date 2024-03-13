@@ -11,6 +11,7 @@ namespace Shared.ketnoi
     public interface IThanhToan
     {
         Task<ThanhToan> addAsync(ThanhToan thanhToan);
+        Task<List<ThanhToan>> getall();
         Task<List<ThanhToan>> getallAsync(int id);
         Task <ThanhToan> getbyidDXNAsync(int id);
         Task<ThanhToan> updateAsync(ThanhToan thanhToan);

@@ -1,6 +1,8 @@
-﻿using duanxetnghiem.Data.Model;
+﻿using duanxetnghiem.Data;
+using duanxetnghiem.Data.Model;
 using duanxetnghiem.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Shared.ketnoi;
 

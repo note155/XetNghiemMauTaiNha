@@ -35,6 +35,9 @@ builder.Services.AddScoped<IPrintingService, PrintingService>();
 builder.Services.AddScoped<IChiso, ChisoRepository>();
 builder.Services.AddScoped<IMau, MauRepository>();
 builder.Services.AddScoped<ITuvan, TuvanRepository>();
+builder.Services.AddScoped<IMayXetNghiem, MayXetNghiemRepository>();
+builder.Services.AddScoped<IKhoa, KhoaRepository>();
+builder.Services.AddScoped<IPhong, PhongRepository>();
 builder.Services.AddScoped(http => new HttpClient
 {
     BaseAddress = new Uri(builder.Configuration.GetSection("BaseAdress").Value)
@@ -64,7 +67,6 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 });
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

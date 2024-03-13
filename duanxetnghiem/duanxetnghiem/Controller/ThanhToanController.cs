@@ -17,6 +17,13 @@ namespace duanxetnghiem.Controller
             this._ThanhToanRepository = ThanhToanRepository;
         }
 
+        [HttpGet("All-TT")]
+        public async Task<ActionResult<List<ThanhToan>>> GetAllStudentsAsync()
+        {
+            var users = await _ThanhToanRepository.getall();
+            return Ok(users);
+        }
+
         [HttpPost("Add-ThanhToan")]
         public async Task<ActionResult<ThanhToan>> AddthanhtoanAsync(ThanhToan user)
         {

@@ -136,8 +136,7 @@
                         </div>
                         <div class="form-group">
                             <label for="khoa">Khoa</label>
-                            <InputText @bind-Value="Inputkq.khoa" class="form-control" id="khoa" readonly />
-                            <ValidationMessage For="() => Inputkq.khoa" class="text-danger" />
+                            <Input Value="@loadkhoa(Inputkq.khoa)" class="form-control" id="khoa" readonly />
                         </div>
                         <div class="form-group">
                             <label for="nhommau">Nhóm Máu</label>
@@ -203,6 +202,7 @@
 @code {
     int goi = -1;
     int goi1 = -1; 
+    public List<Khoa> allkhoa { get; set; } = new();
     private List<string> err = new List<string>();
     private User user = new User();
     public List<GoiXetNghiem> allGXN { get; set; } = new();
@@ -232,6 +232,7 @@
     protected override async Task OnInitializedAsync()
     {
         Input = await DXNservice.getbyid(id);
+        allkhoa = await Khoaservice.getallAsync();
         if(Input==null)
         {
             navigation.NavigateTo("/lichsuDl");
@@ -276,7 +277,7 @@
             }
             kq = await KQXNservice.getbyid(id);
             Inputkq.ngaycoKQ = kq.ngaycoKQ;
-            Inputkq.khoa = kq.khoa;
+            Inputkq.khoa = kq.khoaId;
             Inputkq.nhommau = kq.nhommau;
             Inputkq.ghiChu = kq.ghiChu;
             var qq = await KQXNservice.getallCSbyidAsync(kq.Id);
@@ -347,6 +348,17 @@
             allGXN.RemoveAll(item => item.Id == a.GoiXetNghiemId);
         }
         previousGxndachon = new List<GoiXetNghiem>(gxndachon);
+    }
+    private string loadkhoa(int id)
+    {
+        foreach (var i in allkhoa)
+        {
+            if (i.Id == id)
+            {
+                return i.ten;
+            }
+        }
+        return null;
     }
     private async Task add()
     {

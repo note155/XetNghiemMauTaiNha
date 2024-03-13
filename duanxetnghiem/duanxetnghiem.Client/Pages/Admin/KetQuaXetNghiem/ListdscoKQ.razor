@@ -45,7 +45,7 @@
                                                                 <td>@loadhoten(DXN.UserId)</td>>
                                                                 <td>@DXN.Trangthai</td>
                                                                 <td>@kq.ngaycoKQ</td>
-                                                                <td>@kq.khoa</td>
+                                                                <td>@loadkhoa(kq.khoaId)</td>
                                                                 <td>
                                                                     <a class="btn btn-success" href="/xemKQXN/@DXN.Id"> Xem kết quả </a>
                                                                 </td>
@@ -75,17 +75,28 @@
     public List<DonXetNghiem> AllDXN { get; set; } = new();
     public List<User> allUser { get; set; } = new();
     public List<KetQuaXetNghiem> allKQ { get; set; } = new();
-
+    public List<Khoa> allkhoa { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
         await LoadAlLStudents();
         allUser = await Usertservice.getalluserAsync();
         allKQ = await KQXNservice.getallAsync();
+        allkhoa = await Khoaservice.getallAsync();
     }
 
 
-
+    private string loadkhoa(int id)
+    {
+        foreach (var i in allkhoa)
+        {
+            if (i.Id == id)
+            {
+                return i.ten;
+            }
+        }
+        return null;
+    }
     public async Task LoadAlLStudents()
     {
         // var students = await GenericService.GetAllAsync(student, "api/Student/All-Students");

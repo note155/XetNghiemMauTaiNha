@@ -1,4 +1,5 @@
-﻿/* Thiết lập font chữ mặc định */
+﻿
+/* Thiết lập font chữ mặc định */
 body {
     font-family: Arial, sans-serif;
 }
@@ -44,3 +45,105 @@ body {
     padding: 20px;
     text-align: center;
 }
+
+/* Bộ lọc*/
+
+.filter-container {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 20px;
+}
+
+    .filter-container.active {
+        background-color: #007bff;
+    }
+
+    .filter-container a {
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        color: #fff;
+    }
+
+.filter-image {
+    margin-left: 10px;
+    max-width: 50px;
+    height: 50px;
+}
+
+.filter-container .btn {
+    background-color: #3498db; /* Màu nền của nút */
+    color: #ffffff; /* Màu chữ trắng */
+    border-radius: 5px; /* Bo tròn các góc của nút */
+    padding: 10px 20px; /* Kích thước lề bên trong nút */
+    border: none; /* Loại bỏ viền */
+    transition: background-color 0.3s ease; /* Hiệu ứng chuyển đổi màu nền */
+}
+
+.filter-container .filter-image {
+    width: 30px;
+    height: 30px;
+    margin-left: 5px;
+}
+
+.filter-container .btn:hover {
+    background-color: #2980b9;
+}
+/*form timkiem*/
+
+/* Đảm bảo nút "Bỏ lọc" và thanh ngang nằm trên cùng một dòng */
+.actions {
+    display: flex;
+    align-items: center;
+}
+
+.row {
+    margin-bottom: 80px;
+}
+/* Đặt khoảng cách giữa nút và thanh ngang */
+.btn-remove {
+    margin-right: 10px; /* Điều chỉnh khoảng cách theo ý muốn */
+}
+/* Tùy chỉnh thanh tìm kiếm */
+.search-container {
+    position: relative;
+}
+
+    .search-container input {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+
+    .search-container button {
+        padding: 8px 15px;
+        margin-left: 5px;
+    }
+
+    /* Nếu bạn muốn làm cho thanh tìm kiếm và nút nhấn cùng chiều cao */
+    .search-container input, .search-container button {
+        height: 38px; /* Điều chỉnh chiều cao theo ý muốn */
+    }
+/* Đảm bảo các thành phần nằm trên cùng một hàng */
+.row.align-items-center {
+    display: flex;
+}
+
+/* Điều chỉnh khoảng cách giữa các thành phần */
+.form-group {
+    margin-right: 10px; /* Điều chỉnh khoảng cách theo ý muốn */
+}
+
+/* Đảm bảo nút "Tìm kiếm" và "Bỏ lọc" có cùng chiều cao */
+.search-container button {
+    height: 38px; /* Điều chỉnh chiều cao theo ý muốn */
+}
+
+    /* Điều chỉnh khoảng cách giữa các nút trong thanh tìm kiếm */
+    .search-container button:not(:last-child) {
+        margin-right: 5px;
+    }
+
+Đang hiển thị 1961511495396438441.

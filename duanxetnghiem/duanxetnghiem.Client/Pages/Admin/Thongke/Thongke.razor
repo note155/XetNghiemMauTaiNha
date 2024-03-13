@@ -1,0 +1,255 @@
+﻿@page "/thongke"
+@rendermode InteractiveAuto
+<h3>Thống kê</h3>
+    
+<div class="row">
+    <h4>Số đơn đã thực hiện</h4>
+    <div class="col-sm-12 ">      
+        <canvas id="myChart"></canvas>
+    </div>
+</div>
+<div class="row">
+    <h4> Thống kê trong tháng @DateTime.Now.Month</h4><br>
+    <div class="col-sm-5">        
+        <canvas id="myPieChart" width="400" height="400"></canvas>
+        <h5>Biểu đồ trạng thái đơn yêu cầu xét nghiệm trong tháng @DateTime.Now.Month</h5>
+    </div>
+    <div class="col-sm-5">
+        <h3>Chi tiết</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>Trạng thái</th>
+                <th>Số lượng</th>
+            </tr>
+
+            </thead>
+            @foreach (var ab in statusNames)
+            {
+                <tr>
+                    <td>
+                    @ab
+                    </td>
+                    @if (RequestCountsByStatus.ContainsKey(ab))
+                    {
+                        <td>@RequestCountsByStatus[ab].ToString() đơn</td>
+                    }
+                    else
+                    {
+                        <td>0 đơn</td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-5">
+        <canvas id="myPieChart1" width="400" height="400"></canvas>
+        <h5>Biểu đồ trạng thái hóa đơn trong tháng @DateTime.Now.Month</h5>
+    </div>
+    <div class="col-sm-5">
+        <h3>Chi tiết</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Trạng thái</th>
+                    <th>Số lượng</th>
+                    <th>Tổng thành tiền</th>
+                </tr>
+
+            </thead>
+            @foreach (var ab in HDcount)
+            {
+                <tr>
+                    <td>
+                        @ab.Key
+                    </td>
+                    <td>@ab.Value</td>
+                    @if (ab.Key == "Đã Thanh Toán")
+                    {
+                        <td>
+                            @tongtt VND
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            @tong30 VND
+                        </td>
+                    }
+                </tr>
+            }
+            <tr>
+                <td colspan="3">
+                    Tổng doanh thu đạt được: @tongdoanhthu VND
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+@code {
+    public List<DonXetNghiem> AllDXN { get; set; } = new();
+    public List<ThanhToan> AllHD { get; set; } = new();
+    public List<int> CompletedRequestsPerMonth { get; set; } = new List<int>();
+    public Dictionary<string, int> RequestCountsByStatus { get; set; } = new Dictionary<string, int>();
+    public Dictionary<string, int> HDcount { get; set; } = new Dictionary<string, int>();
+    public List<string> statusNames = new List<string> { "Hoàn thành", "Đã Chuyển Tiền", "Chờ kết quả", "Lấy mẫu thất bại", "Từ Chối" };
+    public List<string> HDtrangthai = new List<string> { "Đã Thanh Toán", "30%" };
+    long tongdoanhthu=0,tongtt=0,tong30=0;
+    protected override async Task OnInitializedAsync()
+    {
+        AllDXN = await DXNservice.getallAsync();
+        AllHD = await TTservice.getall();
+        // Loop through each month and count completed requests
+        for (int i = 1; i <= 12; i++)
+        {
+            var completedRequests = FilterCompletedRequestsByMonth(i);
+            CompletedRequestsPerMonth.Add(completedRequests);
+        }
+        foreach (var status in statusNames)
+        {
+            RequestCountsByStatus[status] = AllDXN.Count(d => d.Trangthai == status && d.ngaytaodon.Month == DateTime.Now.Month);
+        }
+        foreach (var hd in HDtrangthai)
+        {
+            HDcount[hd] = AllHD.Count(d => d.trangthai == hd );
+        }
+        foreach(var c in AllHD)
+        {
+            if(c.trangthai=="Đã Thanh Toán")
+            {
+                tongdoanhthu += c.Tongtien;
+                tongtt += c.Tongtien;
+            }
+            if (c.trangthai == "30%")
+            {
+                tongdoanhthu += c.DaTT1 ?? 0;
+                tong30 += c.DaTT1 ?? 0;
+            }
+        }
+    }
+    private async Task DrawPieChart()
+    {
+        // Tạo mảng dữ liệu cho biểu đồ tròn
+        var labels = RequestCountsByStatus.Keys.ToArray();
+        var data = RequestCountsByStatus.Values.ToArray();
+
+        // Gọi hàm JavaScript interop để vẽ biểu đồ tròn
+        await JSRuntime.InvokeVoidAsync("renderPieChart", labels, data);
+    }
+    private async Task hoadon()
+    {
+        // Tạo mảng dữ liệu cho biểu đồ tròn
+        var labels = HDcount.Keys.ToArray();
+        var data = HDcount.Values.ToArray();
+
+        // Gọi hàm JavaScript interop để vẽ biểu đồ tròn
+        await JSRuntime.InvokeVoidAsync("renderPieChart1", labels, data);
+    }
+    public int FilterCompletedRequestsByMonth(int month)
+    {
+        return AllDXN.Where(d => d.ngaytaodon.Month == month && d.Trangthai == "Hoàn thành").ToList().Count;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await OnInitializedAsync(); // Wait for data to be fetched
+            await JSRuntime.InvokeVoidAsync("renderChart", CompletedRequestsPerMonth);
+            await DrawPieChart();
+            await hoadon();
+        }
+    }
+
+}
+<script>
+    window.renderChart = (data) => {
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+                datasets: [{
+                    label: 'Số đơn đã thực hiện',
+                    data: data,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    datalabels: {
+                        color: 'black',
+                        anchor: 'end',
+                        align: 'top',
+                        formatter: (value, context) => {
+                            return value; // Hiển thị giá trị của cột
+                        }
+                    }
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                maintainAspectRatio: false,
+                responsive: true,
+                width: 50,
+                height: 50
+            }
+        });
+    };
+    window.renderPieChart = (labels, data) => {
+        var ctx = document.getElementById('myPieChart').getContext('2d');
+        var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgb(255, 175, 71)',
+                        'rgb(149, 175, 71)'
+                        // Thêm màu sắc cho các trạng thái khác
+                    ],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    };
+    window.renderPieChart1 = (labels, data) => {
+        var ctx = document.getElementById('myPieChart1').getContext('2d');
+        var myPieChart1 = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        // Thêm màu sắc cho các trạng thái khác
+                    ],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    };
+    
+</script>
+
+
+

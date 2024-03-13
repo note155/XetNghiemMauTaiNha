@@ -84,8 +84,7 @@
                 </div>
                 <div class="form-group">
                     <label for="khoa">Khoa</label>
-                    <InputText @bind-Value="Inputkq.khoa" class="form-control" id="khoa" readonly />
-                    <ValidationMessage For="() => Inputkq.khoa" class="text-danger" />
+                    <Input Value="@loadkhoa(Inputkq.khoa)" class="form-control" id="khoa" readonly />
                 </div>
                 <div class="form-group">
                     <label for="nhommau">Nhóm Máu</label>
@@ -156,7 +155,7 @@
     public Chiso cs { get; set; } = new();
     private KetQuaXetNghiem kq { get; set; } = new();
     private Mau mau { get; set; } = new();
-
+    public List<Khoa> allkhoa { get; set; } = new();
     [SupplyParameterFromForm]
     public KQXN Inputkq { get; set; } = new();
 
@@ -166,6 +165,7 @@
         user = await Usertservice.getuserbyid(Input.UserId);
         allGXN = await GXNservice.getallAsync();
         dxn = await DXNservice.getallGXNAsync(id);
+        allkhoa = await Khoaservice.getallAsync();
         loadgxndachon();
         allchiso = await CSservice.getallAsync();
         Inputkq.kQandCs = new List<ChisoKq>();
@@ -187,7 +187,7 @@
         }
         kq = await KQXNservice.getbyid(id);
         Inputkq.ngaycoKQ=kq.ngaycoKQ;
-        Inputkq.khoa=kq.khoa;
+        Inputkq.khoa=kq.khoaId;
         Inputkq.nhommau=kq.nhommau;
         Inputkq.ghiChu = kq.ghiChu;
         var qq = await KQXNservice.getallCSbyidAsync(kq.Id);
@@ -250,6 +250,17 @@
             if (i.Id == id)
             {
                 return i.DonVi;
+            }
+        }
+        return null;
+    }
+    private string loadkhoa(int id)
+    {
+        foreach (var i in allkhoa)
+        {
+            if (i.Id == id)
+            {
+                return i.ten;
             }
         }
         return null;

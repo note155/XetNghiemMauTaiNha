@@ -11,125 +11,253 @@
 {
     <NavMenu />
 }
-<div class="card text-center">
+@if (err != "")
+{
+    <p>@err</p>
+}
 
-    <div style="height: 300px;" class="card-body">
+<!-- xét nghiệm tại nhà -->
+<div>haha</div>
+<div class="container mt-5 text-center xetnghiem-container " style="margin-bottom: 33rem;">
+    <div class="card-body overlay">
         <h4 class="card-title">Xét Nghiệm Máu Tại Nhà</h4>
         <p class="card-text">Dịch vụ xét nghiệm máu chất lượng cao, tiện lợi và an toàn ngay tại nhà bạn</p>
+        <AuthorizeView>
+            <Authorized>
+                <div style="font-size: 30; font-weight: bold;" class="notification-icon" @onclick="ToggleNotification">
+                    <i class="fas fa-bell"></i> Thông báo
+                    @if (AllDXN != null && AllDXN.Count > 0)
+                    {
+                        <span class="badge rounded-pill bg-success">@AllDXN.Count</span>
+                    }
+                    else
+                    {
+                        <span class="badge rounded-pill bg-success">0</span>
+                    }
+                </div>
+            </Authorized>
+        </AuthorizeView>
+        <div style="height:30px;" class="row"></div>
+        <!--Code thông báo-->
+        @{
+            string displayStyle = notificationVisible ? "block" : "none";
+        }
+        <div class="notification-popup" style="display: @displayStyle">
+            <!-- Nút đóng -->
+            <button class="close-button" aria-label="Close" @onclick="ToggleNotification">X</button>
+            <!-- Nội dung thông báo -->
+            <div class="card-header">
+                <p style="color:red">Ngày hôm nay: @currentDate.ToShortDateString() Chúc bạn một ngày tốt lành!</p>
+            </div>
+            @if (!AllDXN.Any())
+            {
+                <p><em>Loading ...</em></p>
+            }
+            @if (AllDXN.Any())
+            {
+                <div class="card-body">
+                    @foreach (var DXN in AllDXN)
+                    {
+                        string statusText = "";
+                        @if (@DXN.Trangthai == "Chờ Thanh Toán")
+                        {
+                            statusText = "* Đơn xét nghiệm " + DXN.Id + " của bạn chưa được thanh toán. Hãy thanh toán ngay để được xét nghiệm trong thời gian sớm nhất.";
+                            <div class="notification-item">
+                                <img src="/logo.jpg" class="notification-icon-nd" />
+                                <a href="/XCTDon/@DXN.Id" class="notification-link">@statusText</a>
+                            </div>
+                        }
+                        @if (@DXN.Trangthai == "Đã Chuyển Tiền")
+                        {
+                            statusText = "* Đơn xét nghiệm " + DXN.Id + " của bạn đang chờ xác nhận. Vui lòng chờ trong giây lát.";
+                            <div class="notification-item">
+                                <img src="/logo.jpg" class="notification-icon-nd" />
+                                <a href="/XCTDon/@DXN.Id" class="notification-link">@statusText</a>
+                            </div>
+                        }
+                        @if (@DXN.Trangthai == "Chờ lấy mẫu")
+                        {
+                            statusText = "* Đơn xét nghiệm " + DXN.Id + " của bạn đã được xác nhận. Chúng tôi sẽ liên lạc và tiến hành lấy mẫu trong thời gian sớm nhất.";
+                            <div class="notification-item">
+                                <img src="/logo.jpg" class="notification-icon-nd" />
+                                <a href="/XCTDon/@DXN.Id" class="notification-link">@statusText</a>
+                            </div>
+                        }
+                        @if (@DXN.Trangthai == "Lấy mẫu thất bại")
+                        {
+                            statusText = "* Đơn xét nghiệm " + DXN.Id + " của bạn lấy mẫu thất bại. Vui lòng chờ xử lý.";
+                            <div class="notification-item">
+                                <img src="/logo.jpg" class="notification-icon-nd" />
+                                <a href="/XCTDon/@DXN.Id" class="notification-link">@statusText</a>
+                            </div>
+                        }
+                        @if (@DXN.Trangthai == "Lấy mẫu thành công")
+                        {
+                            statusText = "* Đơn xét nghiệm " + DXN.Id + " của bạn đã lấy mẫu thành công. Chúng tôi sẽ gửi kết quả đến bạn trong thời gian sớm nhất.";
+                            <div class="notification-item">
+                                <img src="/logo.jpg" class="notification-icon-nd" />
+                                <a href="/XCTDon/@DXN.Id" class="notification-link">@statusText</a>
+                            </div>
+                        }
+                        @if (@DXN.Trangthai == "Từ Chối")
+                        {
+                            statusText = "* Đơn xét nghiệm " + DXN.Id + " của bạn đã bị từ chối do một số lý do khách quan. Bạn có thể đặt lại đơn mới.";
+                            <div class="notification-item">
+                                <img src="/logo.jpg" class="notification-icon-nd" />
+                                <a href="/XCTDon/@DXN.Id" class="notification-link">@statusText</a>
+                            </div>
+                        }
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info"> Bạn hiện chưa có thông báo nào</div>
+            }
+        </div>
         <EditForm Model="Inputkq" method="post" OnValidSubmit="add" FormName="register">
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" role="alert" />
-            <InputText style="width: 70%; height: 36px;" @bind-Value="Inputkq" placeholder="Nhập kết quả xét nghiệm                  " />
+            <InputText style="width: 70%; height: 40px; border-radius: 5px;" @bind-Value="Inputkq" placeholder="Nhập kết quả xét nghiệm" />
             <ValidationMessage For="() => Inputkq" class="text-danger" />
-                <br>
+            <br>
             <br>
             <br>
             <div class="row justify-content-center">
-                <a style="width:250px;" href="/datlich" class="btn btn-outline-dark  ">Đặt lịch hẹn</a>
-                <button style="width:250px;" type="submit" class="btn btn-dark ">Xem kết quả</button>
+                <a href="/datlich" class="btn btn-outline-dark">Đặt lịch hẹn</a>
+                <br>
+                <button type="submit" class="btn btn-dark ">Xem kết quả</button>
             </div>
         </EditForm>
     </div>
 </div>
-<div style="height:50px;" class="row"></div>
-<div class="row d-flex align-items-center justify-content-center">
+
+<!-- Dịch vụ của chúng tôi -->
+<div class="container d-flex align-items-center justify-content-center dichvu-container">
     <div class="col-md-6 d-flex flex-column align-items-center">
-        <h4 style="font-family: 'Roboto';font-style: normal;font-weight: 700;font-size: 40px;line-height: 48px;">
+        <h4>
             Dịch vụ của chúng tôi
         </h4>
-        <p style="font-family: 'Roboto';font-style: normal;font-weight: 400;font-size: 16px;line-height: 24px;">
-            Chúng tôi cung cấp các gói xét nghiệm máu chuyên sâu,
+        <p>
+            Chúng tôi cung cấp các gói xét nghiệm máu chuyên sâu.
         </p>
-        <p style="font-family: 'Roboto';font-style: normal;font-weight: 400;font-size: 16px;line-height: 24px;">
-            đảm bảo phục vụ mọi nhu cầu của bạn.
+        <p>
+            Đảm bảo phục vụ mọi nhu cầu của bạn.
         </p>
-        <a href="#" class="btn btn-dark">Đặt lịch hẹn</a>
-        <div style="height:30px" class="row"></div>
+        <a href="/dichvu" class="btn btn-dark">Gói dịch vụ Y Khoa</a>
     </div>
     <div class="col-md-6 d-flex flex-column align-items-center">
         <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <img src="1.jpg" class="card-img-top img-fluid" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">xét nghiệm máu tổng quát</h5>
-                        <p class="card-text">240 chỉ số xét nghiệm </p>
+            <div class=" col-md-6 ">
+                <div class="card1" style="margin-bottom:8px;">
+                    <div class="package-item-photo" b-rxw84ra1o5="">
+                        <a href="/ChiTietGoiXetNghiem" class="post-image-container" tabindex="-1" b-rxw84ra1o5="">
+                            <div class="package-item-photo" b-rxw84ra1o5="">
+                                <img src="img/1.jpg" alt="" loading="lazy" b-rxw84ra1o5="">
+                            </div>
+                        </a>
+                    </div>
+                    <div class="package-item-detail" b-rxw84ra1o5="">
+                        <div class="package-item-price" b-rxw84ra1o5="">2300000 VND</div>
+                        <h3 class="package-item-title" b-rxw84ra1o5="">gói cơ bản</h3>
+                        <div class="package-item-meta" b-rxw84ra1o5="">
+                            <div class="package-item-gender" b-rxw84ra1o5="">1 tiếng </div>
+                            <div class="plus-icon-container" b-rxw84ra1o5="">
+                                <div class="actions1" b-rxw84ra1o5="">
+                                    <a href="#myBooking" data-toggle="modal" class="btn btn-primary btn-booking rounded-circle" b-rxw84ra1o5="">
+                                        Thêm giỏ hàng
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <img src="2.jpg" class="card-img-top img-fluid" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">Đường huyết (đói)</h5>
-                        <p class="card-text">100 chỉ số xét nghiệm</p>
+            <div class="col-md-6 ">
+                <div class="card1">
+                    <div class="package-item-photo" b-rxw84ra1o5="">
+                        <a href="/ChiTietGoiXetNghiem" class="post-image-container" tabindex="-1" b-rxw84ra1o5="">
+                            <div class="package-item-photo" b-rxw84ra1o5="">
+                                <img src="img/1.jpg" alt="" loading="lazy" b-rxw84ra1o5="">
+                            </div>
+                        </a>
+                    </div>
+                    <div class="package-item-detail" b-rxw84ra1o5="">
+                        <div class="package-item-price" b-rxw84ra1o5="">2300000 VND</div>
+                        <h3 class="package-item-title" b-rxw84ra1o5="">gói cơ bản</h3>
+                        <div class="package-item-meta" b-rxw84ra1o5="">
+                            <div class="package-item-gender" b-rxw84ra1o5="">1 tiếng </div>
+                            <div class="plus-icon-container" b-rxw84ra1o5="">
+                                <div class="actions1" b-rxw84ra1o5="">
+                                    <a href="#myBooking" data-toggle="modal" class="btn btn-primary btn-booking rounded-circle" b-rxw84ra1o5="">
+                                        Thêm giỏ hàng
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!--TaiSSaoChonChungtoi-->
-<!-- Tại sao chọn chúng tôi -->
 
-<div class="container mt-5">
+
+<!--Vì sao chọn chúng tôi-->
+<div class="container mt-5" style="margin-bottom: 8rem;">
     <div class="row justify-content-center">
         <div class="block-title">
-            <h2 style="font-family: 'Roboto';font-style: normal;font-weight: 700;font-size: 40px;line-height: 48px;">
-                VÌ SAO CHỌN CHÚNG TÔI ?
+            <h2 style="font-family: 'Roboto';font-style: normal;font-weight: 700;font-size: 2.3rem;line-height: 48px;">
+                Vì Sao Chọn Dịch Vụ Chúng Tôi ?
             </h2>
-            <p style="font-size: 20px;">
-                Lấy mẫu xét nghiệm tại nhà giúp tiết kiệm thời gian và kết quả sẽ được trả ngay tại nhà hoặc tra cứu kết quả trên website.
-                Mang lại cho bạn những kết qủa chính xác và tin cậy.
+            <p style="font-size: 1.2rem;margin-left:2px;">
+                Dịch vụ bên chúng tôi mang đến cho bạn những lời ích gì và đảm bảo an toàn như thế nào đến cho người dùng khi lựa chọn chúng tôi.
             </p>
         </div>
-        <div class="row">
+        <div class="row with-background">
             <div class="col-md-4 mb-4">
                 <div class="card">
                     <div class="row g-0">
-                        <div class="col-md-4 d-flex justify-content-center">
-                            <img style="max-width: 100px; max-height: 100px; margin-top: 50px; margin-left: 15px;" src="kinhnghiem.png" alt="Hình ảnh bài viết" class="img-fluid">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title" style="font-size: 40px">Kinh nghiệm</h5>
+                        <div class="col">
+                            <div class="card-body" style="max-width: 100%;">
+                                <div class="col-md-4 d-flex justify-content-center">
+                                    <img style="max-width: 80px; max-height: 80px; margin-top: 5px; margin-bottom:10px;" src="kinhnghiem.png" alt="Hình ảnh bài viết" class="img-fluid">
+                                </div>
+                                <h5 class="card-title justify-content-center" style="font-size: 30px">Kinh nghiệm</h5>
                                 <p class="card-text">
-                                    Bệnh viện Âu Lạc có hơn một thập kỷ hoạt động trong lĩnh vực y tế, được mô tả là một địa chỉ uy tín và có kinh nghiệm trong xét nghiệm máu.
+                                    Bệnh viện có kinh nghiệm hơn một thập kỷ hoạt động trong lĩnh vực xét nghiệm mẫu.
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
             <div class="col-md-4 mb-4">
                 <div class="card">
                     <div class="row g-0">
-                        <div class="col-md-4 d-flex justify-content-center">
-                            <img style="max-width: 100px;max-height: 100px ;margin-top: 40px" src="tuvanketqua.png" alt="Article Image" class="img-fluid">
-                        </div>
-
-                        <div class="col-md-8">
+                        <div class="col">
                             <div class="card-body">
-                                <h5 class="card-title" style="font-size: 40px">Tư vấn</h5>
+                                <div class="col-md-4 d-flex justify-content-center">
+                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="tuvanketqua.png" alt="Article Image" class="img-fluid">
+                                </div>
+                                <h5 class="card-title justify-content-center" style="font-size: 30px">Tư vấn</h5>
                                 <p class="card-text">
-                                    Bác sĩ tư vấn cho khách hàng những thắc mắc hoặc có kết quả bất thường và đưa ra lời khuyên cho bệnh nhân.
+                                    Tư vấn cho khách hàng những thắc mắc hoặc có kết quả bất thường và đưa ra lời khuyên chính xác.
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
             <div class="col-md-4 mb-4">
                 <div class="card">
                     <div class="row g-0">
-                        <div class="col-md-4 d-flex justify-content-center">
-                            <img style="max-width: 100px;max-height: 100px ;margin-top: 40px" src="nhanluc.png" alt="Article Image" class="img-fluid">
-                        </div>
-                        <div class="col-md-8">
+                        <div class="col">
                             <div class="card-body">
-                                <h5 class="card-title" style="font-size: 40px">Nhân lực</h5>
+                                <div class="col-md-4 d-flex justify-content-center">
+                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="nhanluc.png" alt="Article Image" class="img-fluid">
+                                </div>
+                                <h5 class="card-title justify-content-center" style="font-size: 30px">Nhân lực</h5>
                                 <p class="card-text">
                                     Đội ngũ chuyên gia, bác sĩ đầu ngành và nhân viên lấy mẫu chuyên nghiệp với chứng chỉ hành nghề.
                                 </p>
@@ -138,18 +266,17 @@
                     </div>
                 </div>
             </div>
-
             <div class="col-md-4 mb-4">
                 <div class="card">
                     <div class="row g-0">
-                        <div class="col-md-4 d-flex justify-content-center">
-                            <img style="max-width: 100px;max-height: 100px ;margin-top: 40px; margin-left: 15px; " src="chiphi1.png" alt="Article Image" class="img-fluid">
-                        </div>
-                        <div class="col-md-8">
+                        <div class="col">
                             <div class="card-body">
-                                <h5 class="card-title" style="font-size: 40px">Chi phí</h5>
+                                <div class="col-md-4 d-flex justify-content-center">
+                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="chiphi1.png" alt="Article Image" class="img-fluid">
+                                </div>
+                                <h5 class="card-title justify-content-center" style="font-size: 30px">Chi phí</h5>
                                 <p class="card-text">
-                                    Bệnh viện cam kết cung cấp dịch vụ với chi phí hợp lý và minh bạch, thông báo bảng giá dịch vụ công khai.
+                                    Cam kết mang đến cho khách hàng dịch vụ với chi phí hợp lý , thông báo bảng giá dịch vụ công khai.
                                 </p>
                             </div>
                         </div>
@@ -159,14 +286,14 @@
             <div class="col-md-4 mb-4">
                 <div class="card">
                     <div class="row g-0">
-                        <div class="col-md-4 d-flex justify-content-center">
-                            <img style="max-width: 100px;max-height: 100px ;margin-top: 40px" src="quymo.png" alt="Article Image" class="img-fluid">
-                        </div>
-                        <div class="col-md-8">
+                        <div class="col">
                             <div class="card-body">
-                                <h5 class="card-title" style="font-size: 40px">Quy mô</h5>
+                                <div class="col-md-4 d-flex justify-content-center">
+                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="quymo.png" alt="Article Image" class="img-fluid">
+                                </div>
+                                <h5 class="card-title justify-content-center" style="font-size: 30px">Quy mô</h5>
                                 <p class="card-text">
-                                    Bệnh viện cam kết cung cấp dịch vụ với chi phí hợp lý và minh bạch, thông báo bảng giá dịch vụ công khai.
+                                    Có quy mô rộng lớn trải dài từ bắc và nam của đất nước.
                                 </p>
                             </div>
                         </div>
@@ -176,14 +303,14 @@
             <div class="col-md-4 mb-4">
                 <div class="card">
                     <div class="row g-0">
-                        <div class="col-md-4 d-flex justify-content-center">
-                            <img style="max-width: 100px;max-height: 100px ;margin-top: 40px" src="thoigiantuvan1.png" alt="Article Image" class="img-fluid">
-                        </div>
-                        <div class="col-md-8">
+                        <div class="col">
                             <div class="card-body">
-                                <h5 class="card-title" style="font-size: 40px">Thời gian</h5>
+                                <div class="col-md-4 d-flex justify-content-center">
+                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="thoigiantuvan1.png" alt="Article Image" class="img-fluid">
+                                </div>
+                                <h5 class="card-title justify-content-center" style="font-size: 30px">Thời gian</h5>
                                 <p class="card-text">
-                                    Bệnh viện hứa hẹn thời gian phục vụ linh hoạt và ngắn gọn, giảm thiểu đợi lâu cho bệnh nhân.
+                                    Thời gian phục vụ linh hoạt và phù hợp với yêu cầu của khách hàng.
                                 </p>
                             </div>
                         </div>
@@ -193,14 +320,14 @@
             <div class="col-md-4 mb-4">
                 <div class="card">
                     <div class="row g-0">
-                        <div class="col-md-4 d-flex justify-content-center">
-                            <img style="max-width: 100px;max-height: 100px ;margin-top: 30px" src="traketquachinhxac.png" alt="Article Image" class="img-fluid">
-                        </div>
-                        <div class="col-md-8">
+                        <div class="col">
                             <div class="card-body">
-                                <h5 class="card-title" style="font-size: 40px">Trả kết quả</h5>
+                                <div class="col-md-4 d-flex justify-content-center">
+                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="traketquachinhxac.png" alt="Article Image" class="img-fluid">
+                                </div>
+                                <h5 class="card-title justify-content-center" style="font-size: 30px">Trả kết quả</h5>
                                 <p class="card-text">
-                                    Bệnh viện cam kết mang lại kết quả chính xác và tin cậy cho bệnh nhân.
+                                    Cam kết mang lại cho khách hàng kết quả chính và nhanh chóng.
                                 </p>
                             </div>
                         </div>
@@ -210,14 +337,14 @@
             <div class="col-md-4 mb-4">
                 <div class="card">
                     <div class="row g-0">
-                        <div class="col-md-4 d-flex justify-content-center">
-                            <img style="max-width: 100px;max-height: 100px ;margin-top: 40px" src="dungcu.png" alt="Article Image" class="img-fluid">
-                        </div>
-                        <div class="col-md-8">
+                        <div class="col">
                             <div class="card-body">
-                                <h5 class="card-title" style="font-size: 40px">Thiết bị</h5>
+                                <div class="col-md-4 d-flex justify-content-center">
+                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="dungcu.png" alt="Article Image" class="img-fluid">
+                                </div>
+                                <h5 class="card-title justify-content-center" style="font-size: 30px">Thiết bị</h5>
                                 <p class="card-text">
-                                    Bệnh viện cam kết mang lại kết quả chính xác và tin cậy cho bệnh nhân.
+                                    Cung cấp dụng cụ thiết bị xét nghiệm và lấy mẫu tiên tiến và hiện đại.
                                 </p>
                             </div>
                         </div>
@@ -227,14 +354,14 @@
             <div class="col-md-4 mb-4">
                 <div class="card">
                     <div class="row g-0">
-                        <div class="col-md-4 d-flex justify-content-center">
-                            <img style="max-width: 100px;max-height: 100px ;margin-top: 40px" src="hoso.png" alt="Article Image" class="img-fluid">
-                        </div>
-                        <div class="col-md-8">
+                        <div class="col">
                             <div class="card-body">
-                                <h5 class="card-title" style="font-size: 40px">Hồ sơ</h5>
+                                <div class="col-md-4 d-flex justify-content-center">
+                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="hoso.png" alt="Article Image" class="img-fluid">
+                                </div>
+                                <h5 class="card-title justify-content-center" style="font-size: 30px">Hồ sơ</h5>
                                 <p class="card-text">
-                                    Bệnh viện hứa hẹn thời gian phục vụ linh hoạt và ngắn gọn, giảm thiểu đợi lâu cho bệnh nhân.
+                                    Đảm bảo sự an toàn bảo mật thông tin cá nhân của khách hàng.
                                 </p>
                             </div>
                         </div>
@@ -246,13 +373,13 @@
 </div>
 
 <!-- Tin tức mõi ngày-->
-<div class="container mt-5">
-    <div class="row justify-content-center" style="margin: 0 auto;">
+<div class="container mt-5" style="margin-bottom: 8rem;">
+    <div class="row justify-content-center">
         <div class="row">
             <div class="col-md-12 d-flex flex-column ">
                 <div class="d-flex flex-column align-items-center align-self-start" style=" margin: 0 auto; ">
-                    <h4 style="font-family: 'Roboto'; font-style: normal; font-weight: 800; font-size: 40px; line-height: 30px; margin-bottom: 50px; margin-top: 20px;">
-                        Tin tức mỗi ngày
+                    <h4 style="font-family: 'Roboto';font-style: normal;font-weight: 700;font-size: 2.3rem;line-height: 48px; margin-bottom: 20px;">
+                        Tin Tức Hôm Nay
                     </h4>
                 </div>
             </div>
@@ -307,7 +434,7 @@
                     </div>
                     <div class="post-item-details">
                         <h3 class="post-item-title">
-                            <a href="/NhungLoiIchKhi" tabindex="-1">DỊCH VỤ LẤY MẪU XÉT NGHIỆM TẬN NƠI MEDLATEC - GỌI LÀ CÓ!...</a>
+                            <a href="/NhungLoiIchKhi" tabindex="-1">DỊCH VỤ LẤY MẪU XÉT NGHIỆM TẬN NƠI !...</a>
                         </h3>
                         <div class="post-item-excerpt">
                             Hình ảnh nữ cán bộ y tế chèo thuyền đến tận nhà lấy mẫu xét nghiệm khi Huế ngập trong biển nước vẫn luôn khiến ...
@@ -322,199 +449,97 @@
     </div>
 </div>
 
-<!-- Nhận xét của khách hàng -->
-<div style="height:50px;" class="row"></div>
-<div class="row d-flex align-items-center justify-content-center">
-    <!-- Title -->
-    <div class="col-md-6 d-flex flex-column align-items-center">
-        <div class="title" style=" font-family: 'Roboto'; font-style: normal; font-weight: 700; font-size: 40px; line-height: 48px; color: #000000;">
-            Nhận xét của khách hàng
-        </div>
-    </div>
-
-    <div class="col-md-6 d-flex flex-wrap justify-content-center">
-        <!-- Customer Review Card 1 -->
-            <div class="col-md-6">
-             <div class="card d-flex flex-column justify-content-center align-items-center p-3 gap-3" style=" background: rgba(0, 0, 0, 0.05); border-radius: 6px;">
-                 <!-- User -->
-                 <div class="user d-flex flex-row align-items-center gap-2" style="">
-                     <!-- Avatar -->
-                    <div class="avatar d-flex flex-row align-items-center gap-2" style="width: 32px; height: 32px; background: rgba(0, 0, 0, 0.1); border-radius: 32px;"></div>
-                    <!-- Frame -->
-                    <div class="frame d-flex flex-column align-items-start" style="width: 105.74px; height: 20px;">
-                        <!-- Title in Frame -->
-                        <div class="title" style="width: 105.74px; height: 20px; font-family: 'Roboto'; font-style: normal; font-weight: 500; font-size: 14px; line-height: 20px; color: #000000;">
-                            Văn Tương Linh
-                        </div>
-                            <img src="7.jpg" style="width: 60px; height: 30px">
-                     </div> 
-                </div>
-                <!-- Review Content -->
-                <p>Dịch vụ nhanh chóng, tiện lợi và dễ dàng sử dụng.</p>
-             </div>
-            </div>
-   
-        <!-- Customer Review Card 2 -->
-           <div class="col-md-6">
-            <div class="card d-flex flex-column justify-content-center align-items-center p-3 gap-3" style=" background: rgba(0, 0, 0, 0.05); border-radius: 6px;">
-                <!-- User -->
-                <div class="user d-flex flex-row align-items-center gap-2" style="">
-                    <!-- Avatar -->
-                    <div class="avatar d-flex flex-row align-items-center gap-2" style="width: 32px; height: 32px; background: rgba(0, 0, 0, 0.1); border-radius: 32px;"></div>
-                    <!-- Frame -->
-                    <div class="frame d-flex flex-column align-items-start" style="width: 105.74px; height: 20px;">
-                        <!-- Title in Frame -->
-                        <div class="title" style="width: 105.74px; height: 20px; font-family: 'Roboto'; font-style: normal; font-weight: 500; font-size: 14px; line-height: 20px; color: #000000;">
-                            Nguyễn Ngọc Hà
-                        </div>
-                        <img src="7.jpg" style="width: 60px; height: 30px">
-                    </div>
-                </div>
-                <!-- Review Content -->
-                <p>Tôi hài lòng với việc xét nghiệm máu tại nhà.</p>
-            </div>
-        </div>
-    </div>
-</div>
 <!-- Lợi ích của việc lấy máu tại nhà-->
-<div style="height:50px" class="row"></div>
-<div class="row">
-    <div class="col-md-6 d-flex flex-column align-items-center">
-        <div class="d-flex justify-content-center align-items-center">
-            <h4 style="font-family: 'Roboto'; font-style: normal; font-weight: 700; font-size: 40px; line-height: 48px;" class="text-center">
-                Lợi ích của xét nghiệm máu tại nhà
-            </h4>
+<div class="container d-flex align-items-center justify-content-center loiich-container" style=" margin-bottom: 8rem; ">
+    <div class="row">
+        <div class="col-md-6 d-flex flex-column align-items-center">
+            <div class="d-flex justify-content-center align-items-center">
+                <h4 style="font-family: 'Roboto'; font-style: normal; font-weight: 600; font-size: 2.3rem; line-height: 48px;" class="text-center">
+                    Lợi ích của việc lấy xét nghiệm mẫu tại nhà
+                </h4>
+            </div>
+            <ul class="arrow-list">
+                <li class="arrow-list-item">
+                    <img src="3.png" alt="Biểu tượng">
+                    <p>Tiết kiệm thời gian - Không cần di chuyển</p>
+                </li>
+                <li class="arrow-list-item">
+                    <img src="5.png" alt="Biểu tượng">
+                    <p>Kết quả nhanh - Nhận kết quả trong vài giờ</p>
+                </li>
+                <li class="arrow-list-item">
+                    <img src="6.jpg" alt="Biểu tượng">
+                    <p>An toàn uy tín - Đảm bảo sự riêng tư và bảo mật</p>
+                </li>
+            </ul>
         </div>
-        <div class="d-grid gap-3 mt-5">
-            <div class="p-3 d-flex align-items-center">
-                <img style="width:40px" src="3.png" alt="Icon">
-                <p style="font-family: 'Roboto'; font-style: normal; font-weight: 400; font-size: 20px; line-height: 28px; margin-left: 10px;">
-                    Tiết kiệm thời gian
-                    - Không cần di chuyển
-                </p>
-            </div>
-            <div class="p-3 d-flex align-items-center">
-                <img style="width:40px" src="5.png" alt="Icon">
-                <p style="font-family: 'Roboto'; font-style: normal; font-weight: 400; font-size: 20px; line-height: 28px; margin-left: 10px;">
-                    Kết quả nhanh
-                    - Nhận kết quả trong vài giờ
-                </p>
-            </div>
-            <div class="p-3 d-flex align-items-center">
-                <img style="width:40px" src="6.jpg" alt="Icon">
-                <p style="font-family: 'Roboto'; font-style: normal; font-weight: 400; font-size: 20px; line-height: 28px; margin-left: 10px;">
-                    An toàn và uy tín
-                    - Đảm bảo sự riêng tư và bảo mật
-                </p>
-            </div>
+        <div class="col-md-6 d-flex flex-column align-items-center">
+            <img style="width: 100%;" src="4.jpg" alt="Hình ảnh mô tả lợi ích">
         </div>
-    </div>
-
-
-
-    <div class="col-md-6">
-        <img style="width: 100%" src="4.jpg" alt="Hình ảnh mô tả lợi ích">
     </div>
 </div>
-<style>
-    /* Thêm đoạn mã CSS này vào trang của bạn */
-    .center-container {
-        display: flex;
-        justify-content: center;
-        height: 100vh; /* Đảm bảo chiều cao 100% của viewport để căn giữa theo chiều dọc */
-    }
 
-    body {
-        margin: 0;
-    }
-</style>
 <!--Liên hệ đặt lịch-->
-<!-- section -->
-<div class="container-fluid">
-    <div class="row justify-content-center align-items-center" style="padding: 60px 5%; background: rgba(0, 0, 0, 0.6);">
-        <!-- avatar -->
-        <div class="col-md-3 col-sm-12 d-flex align-items-center justify-content-center">
-            <div style="width: 100px; height: 100px; background: rgba(217, 217, 217, 0.5); border-radius: 50px;"></div>
-        </div>
-
-        <!-- container -->
-        <div class="col-md-6 col-sm-12">
-            <!-- title -->
-            <div style="height: 32px; font-family: 'Roboto'; font-style: normal; font-weight: 700; font-size: 24px; line-height: 32px; color: #FFFFFF;">
-                Âu Lạc
+<div class="container-fluid" style=" margin-bottom: 38rem;">
+    <div class="card-body overlay1">
+        <div class="row justify-content-center align-items-center" style="padding: 60px 5%; ">
+            <div class="col-md-3 col-sm-12 d-flex align-items-center justify-content-center">
+                <div style="width: 100px; height: 100px; background: rgba(217, 217, 217, 0.5); border-radius: 50px;margin-bottom:10px;"></div>
             </div>
-
-            <!-- Selection -->
-            <div style="display: flex; flex-direction: row; align-items: center; gap: 10px; height: 20px;">
-                <!-- label-normal -->
-                <div style=" background: rgba(217, 217, 217, 0.5); border: 0.5px solid rgba(0, 0, 0, 0.1); border-radius: 2px;">
-                    <!-- label text -->
-                    <div style=" font-family: 'Roboto'; font-style: normal; font-weight: 420; font-size: 14px; color: #000000;">
-                        Dịch vụ xét nghiệm máu tại nhà
-                    </div>
+            <div class="col-md-6 col-sm-12">
+                <div style="font-family: 'Roboto'; font-style: normal; font-weight: 800; font-size: 2.5rem; line-height: 32px; color: #FFFFFF; margin-bottom:20px; text-align:center;">
+                    ÂU LẠC
+                </div>
+                <div style=" font-family: 'Roboto'; font-style: normal; font-weight: 420; font-size: 1.5rem;text-align:center; color: #00131e;">
+                    Nơi cung cấp dịch vụ xét nghiệm máu tại nhà
                 </div>
             </div>
-            <!-- description -->
-            <div style=" font-family: 'Roboto'; font-style: normal; font-weight: 400; font-size: 16px; color: #FFFFFF;">
-                Chúng tôi cam kết mang đến cho bạn dịch vụ xét nghiệm máu chất lượng và đáng tin cậy.
+            <div class="col-md-3 col-sm-12">
+                <a style="width:250px;display:flex; text-align:center;" href="/datlich" class="btn btn-outline-dark1 d-flex justify-content-center">Đặt lịch ngay</a>
             </div>
-        </div>
-
-        <!-- Button -->
-        <div class="col-md-3 col-sm-12">
-            <a href="#" style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 12px; width: 160px; height: 48px; margin: 0 auto;">
-                <!-- primary -->
-                <div style="width: 14rem; height: 50rem; background: #000000; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                    <!-- title -->
-                    <div style="width: 63px; height: 24px; font-family: 'Roboto'; font-style: normal; font-weight: 500; font-size: 16px; line-height: 24px; color: #FFFFFF;">
-                        Đặt ngay
-                    </div>
-                </div>
-            </a>
         </div>
     </div>
 </div>
-<br>
+
 <div class="container">
-    <div class="card mb-3" style="max-width: 100%;">
+    <div class="card1 mb-3" style="max-width: 100%;">
         <div class="row g-0">
             <div class="col-md-8">
-
                 <img src="9.jpg" class="img-fluid rounded-start" alt="...">
             </div>
             <div class="col-md-4">
-                <div class="card-body d-grid gap-4">
-                    <h3 class="card-title">Quy Trình Thực Hiện</h3>
-                    <div class="card">
+                <div class="card1-body d-grid gap-4">
+                    <h3 class="card1-title">Quy Trình Thực Hiện</h3>
+                    <div class="card1 p-2">
                         <div class="card-header">
-                            <h5 class="card-title">Đặt lịch</h5>
+                            <h5 class="card-title1">Đặt lịch</h5>
                         </div>
                         <div class="card-body">
-                            <p class="card-text">Đặt trực tiếp tại website hoặc liện hệ 0988999999</p>
+                            <p class="card-text1">Đặt trực tiếp tại website hoặc liện hệ 0988999999</p>
                         </div>
                     </div>
-                    <div class="card  p-2">
+                    <div class="card1  p-2">
                         <div class="card-header">
-                            <h5 class="card-title">Lấy mẫu</h5>
+                            <h5 class="card-title1">Lấy mẫu</h5>
                         </div>
                         <div class="card-body">
-                            <p class="card-text">Nhân viên y tế sẽ đến lấy mẫu trực tiếp tại nhà của bạn</p>
+                            <p class="card-text1">Nhân viên y tế sẽ đến lấy mẫu trực tiếp tại nhà.</p>
                         </div>
                     </div>
-                    <div class="card p-2">
+                    <div class="card1 p-2">
                         <div class="card-header ">
-                            <h5 class="card-title">Trả kết quả</h5>
+                            <h5 class="card-title1">Trả kết quả</h5>
                         </div>
                         <div class="card-body">
-                            <p class="card-text">Kết quả sẽ được gửi đến bạn một cách nhanh ngay khi có kết quả</p>
+                            <p class="card-text1">Kết quả sẽ gửi đến bạn một cách nhanh ngay khi có kết quả.</p>
                         </div>
                     </div>
-                    <div class="card p-2">
+                    <div class="card1 p-2">
                         <div class="card-header ">
-                            <h5 class="card-title">Tư vấn</h5>
+                            <h5 class="card-title1">Tư vấn</h5>
                         </div>
                         <div class="card-body">
-                            <p class="card-text">Chúng tôi có đội ngũ chuyên nguyệp sẵn sàng tư vấn kết quả xét nghiệm cho bạn</p>
+                            <p class="card-text1">Đội ngũ chuyên nguyệp sẵn sàng tư vấn kết quả xét nghiệm cho bạn</p>
                         </div>
                     </div>
                 </div>
@@ -619,11 +644,33 @@
     protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
     public string UserName { get; set; }
     public BacSi bs { get; set; } = new();
+    public List<DonXetNghiem> AllDXN { get; set; } = new();
+    private List<string> trangthai = new List<string>();
+    //public User khach { get; set; } = new();
+    public Data.Model.User khach { get; set; } = new Data.Model.User();
+
+    private DateTime currentDate;
+    private bool notificationVisible = false;
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         UserName = authState.User.Identity.Name;
-        bs = await bacsiservice.getbyemail(UserName);
+        if (UserName != null)
+        {
+            bs = await bacsiservice.getbyemail(UserName);
+            khach = await Usertservice.getuserbyemail(UserName);
+            if (khach != null)
+            { AllDXN = await DXNservice.getallbyiduserAsync(khach.Id); }
+            else
+            { AllDXN = new List<DonXetNghiem>(); }
+
+            // Khởi tạo ngày hiện tại
+            currentDate = DateTime.Now;
+        }
+    }
+    private void ToggleNotification()
+    {
+        notificationVisible = !notificationVisible;
     }
     private async Task tuvanKH()
     {

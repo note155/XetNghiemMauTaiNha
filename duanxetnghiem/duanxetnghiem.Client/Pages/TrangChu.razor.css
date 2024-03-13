@@ -1,166 +1,402 @@
-﻿body {
-    font-size: 16px;
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 400;
-    color: #132432;
-    background-color: #fff;
-    overflow-x: hidden;
-    line-height: 1.5;
-}
-
-.block-title h2 {
-    font-size: 24px;
-    line-height: 1.4;
+﻿
+/*xet nghiem mau tai nha*/
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Điều chỉnh độ mờ của overlay tại đây */
+    height: 420px;
+    background-image: url('imgtrangchu/hinhnen4.png');
+    background-size: cover;
+    background-position: center;
 }
 
 .container {
-    margin-left: 10px;
-    margin-right: 10px;
-    width: 100%;
-    max-width: 1490px;
-    padding-left: 25px;
-    padding-right: 25px;
-    margin-top: 80px;
-    display: flex;
-    flex-direction: column;
+    margin-top: 0.6rem;
+}
+
+.card-title {
+    font-size: 2.3rem;
+    margin-bottom: 1rem;
+    color: #000000;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+}
+
+.card-text {
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    color: #fff;
 }
 
 .row {
-    margin-bottom: 5px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: stretch;
-}
-
-.col-md-3 {
-    flex: 0 0 calc(25% - 10px); /* Thay đổi giá trị 33.333% thành 25% để chia thành 4 cột */
     margin-top: 5px;
-    margin-bottom: 5px;
-    box-sizing: border-box; /* Thêm dòng này để giảm padding/border ảnh hưởng đến kích thước */
 }
 
-.card {
-    max-width: 100%;
-    margin: 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.btn {
+    width: 250px;
+    margin-right: 15px;
+    font-size: 18px;
 }
 
-.post-item-details {
-    font-size: 14px;
-    margin-bottom: 10px;
+.btn-outline-dark {
+    color: #000000;
+    border-color: #000000;
 }
 
-.post-item-title {
-    margin-top: 10px;
-    margin-bottom: 5px;
-    font-size: 20px;
-    line-height: 24px;
+    .btn-outline-dark:hover {
+        background-color: #fff;
+        color: #000;
+    }
+
+.btn-dark {
+    background-color: #000;
+    color: #fff;
+    border-color: #fff;
 }
 
-.post-item-photo img {
+    .btn-dark:hover {
+        background-color: rgba(0, 0, 0, 0.5);
+        border-color: #fff;
+    }
+
+.xetnghiem-container {
+    margin-bottom: 50px; /* Điều chỉnh giảm khoảng cách dưới */
+}
+
+
+/*Dịch vụ của chúng tôi*/
+
+@media (max-width: 767px) {
+    .dichvu-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .col-md-6.d-flex.flex-column.align-items-center {
+        order: 2;
+        margin-bottom: 2rem;
+    }
+
+    .col-md.d-flex.flex-column.align-items-center {
+        order: 1;
+        margin-bottom: 2rem;
+    }
+
+    .card {
+        width: 100%; /* Đảm bảo rằng card chiếm toàn bộ chiều rộng */
+        max-width: 100%; /* Ngăn không cho card trở nên quá lớn */
+    }
+}
+
+.dichvu-container {
+    background-image: url('imgtrangchu/hinhnen9.png');
+    background-size: cover;
+    background-position: center;
     height: auto;
-    width: 100%;
-    object-fit: cover;
-    border-radius: 8px;
+    margin-bottom: 8rem;
+    text-align: center;
 }
 
-.post-item-photo a:hover img {
-    transform: scale(1.1);
-    transition: transform 0.3s ease-in-out;
+h4 {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 48px;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-.lienhe-info {
-    display: flex;
-    justify-content: space-between;
-    max-width: 1200px;
-    margin: auto;
-    padding: 20px;
-}
-
-.info-left {
-    flex: 0.5;
-}
-
-.guithongtin {
-    max-width: 400px;
-    margin: auto;
-    border-radius: 10px;
-    background-color: #FFFFFF;
-    border: 2px solid #1d93e3;
-}
-
-table {
-    width: 100%;
-}
-
-td {
-    padding: 10px;
-}
-
-input,
-textarea {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
+p {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1.0rem;
+    line-height: 24px;
+    text-align: center;
 }
 
 
-
-.info-right {
-    flex: 1;
-    margin-left: 20px;
+/*Vì sao chọn chúng tôi*/
+.visao-container {
+    margin-bottom: 50px; /* Điều chỉnh giảm khoảng cách dưới */
 }
 
-iframe {
-    width: 100%;
-    height: 450px;
-    border: 0;
-    border-radius: 10px;
-}
-
-
-/* Thêm CSS để căn chỉnh nút về phía bên phải của bảng */
-/*Tai sao chhon chung toi*/
 .card {
     transition: transform 0.3s ease-in-out;
     height: 100%;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #ffffff;
 }
-    /*
+
     .card:not(.no-hover):hover {
         background-color: #66b2ff;
-        Màu nền khi di chuột qua 
         color: #fff;
     }
-    */
+
+    .card .col-md-4 img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .card .col-md-8 {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+        .card .col-md-8 .card-body h5 {
+            font-size: 2.0rem;
+        }
+
+        .card .col-md-8 .card-body p {
+            max-height: 100%;
+            overflow: hidden;
+        }
+
+    .card .row.g-0 {
+        width: 100%;
+    }
+
     .card:hover {
         transform: scale(1.05);
     }
 
-    .card img {
-        object-fit: cover;
-        width: 100%;
-        height: 100%;
+.row.with-background {
+    background-image: url('imgtrangchu/hinhnen10.png'); /* Đặt đường dẫn đến hình nền của bạn */
+    background-size: cover; /* Đảm bảo hình nền đầy đủ kích thước */
+    background-position: center; /* Căn giữa hình nền */
+    color: #fff; /* Màu chữ trên hình nền (nếu bạn muốn) */
+}
+
+.card.with-background .card-body {
+    padding: 20px; /* Thêm padding vào nội dung card để không bị mất nội dung vào hình nền */
+}
+
+/*Tin tức mỗi ngày*/
+.post-item-info {
+    height: 450px;
+}
+
+.post-item-photo {
+    overflow: hidden;
+    position: relative;
+    border-top-width: 5px;
+}
+
+    .post-item-photo img {
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .post-item-photo:hover img {
+        transform: scale(1.1); /* hoặc giá trị khác tùy thuộc vào mong muốn của bạn */
+    }
+
+.post-item-details {
+    background-color: #fdfdfd; /* Chọn màu nền mong muốn */
+    border: 2px solid #e0e0e0; /* Chọn màu đường viền mong muốn và kích thước đường viền */
+    padding: 10px; /* Tăng khoảng cách giữa nội dung và đường viền */
+}
+
+    .post-item-details h3 {
+        margin: 0px;
+        height: 100px;
+    }
+
+.post-item-title {
+    font-size: 1.4rem;
+    margin: 0px;
+}
+/*Lợi ích của việc lấy máu tại nhà*/
+.col-md-6 img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.col-md-6 {
+    margin-bottom: 20px;
+}
+
+.arrow-list {
+    list-style: none;
+    padding: 0;
+    margin: 18px;
+}
+
+.arrow-list-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #f8f9fa; /* Đặt màu nền mong muốn của bạn */
+    margin-bottom: 40px;
+    transition: background-color 0.4s ease;
+}
+
+    .arrow-list-item img {
+        width: 40px;
+        margin-right: 15px;
+    }
+
+    .arrow-list-item p {
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 28px;
+        margin: 10px;
+        color: #fdfdfd;
+    }
+
+    .arrow-list-item:nth-child(1) {
+        background-color: #ff13a9; /* Màu vàng */
+    }
+
+    .arrow-list-item:nth-child(2) {
+        background-color: #28a745; /* Màu xanh lá cây */
+    }
+
+    .arrow-list-item:nth-child(3) {
+        background-color: #007bff; /* Màu xanh da trời */
+    }
+
+    /* Hover effect */
+    .arrow-list-item:hover {
+        background-color: #bab3bf; /* Màu mới khi di chuột qua */
     }
 
 
-.card-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+/*Liên hệ đặt lịch*/
+.overlay1 {
+    position: absolute;
+    left: 0;
+    width: 100%;
     height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Điều chỉnh độ mờ của overlay tại đây */
+    height: auto;
+    background-image: url('imgtrangchu/hinhnen17.png');
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 38rem;
 }
 
-.card-title {
-    font-size: 2.5vw; /* Sử dụng vw để tự động điều chỉnh kích thước theo chiều rộng của viewport */
+.btn-outline-dark1 {
+    color: #fff;
+    border-color: #fff;
+    border-radius: 4px;
+    background-color: #000000;
+    text-align: center;
+    margin: 0 auto;
 }
 
-.card-text {
-    flex-grow: 1;
+    .btn-outline-dark1:hover {
+        background-color: #0078b6;
+        color: #fff;
+    }
+
+/*quy trinh dat lich*/
+.card1 {
+    background-image: url('imgtrangchu/hinhnen19.png');
+    background-size: cover; /* Đảm bảo hình nền được phủ toàn bộ phần nền */
+    background-position: center; /* Căn giữa hình nền */
+    padding: 0px;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+    background-color: #ffffff; /* Màu nền ban đầu */
 }
+
+.card1-title {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 2.0rem;
+    line-height: 28px;
+    margin: 10px;
+    color: #007bff;
+    text-align: center
+}
+
+.card-title1 {
+    font-size: 1.7rem;
+    text-align: center;
+}
+
+.card-text1 {
+    font-size: 1.3rem;
+    color: #ff1333;
+}
+
+.img-fluid rounded-start {
+    border-radius: 5px;
+}
+
+/*Thêm thông báo*/
+.notification-popup {
+    position: fixed;
+    top: 100px; /* Đặt khoảng cách trên cùng */
+    right: 5%; /* Đặt vị trí bên phải */
+    width: 300px;
+    max-height: 200px; /* Đặt chiều cao tối đa của phần card */
+    overflow-y: auto; /* Tạo thanh cuộn dọc */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+
+.notification-icon {
+    cursor: pointer;
+    width: 150px;
+}
+
+.notification-popup p {
+    margin: 5px 0;
+}
+
+/*Noidungthongbao*/
+.notification-item {
+    display: flex;
+    align-items: flex-start;
+    border-bottom: 1px solid #ccc; /* Đường viền nhỏ giữa các dòng */
+    padding-bottom: 10px; /* Khoảng cách dưới cùng */
+    margin-top: 10px; /* Khoảng cách trên cùng */
+}
+
+.notification-icon-nd {
+    max-width: 30px;
+    max-height: 30px;
+    border-radius: 50%; /* Bo tròn ảnh */
+    margin-right: 10px; /* Khoảng cách giữa ảnh và văn bản */
+}
+
+.notification-link {
+    color: black;
+    font-weight: bold;
+}
+
+.close-button {
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 50%; /* Hình dạng bo tròn */
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    position: absolute;
+    right: 10px; /* Căn phải */
+    top: 10px;
+}
+
+    .close-button:hover {
+        background-color: darkred; /* Màu nền khi di chuột qua */
+    }
+
+Đang hiển thị 3039777065569046924.

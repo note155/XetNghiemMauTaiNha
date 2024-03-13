@@ -15,9 +15,9 @@ namespace Shared.Model
         public int DonXetNghiemId { get; set; }
         public DonXetNghiem? DonXetNghiem { get; set; }
         public DateTime ngaynhanmau { get; set; }
-        public string khoa { get; set; }
+        public int khoaId { get; set; }
         public int? bacsiid {get;set; }
-        public string? phongthuchien { get; set; }
-        public string? maythuchien { get; set; }
+        public int PhongId { get; set; }
+        public int? MayxetnghiemId { get; set; }
     }
 }

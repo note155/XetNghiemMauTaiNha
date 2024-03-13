@@ -55,9 +55,12 @@
             }
         </tbody>
     </table>
+    <a class="btn btn-secondary float-end mt-3" @onclick="@(() => add(1))"> Tạo đơn cho bản thân</a>
+    <a class="btn btn-success float-end mt-3 mx-3" @onclick="@(() => add(2))"> Tạo đơn cho người thân</a>
+    <br>
     <p class="total-amount">Tổng tiền: @TinhTongTien() VND</p>
 
-    <a class="btn btn-success float-end mt-3" @onclick="add"> Tạo đơn </a>
+   
 }
 else
 {
@@ -115,7 +118,7 @@ else
             await GHservice.updateAsync(a);
         }
     }
-    private async void add()
+    private async void add(int i)
     {
         var itemsToRemove = gioHangt.Where(student => student.IsSelected == true).ToList();
         if (itemsToRemove.Count == 0)
@@ -134,7 +137,14 @@ else
                 };
             await GHservice.updateAsync(a);
         }
-        navigation.NavigateTo("/datlichGH");
+        if (i == 1)
+        {
+            navigation.NavigateTo("/datlichGH");
+        }
+        if(i == 2)
+        {
+            navigation.NavigateTo("/datlichCNTGH");
+        }
     }
     public void LoadAllStudents()
     {

@@ -38,6 +38,11 @@ namespace duanxetnghiem.Services
             return thanhToan;
         }
 
+        public async Task<List<ThanhToan>> getall()
+        {
+            return await _context.thanhToans.ToListAsync();
+        }
+
         public async Task<List<ThanhToan>> getallAsync(int id)
         {
             var thanhToans = await _context.thanhToans.Where(t => t.UserId == id).ToListAsync();
