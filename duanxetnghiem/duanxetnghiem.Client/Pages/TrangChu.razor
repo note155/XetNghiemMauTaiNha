@@ -26,14 +26,7 @@
             <Authorized>
                 <div style="font-size: 30; font-weight: bold;" class="notification-icon" @onclick="ToggleNotification">
                     <i class="fas fa-bell"></i> Thông báo
-                    @if (AllDXN != null && AllDXN.Count > 0)
-                    {
-                        <span class="badge rounded-pill bg-success">@AllDXN.Count</span>
-                    }
-                    else
-                    {
-                        <span class="badge rounded-pill bg-success">0</span>
-                    }
+                    <span class="badge rounded-pill bg-success">@count</span>
                 </div>
             </Authorized>
         </AuthorizeView>
@@ -56,7 +49,7 @@
             @if (AllDXN.Any())
             {
                 <div class="card-body">
-                    @foreach (var DXN in AllDXN)
+                    @foreach (var DXN in AllDXNhienthi)
                     {
                         string statusText = "";
                         @if (@DXN.Trangthai == "Chờ Thanh Toán")
@@ -651,6 +644,7 @@
 
     private DateTime currentDate;
     private bool notificationVisible = false;
+    public List<DonXetNghiem> AllDXNhienthi { get; set; } = new(); public int count = 0;
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -660,12 +654,20 @@
             bs = await bacsiservice.getbyemail(UserName);
             khach = await Usertservice.getuserbyemail(UserName);
             if (khach != null)
-            { AllDXN = await DXNservice.getallbyiduserAsync(khach.Id); }
+            { 
+                AllDXN = await DXNservice.getallbyiduserAsync(khach.Id);
+                @foreach (var DXN in AllDXN)
+                {
+                    @if (DateTime.Now - @DXN.Ngaydat < TimeSpan.FromDays(20))
+                    {
+                        count++;
+                        AllDXNhienthi.Add(DXN);
+                    }
+                }
+                AllDXNhienthi = AllDXNhienthi.OrderByDescending(DXN => DXN.Id).ToList();
+            }   
             else
-            { AllDXN = new List<DonXetNghiem>(); }
-
-            // Khởi tạo ngày hiện tại
-            currentDate = DateTime.Now;
+            { AllDXNhienthi = new List<DonXetNghiem>(); }
         }
     }
     private void ToggleNotification()

@@ -42,7 +42,10 @@
                     <option value="">Chọn Bác Sĩ</option>
                     @foreach (var bs in AllBS)
                     {
-                        <option value="@bs.Id">@bs.Hoten</option>
+                        if (bs.Chucvu == "Bác sĩ lấy mẫu máu" || bs.Chucvu == "Thực tập" || bs.Chucvu == "Cộng tác viên")
+                        {
+                            <option value="@bs.Id">@bs.Hoten   --   @bs.Chucvu</option>
+                        }
                     }
                 </InputSelect>
             </div>

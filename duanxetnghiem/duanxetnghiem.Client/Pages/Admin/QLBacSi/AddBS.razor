@@ -24,8 +24,13 @@
             </div>
             <div class="mb-3">
                 <label for="Chucvu" class="form-label">Chức Vụ</label>
-                <InputText @bind-Value="Input.Chucvu" class="form-control" id="Chucvu" />
-                <ValidationMessage For="() => Input.Chucvu" class="text-danger" />
+                <InputSelect @bind-Value="Input.Chucvu" class="form-control" id="Chucvu">
+                    <option value="0">Chọn</option>
+                    <option value="Cộng tác viên">Cộng tác viên</option>
+                    <option value="Thực tập">Thực tập</option>
+                    <option value="Bác sĩ lấy mẫu máu">Bác sĩ lấy mẫu máu</option>
+                    <option value="Bác sĩ phân tích mẫu">Bác sĩ phân tích mẫu</option>
+                </InputSelect>
             </div>
             <div class="mb-3">
                 <label for="SDT" class="form-label">Số Điện Thoại</label>
@@ -59,7 +64,7 @@
         {
             err.Add("Họ Tên không được để trống");
         }
-        if (string.IsNullOrEmpty(Input.Chucvu))
+        if (string.IsNullOrEmpty(Input.Chucvu) || Input.Chucvu=="0")
         {
             err.Add("Chức Vụ không được để trống");
         }

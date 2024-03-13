@@ -25,37 +25,41 @@
                             {
                                 <div class="card-body">
                                    <div class="table-responsive">
-                                    <table class="table table-striped table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>id</th>
-                                                <th>Ảnh</th>
-                                                <th>Họ Tên</th>
-                                                <th>Chức Vụ</th>
-                                                <th>Số Điện Thoại</th>
-                                                <th></th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var DXN in AllBS)
-                                            {
-                                                <tr>
-                                                    <td>@DXN.Id</td>
-                                                    <td><img src="@DXN.Anh"></td>
-                                                    <td>@DXN.Hoten</td>
-                                                    <td>@DXN.Chucvu</td>
-                                                    <td>@DXN.SDT</td>
-                                                    <td>
-                                                        <a class="btn btn-success" href="/BSedit/@DXN.Id"> Edit </a>
-                                                    </td>
-                                                    <td>
-                                                        <a class="btn btn-danger" href="#" @onclick="() => ConfirmDelete(DXN.Id)"> Delete </a>
-                                                    </td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
+                                        @foreach (var group in GroupedBSByChucVu)
+                                        {
+                                            <h3>@group.Key -- Số lượng: @group.Value.Count người</h3> <!-- Hiển thị Chucvu -->
+                                            <table class="table table-striped table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>id</th>
+                                                        <th>Ảnh</th>
+                                                        <th>Họ Tên</th>
+                                                        <th>Chức Vụ</th>
+                                                        <th>Số Điện Thoại</th>
+                                                        <th></th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var doctor in group.Value)
+                                                    {
+                                                        <tr>
+                                                            <td>@doctor.Id</td>
+                                                            <td><img src="@doctor.Anh"></td>
+                                                            <td>@doctor.Hoten</td>
+                                                            <td>@doctor.Chucvu</td>
+                                                            <td>@doctor.SDT</td>
+                                                            <td>
+                                                                <a class="btn btn-success" href="/BSedit/@doctor.Id"> Edit </a>
+                                                            </td>
+                                                            <td>
+                                                                <a class="btn btn-danger" href="#" @onclick="() => ConfirmDelete(doctor.Id)"> Delete </a>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        }
                                     </div>
                                 </div>
                             }
@@ -72,24 +76,30 @@
 </div>
 @code {
     public List<BacSi> AllBS { get; set; } = new();
+    public Dictionary<string, List<BacSi>> GroupedBSByChucVu { get; set; } = new Dictionary<string, List<BacSi>>();
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadAlLBS();
-
+        await LoadAllBS();
+        GroupBSByChucVu();
     }
 
-
-    public async Task LoadAlLBS()
+    public async Task LoadAllBS()
     {
         var bs = await bacsiservice.getallAsync();
         AllBS.Clear();
 
         if (bs is null) return;
-        foreach (var student in bs)
+        foreach (var doctor in bs)
         {
-            AllBS.Add(student);
+            AllBS.Add(doctor);
         }
+    }
+
+    public void GroupBSByChucVu()
+    {
+        GroupedBSByChucVu = AllBS.GroupBy(bs => bs.Chucvu)
+                                .ToDictionary(g => g.Key, g => g.ToList());
     }
     public async Task ConfirmDelete(int id)
     {
@@ -105,6 +115,7 @@
         }
     }
 }
+
 
 
 
