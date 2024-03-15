@@ -5,6 +5,7 @@ using duanxetnghiem.Client.Services;
 using duanxetnghiem.Components;
 using duanxetnghiem.Components.Account;
 using duanxetnghiem.Data;
+using duanxetnghiem.Hubs;
 using duanxetnghiem.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -16,6 +17,7 @@ using Shared.ketnoi;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSignalR();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
@@ -82,7 +84,7 @@ else
     app.UseHsts();
 }
 
-
+app.MapHub<ChatHub>("/chathub");
 app.UseHttpsRedirection();
 app.MapControllers();
 app.UseStaticFiles();

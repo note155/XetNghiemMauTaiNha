@@ -1,0 +1,109 @@
+﻿@page "/Listchat"
+@inject NavigationManager navigation;
+<h3>Chat trực tiếp với bác sĩ</h3>
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Đăng ký</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Thêm đoạn chat mới</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<EditForm Model="Inputkq" method="post" OnValidSubmit="add" FormName="register">
+					<DataAnnotationsValidator />
+					<ValidationSummary class="text-danger" role="alert" />
+					<div class="row">
+						<InputText class="form-group" @bind-Value="Inputkq" placeholder="Nhập tên" />
+						<ValidationMessage For="() => Inputkq" class="text-danger" />
+						<button type="submit" class="btn btn-dark ">Đăng ký</button>
+					</div>
+				</EditForm>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<br>
+<br>
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Room</th>
+			<th>Trạng thái</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var unreadRoom in unreadRooms)
+		{
+			<tr>
+				<td>@unreadRoom.RoomId</td>
+				<td><a href="/Chat/@unreadRoom.RoomId">#Room:@roomNameDictionary[unreadRoom.RoomId]</a></td>
+				<td>@unreadRoom.UnreadChatCount tin nhắn chờ</td>
+				<td><a class="btn btn-info" href="/Chat/@unreadRoom.RoomId">Xem</a></td>
+			</tr>
+		}
+	</tbody>
+</table>
+@code {
+	[Inject]
+	protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+	public string UserName { get; set; }
+	public User user { get; set; } = new();
+	public List<roomchat> allroom { get; set; } = new();
+	public List<RoomUnreadChatCount> unreadRooms { get; set; } = new List<RoomUnreadChatCount>();
+	public Dictionary<int, string> roomNameDictionary { get; set; } = new Dictionary<int, string>();
+
+	[SupplyParameterFromForm]
+	public String Inputkq { get; set; } = new("");
+
+	protected override async Task OnInitializedAsync()
+	{
+		var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+		UserName = authState.User.Identity.Name;
+		user = await Usertservice.getuserbyemail(UserName);
+		allroom = await Roomchatservice.getallbyidAsync(user.Id);
+		foreach (var room in allroom)
+		{
+			{
+				var dschat = await Chatservice.getallbyidroomAsync(room.Id);
+				var unreadCount = dschat.Count(chat => chat.trangthai == 2);
+				unreadRooms.Add(new RoomUnreadChatCount { RoomId = room.Id, UnreadChatCount = unreadCount });
+				roomNameDictionary.Add(room.Id, room.Name);
+			}
+		}
+		// Sắp xếp lại danh sách unreadRooms dựa trên UnreadChatCount giảm dần
+		unreadRooms = unreadRooms.OrderByDescending(room => room.UnreadChatCount).ToList();
+	}
+	private async Task add()
+	{
+		if (string.IsNullOrEmpty(Inputkq))
+		{
+		}
+		else
+		{
+			roomchat room = new roomchat
+			{
+				Name=Inputkq,
+				userid=user.Id
+			};
+			var a = await Roomchatservice.addAsync(room);
+			allroom.Add(a);
+			navigation.NavigateTo("/Chat/" + a.Id);
+		}
+	}
+	public class RoomUnreadChatCount
+	{
+		public int RoomId { get; set; }
+		public int UnreadChatCount { get; set; }
+	}
+}

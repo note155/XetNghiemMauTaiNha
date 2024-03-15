@@ -1,0 +1,239 @@
+﻿@page "/Traloichat/{id:int}"
+
+@rendermode InteractiveAuto
+@inject NavigationManager navigation
+
+<div class="row">
+	@if (idbs == 0)
+	{
+		<div class="col-sm-3">
+			<div style="width:100%" class="card-header">
+				<button @onclick="nhantuvan">Nhận tư vấn</button>
+			</div>
+		</div>
+	}
+	else
+	{
+		<div class="card ">
+			<div class="card-header">
+				Thông tin bệnh nhân
+			</div>
+			<div class="card-body">
+				<div class="row">
+					<p>Họ tên: <strong>@userchat.Hoten</strong></p>
+					<p>Tuổi: <strong>@userchat.Tuoi</strong></p>
+					<p>Giới tính:@if (@userchat.Gioitinh)
+						{
+							<strong>Nam</strong>
+						}
+						else
+						{
+							<strong>Nữ</strong>
+						}
+					</p>
+					<p>Số điện thoại: <strong>@userchat.SDT</strong></p>
+					<p>Email: <strong>@userchat.Email</strong></p>
+					<p>Địa chỉ: <strong>@userchat.Diachi, @userchat.CapXa, @userchat.CapHuyen</strong></p>
+				</div>
+			</div>
+		</div>
+	}
+	<div class="col-sm-8">
+		<div style="width:100%" class="card-header">
+			#Room: @room.Name <button @onclick="keoxuong" style="width:auto;background-color:darkgrey">Kéo xuống</button>
+		</div>
+
+		<div id="chat-container" class="chat-container" @ref="chatContainerRef">
+			@foreach (var chat in messages)
+			{
+				<div class="card-wrapper">
+					@if (chat.Name == bs.Hoten)
+					{
+						<div class="card w-auto card-right">
+							<div class="card-header text-right">
+								@chat.Time <strong>@chat.Name</strong>
+							</div>
+							<div class="card-body">
+								<p class="card-text">@chat.Message</p>
+							</div>
+						</div>
+					}
+					else
+					{
+						<div class="card">
+							<div class="card-header">
+								<strong>@chat.Name</strong> @chat.Time
+							</div>
+							<div class="card-body">
+								<p class="card-text">@chat.Message</p>
+							</div>
+						</div>
+					}
+				</div>
+			}
+		</div>
+		@if (idbs != 0)
+		{
+			<div class="row">
+				<div class="col-sm-10">
+					<input class="form-control" type="text" @bind="messageInput" @bind:event="oninput" @onkeypress="nhanenter" />
+				</div>
+				<div class="col-sm-2"><button @onclick="Send">Gửi</button></div>
+			</div>
+		}
+	</div>
+</div>
+
+@code {
+
+	private HubConnection hubConnection;
+	private List<chatt> messages = new List<chatt>();
+	private string userInput;
+	private string messageInput;
+
+	//khaibao
+	[Parameter]
+	public int id { get; set; }
+	[Inject]
+	protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+	public string UserName { get; set; }
+	public User userchat { get; set; } = new();
+	public BacSi bs { get; set; } = new();
+	public List<Chat> allChat { get; set; } = new();
+	public List<User> alluser { get; set; } = new();
+	public List<BacSi> allBS { get; set; } = new();
+	private ElementReference chatContainerRef;
+	public roomchat room { get; set; } = new();
+	public int idbs = 0;
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			await Task.Delay(500);
+			await JSRuntime.InvokeVoidAsync("scrollToBottom");
+		}
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+		UserName = authState.User.Identity.Name;
+		bs = await bacsiservice.getbyemail(UserName);		
+		allChat = await Chatservice.getallbyidroomAsync(id);
+		room = await Roomchatservice.getbyidAsync(id);
+		idbs = room.idbs ?? 0;
+		userchat = await Usertservice.getuserbyid(room.userid);
+		alluser = await Usertservice.getalluserAsync();
+		allBS = await bacsiservice.getallAsync();
+		if (allChat.Any())
+		{
+			foreach (var chat in allChat)
+			{
+				if (chat.trangthai == 1)
+				{
+					chat.trangthai = 0;
+					await Chatservice.updateAsync(chat);
+				}
+				if (chat.bacsiid == null)
+				{
+					chatt chats = new chatt
+						{
+							Message = chat.data,
+							Name = userchat.Hoten,
+							Time = chat.thoigian
+						};
+					messages.Add(chats);
+				}
+				else
+				{
+					chatt chats = new chatt
+						{
+							Message = chat.data,
+							Name = bs.Hoten,
+							Time = chat.thoigian
+						};
+					messages.Add(chats);
+				}
+			}
+		}
+		hubConnection = new HubConnectionBuilder().WithUrl(navigation.ToAbsoluteUri("/chathub")).Build();
+		hubConnection.On<string, string>("ReceiveMessage", async (user, message) =>
+		{
+			chatt chats = new chatt
+				{
+					Message = message,
+					Name = user,
+					Time = DateTime.Now
+				};
+			messages.Add(chats);
+			await UpdateChatMessages();
+			await keoxuong();
+			StateHasChanged();
+		});
+		await hubConnection.StartAsync();
+		await hubConnection.SendAsync("AddToRoom", userchat.Hoten, id);
+	}
+	private async Task UpdateChatMessages()
+	{
+		allChat = await Chatservice.getallbyidroomAsync(id);
+		foreach (var chat in allChat)
+		{
+			if (chat.trangthai == 1)
+			{
+				chat.trangthai = 0;
+				await Chatservice.updateAsync(chat);
+			}
+		}
+		StateHasChanged();
+	}
+	public async Task keoxuong()
+	{
+		await JSRuntime.InvokeVoidAsync("scrollToBottom");
+	}
+	public async Task Send()
+	{
+		if (!string.IsNullOrEmpty(messageInput))
+		{
+			await hubConnection.SendAsync("SendMessage", bs.Hoten, messageInput, id);
+			Chat newchat = new Chat
+				{
+					data = messageInput,
+					bacsiid = bs.Id,
+					roomchatid = id,
+					thoigian = DateTime.Now,
+					trangthai = 2
+				};
+			var a = await Chatservice.addAsync(newchat);
+			await Task.Delay(500);
+			messageInput = "";
+			await JSRuntime.InvokeVoidAsync("scrollToBottom");
+		}
+	}
+	public bool Isconnet => hubConnection.State == HubConnectionState.Connecting;
+
+	private async Task nhantuvan()
+	{
+		room.idbs = bs.Id;
+		await Roomchatservice.updateAsync(room);
+		idbs = bs.Id;
+	}
+	private async Task nhanenter(KeyboardEventArgs e)
+	{
+		if (e.Key == "Enter")
+		{
+			await Send();
+		}
+	}
+	public class chatt
+	{
+		public string Message { get; set; }
+		public string Name { get; set; }
+		public DateTime Time { get; set; }
+	}
+}
+<script>
+	window.scrollToBottom = () => {
+		const chatContainer = document.getElementById('chat-container');
+		chatContainer.scrollTop = chatContainer.scrollHeight;
+	}
+</script>

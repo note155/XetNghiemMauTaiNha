@@ -1,4 +1,5 @@
-﻿using duanxetnghiem.Data;
+﻿using duanxetnghiem.Client.Pages.User.DichVu_user;
+using duanxetnghiem.Data;
 using duanxetnghiem.Data.Model;
 using Microsoft.EntityFrameworkCore;
 using Shared.ketnoi;
@@ -23,7 +24,12 @@ namespace duanxetnghiem.Services
             return newstudent;
         }
 
-        public async Task<List<roomchat>> getallbyidAsync(int id)
+		public async Task<List<roomchat>> getallAsync()
+		{
+			return await _context.Roomchats.ToListAsync();
+		}
+
+		public async Task<List<roomchat>> getallbyidAsync(int id)
         {
             var gioHangs = await _context.Roomchats.Where(g => g.userid == id).ToListAsync();
             return gioHangs;
@@ -33,5 +39,16 @@ namespace duanxetnghiem.Services
         {
             return await _context.Roomchats.FindAsync(id);
         }
-    }
+
+		public async Task<roomchat> updateAsync(roomchat roomchat)
+		{
+			if (roomchat == null) return null;
+
+			var updateuser = _context.Roomchats.Update(roomchat).Entity;
+
+			await _context.SaveChangesAsync();
+
+			return updateuser;
+		}
+	}
 }

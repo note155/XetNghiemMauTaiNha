@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using duanxetnghiem.Client.Pages.User.DichVu_user;
 using duanxetnghiem.Data.Model;
 using Shared.ketnoi;
 using Shared.Model;
@@ -20,7 +21,14 @@ namespace duanxetnghiem.Client.Services
             return respone;
         }
 
-        public async Task<List<roomchat>> getallbyidAsync(int id)
+		public async Task<List<roomchat>> getallAsync()
+		{
+			var allstudent = await _httpClient.GetAsync("api/Roomchat/All-Roomchat");
+			var respone = await allstudent.Content.ReadFromJsonAsync<List<roomchat>>();
+			return respone;
+		}
+
+		public async Task<List<roomchat>> getallbyidAsync(int id)
         {
             var allstudent = await _httpClient.GetAsync($"api/Roomchat/All-Roomchatbyiduser/{id}");
             var respone = await allstudent.Content.ReadFromJsonAsync<List<roomchat>>();
@@ -41,5 +49,12 @@ namespace duanxetnghiem.Client.Services
                 return null;
             }
         }
-    }
+
+		public async Task<roomchat> updateAsync(roomchat roomchat)
+		{
+			var newstudent = await _httpClient.PostAsJsonAsync("api/Roomchat/Update-Roomchat", roomchat);
+			var respone = await newstudent.Content.ReadFromJsonAsync<roomchat>();
+			return respone;
+		}
+	}
 }

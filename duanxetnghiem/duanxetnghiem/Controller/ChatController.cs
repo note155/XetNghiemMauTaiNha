@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using duanxetnghiem.Data.Model;
+using duanxetnghiem.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared.ketnoi;
 using Shared.Model;
@@ -27,5 +29,13 @@ namespace duanxetnghiem.Controller
             var users = await _ChatRepository.getallbyidroomAsync(id);
             return Ok(users);
         }
-    }
+
+		[HttpPost("Update-Chat")]
+		public async Task<ActionResult<Chat>> UpdateBacSiAsync(Chat user)
+		{
+			var updatestudent = await _ChatRepository.updateAsync(user);
+
+			return Ok(updatestudent);
+		}
+	}
 }

@@ -2,6 +2,7 @@
 @rendermode InteractiveAuto
 @using Microsoft.AspNetCore.Components.Web
 @using duanxetnghiem.Client.Pages.Admin
+@using duanxetnghiem.Client.Pages.Layout
 @inject NavigationManager navigation;
 @if (err != "")
 {
@@ -18,19 +19,20 @@
 
 <!-- xét nghiệm tại nhà -->
 <div>haha</div>
-<div class="container mt-5 text-center xetnghiem-container " style="margin-bottom: 33rem;">
+<div class="container mt-5 text-center xetnghiem-container " style="margin-bottom: 30rem;">
     <div class="card-body overlay">
         <h4 class="card-title">Xét Nghiệm Máu Tại Nhà</h4>
         <p class="card-text">Dịch vụ xét nghiệm máu chất lượng cao, tiện lợi và an toàn ngay tại nhà bạn</p>
         <AuthorizeView>
             <Authorized>
-                <div style="font-size: 30; font-weight: bold;" class="notification-icon" @onclick="ToggleNotification">
+                <div class="notification-icon" @onclick="ToggleNotification">
                     <i class="fas fa-bell"></i> Thông báo
                     <span class="badge rounded-pill bg-success">@count</span>
                 </div>
             </Authorized>
         </AuthorizeView>
-        <div style="height:30px;" class="row"></div>
+        <div style="height:auto;" class="row"></div>
+
         <!--Code thông báo-->
         @{
             string displayStyle = notificationVisible ? "block" : "none";
@@ -122,11 +124,12 @@
                 <button type="submit" class="btn btn-dark ">Xem kết quả</button>
             </div>
         </EditForm>
+
     </div>
 </div>
 
 <!-- Dịch vụ của chúng tôi -->
-<div class="container d-flex align-items-center justify-content-center dichvu-container">
+<div class="package-container d-flex align-items-center justify-content-center dichvu-container">
     <div class="col-md-6 d-flex flex-column align-items-center">
         <h4>
             Dịch vụ của chúng tôi
@@ -154,8 +157,8 @@
                         <div class="package-item-price" b-rxw84ra1o5="">2300000 VND</div>
                         <h3 class="package-item-title" b-rxw84ra1o5="">gói cơ bản</h3>
                         <div class="package-item-meta" b-rxw84ra1o5="">
-                            <div class="package-item-gender" b-rxw84ra1o5="">1 tiếng </div>
-                            <div class="plus-icon-container" b-rxw84ra1o5="">
+                            <div class="package-item-gender" b-rxw84ra1o5="">Thời gian : 1 tiếng </div>
+                            <div class="plus-icon-container" style=" top: 55px;" b-rxw84ra1o5="">
                                 <div class="actions1" b-rxw84ra1o5="">
                                     <a href="#myBooking" data-toggle="modal" class="btn btn-primary btn-booking rounded-circle" b-rxw84ra1o5="">
                                         Thêm giỏ hàng
@@ -179,8 +182,8 @@
                         <div class="package-item-price" b-rxw84ra1o5="">2300000 VND</div>
                         <h3 class="package-item-title" b-rxw84ra1o5="">gói cơ bản</h3>
                         <div class="package-item-meta" b-rxw84ra1o5="">
-                            <div class="package-item-gender" b-rxw84ra1o5="">1 tiếng </div>
-                            <div class="plus-icon-container" b-rxw84ra1o5="">
+                            <div class="package-item-gender" b-rxw84ra1o5="">Thời gian : 1 tiếng </div>
+                            <div class="plus-icon-container" style=" top: 55px;" b-rxw84ra1o5="">
                                 <div class="actions1" b-rxw84ra1o5="">
                                     <a href="#myBooking" data-toggle="modal" class="btn btn-primary btn-booking rounded-circle" b-rxw84ra1o5="">
                                         Thêm giỏ hàng
@@ -473,7 +476,7 @@
 </div>
 
 <!--Liên hệ đặt lịch-->
-<div class="container-fluid" style=" margin-bottom: 38rem;">
+<div class="container-fluid" style=" margin-bottom: 45rem;">
     <div class="card-body overlay1">
         <div class="row justify-content-center align-items-center" style="padding: 60px 5%; ">
             <div class="col-md-3 col-sm-12 d-flex align-items-center justify-content-center">
@@ -493,8 +496,7 @@
         </div>
     </div>
 </div>
-
-<div class="container">
+<div class="container" style=" margin-bottom: 45rem;">
     <div class="card1 mb-3" style="max-width: 100%;">
         <div class="row g-0">
             <div class="col-md-8">
@@ -542,69 +544,62 @@
     </div>
 </div>
 <!-- Liên hệ - địa chỉ goodMap-->
-@if (errors.Count > 0)
-{
-    <div class="alert alert-danger" role="alert">
+<div class="container d-flex align-items-center justify-content-center loiich-container " style=" margin-bottom: 8rem; ">
+    <div class="card-body overlay2">
+        <div class="row">
+            <div class="col-md-6 d-flex flex-column align-items-center">
+                @if (errors.Count > 0)
+                {
+                    <div class="alert alert-danger" role="alert">
 
-        @foreach (var error in errors)
-        {
-            <p>@error</p>
-        }
-    </div>
-}
-
-<div class="lienhe-info">
-    <div class="info-left">
-        <div class="guithongtin">
-            <h2 style="font-size: 22px;">Liên hệ tư vấn</h2>
-
-            <EditForm Model="Input" method="post" OnValidSubmit="tuvanKH" FormName="dangky">
-                <DataAnnotationsValidator />
-                <ValidationSummary class="text-danger" role="alert" />
-                <table>
-                    <tr>
-                        <td>Họ và tên</td>
-                        <td>
-                            <InputText @bind-Value="Input.hoten" class="form-control" placeholder="" />
-                            <ValidationMessage For="() => Input.hoten" class="text-danger" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Điện thoại liên hệ</td>
-                        <td>
-                            <InputText @bind-Value="Input.sdt" class="form-control" placeholder="" />
-                            <ValidationMessage For="() => Input.sdt" class="text-danger" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Địa chỉ Email</td>
-                        <td>
-                            <InputText @bind-Value="Input.email" class="form-control" placeholder="" />
-                            <ValidationMessage For="() => Input.noidung" class="text-danger" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Nội dung</td>
-                        <td>
-                            <InputTextArea @bind-Value="Input.noidung" class="form-control" placeholder="" />
-                            <ValidationMessage For="() => Input.noidung" class="text-danger" />
-                        </td>
-                    </tr>
-                    <!-- Sử dụng thêm class cho hàng chứa nút "Gửi yêu cầu" -->
-                    <tr class="button-cell">
-                        <button type="submit" class="w-100 btn btn-lg btn-primary">Gửi</button>
-                    </tr>
-                </table>
-            </EditForm>
+                        @foreach (var error in errors)
+                        {
+                            <p>@error</p>
+                        }
+                    </div>
+                }
+                <div class="guithongtin">
+                    <h2>Liên hệ tư vấn</h2>
+                    <EditForm Model="Input" method="post" OnValidSubmit="tuvanKH" FormName="dangky">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary class="text-danger" role="alert" />
+                        <div class="form-container">
+                            <div class="form-group">
+                                <label for="hoten">Họ và tên :</label>
+                                <InputText @bind-Value="Input.hoten" class="form-control" placeholder="" />
+                                <ValidationMessage For="() => Input.hoten" class="text-danger" />
+                            </div>
+                            <div class="form-group">
+                                <label for="sdt">Điện thoại liên hệ :</label>
+                                <InputText @bind-Value="Input.sdt" class="form-control" placeholder="" />
+                                <ValidationMessage For="() => Input.sdt" class="text-danger" />
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Địa chỉ Email :</label>
+                                <InputText @bind-Value="Input.email" class="form-control" placeholder="" />
+                                <ValidationMessage For="() => Input.email" class="text-danger" />
+                            </div>
+                            <div class="form-group">
+                                <label for="noidung">Nội dung :</label>
+                                <InputTextArea @bind-Value="Input.noidung" class="form-control" placeholder="" />
+                                <ValidationMessage For="() => Input.noidung" class="text-danger" />
+                            </div>
+                            <div class="form-group button-cell">
+                                <button type="submit" class="btn btn-lg btn-primary">Gửi</button>
+                            </div>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex flex-column align-items-center map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d626.2666466867495!2d107.5921861616567!3d16.45897538255283!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3141a13f5a9746a7%3A0xc608a91b8c7b5498!2zNzcgTmd1eeG7hW4gSHXhu4csIFBow7ogTmh14bqtbiwgVGjDoG5oIHBo4buRIEh14bq_LCBUaOG7q2EgVGhpw6puIEh14bq_LCBWaWV0bmFt!5e0!3m2!1sen!2s!4v1690080716139!5m2!1sen!2s"
+                        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <a href="https://www.maps.ie/create-google-map/" target="_blank" rel="noopener noreferrer">Embed Google Map</a>
+            </div>
         </div>
     </div>
-    
-    <div class="info-right">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d626.2666466867495!2d107.5921861616567!3d16.45897538255283!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3141a13f5a9746a7%3A0xc608a91b8c7b5498!2zNzcgTmd1eeG7hW4gSHXhu4csIFBow7ogTmh14bqtbiwgVGjDoG5oIHBo4buRIEh14bq_LCBUaOG7q2EgVGhpw6puIEh14bq_LCBWaWV0bmFt!5e0!3m2!1sen!2s!4v1690080716139!5m2!1sen!2s"
-                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        <a href="https://www.maps.ie/create-google-map/" target="_blank" rel="noopener noreferrer">Embed Google Map</a>
-    </div>
 </div>
+
 
 <!-- Trang thông tin-->
 <footer id="footer" class="site-footer">
@@ -612,7 +607,7 @@
         <div class="footer-top">
             <div class="footer-logo">
                 <div class="img">
-                    <img src="" >
+                    <img src="">
                 </div>
                 <div class="info">
                     <h3>Bệnh viện </h3>
@@ -645,6 +640,7 @@
     private DateTime currentDate;
     private bool notificationVisible = false;
     public List<DonXetNghiem> AllDXNhienthi { get; set; } = new(); public int count = 0;
+    MainLayout main = new();
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -654,7 +650,7 @@
             bs = await bacsiservice.getbyemail(UserName);
             khach = await Usertservice.getuserbyemail(UserName);
             if (khach != null)
-            { 
+            {
                 AllDXN = await DXNservice.getallbyiduserAsync(khach.Id);
                 @foreach (var DXN in AllDXN)
                 {
@@ -665,9 +661,10 @@
                     }
                 }
                 AllDXNhienthi = AllDXNhienthi.OrderByDescending(DXN => DXN.Id).ToList();
-            }   
+            }
             else
             { AllDXNhienthi = new List<DonXetNghiem>(); }
+            currentDate = DateTime.Now;
         }
     }
     private void ToggleNotification()
@@ -721,8 +718,6 @@
                 err = "Giá trị nhập vào phải là số";
             }
         }
-        }
-    
+    }
+
 }
-
-

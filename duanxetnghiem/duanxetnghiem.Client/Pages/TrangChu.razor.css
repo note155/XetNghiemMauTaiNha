@@ -2,19 +2,19 @@
 /*xet nghiem mau tai nha*/
 .overlay {
     position: absolute;
-    top: 0;
+    top: 0px;
     left: 0;
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5); /* Điều chỉnh độ mờ của overlay tại đây */
-    height: 420px;
+    height: 500px;
     background-image: url('imgtrangchu/hinhnen4.png');
     background-size: cover;
     background-position: center;
 }
 
 .container {
-    margin-top: 0.6rem;
+    margin-top: 10.1rem;
 }
 
 .card-title {
@@ -65,7 +65,88 @@
 
 .xetnghiem-container {
     margin-bottom: 50px; /* Điều chỉnh giảm khoảng cách dưới */
+    max-width: 600px; /* Đặt chiều rộng tối đa */
+    margin: 0 auto; /* Để căn giữa phần tử */
+    text-align: right; /* Căn nội dung về phía bên phải */
 }
+
+.card-body.overlay {
+    padding: 30px; /* Điều chỉnh khoảng cách bên trong của phần tử */
+}
+
+/*Thêm thông báo*/
+.notification-popup {
+    position: fixed;
+    top: 150px; /* Đặt khoảng cách trên cùng */
+    right: 0; /* Đặt vị trí bên phải */
+    width: 300px;
+    max-height: 200px; /* Đặt chiều cao tối đa của phần card */
+    overflow-y: auto; /* Tạo thanh cuộn dọc */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 1; /* Đảm bảo bảng thông báo hiển thị trên các phần tử khác */
+}
+
+.notification-icon {
+    position: fixed;
+    top: 90px; /* Đặt khoảng cách trên cùng */
+    right: 0; /* Đặt vị trí bên phải */
+    width: 300px;
+    cursor: pointer;
+    font-size: 1.3rem; /* Đặt kích thước font */
+    font-weight: bold; /* Đặt độ đậm cho font */
+}
+
+.notification-popup p {
+    margin: 5px 0;
+}
+
+.notification-container {
+    position: relative; /* Đặt vị trí của container */
+}
+
+
+/*Noidungthongbao*/
+.notification-item {
+    display: flex;
+    align-items: flex-start;
+    border-bottom: 1px solid #ccc; /* Đường viền nhỏ giữa các dòng */
+    padding-bottom: 10px; /* Khoảng cách dưới cùng */
+    margin-top: 30px; /* Khoảng cách trên cùng */
+}
+
+.notification-icon-nd {
+    max-width: 30px;
+    max-height: 30px;
+    border-radius: 50%; /* Bo tròn ảnh */
+    margin-right: 10px; /* Khoảng cách giữa ảnh và văn bản */
+}
+
+.notification-link {
+    color: black;
+    font-weight: bold;
+}
+
+.close-button {
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 50%; /* Hình dạng bo tròn */
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    position: absolute;
+    right: 10px; /* Căn phải */
+    top: 10px;
+}
+
+    .close-button:hover {
+        background-color: darkred; /* Màu nền khi di chuột qua */
+    }
 
 
 /*Dịch vụ của chúng tôi*/
@@ -116,6 +197,25 @@ p {
     font-size: 1.0rem;
     line-height: 24px;
     text-align: center;
+}
+
+.plus-icon-container {
+    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 70px;
+    right: 0;
+    margin: 10px;
+    font-size: 0.1rem;
+    color: #f00; /* Màu trắng */
+    font-size: 0.1rem;
+}
+
+.plus-icon {
+    color: #f00; /* Màu trắng */
+    font-size: 0.1rem;
 }
 
 
@@ -336,67 +436,62 @@ p {
     border-radius: 5px;
 }
 
-/*Thêm thông báo*/
-.notification-popup {
-    position: fixed;
-    top: 100px; /* Đặt khoảng cách trên cùng */
-    right: 5%; /* Đặt vị trí bên phải */
-    width: 300px;
-    max-height: 200px; /* Đặt chiều cao tối đa của phần card */
-    overflow-y: auto; /* Tạo thanh cuộn dọc */
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: none;
-}
 
-.notification-icon {
-    cursor: pointer;
-    width: 150px;
-}
-
-.notification-popup p {
-    margin: 5px 0;
-}
-
-/*Noidungthongbao*/
-.notification-item {
-    display: flex;
-    align-items: flex-start;
-    border-bottom: 1px solid #ccc; /* Đường viền nhỏ giữa các dòng */
-    padding-bottom: 10px; /* Khoảng cách dưới cùng */
-    margin-top: 10px; /* Khoảng cách trên cùng */
-}
-
-.notification-icon-nd {
-    max-width: 30px;
-    max-height: 30px;
-    border-radius: 50%; /* Bo tròn ảnh */
-    margin-right: 10px; /* Khoảng cách giữa ảnh và văn bản */
-}
-
-.notification-link {
-    color: black;
-    font-weight: bold;
-}
-
-.close-button {
-    background-color: black;
-    color: white;
-    border: none;
-    border-radius: 50%; /* Hình dạng bo tròn */
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
+/* Liên hệ - địa chỉ goodMap*/
+.overlay2 {
     position: absolute;
-    right: 10px; /* Căn phải */
-    top: 10px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Điều chỉnh độ mờ của overlay tại đây */
+    height: auto;
+    background-image: url('imgtrangchu/hinhnen23.png');
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 38rem;
+    height: auto;
 }
 
-    .close-button:hover {
-        background-color: darkred; /* Màu nền khi di chuột qua */
+.guithongtin {
+    margin-left: 40px;
+    width: 300px;
+}
+
+    .guithongtin h2 {
+        font-size: 2.4rem;
+        margin-bottom: 40px;
     }
 
-Đang hiển thị 3039777065569046924.
+
+.form-group {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    padding: 6px 0;
+}
+
+.button-cell {
+    align-self: flex-end;
+    text-align: center
+}
+
+.form-container {
+    display: flex; /* Sử dụng flexbox để căn chỉnh nội dung */
+    flex-direction: column; /* Căn nội dung dọc theo trục chính */
+}
+
+.button-cell {
+    display: flex; /* Sử dụng flexbox cho nút "Gửi" */
+    justify-content: center; /* Căn nút "Gửi" ra giữa */
+    margin-top: 20px; /* Khoảng cách trên của nút "Gửi" */
+}
+
+.map-container {
+    max-width: 100%; /* Đảm bảo iframe không vượt quá chiều rộng của cột */
+    margin-top: 70px; /* Khoảng cách trên giữa iframe và văn bản dưới nó */
+}
+
+    .map-container iframe {
+        width: 100%; /* Đảm bảo iframe chiếm toàn bộ chiều rộng của phần tử cha */
+        height: 400px; /* Đặt chiều cao của iframe */
+    }
+

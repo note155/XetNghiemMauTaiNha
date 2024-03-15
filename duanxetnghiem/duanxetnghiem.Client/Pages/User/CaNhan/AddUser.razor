@@ -5,25 +5,24 @@
 @rendermode InteractiveAuto
 
 <h3>Thông Tin Cá Nhân </h3>
- <div class="alert alert-danger" role="alert">
-<p>Để sử dụng dịch vụ bạn vui lòng nhập chính xác thông tin</p>
+<div class="alert alert-danger" role="alert">
+    <p>Để sử dụng dịch vụ bạn vui lòng nhập chính xác thông tin</p>
 </div>
 @if (errors.Count > 0)
 {
     <div class="alert alert-danger" role="alert">
-   
+
         @foreach (var error in errors)
         {
             <p>@error</p>
         }
     </div>
 }
-
-<div class="row">
+<hr />
+<div class="row justify-content-center">
     <div class="col-md-6">
         <EditForm Model="Input" class="needs-validation" method="post" OnValidSubmit="add" FormName="register">
             <DataAnnotationsValidator />
-            <hr />
             <ValidationSummary class="text-danger" role="alert" />
             <div class="form-group">
                 <label class="form-label" for="Hoten">Họ Tên</label>
@@ -34,7 +33,7 @@
                 <label class="form-label" for="CapHuyen">Quận/Huyện</label>
                 <InputSelect style="border-color:greenyellow;" class="form-control" ValueChanged="@((string value)=>FilterData(value))" ValueExpression="@(()=>aa)" Value="aa">
                     <option value="0">Vui Lòng Chọn</option>
-                    @foreach(var qh in Quan)
+                    @foreach (var qh in Quan)
                     {
                         <option value="@qh">@qh</option>
                     }
@@ -55,19 +54,19 @@
             }
             <div class="form-group">
                 <label class="form-label" for="Diachi">Địa Chỉ</label>
-                <InputText @bind-Value="Input.Diachi" class="form-control" placeholder="" />               
+                <InputText @bind-Value="Input.Diachi" class="form-control" placeholder="" />
                 <ValidationMessage For="() => Input.Diachi" class="text-danger" />
-            </div>       
+            </div>
             <div class="form-group">
                 <label class="form-label" for="SDT">Số Điện Thoại</label>
-                <InputText @bind-Value="Input.SDT" class="form-control" placeholder="" />       
+                <InputText @bind-Value="Input.SDT" class="form-control" placeholder="" />
                 <ValidationMessage For="() => Input.SDT" class="text-danger" />
             </div>
             <div class="form-group">
                 <label class="form-label" for="Tuoi">Giới tính</label>
                 <InputSelect id="Gioitinh" @bind-Value="Input.Gioitinh" class="form-control">
                     <option class="form-check-label" value="true">Nam</option>
-                    <option class="form-check-label"  value="false">Nữ</option>
+                    <option class="form-check-label" value="false">Nữ</option>
                 </InputSelect>
             </div>
             <div class="form-group">
@@ -78,8 +77,11 @@
             <button type="submit" class="w-100 btn btn-lg btn-primary">Cập Nhật Thông Tin</button>
         </EditForm>
     </div>
-
+    <div class="col-md-6">
+        <img src="imgadduser/hinhnen5.png" class="img-fluid" alt="Hình ảnh mô tả">
+    </div>
 </div>
+
 
 @code {
     [Inject]
@@ -88,7 +90,7 @@
     [SupplyParameterFromForm]
     public User Input { get; set; } = new();
 
-    private string aa="0",xa;
+    private string aa = "0", xa;
     public string UserName { get; set; }
     List<string> errors = new List<string>();
     List<string> phuong = new List<string>();
@@ -163,7 +165,7 @@
         if (errors.Count == 0)
         {
             Input.Email = UserName;
-             a= await Usertservice.IsUserExistsAsync(Input);
+            a = await Usertservice.IsUserExistsAsync(Input);
             if (a != -1)
             {
                 errors.Add("Thông tin bệnh nhân này đã có");

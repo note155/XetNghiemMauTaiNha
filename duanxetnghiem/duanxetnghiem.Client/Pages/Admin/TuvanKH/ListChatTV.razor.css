@@ -1,0 +1,29 @@
+﻿.container {
+    margin-top: 50px;
+}
+
+.table-container {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.table {
+    width: 100%;
+}
+
+    .table th,
+    .table td {
+        text-align: center;
+    }
+
+.btn {
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+/* Định dạng cho thẻ h3 */
+h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}

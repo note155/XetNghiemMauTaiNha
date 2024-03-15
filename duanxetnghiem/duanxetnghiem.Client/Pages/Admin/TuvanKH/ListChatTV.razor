@@ -1,0 +1,96 @@
+﻿@page "/listchatBS"
+
+<div class="container">
+    <h2 class="mt-5">Danh sách chat tư vấn</h2>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h3>Danh sách chat tư vấn chưa có BS</h3>
+            <div class="table-container">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Room</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var room in allroom)
+                        {
+                            if (room.idbs == null)
+                            {
+                                <tr>
+                                    <td>@room.Id</td>
+                                    <td><a href="/Traloichat/@room.Id">#Room:@room.Name</a></td>
+                                    <td><a class="btn btn-info" href="/Traloichat/@room.Id">Xem</a></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h3>Danh sách chat đang tư vấn của BS.@bs.Hoten</h3>
+            <div class="table-container">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Room</th>
+                            <th>Trạng thái</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var unreadRoom in unreadRooms)
+                        {
+                            <tr>
+                                <td>@unreadRoom.RoomId</td>
+                                <td><a href="/Traloichat/@unreadRoom.RoomId">#Room:@roomNameDictionary[unreadRoom.RoomId]</a></td>
+                                <td>@unreadRoom.UnreadChatCount tin nhắn chờ</td>
+                                <td><a class="btn btn-info" href="/Traloichat/@unreadRoom.RoomId">Xem</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    public List<roomchat> allroom { get; set; } = new List<roomchat>();
+    [Inject]
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    public string UserName { get; set; }
+    public BacSi bs { get; set; } = new BacSi();
+    public List<RoomUnreadChatCount> unreadRooms { get; set; } = new List<RoomUnreadChatCount>();
+    public Dictionary<int, string> roomNameDictionary { get; set; } = new Dictionary<int, string>();
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        UserName = authState.User.Identity.Name;
+        bs = await bacsiservice.getbyemail(UserName);
+        allroom = await Roomchatservice.getallAsync();
+        foreach (var room in allroom)
+        {
+            if (room.idbs == bs.Id)
+            {
+                var dschat = await Chatservice.getallbyidroomAsync(room.Id);
+                var unreadCount = dschat.Count(chat => chat.trangthai == 1);
+                unreadRooms.Add(new RoomUnreadChatCount { RoomId = room.Id, UnreadChatCount = unreadCount });
+                roomNameDictionary.Add(room.Id, room.Name);
+            }
+        }
+        // Sắp xếp lại danh sách unreadRooms dựa trên UnreadChatCount giảm dần
+        unreadRooms = unreadRooms.OrderByDescending(room => room.UnreadChatCount).ToList();
+    }
+
+    public class RoomUnreadChatCount
+    {
+        public int RoomId { get; set; }
+        public int UnreadChatCount { get; set; }
+    }
+}

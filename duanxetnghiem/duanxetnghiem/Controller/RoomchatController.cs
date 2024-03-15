@@ -1,4 +1,5 @@
 ﻿using duanxetnghiem.Data.Model;
+using duanxetnghiem.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared.ketnoi;
@@ -31,7 +32,21 @@ namespace duanxetnghiem.Controller
             return Ok(users);
         }
 
-        [HttpGet("Single-Roomchat/{id}")]
+		[HttpGet("All-Roomchat")]
+		public async Task<ActionResult<List<roomchat>>> GetAllAsync()
+		{
+			var users = await _RCRepository.getallAsync();
+			return Ok(users);
+		}
+
+		[HttpPost("Update-Roomchat")]
+		public async Task<ActionResult<roomchat>> UpdateroomchatAsync(roomchat user)
+		{
+			var updatestudent = await _RCRepository.updateAsync(user);
+			return Ok(updatestudent);
+		}
+
+		[HttpGet("Single-Roomchat/{id}")]
         public async Task<ActionResult<roomchat>> GetSingleStudentAsync(int id)
         {
             var student = await _RCRepository.getbyidAsync(id);

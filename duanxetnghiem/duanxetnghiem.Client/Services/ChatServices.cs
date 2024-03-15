@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using duanxetnghiem.Data.Model;
 using Shared.ketnoi;
 using Shared.Model;
 
@@ -25,5 +26,12 @@ namespace duanxetnghiem.Client.Services
             var respone = await allstudent.Content.ReadFromJsonAsync<List<Chat>>();
             return respone;
         }
-    }
+
+		public async Task<Chat> updateAsync(Chat chat)
+		{
+			var newstudent = await _httpClient.PostAsJsonAsync("api/Chat/Update-Chat", chat);
+			var respone = await newstudent.Content.ReadFromJsonAsync<Chat>();
+			return respone;
+		}
+	}
 }

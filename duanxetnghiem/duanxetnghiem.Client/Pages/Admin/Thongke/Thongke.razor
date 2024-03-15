@@ -1,93 +1,109 @@
 ﻿@page "/thongke"
 @rendermode InteractiveAuto
-<h3>Thống kê</h3>
-    
-<div class="row">
-    <h4>Số đơn đã thực hiện</h4>
-    <div class="col-sm-12 ">      
-        <canvas id="myChart"></canvas>
-    </div>
-</div>
-<div class="row">
-    <h4> Thống kê trong tháng @DateTime.Now.Month</h4><br>
-    <div class="col-sm-5">        
-        <canvas id="myPieChart" width="400" height="400"></canvas>
-        <h5>Biểu đồ trạng thái đơn yêu cầu xét nghiệm trong tháng @DateTime.Now.Month</h5>
-    </div>
-    <div class="col-sm-5">
-        <h3>Chi tiết</h3>
-        <table>
-            <thead>
-            <tr>
-                <th>Trạng thái</th>
-                <th>Số lượng</th>
-            </tr>
 
-            </thead>
-            @foreach (var ab in statusNames)
-            {
-                <tr>
-                    <td>
-                    @ab
-                    </td>
-                    @if (RequestCountsByStatus.ContainsKey(ab))
-                    {
-                        <td>@RequestCountsByStatus[ab].ToString() đơn</td>
-                    }
-                    else
-                    {
-                        <td>0 đơn</td>
-                    }
-                </tr>
-            }
-        </table>
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-5">
-        <canvas id="myPieChart1" width="400" height="400"></canvas>
-        <h5>Biểu đồ trạng thái hóa đơn trong tháng @DateTime.Now.Month</h5>
-    </div>
-    <div class="col-sm-5">
-        <h3>Chi tiết</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Trạng thái</th>
-                    <th>Số lượng</th>
-                    <th>Tổng thành tiền</th>
-                </tr>
 
-            </thead>
-            @foreach (var ab in HDcount)
-            {
-                <tr>
-                    <td>
-                        @ab.Key
-                    </td>
-                    <td>@ab.Value</td>
-                    @if (ab.Key == "Đã Thanh Toán")
-                    {
-                        <td>
-                            @tongtt VND
-                        </td>
-                    }
-                    else
-                    {
-                        <td>
-                            @tong30 VND
-                        </td>
-                    }
-                </tr>
-            }
-            <tr>
-                <td colspan="3">
-                    Tổng doanh thu đạt được: @tongdoanhthu VND
-                </td>
-            </tr>
-        </table>
+<h3 class="text-center">Thống kê</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Thống kê trong tháng @DateTime.Now.Month</h5>
+                    <canvas id="myPieChart" width="400" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Biểu đồ trạng thái hóa đơn trong tháng @DateTime.Now.Month</h5>
+                    <canvas id="myPieChart1" width="400" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Chi tiết</h5>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Trạng thái</th>
+                                <th>Số lượng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var ab in statusNames)
+                            {
+                                <tr>
+                                    <td>@ab</td>
+                                    @if (RequestCountsByStatus.ContainsKey(ab))
+                                    {
+                                        <td>@RequestCountsByStatus[ab].ToString() đơn</td>
+                                    }
+                                    else
+                                    {
+                                        <td>0 đơn</td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Chi tiết</h5>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Trạng thái</th>
+                                <th>Số lượng</th>
+                                <th>Tổng thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var ab in HDcount)
+                            {
+                                <tr>
+                                    <td>@ab.Key</td>
+                                    <td>@ab.Value</td>
+                                    @if (ab.Key == "Đã Thanh Toán")
+                                    {
+                                        <td>@tongtt VND</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@tong30 VND</td>
+                                    }
+                                </tr>
+                            }
+                            <tr>
+                                <td colspan="3">Tổng doanh thu đạt được trong tháng @DateTime.Now.Month: @tongdoanhthu VND</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div style="height:350px" class="card-body">
+                    <h5 class="card-title">Số đơn đã thực hiện</h5>
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
 @code {
     public List<DonXetNghiem> AllDXN { get; set; } = new();
     public List<ThanhToan> AllHD { get; set; } = new();
@@ -113,20 +129,36 @@
         }
         foreach (var hd in HDtrangthai)
         {
-            HDcount[hd] = AllHD.Count(d => d.trangthai == hd );
+            HDcount[hd] = AllHD.Count(d => d.trangthai == hd && d.NgayTT1 != null && d.NgayTT1.Value.Month == DateTime.Now.Month 
+                || d.trangthai==hd && d.NgayTT2!=null && d.NgayTT2.Value.Month == DateTime.Now.Month);
         }
         foreach(var c in AllHD)
         {
-            if(c.trangthai=="Đã Thanh Toán")
+            if(c.NgayTT2!=null && c.NgayTT2.Value.Month == DateTime.Now.Month)
             {
-                tongdoanhthu += c.Tongtien;
-                tongtt += c.Tongtien;
+                if (c.trangthai == "Đã Thanh Toán")
+                {
+                    tongdoanhthu += c.Tongtien;
+                    tongtt += c.Tongtien;
+                }
             }
-            if (c.trangthai == "30%")
+            if (c.NgayTT2 == null)
             {
-                tongdoanhthu += c.DaTT1 ?? 0;
-                tong30 += c.DaTT1 ?? 0;
+                if (c.NgayTT1!=null && c.NgayTT1.Value.Month == DateTime.Now.Month)
+                {
+                    if (c.trangthai == "Đã Thanh Toán")
+                    {
+                        tongdoanhthu += c.Tongtien;
+                        tongtt += c.Tongtien;
+                    }
+                    if (c.trangthai == "30%")
+                    {
+                        tongdoanhthu += c.DaTT1 ?? 0;
+                        tong30 += c.DaTT1 ?? 0;
+                    }
+                }
             }
+           
         }
     }
     private async Task DrawPieChart()
@@ -199,8 +231,6 @@
                 },
                 maintainAspectRatio: false,
                 responsive: true,
-                width: 50,
-                height: 50
             }
         });
     };

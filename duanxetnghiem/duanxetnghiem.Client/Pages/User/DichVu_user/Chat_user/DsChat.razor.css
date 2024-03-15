@@ -1,0 +1,43 @@
+﻿.container {
+    margin-top: 50px;
+}
+
+.table-container {
+
+}
+
+.table {
+    width: 100%;
+}
+
+    .table th,
+    .table td {
+        text-align: center;
+    }
+
+.btn {
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+/* Định dạng cho thẻ h3 */
+h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+@media only screen and (max-width: 600px) {
+    .container {
+        margin-top: 20px; /* Adjust margin for smaller screens */
+    }
+
+    .btn {
+        padding: 8px 12px; /* Increase button padding for better touch targets */
+        font-size: 16px; /* Increase font size for better readability */
+    }
+
+    /* Adjust font size for h3 */
+    h3 {
+        font-size: 16px;
+    }
+}

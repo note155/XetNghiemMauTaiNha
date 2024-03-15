@@ -5,6 +5,7 @@
 @using Microsoft.AspNetCore.Authorization
 @using Shared.form
 
+<!--Thong báo-->
 <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000" id="toastNotification">
     <div class="toast-header">
         <strong class="mr-auto">Thông báo</strong>
@@ -16,96 +17,88 @@
         Gói đã có trong đơn xét nghiệm!
     </div>
 </div>
-<div class="background-container" style="background-image: url('anhnen.jpg');">
-    <div class="row d-flex align-items-center justify-content-center" style="width: 100%; height: 300px;margin:auto;">
-        <div class="col-md-6 d-flex flex-column align-items-center">
-            <!-- title -->
-            <div class="title">
-                Xét nghiệm máu tại nhà
-            </div>
-            <!-- description -->
-            <div class="description">
-                Chẩn đoán sớm, chăm sóc sức khỏe của bạn
-            </div>
-            <div class="d-flex flex-row gap-3">
-                <a href="quytrinh" class="secondary btn" style="width: 140px; height: 48px; border: 1px solid #000000; border-radius: 8px; display: flex; justify-content: center; align-items: center; margin-top: 30px;">
-                    <div style="font-family: 'Roboto'; font-weight: 500; font-size: 20px; line-height: 24px; color: #000000;">
-                        Chi tiết
-                    </div>
-                </a>
-                <a href="quytrinh" class="secondary btn" style="width: 140px; height: 48px; border-radius: 8px; display: flex; justify-content: center; align-items: center; text-decoration: none; background-color: #000000; color: #FFFFFF;  margin-top: 30px;">
-                    <div style="font-family: 'Roboto'; font-weight: 500; font-size: 20px; line-height: 24px;">
-                        Đặt lịch hẹn
-                    </div>
-                </a>
+<!-- hinh nen goi dich vu-->
+<div class="container d-flex align-items-center justify-content-center" style="margin-bottom:33rem;">
+    <div class="card-body overlay">
+        <div class="row">
+            <div class="col-md-6 d-flex flex-column align-items-center">
+                <h4>
+                    Gói Dịch Vụ Xét Nghiệm Sức Khỏe
+                </h4>
+                <p>
+                    Cung cấp các gói xét nghiệm máu phù hợp với nhu cầu của bạn
+                </p>
+                <div class="d-flex flex-row gap-3">
+                    <a href="/quytrinh" class="btn btn-outline-dark">Quy trình</a>
+                    <a href="/quytrinh" class="btn btn-dark"> Đặt lịch hẹn</a>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<!-- các gói dịch vụ-->
-<div class="container" style="width: 100%;">
+
+<!-- tìm kiếm các gói dịch vụ-->
+<div class="container">
     <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="section text-center py-5">
-                <h1 class="title">Gói Dịch Vụ Xét Nghiệm Sức Khỏe</h1>
-                <p class="description">Cung cấp các gói xét nghiệm máu phù hợp với nhu cầu của bạn</p>
-            </div>
-        </div>
         <div class="col-lg-6">
             <div class="search-container d-flex">
-                <input type="text" @bind="searchTerm" class="form-control" placeholder="Tìm kiếm gói xét nghiệm...">
-                <button @onclick="Search" class="btn btn-primary ml-auto">Tìm kiếm</button>
+                <input type="text" @bind="searchTerm" class="form-control" placeholder="Tìm kiếm ...">
+                <button @onclick="Search" class="btn1 btn-primary ml-auto">Tìm kiếm</button>
             </div>
         </div>
-
     </div>
 </div>
-<div class="package-container">
+
+<!--list goi xét nghiem-->
+<div class="package-container" style="margin-bottom: 10rem;">
     @if (!FilteredGoi.Any())
     {
         <p><em>Không tìm thấy kết quả.</em></p>
     }
     @if (FilteredGoi.Any())
     {
-        @foreach (var goi in FilteredGoi)
-        {
-            <div class="package-item">
-                <div class="package-item-photo">
-                    <a href="/ChiTietGoiXetNghiem" class="post-image-container" tabindex="-1">
-                        <div class="package-item-photo">
-                            <img src="@goi.Anh" alt="" loading="lazy">
-                        </div>
-                    </a>
-                </div>
-                <div class="package-item-detail">
-                    <div class="package-item-price">@goi.Gia VND</div>
-                    <h3 class="package-item-title">@goi.TenGoi</h3>
-                    <div class="package-item-meta">
-                        <div class="package-item-gender">
-                            @goi.ThoiGian
-                        </div>
-                        <div class="plus-icon-container">
-                            <div class="actions1">
-                                <a @onclick="@(() => themgio(goi.Id))" href="#myBooking" data-toggle="modal" class="btn btn-primary btn-booking rounded-circle">Thêm giỏ hàng</a>
+        <div class="team-items">
+            @foreach (var goi in FilteredGoi)
+            {
+                <div class="package-item">
+                    <div class="package-item-photo">
+                        <a href="/ChiTietGoiXetNghiem" class="post-image-container" tabindex="-1">
+                            <div class="package-item-photo">
+                                <img src="@goi.Anh" alt="" loading="lazy">
                             </div>
-                        </div>
-                        @if (showNotification && selectedGoiId == goi.Id)
-                        {
-                            <div class="alert alert-info">
-                                @notificationMessage
+                        </a>
+                    </div>
+                    <div class="package-item-detail">
+                        <div class="package-item-price">@goi.Gia VND</div>
+                        <h3 class="package-item-title">@goi.TenGoi</h3>
+                        <div class="package-item-meta">
+                            <div class="package-item-gender">
+                                Thời gian :
+                                @goi.ThoiGian
                             </div>
-                        }
+                            <div class="plus-icon-container">
+                                <div class="actions1">
+                                    <a @onclick="@(() => themgio(goi.Id))" href="#myBooking" data-toggle="modal" class="btn btn-primary btn-booking rounded-circle">Thêm gói hàng</a>
+                                </div>
+                            </div>
+                            @if (showNotification && selectedGoiId == goi.Id)
+                            {
+                                <div class="alert alert-info">
+                                    @notificationMessage
+                                </div>
+                            }
+                        </div>
                     </div>
                 </div>
-            </div>
 
-        }
+            }
+        </div>
 
     }
 </div>
 
-
-<nav aria-label="Page navigation">
+<!-- Nút phân trang-->
+<nav aria-label="Page navigation" style="margin-bottom: 10rem;">
     <nav id="pagination-7960274864" aria-label="Page navigation" class="text-center">
         <ul class="pagination mb-0 justify-content-center">
             <!-- Nút trang trước -->
@@ -135,6 +128,7 @@
     </nav>
 </nav>
 
+
 @code {
     [Inject]
     protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
@@ -143,7 +137,7 @@
     public User user { get; set; } = new();
     public List<GoiXetNghiem> AllGoi { get; set; } = new();
     public List<GioHang> gioHangList { get; set; } = new();
-    private int itemsPerPage = 6; // Số lượng mục trên mỗi trang
+    private int itemsPerPage = 9; // Số lượng mục trên mỗi trang
     private int currentPage = 1;
     private int totalPages;
     private int selectedGoiId = -1; // Thêm biến để lưu trữ ID của gói được chọn

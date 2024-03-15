@@ -1,4 +1,5 @@
 ﻿using duanxetnghiem.Data;
+using duanxetnghiem.Data.Model;
 using Microsoft.EntityFrameworkCore;
 using Shared.ketnoi;
 using Shared.Model;
@@ -28,5 +29,16 @@ namespace duanxetnghiem.Services
             var gioHangs = await _context.Chats.Where(g => g.roomchatid == id).ToListAsync();
             return gioHangs;
         }
-    }
+
+		public async Task<Chat> updateAsync(Chat chat)
+		{
+			if (chat == null) return null;
+
+			var updateuser = _context.Chats.Update(chat).Entity;
+
+			await _context.SaveChangesAsync();
+
+			return updateuser;
+		}
+	}
 }
