@@ -1,5 +1,5 @@
 ﻿@page "/chat/{id:int}"
-
+@attribute [Authorize]
 @rendermode InteractiveAuto
 @inject NavigationManager navigation
 
@@ -10,7 +10,7 @@
 	{
 		<div class="col-sm-3">
 			<div style="width:100%" class="card-header">
-				Chưa có bác sĩ nhận hộ trỡ,sẽ có người hỗ trợ trong thời gian sớm nhất
+				Chưa có bác sĩ nhận hộ trỡ,sẽ có người hỗ trợ trong thời gian sớm nhất,Hãy đặt bất kỳ câu hỏi nào mà bạn muốn
 			</div>
 		</div>
 	}

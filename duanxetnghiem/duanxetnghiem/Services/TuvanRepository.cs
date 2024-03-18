@@ -43,7 +43,7 @@ namespace duanxetnghiem.Services
 
             MailMessage message = new MailMessage();
             message.From = new MailAddress(fromMail);
-            message.Subject = "Thông báo Kết Quả Đơn Xét Nghiệm";
+            message.Subject = "Trả Lời Tư Vấn - Âu Lạc";
             message.To.Add(new MailAddress(gm.email));
             message.Body = "<html><body><p>Chào "+gm.hotenKH+",</p><p>Chúng tôi hy vọng bạn đang khỏe mạnh và an lành. Xin gửi đến bạn kết quả tư vấn dựa trên thông tin bạn đã cung cấp:</p><p>Sau khi chuyên gia của chúng tôi đã phân tích, kết quả tư vấn cho thấy:</p><p>"+gm.noidung+"</p><p>Nếu bạn có bất kỳ câu hỏi hoặc cần hỗ trợ thêm, đừng ngần ngại liên hệ với chúng tôi qua email này hoặc số điện thoại dưới đây. Chúng tôi luôn sẵn lòng hỗ trợ bạn.</p><p>Trân trọng,</p><p>"+gm.hotenBS+"<br>Bác sĩ<br>CÔNG TY TNHH GIẢI PHÁP PHẦN MỀM ÂU LẠC<br></p></body></html>";
             message.IsBodyHtml = true;

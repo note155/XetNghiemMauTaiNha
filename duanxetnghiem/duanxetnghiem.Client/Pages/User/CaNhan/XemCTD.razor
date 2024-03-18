@@ -191,6 +191,7 @@
                     <button class="btn btn-success" @onclick="@(_ => PrintingService.Print(rawHtml, PrintType.RawHtml))">
                         Tải Kết Quả
                     </button>
+                    <button @onclick="tuvan">Liên hệ tư vấn </button>
                 </div>
             }
         }
@@ -200,6 +201,9 @@
 
 
 @code {
+    [Inject]
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    public string UserName { get; set; }
     int goi = -1;
     int goi1 = -1; 
     public List<Khoa> allkhoa { get; set; } = new();
@@ -231,6 +235,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        UserName = authState.User.Identity.Name;
         Input = await DXNservice.getbyid(id);
         allkhoa = await Khoaservice.getallAsync();
         if(Input==null)
@@ -311,27 +317,27 @@
     "<th style=\"border: 1px solid black;\">Đơn Vị</th>" +
     "</tr>" +
     "</thead>";
-        foreach (var ss in Inputkq.kQandCs)
-        {
-            if (ss.goi != goi)
+            foreach (var ss in Inputkq.kQandCs)
             {
-                goi = ss.goi;
-                rawHtml+= "<tr><td colspan=\"5\"><strong>Gói Xét Nghiệm:</strong>"+loadtengoi(goi)+"</td></tr>";
+                if (ss.goi != goi)
+                {
+                    goi = ss.goi;
+                    rawHtml+= "<tr><td colspan=\"5\"><strong>Gói Xét Nghiệm:</strong>"+loadtengoi(goi)+"</td></tr>";
+                }
+                stt++;
+                rawHtml += "<tr>" +
+                           "<td style=\"border: 1px solid black;\">" + stt + "</td>" +
+                           "<td style=\"border: 1px solid black;\">" + loadtenchiso(ss.id) + "</td>" +
+                           "<td style=\"border: 1px solid black;\">"+ss.kq+"</td>" +
+                           "<td style=\"border: 1px solid black;\">" + loadcsbt(ss.id) + "</td>" +
+                           "<td style=\"border: 1px solid black;\">" + loaddonvi(ss.id) + "</td>" +
+                           "</tr>";
             }
-            stt++;
-            rawHtml += "<tr>" +
-                       "<td style=\"border: 1px solid black;\">" + stt + "</td>" +
-                       "<td style=\"border: 1px solid black;\">" + loadtenchiso(ss.id) + "</td>" +
-                       "<td style=\"border: 1px solid black;\">"+ss.kq+"</td>" +
-                       "<td style=\"border: 1px solid black;\">" + loadcsbt(ss.id) + "</td>" +
-                       "<td style=\"border: 1px solid black;\">" + loaddonvi(ss.id) + "</td>" +
-                       "</tr>";
+
+            rawHtml += "</table>";
         }
 
-        rawHtml += "</table>";
-        }
-        
-}
+    }
     private void loadgxndachon()
     {
         foreach (var a in dxn)
@@ -415,6 +421,7 @@
         await DXNservice.updateAsync(Input);
         navigation.NavigateTo("/lichsuDl");
     }
+
     public String loadGXN(int id)
     {
         foreach (var gxn in allGXN)
@@ -435,6 +442,7 @@
             SelectedDoctor = AllBS.FirstOrDefault(bs => bs.Id == id)!;
         }
     }
+
     private String gioitinh(bool a)
     {
         if (a)
@@ -445,6 +453,27 @@
         {
             return "Nữ";
         }
+    }
+    private async void tuvan()
+    {
+
+        var us = await Usertservice.getuserbyemail(UserName);
+        roomchat room = new()
+        {
+            Name="Tư Vấn Đơn "+id,
+            userid=us.Id
+        };
+        var ro=await Roomchatservice.addAsync(room);
+        Chat ha = new()
+        {
+            data="Tôi cần hỗ trợ cho đơn "+id,
+            roomchatid=ro.Id,
+            thoigian=DateTime.Now,
+            trangthai=1,
+            userid=us.Id
+        };
+        await Chatservice.addAsync(ha);
+        navigation.NavigateTo("/Chat/" + ro.Id);
     }
     private async void remove(int id)
     {

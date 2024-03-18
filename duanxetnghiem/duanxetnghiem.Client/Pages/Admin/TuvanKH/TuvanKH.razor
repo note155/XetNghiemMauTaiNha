@@ -24,22 +24,22 @@
         <div class="col-sm-6">
                 <div class="form-group">
                     <label>Họ và tên</label>
-                    <InputText @bind-Value="Input.hoten" class="form-control" />
+                <InputText @bind-Value="Input.hoten" class="form-control" readonly />
                     <ValidationMessage For="() => Input.hoten" class="text-danger" />
                 </div>
                 <div class="form-group">
                     <label>Email</label>
-                    <InputText @bind-Value="Input.email" class="form-control" />
+                <InputText @bind-Value="Input.email" class="form-control" readonly />
                     <ValidationMessage For="() => Input.email" class="text-danger" />
                 </div>
                 <div class="form-group">
                     <label>Số điện thoại</label>
-                    <InputText @bind-Value="Input.sdt" class="form-control" />
+                <InputText @bind-Value="Input.sdt" class="form-control" readonly />
                     <ValidationMessage For="() => Input.sdt" class="text-danger" />
                 </div>
                 <div class="form-group">
                     <label>Nội dung</label>
-                    <InputText @bind-Value="Input.noidung" class="form-control" />
+                <InputText @bind-Value="Input.noidung" class="form-control" readonly />
                     <ValidationMessage For="() => Input.noidung" class="text-danger" />
                 </div>
 
@@ -61,10 +61,8 @@
                 <ValidationMessage For="() => Input.traloi" class="text-danger" />
             </div>
             <a href="/listTV" style="width:47%;" class="btn btn-danger">Trở về</a>
-            @if (Input.traloi==null)
-            {
                 <button style="width:47%;" type="submit" class="btn btn-primary mx-3">Gửi trả lời tư vấn</button>
-            }
+
         </div>
     </div>
 </EditForm>

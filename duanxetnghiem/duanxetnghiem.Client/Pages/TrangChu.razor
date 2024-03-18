@@ -2,13 +2,9 @@
 @rendermode InteractiveAuto
 @using Microsoft.AspNetCore.Components.Web
 @using duanxetnghiem.Client.Pages.Admin
-@using duanxetnghiem.Client.Pages.Layout
 @inject NavigationManager navigation;
-@if (err != "")
-{
-    <p>@err</p>
-}
-@if (bs != null)
+
+@if (UserName!=null && bs != null)
 {
     <NavMenu />
 }
@@ -17,8 +13,6 @@
     <p>@err</p>
 }
 
-<!-- xét nghiệm tại nhà -->
-<div>haha</div>
 <div class="container mt-5 text-center xetnghiem-container " style="margin-bottom: 30rem;">
     <div class="card-body overlay">
         <h4 class="card-title">Xét Nghiệm Máu Tại Nhà</h4>
@@ -640,7 +634,6 @@
     private DateTime currentDate;
     private bool notificationVisible = false;
     public List<DonXetNghiem> AllDXNhienthi { get; set; } = new(); public int count = 0;
-    MainLayout main = new();
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();

@@ -1,7 +1,5 @@
 using System.Net;
 using Append.Blazor.Printing;
-using duanxetnghiem.Client.Pages;
-using duanxetnghiem.Client.Services;
 using duanxetnghiem.Components;
 using duanxetnghiem.Components.Account;
 using duanxetnghiem.Data;

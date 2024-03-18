@@ -1,12 +1,6 @@
 ﻿@page "/quytrinh"
-
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Your HTML Code -->
-<div id="carouselDemo" class="carousel slide" data-bs-ride="carousel">
+<!--trang bootrap-->
+<div id="carouselDemo" class="carousel slide" data-bs-ride="carousel" style="margin-bottom:8rem;">
     <!-- Indicators/dots -->
     <div class="carousel-indicators">
         <button type="button" data-bs-target="#carouselDemo" data-bs-slide-to="0" class="active"></button>
@@ -15,159 +9,107 @@
         <button type="button" data-bs-target="#carouselDemo" data-bs-slide-to="3"></button>
         <button type="button" data-bs-target="#carouselDemo" data-bs-slide-to="4"></button>
     </div>
-    <div id="demo" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="quytrinh11.png" alt="Article Image" class="d-block" style="width:100%">
-            </div>
-            <div class="carousel-item">
-                <img src="quytrinh4.jpg" alt="Article Image" class="d-block" style="width:100%">
-            </div>
-            <div class="carousel-item">
-                <img src="quytrinh5.jpg" alt="Article Image" class="d-block" style="width:100%">
-            </div>
-            <div class="carousel-item">
-                <img src="quytrinh6.jpg" alt="Article Image" class="d-block" style="width:100%">
-            </div>
-            <!-- Thêm các ảnh khác nếu cần -->
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="overlay"></div>
+            <img src="imgquytrinh/hinhnen18.png" alt="Article Image" class="d-block">
         </div>
-        <!-- Left and right controls/icons -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselDemo" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselDemo" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-        </button>
+        <div class="carousel-item">
+            <div class="overlay"></div>
+            <img src="imgquytrinh/hinhnen9.png" alt="Article Image" class="d-block">
+        </div>
+        <div class="carousel-item">
+            <div class="overlay"></div>
+            <img src="imgquytrinh/hinhnen8.png" alt="Article Image" class="d-block">
+        </div>
+        <div class="carousel-item">
+            <div class="overlay"></div>
+            <img src="imgquytrinh/hinhnen15.png" alt="Article Image" class="d-block">
+        </div>
+        <!-- Thêm các ảnh khác nếu cần -->
+    </div>
+    <!-- Left and right controls/icons -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselDemo" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselDemo" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+</div>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<!-- Lợi ích của việc lấy máu tại nhà-->
+<div class="container1 d-flex align-items-center justify-content-center loiich-container" style=" margin-bottom: 8rem; ">
+    <div class="row">
+        <div class="col-md-6 d-flex flex-column align-items-center">
+            <div class="d-flex justify-content-center align-items-center">
+                <h4 style="font-family: 'Roboto'; font-style: normal; font-weight: 600; font-size: 2.3rem; line-height: 48px;" class="text-center">
+                    Lợi ích của việc lấy xét nghiệm mẫu tại nhà
+                </h4>
+            </div>
+            <ul class="arrow-list">
+                <li class="arrow-list-item">
+                    <img src="3.png" alt="Biểu tượng">
+                    <p>Tiết kiệm thời gian - Không cần di chuyển</p>
+                </li>
+                <li class="arrow-list-item">
+                    <img src="5.png" alt="Biểu tượng">
+                    <p>Kết quả nhanh - Nhận kết quả trong vài giờ</p>
+                </li>
+                <li class="arrow-list-item">
+                    <img src="6.jpg" alt="Biểu tượng">
+                    <p>An toàn uy tín - Đảm bảo sự riêng tư và bảo mật</p>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-6 d-flex flex-column align-items-center">
+            <img style="width: 100%;" src="4.jpg" alt="Hình ảnh mô tả lợi ích">
+        </div>
     </div>
 </div>
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="block-title">
-            <h2 style="font-family: 'Roboto';font-style: normal;font-weight: 700;font-size: 40px;line-height: 48px;">
-                Quy trình xét nghiệm máu tại nhà
-            </h2>
-        </div>
-        <div class="row">
-            <!-- Bước 1: Đặt lịch -->
-            <div class="col-md-6 mb-4">
-                <div class="card">
-                    <div class="row g-0">
-                        <div class="col-md-4 d-flex justify-content-center">
-                            <img src="quytrinh/lichquytrinh.png" alt="Bước 1" class="img-fluid">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">Bước 1: Đặt lịch</h5>
-                                <p class="card-text">
-                                    Đặt lịch xét nghiệm máu tại nhà qua trang web hoặc gọi điện trực tiếp
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Bước 2: Lấy mẫu trực tiếp -->
-            <div class="col-md-6 mb-4">
-                <div class="card">
-                    <div class="row g-0">
-                        <div class="col-md-4 d-flex justify-content-center">
-                            <img src="quytrinh/xecapcuuquytrinh.png" alt="Bước 2" class="img-fluid">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">Bước 2: Lấy mẫu trực tiếp</h5>
-                                <p class="card-text">
-                                    Nhân viên y tế sẽ liên lạc và đến tận nhà khách hàng để lấy mẫu máu
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Bước 3: Trả kết quả -->
-            <div class="col-md-6 mb-4">
-                <div class="card">
-                    <div class="row g-0">
-                        <div class="col-md-4 d-flex justify-content-center">
-                            <img src="quytrinh/traketquaquytrinh.png" alt="Bước 3" class="img-fluid">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">Bước 3: Trả kết quả</h5>
-                                <p class="card-text">
-                                    Khách hàng có thể xem kết quả trực tiếp qua trang web
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Bước 4: Tư vấn kết quả -->
-            <div class="col-md-6 mb-4">
-                <div class="card">
-                    <div class="row g-0">
-                        <div class="col-md-4 d-flex justify-content-center">
-                            <img src="quytrinh/tuvanquytrinh.png" alt="Bước 4" class="img-fluid">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">Bước 4: Tư vấn kết quả</h5>
-                                <p class="card-text">
-                                    Bác sĩ chuyên môn sẽ tư vấn cho khách hàng về kết quả xét nghiệm
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<!--quy trinh dat lich-->
+<div class="container1 d-flex align-items-center justify-content-center loiich-container" style=" margin-bottom: 8rem; ">
+    <div class="row">
+        <div class="col d-flex flex-column align-items-center">
+            <img style="width: 100%;height:auto;" src="imgquytrinh/quytrinh6.png" alt="Hình ảnh mô tả lợi ích">
         </div>
     </div>
 </div>
 
-<!--Nguyên tắc khi đặt lịch-->
-<div class="container">
-    <h2 style="font-family: 'Roboto';font-style: normal;font-weight: 700;font-size: 40px;line-height: 48px;margin-top:40px;">Nguyên Tắc Trước Khi Lấy Mẫu</h2>
-    <p style="font-size: 20px;">
-        Một số nguyên tắc quan trọng khách hàng cần biết để đảm bảo quá trình xét nghiệm diễn ra suôn sẻ và mang lại kết quả chính xác.
-    </p>
-    <ul class="circle-list" style="font-size: 22px;">
-        <li id="item1" style="background-color: #FF33FF;">Nguyên tắc 1</li>
-        <li id="item2" style="background-color: #ff5733;">Nguyên tắc 2</li>
-        <li id="item3" style="background-color: #33ff57;">Nguyên tắc 3</li>
-        <li id="item4" style="background-color: #FF0033;">Nguyên tắc 4</li>
-        <!-- Thêm các mục khác tương tự -->
-    </ul>
-    <ul class="circle-list" style="font-size: 22px;">
-        <li id="item5" style="background-color: #ffcc33;">Nguyên tắc 5</li>
-        <li id="item6" style="background-color: #33ffcc;">Nguyên tắc 6</li>
-        <li id="item7" style="background-color: #cc33ff;">Nguyên tắc 7</li>
-        <!-- Thêm các mục khác tương tự -->
-    </ul>
+<!--Hướng dẫn các bước đặt lịch xét nghiệm-->
+<div class="container mt-5" style="margin-bottom: 8rem;">
+    <div class="row justify-content-center">
+        <div class="block-title">
+            <h2 style="font-family: 'Roboto';font-style: normal;font-weight: 700;font-size: 2.3rem;line-height: 48px;">
+                Hướng dẫn các bước đặt lịch xét nghiệm
+            </h2>
+            <p style="font-size: 1.2rem;margin-left:2px;">
+                Đặt lịch xét nghiệm có thể khác nhau tùy theo địa điểm và cơ sở y tế mà bạn chọn. Tuy nhiên, dưới đây là một số bước cơ bản mà bạn có thể thực hiện để đặt lịch xét nghiệm:
+            </p>
+        </div>
+    </div>
 </div>
-<!-- Nội dung trang web của bạn ở đây -->
-<!-- Thanh liên hệ -->
-<div class="contact-bar">
-    <div class="contact-icon">
-        <!-- Điện thoại icon (thay thế đường dẫn hình ảnh bằng biểu tượng của bạn) -->
-        <img src="phone-icon.png" alt="Phone">
-        <span>0123 456 789</span>
+<div class="container">
+    <div class="step-content">
+        <h2>Bước 1: Chuẩn bị thông tin</h2>
+        <p>Đảm bảo bạn đã chuẩn bị đầy đủ thông tin cá nhân cần thiết.</p>
     </div>
-    <div class="contact-icon">
-        <!-- Email icon (thay thế đường dẫn hình ảnh bằng biểu tượng của bạn) -->
-        <img src="email-icon.png" alt="Email">
-        <span>Contact@gmail.com</span>
+    <div class="step-image">
+        <img src="prepare_info.jpg" alt="Chuẩn bị thông tin">
     </div>
-    <div class="contact-icon">
-        <!-- Facebook icon (thay thế đường dẫn hình ảnh bằng biểu tượng của bạn) -->
-        <a href="https://www.facebook.com/yourpage" target="_blank">
-            <img src="facebook-icon.png" alt="Facebook">
-        </a>
+    <div class="step">
+        <h2>Bước 2: Liên hệ cơ sở y tế</h2>
+        <p>Liên hệ với cơ sở y tế để đặt lịch xét nghiệm theo yêu cầu của bạn.</p>
     </div>
-    <div class="contact-icon">
-        <!-- Zalo icon (thay thế đường dẫn hình ảnh bằng biểu tượng của bạn) -->
-        <a href="https://zalo.me/yourzaloid" target="_blank">
-            <img src="zalo-icon.png" alt="Zalo">
-        </a>
+    <div class="step">
+        <h2>Bước 3: Đặt lịch xét nghiệm</h2>
+        <p>Đặt lịch xét nghiệm theo hướng dẫn của cơ sở y tế và chờ xác nhận.</p>
+    </div>
+    <div class="step">
+        <h2>Bước 4: Thực hiện xét nghiệm</h2>
+        <p>Đến cơ sở y tế đúng giờ để thực hiện xét nghiệm.</p>
     </div>
 </div>
 @code {
