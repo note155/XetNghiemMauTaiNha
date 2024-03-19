@@ -1,4 +1,4 @@
-﻿@page "/datlich"
+﻿@page "/datlichNTid/{id}"
 @using Shared.form
 @rendermode InteractiveAuto
 @inject NavigationManager navigation;
@@ -125,6 +125,9 @@
 </EditForm>
 
 @code {
+    [Parameter]
+    public string id { get; set; }
+
     [Inject]
     protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
@@ -137,23 +140,37 @@
     public List<GXNchon> listgxn { get; set; } = new();
     int valor = 0, idbs;
     public long tongtien = 0;
+    int iduser, idgoi;
 
     [SupplyParameterFromForm]
     public donXNform Input { get; set; } = new();
 
-
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            keolen();
+        }
+    }
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        UserName = authState.User.Identity.Name;
-        user = await Usertservice.getuserbyemail(UserName);
+        string[] numbers = id.Split(';');
+
+        if (numbers.Length == 2)
+        {
+            iduser = int.Parse(numbers[0]);
+            idgoi = int.Parse(numbers[1]);
+        }
+        user = await Usertservice.getuserbyid(iduser);
         if (user == null)
         {
             navigation.NavigateTo("/AddUser");
         }
         allGXN = await GXNservice.getallAsync();
         getds();
-        Input.Ngaydat = DateTime.Now;
+
+        Input.Ngaydat = DateTime.Now; 
+        getid();
     }
     private void getds()
     {
@@ -170,6 +187,26 @@
                     Mota = a.Mota,
                     ThoiGian = a.ThoiGian
                 });
+        }
+    }
+    private void getid()
+    {
+        foreach (var a in listgxn)
+        {
+            if (a.Id == idgoi)
+            {
+                a.IsSelected = true;
+                break;
+            }
+        }
+        foreach (var b in allGXN)
+        {
+            if (b.Id == idgoi)
+            {
+                gxndachon.Add(b);
+                tongtien += b.Gia;
+                break;
+            }
         }
     }
     private void remove(int id)
@@ -208,6 +245,7 @@
         }
         if (err.Any())
         {
+            keolen();
             return;
         }
         DonXetNghiem donXetNghiem = new DonXetNghiem
@@ -282,4 +320,13 @@
             }
         }
     }
+    public async Task keolen()
+    {
+        await JSRuntime.InvokeVoidAsync("scrollToBottom");
+    }
 }
+<script>
+    window.scrollToBottom = () => {
+        window.scrollTo(0, 0);
+    }
+</script>

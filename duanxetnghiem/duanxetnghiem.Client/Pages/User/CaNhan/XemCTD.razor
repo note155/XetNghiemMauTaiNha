@@ -458,22 +458,33 @@
     {
 
         var us = await Usertservice.getuserbyemail(UserName);
-        roomchat room = new()
+        var allroom = await Roomchatservice.getallbyidAsync(us.Id);
+        string name = "Tư Vấn Đơn :" + id;
+        var rooms = allroom.FirstOrDefault(a => a.Name == name);
+        if (rooms == null)
         {
-            Name="Tư Vấn Đơn "+id,
-            userid=us.Id
-        };
-        var ro=await Roomchatservice.addAsync(room);
-        Chat ha = new()
+            roomchat room = new()
+                {
+                    Name = "Tư Vấn Đơn :" + id,
+                    userid = us.Id,
+                    ngaytao = DateTime.Now
+                };
+            var ro = await Roomchatservice.addAsync(room);
+            Chat ha = new()
+                {
+                    data = "Tôi cần hỗ trợ cho đơn " + id,
+                    roomchatid = ro.Id,
+                    thoigian = DateTime.Now,
+                    trangthai = 1,
+                    userid = us.Id
+                };
+            await Chatservice.addAsync(ha);
+            navigation.NavigateTo("/Chat/" + ro.Id);
+        }
+        else
         {
-            data="Tôi cần hỗ trợ cho đơn "+id,
-            roomchatid=ro.Id,
-            thoigian=DateTime.Now,
-            trangthai=1,
-            userid=us.Id
-        };
-        await Chatservice.addAsync(ha);
-        navigation.NavigateTo("/Chat/" + ro.Id);
+            navigation.NavigateTo("/Chat/" + rooms.Id);
+        }
     }
     private async void remove(int id)
     {

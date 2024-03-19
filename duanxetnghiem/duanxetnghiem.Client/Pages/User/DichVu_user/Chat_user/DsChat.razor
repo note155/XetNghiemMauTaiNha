@@ -95,7 +95,8 @@
 			roomchat room = new roomchat
 			{
 				Name=Inputkq,
-				userid=user.Id
+				userid=user.Id,
+				ngaytao=DateTime.Now
 			};
 			var a = await Roomchatservice.addAsync(room);
 			allroom.Add(a);

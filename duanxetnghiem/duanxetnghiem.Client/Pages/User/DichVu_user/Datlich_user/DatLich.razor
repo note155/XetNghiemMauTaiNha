@@ -1,0 +1,295 @@
+﻿@page "/datlich"
+@using Shared.form
+@rendermode InteractiveAuto
+@inject NavigationManager navigation;
+@attribute [Authorize]
+<EditForm Model="Input" method="post" OnValidSubmit="add" FormName="register" class="profile-form">
+    <DataAnnotationsValidator />
+    <hr />
+
+    @if (err.Any())
+    {
+        <div class="alert alert-danger" role="alert">
+            @foreach (var error in err)
+            {
+                <p>@error</p>
+            }
+        </div>
+    }
+    <div class="patient-registration-container">
+        <div class="patient-info-container">
+            <div class="patient-info">
+                <h2>Thông tin bệnh nhân</h2>
+                @if (user != null)
+                {
+                    <div class="info">
+                        <p><strong>Họ tên:</strong> @user.Hoten</p>
+                        <p><strong>Tuổi:</strong> @user.Tuoi</p>
+                        <p><strong>Số điện thoại:</strong> @user.SDT</p>
+                        <p><strong>Địa chỉ:</strong> @user.Diachi, @user.CapXa, @user.CapHuyen, TT Huế</p>
+                        <p><strong>Email:</strong> @user.Email</p>
+                        <p><strong>Giới tính:</strong> @gioitinh(@user.Gioitinh)</p>
+                    </div>
+                }
+            </div>
+            <div class="patient-info">
+                <h2>Các gói xét nghiệm</h2>
+                <div class="info" style="height: 360px; overflow-y: auto;">
+                    <table>
+                        @foreach (var ds in listgxn)
+                        {
+                            <tr>
+                                <td><input type="checkbox" @onchange="@(() => LoadBSInfo(ds.Id))" checked="@ds.IsSelected" /></td>
+                                <td>@ds.TenGoi</td>
+                                <td>@ds.Gia</td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="test-registration-form">
+            <h2>Đơn đăng ký đặt lịch xét nghiệm</h2>
+            <div class="form-group">
+                <label for="Ngaydat">Ngày Lấy Máu</label>
+                <InputDate @bind-Value="Input.Ngaydat" class="form-control" id="Ngaydat" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                <ValidationMessage For="() => Input.Ngaydat" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label for="giolaymau">Giờ lấy máu</label>
+                <InputSelect id="giolaymau" @bind-Value="Input.giolaymau" class="form-control">
+                    <option value="">Chọn</option>
+                    <option value="5h30">5h30</option>
+                    <option value="6h">6h</option>
+                    <option value="6h30">6h30</option>
+                    <option value="7h">7h</option>
+                    <option value="7h30">7h30</option>
+                    <option value="8h">8h</option>
+                    <option value="8h30">8h30</option>
+                    <option value="9h">9h</option>
+                    <option value="9h30">9h30</option>
+                    <option value="10h">10h</option>
+                    <option value="10h30">10h30</option>
+                    <option value="11h">11h</option>
+                    <option value="11h30">11h30</option>
+                    <option value="12h">12h</option>
+                    <option value="12h30">12h30</option>
+                    <option value="13h">13h</option>
+                    <option value="13h30">13h30</option>
+                    <option value="14h">14h</option>
+                    <option value="14h30">14h30</option>
+                    <option value="15h">15h</option>
+                    <option value="15h30">15h30</option>
+                    <option value="16h">16h</option>
+                    <option value="16h30">16h30</option>
+                    <option value="17h">17h</option>
+                    <option value="17h30">17h30</option>
+                    <option value="18h">18h</option>
+                    <option value="18h30">18h30</option>
+                    <option value="19h">19h</option>
+                    <option value="19h30">19h30</option>
+                    <option value="20h">20h</option>
+                    <option value="20h30">20h30</option>
+                    <option value="21h">21h</option>
+                </InputSelect>
+            </div>
+            <div class="form-group">
+                <label for="ghiChu">Ghi chú </label>
+                <InputTextArea @bind-Value="Input.ghiChu" class="form-control" id="ghiChu" />
+                <ValidationMessage For="() => Input.ghiChu" class="text-danger" />
+            </div>
+            <div class="doctor-info">
+                <div class="selected-packages-header">
+                    <h3>Các gói đã chọn:</h3>
+                </div>
+                <div class="selected-packages">
+                    @foreach (var bs in gxndachon)
+                    {
+                        <div class="package">
+                            <div class="package-content">
+                                <p><strong>Tên Gói:</strong> @bs.TenGoi</p>
+                                <div class="price">Giá: @bs.Gia VND</div>
+                            </div>
+                            <button type="button" @onclick="@( () => remove(bs.Id) )" class="remove-btn">X</button>
+                        </div>
+                    }
+                </div>
+                <div class="total-mobile">
+                    <p>Tổng tiền: <span class="total">@tongtien VND</span></p>
+                </div>
+            </div>
+            <a href="/"><button style="background-color:red" class="btn btn-primary"> Hủy </button></a>
+            <button type="submit" class="btn btn-primary">Đăng Ký</button>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Inject]
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+    private List<string> err = new List<string>();
+    private User user = new User();
+    public List<GoiXetNghiem> allGXN { get; set; } = new();
+    public List<BacSi> AllBS { get; set; } = new();
+    public string UserName { get; set; }
+    public List<GoiXetNghiem> gxndachon { get; set; } = new();
+    public List<GXNchon> listgxn { get; set; } = new();
+    int valor = 0, idbs;
+    public long tongtien = 0;
+
+    [SupplyParameterFromForm]
+    public donXNform Input { get; set; } = new();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        UserName = authState.User.Identity.Name;
+        user = await Usertservice.getuserbyemail(UserName);
+        if (user == null)
+        {
+            navigation.NavigateTo("/AddUser");
+        }
+        allGXN = await GXNservice.getallAsync();
+        getds();
+        Input.Ngaydat = DateTime.Now;
+    }
+    private void getds()
+    {
+        listgxn.Clear();
+        foreach (var a in allGXN)
+        {
+            listgxn.Add(new GXNchon
+                {
+                    Id = a.Id,
+                    IsSelected = false,
+                    Anh = a.Anh,
+                    TenGoi = a.TenGoi,
+                    Gia = a.Gia,
+                    Mota = a.Mota,
+                    ThoiGian = a.ThoiGian
+                });
+        }
+    }
+    private void remove(int id)
+    {
+        foreach (var gxn in gxndachon)
+        {
+            if (gxn.Id == id)
+            {
+                allGXN.Add(gxn);
+                tongtien -= gxn.Gia;
+            }
+        }
+        foreach (var gxn in listgxn)
+        {
+            if (gxn.Id == id)
+            {
+                gxn.IsSelected = false;
+            }
+        }
+        gxndachon.RemoveAll(item => item.Id == id);
+
+    }
+    private async Task add()
+    {
+        err.Clear(); // Xóa danh sách lỗi trước đó
+                     // Kiểm tra ngày lấy máu
+                     // Kiểm tra giờ lấy máu
+
+        if (string.IsNullOrWhiteSpace(Input.giolaymau))
+        {
+            err.Add("Giờ lấy máu không được để trống.");
+        }
+        if (gxndachon.Count == 0)
+        {
+            err.Add("Vui lòng chọn gói xét nghiệm.");
+        }
+        if (err.Any())
+        {
+            keolen();
+            return;
+        }
+        DonXetNghiem donXetNghiem = new DonXetNghiem
+            {
+                UserId = user.Id,
+                BacSiId = null,
+                Ngaydat = Input.Ngaydat,
+                ghiChu = Input.ghiChu,
+                Trangthai = "Chờ Thanh Toán",
+                giolaymau = Input.giolaymau,
+                ngaytaodon = DateTime.Now,
+            };
+        DonXetNghiem don = await DXNservice.addAsync(donXetNghiem);
+        foreach (var gxn in gxndachon)
+        {
+            DXNandGXN a = new DXNandGXN
+                {
+                    DonXetNghiemId = don.Id,
+                    GoiXetNghiemId = gxn.Id
+                };
+            await DXNservice.addnew(a);
+        }
+        ThanhToan tt = new ThanhToan
+            {
+                UserId = user.Id,
+                DonXetNghiemId = don.Id,
+                Tongtien = tongtien,
+                trangthai = "Chưa Thanh Toán"
+            };
+        await TTservice.addAsync(tt);
+        navigation.NavigateTo("/ThanhToan/" + don.Id);
+    }
+    public String loadGXN(int id)
+    {
+        foreach (var gxn in allGXN)
+        {
+            if (gxn.Id == id)
+            {
+                return gxn.TenGoi;
+            }
+        }
+        return null;
+    }
+    private String gioitinh(bool a)
+    {
+        if (a)
+        {
+            return "Nam";
+        }
+        else
+        {
+            return "Nữ";
+        }
+    }
+    private void LoadBSInfo(int id)
+    {
+        var selectedPackage = listgxn.FirstOrDefault(p => p.Id == id);
+        var g = allGXN.FirstOrDefault(p => p.Id == id);
+        if (selectedPackage != null)
+        {
+            selectedPackage.IsSelected = !selectedPackage.IsSelected;
+
+            if (selectedPackage.IsSelected == true)
+            {
+                gxndachon.Add(g);
+                tongtien += selectedPackage.Gia;
+            }
+            else
+            {
+                gxndachon.Remove(g);
+                tongtien -= selectedPackage.Gia;
+            }
+        }
+    }
+    public async Task keolen()
+    {
+        await JSRuntime.InvokeVoidAsync("scrollToBottom");
+    }
+}
+<script>
+    window.scrollToBottom = () => {
+        window.scrollTo(0, 0);
+    }
+</script>

@@ -16,6 +16,6 @@ namespace Shared.Model
         public int userid { get; set; }                 
         public User? User { get; set;                                                                                                                                                                               }     
         public int? idbs { get; set; }                                                                                                                                                               
-
+        public DateTime ngaytao { get; set; } 
     }
 }

@@ -4,17 +4,49 @@
  @using Shared.Model;
 @using Microsoft.AspNetCore.Authorization
 @using Shared.form
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">              
+                <h5 class="modal-title">Chọn người thân</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                @if (err != "")
+                {
+                    <div class="alert alert-danger">@err</div> <br>
+                }
+                <InputSelect ValueChanged="@((int value)=>layuser(value))" ValueExpression="@(()=>iduser)" Value="iduser" class="form-control" id="userid">
+                    <option value="0">Chọn người thân</option>
+                    @foreach (var use in alluser.Skip(1))
+                    {
+                        <option value="@use.Id">@use.Hoten</option>
+                    }
+                </InputSelect>
+                <h2>Thông tin bệnh nhân</h2>
+                @if (user != null)
+                {
+                    <div class="info">
+                        <p style="color:black" class="text-left"><strong>Họ tên:</strong> @user.Hoten</p>
+                        <p style="color:black" class="text-left"><strong>Tuổi:</strong> @user.Tuoi</p>
+                        <p style="color:black" class="text-left"><strong>Số điện thoại:</strong> @user.SDT</p>
+                        <p style="color:black" class="text-left"><strong>Địa chỉ:</strong> @user.Diachi, @user.CapXa, @user.CapHuyen, TT Huế</p>
+                        <p style="color:black" class="text-left"><strong>Email:</strong> @user.Email</p>
+                        <p style="color:black" class="text-left"><strong>Giới tính:</strong> @gioitinh(@user.Gioitinh)</p>
+                       
+                    </div>
 
-<!--Thong báo-->
-<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000" id="toastNotification">
-    <div class="toast-header">
-        <strong class="mr-auto">Thông báo</strong>
-        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="toast-body">
-        Gói đã có trong đơn xét nghiệm!
+                }
+                <a href="/adduser" style="width:100%;color:black" class="btn btn-info">Thêm thông tin người thân</a>
+                <a @onclick="add" style="width:100%;color:black" class="btn btn-primary">Đặt lịch</a>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
     </div>
 </div>
 <!-- hinh nen goi dich vu-->
@@ -78,15 +110,21 @@
                             </div>
                             <div class="plus-icon-container">
                                 <div class="actions1">
-                                    <a @onclick="@(() => themgio(goi.Id))" href="#myBooking" data-toggle="modal" class="btn btn-primary btn-booking rounded-circle">Thêm gói hàng</a>
+                                    
+                                    
                                 </div>
+                                
                             </div>
-                            @if (showNotification && selectedGoiId == goi.Id)
-                            {
+                                
                                 <div class="alert alert-info">
-                                    @notificationMessage
+                                <button @onclick="@(() => themgio(goi.Id,1))" style="width:100%">Đặt cho bản thân</button>
                                 </div>
-                            }
+                                <div class="alert alert-info p-2">                                
+                                    <button @onclick="@(() => themgio(goi.Id,2))" style="width:100%" data-toggle="modal" data-target="#myModal">Đặt cho người thân</button>
+                                </div>
+                            <div class="alert alert-info p-2">
+                                <button @onclick="@(() => themgio(goi.Id,3))" style="width:100%" >Liên hệ tư vấn</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -133,8 +171,12 @@
     [Inject]
     protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
+    [SupplyParameterFromForm]
+    public int Inputkq { get; set; } = new();
+
     public string UserName { get; set; }
     public User user { get; set; } = new();
+    public User user1 { get; set; } = new();
     public List<GoiXetNghiem> AllGoi { get; set; } = new();
     public List<GioHang> gioHangList { get; set; } = new();
     private int itemsPerPage = 9; // Số lượng mục trên mỗi trang
@@ -146,62 +188,89 @@
     private string notificationMessage = "";
     private string searchTerm = "";
     private List<GoiXetNghiem> FilteredGoi { get; set; } = new List<GoiXetNghiem>();
-
-
+    public List<User> alluser { get; set; } = new();
+    int iduser = 0,goiint=0;
+    string err = "";
     protected override async Task OnInitializedAsync()
     {
         await LoadAlLGoi();
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         UserName = authState.User.Identity.Name;
+        if (UserName != null)
+        {
+            alluser = await Usertservice.getalluserbyemailAsync(UserName);
+            user1 = await Usertservice.getuserbyemail(UserName);
+        }
+        user = alluser.FirstOrDefault(p => p.Id == Inputkq);
 
     }
-    public async Task themgio(int id)
+    public async Task themgio(int id,int haha)
     {
         if (UserName == null)
         {
             navigation.NavigateTo("/Account/Login");
             return;
         }
-        user = await Usertservice.getuserbyemail(UserName);
-
-        if (user == null)
+        if (user1 == null)
         {
             navigation.NavigateTo("/AddUser");
             return;
         }
 
-        gioHangList = await GHservice.getallAsyncbyiduser(user.Id);
-
         var goi = FilteredGoi.FirstOrDefault(g => g.Id == id);
 
         if (goi != null)
         {
-            selectedGoiId = goi.Id; // Lưu trữ ID của gói được chọn
-
-            if (gioHangList.Any(ab => ab.GoiXetNghiemId == id))
+            if(haha == 1)
             {
-                notificationMessage = "Gói đã có trong giỏ hàng.";
+                navigation.NavigateTo("/datlichid/" + id);
             }
-            else
+            if(haha ==2)
             {
-                await ThemGoiVaoGioHang(id);
-                notificationMessage = "Thêm vào giỏ hàng thành công.";
+                goiint = id;
             }
-
-            showNotification = true;
+            if (haha == 3)
+            {
+                var us = await Usertservice.getuserbyemail(UserName);
+                var allroom = await Roomchatservice.getallbyidAsync(us.Id);
+                string name = "Tư Vấn Gói :" + id;
+                var rooms = allroom.FirstOrDefault(a => a.Name == name);
+                if (rooms == null)
+                {
+                    roomchat room = new()
+                        {
+                            Name = "Tư Vấn Gói :" + id,
+                            userid = us.Id,
+                            ngaytao = DateTime.Now
+                        };
+                    var ro = await Roomchatservice.addAsync(room);
+                    Chat ha = new()
+                        {
+                            data = "Tôi cần hỗ trợ cho gói: " + id,
+                            roomchatid = ro.Id,
+                            thoigian = DateTime.Now,
+                            trangthai = 1,
+                            userid = us.Id
+                        };
+                    await Chatservice.addAsync(ha);
+                    navigation.NavigateTo("/Chat/" + ro.Id);
+                }
+                else
+                {
+                    navigation.NavigateTo("/Chat/" + rooms.Id);
+                }
+            }
         }
     }
-
-    private async Task ThemGoiVaoGioHang(int id)
+    private async Task add()
     {
-        GioHang a = new GioHang
-            {
-                GoiXetNghiemId = id,
-                IsSelected = false,
-                UserId = user.Id
-            };
-        await GHservice.addAsync(a);
-        gioHangList.Add(a); // Thêm vào danh sách giỏ hàng để tránh gọi lại dịch vụ khi cần kiểm tra lại
+        err = "";
+        if (iduser == 0)
+        {
+            err = "Vui lòng chọn người thân";
+            return;
+        }
+        navigation.NavigateTo("/datlichNTid/" +iduser+";"+goiint);
     }
 
     public async Task LoadAlLGoi()
@@ -243,6 +312,20 @@
         currentPage = 1; // Reset to the first page when performing a new search
         LoadAlLGoi();
     }
-
-
+    private void layuser(int id)
+    {
+        iduser = id;
+        user = alluser.FirstOrDefault(p => p.Id == id);
+    }
+    private String gioitinh(bool a)
+    {
+        if (a)
+        {
+            return "Nam";
+        }
+        else
+        {
+            return "Nữ";
+        }
+    }
 }

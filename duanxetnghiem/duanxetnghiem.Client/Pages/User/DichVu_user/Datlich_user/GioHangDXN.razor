@@ -1,0 +1,147 @@
+﻿@page "/giohangdxn"
+@using Shared.Model
+@rendermode InteractiveAuto
+@using Microsoft.AspNetCore.Authorization
+@using Shared.form
+@inject NavigationManager navigation;
+@attribute [Authorize]
+
+<h1>Đơn Xét Nghiệm</h1>
+
+@if (!DXNList.Any())
+{
+    <p>Đơn xét nghiệm của bạn đang trống</p>
+}
+
+@if (DXNList.Any())
+{
+    <button class="btn btn-danger" @onclick="DeleteSelected">Xóa các mục được chọn</button>
+    <table class="table table-striped mt-3">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Người sử dụng</th>
+                <th>Gói Xét Nghiệm</th>
+                <th scope="col">Số tiền của đơn</th>
+                <th scope="col">Chọn</th> <!-- Thêm cột chọn -->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ghang in GHang)
+            {
+                <tr>
+                    <td>@ghang.id</td>
+                    <td>@ghang.iduser</td>
+                    <td>
+                        @foreach(var gxn in ghang.listgxn)
+                        {
+                            <p>@gxn.GoiXetNghiemId</p>
+                        }
+                    </td>
+                    <td>@ghang.sotien</td>
+                    <td>
+                        <div class="form-check form-switch">
+                            <input @bind=ghang.chon class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                        </div>
+                    </td>
+                    <!-- Thêm checkbox -->
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a class="btn btn-secondary float-end mt-3" @onclick="@(() => add())">Thanh toán</a>
+    <br />
+    <p class="total-amount">Tổng tiền: @TinhTongTien() VND</p>
+}
+
+
+@code {
+    [Inject]
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+    Boolean check = false;
+    public List<DonXetNghiem> DXNList { get; set; } = new();
+    public List<gio> GHang { get; set; } = new();
+    public string UserName { get; set; }
+    public User user { get; set; } = new();
+    public List<User> Alluser { get; set; } = new();
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        UserName = authState.User.Identity.Name;
+        user = await Usertservice.getuserbyemail(UserName);
+        if (user == null)
+        {
+            navigation.NavigateTo("/AddUser");
+        }
+        DXNList = await DXNservice.getallbyiduserAsync(user.Id);
+        Alluser = await Usertservice.getalluserbyemailAsync(UserName);
+        foreach (var us in Alluser)
+        {
+            var don = await DXNservice.getallbyiduserAsync(us.Id);
+            foreach (var a in don)
+            {
+                if(a.Trangthai=="Chờ Thanh Toán" && a.UserId!=user.Id)
+                {
+                    DXNList.Add(a);
+                }
+            }
+        }
+        foreach(var dxn in DXNList)
+        {
+            if(dxn.Trangthai=="Chờ Thanh Toán")
+            {
+                gio a = new()
+                    {
+                        chon = false,
+                        id = dxn.Id,
+                        iduser = dxn.UserId
+                    };
+                GHang.Add(a);
+            }
+        }
+        foreach(var g in GHang)
+        {
+            g.listgxn = new List<DXNandGXN>();
+            g.listgxn = await DXNservice.getallGXNAsync(g.id);
+            var tt = await TTservice.getbyidDXNAsync(g.id);
+            g.sotien = tt.Tongtien;
+        }
+    }
+
+    private async void add()
+    {
+    }
+    private async void DeleteSelected()
+    {
+        var itemsToRemove = GHang.Where(student => student.chon == true).ToList();
+        foreach (var student in itemsToRemove)
+        {
+            GHang.Remove(student);
+            navigation.NavigateTo(navigation.Uri, true);
+        }
+
+    }
+
+
+    public long? TinhTongTien()
+    {
+        long? tongTien = 0;
+        foreach (var item in GHang)
+        {
+            if (item.chon == true)
+            {
+                tongTien += item.sotien;
+            }
+        }
+        return tongTien;
+    }
+    public class gio
+    {
+        public int id { get; set; }
+        public int iduser { get; set; }
+        public List<DXNandGXN> listgxn { get; set; }
+        public long sotien { get; set; }
+        public Boolean chon { get; set; }
+    }
+}
