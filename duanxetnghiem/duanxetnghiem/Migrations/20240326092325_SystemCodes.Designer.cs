@@ -12,8 +12,8 @@ using duanxetnghiem.Data;
 namespace duanxetnghiem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240322101834_InitialMigratio1")]
-    partial class InitialMigratio1
+    [Migration("20240326092325_SystemCodes")]
+    partial class SystemCodes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
