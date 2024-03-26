@@ -81,9 +81,17 @@
                                 <a href="/XCTDon/@DXN.Id" class="notification-link">@statusText</a>
                             </div>
                         }
-                        @if (@DXN.Trangthai == "Lấy mẫu thành công")
+                        @if (@DXN.Trangthai == "Đã Lấy Mẫu" || @DXN.Trangthai == "Chờ kết quả")
                         {
                             statusText = "* Đơn xét nghiệm " + DXN.Id + " của bạn đã lấy mẫu thành công. Chúng tôi sẽ gửi kết quả đến bạn trong thời gian sớm nhất.";
+                            <div class="notification-item">
+                                <img src="/logo.jpg" class="notification-icon-nd" />
+                                <a href="/XCTDon/@DXN.Id" class="notification-link">@statusText</a>
+                            </div>
+                        }
+                        @if (@DXN.Trangthai == "Hoàn thành")
+                        {
+                            statusText = "* Đơn xét nghiệm " + DXN.Id + " của bạn đã có kết quả. Nhấn vào để xem chi tiết.";
                             <div class="notification-item">
                                 <img src="/logo.jpg" class="notification-icon-nd" />
                                 <a href="/XCTDon/@DXN.Id" class="notification-link">@statusText</a>

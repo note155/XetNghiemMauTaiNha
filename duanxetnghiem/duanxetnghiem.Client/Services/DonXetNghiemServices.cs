@@ -29,7 +29,7 @@ namespace duanxetnghiem.Client.Services
 
         public async Task<DonXetNghiem> deleteAsync(int id)
         {
-            var newstudent = await _httpClient.PostAsJsonAsync("api/DonXetNghiem/Delete-DXN", id);
+            var newstudent = await _httpClient.DeleteAsync($"api/DonXetNghiem/Delete-DXN/{id}");
             var respone = await newstudent.Content.ReadFromJsonAsync<DonXetNghiem>();
             return respone;
         }

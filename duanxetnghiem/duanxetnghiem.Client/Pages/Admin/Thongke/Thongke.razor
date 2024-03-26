@@ -1,150 +1,408 @@
-﻿@page "/thongke"
+﻿
+@page "/trangchuthongke"
 @rendermode InteractiveAuto
-
-
-<h3 class="text-center">Thống kê</h3>
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Thống kê trong tháng @DateTime.Now.Month</h5>
-                    <canvas id="myPieChart" width="400" height="400"></canvas>
+<aside class="sidebar">
+    <ul class="nav">
+        <li class="nav-item1"><a class="nav-link active" onclick="openTab('DoanhThu')"><i class="fa fa-home"></i></a></li>
+        <li class="nav-item"><a class="nav-link" onclick="openTab('DoanhThu')"> Thống kê doanh thu</a></li>
+        <li class="nav-item"><a class="nav-link" onclick="openTab('DonHang')">Thống kê đơn hàng</a></li>
+        <li class="nav-item"><a class="nav-link" onclick="openTab('DoTuoi')">Thống kê độ tuổi</a></li>
+        <li class="nav-item"><a class="nav-link" onclick="openTab('PhamVi')">Thống kê phạm vi</a></li>
+    </ul>                                                                                                                                                                             
+</aside>
+<!--noidung-->
+<div class="main" style="margin-left:250px; padding:20px 0;">
+    <!--doanh thu-->
+    <div class="doanhthu" id="DoanhThu">
+        <div class="container">
+        <div class="row">           
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Biểu đồ trạng thái Doanh Thu trong tháng @DateTime.Now.Month (%)</h5>
+                            <canvas id="doanhthu" width="400" height="400"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                            <h5 class="card-title">Biểu đồ trạng thái Doanh Thu trong năm @DateTime.Now.Year (%)</h5>
+                            <canvas id="doanhthu1" width="400" height="400"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Biểu đồ trạng thái hóa đơn trong tháng @DateTime.Now.Month</h5>
-                    <canvas id="myPieChart1" width="400" height="400"></canvas>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Chi tiết</h5>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Trạng thái</th>
+                                    <th>Số lượng</th>
+                                    <th>Tổng thành tiền</th>
+                                </tr>
+                            </thead>
+                                <tbody>
+                                    @foreach (var ab in HDcount)
+                                    {
+                                        <tr>
+                                            <td>@ab.Key</td>
+                                            <td>@ab.Value</td>
+                                            @if (ab.Key == "Đã Thanh Toán")
+                                            {
+                                                <td>@string.Format("{0:#,##0}", tongtt) VND</td>
+                                            }
+                                            else
+                                            {
+                                                <td>@string.Format("{0:#,##0}", tong30) VND</td>
+                                            }
+                                        </tr>
+                                    }
+                                    <tr>
+                                        <td colspan="3">Tổng Doanh thu đạt được trong Tháng @DateTime.Now.Month : @string.Format("{0:#,##0}", tongdoanhthu) VND</td>
+                                    </tr>
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Chi tiết</h5>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Trạng thái</th>
+                                    <th>Số lượng</th>
+                                    <th>Tổng thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var ab in HDcountYear)
+                                {
+                                    <tr>
+                                        <td>@ab.Key</td>
+                                        <td>@ab.Value</td>
+                                        @if (ab.Key == "Đã Thanh Toán")
+                                        {
+                                            <td>@string.Format("{0:#,##0}", tongttYear) VND</td>
+                                        }
+                                        else
+                                        {
+                                            <td>@string.Format("{0:#,##0}", tong365) VND</td>
+                                        }
+                                    </tr>
+                                }
+                                <tr>
+                                    <td colspan="3">Tổng Doanh thu đạt được trong Năm @DateTime.Now.Year : @string.Format("{0:#,##0}", tongdoanhthuYear) VND</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>              
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div style="height:auto" class="card-body">
+                        <h5 class="card-title">Doanh thu từng Tháng</h5>
+                        <canvas id="doanhthu2"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+                <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Chi tiết</h5>
+                        <table id="detailTabledoanhthu" class="table" >
+                            <thead>
+                                <tr>
+                                    <th >Tháng</th>
+                                    <th >Doanh thu (VND)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row mt-4">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Chi tiết</h5>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Trạng thái</th>
-                                <th>Số lượng</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var ab in statusNames)
-                            {
-                                <tr>
-                                    <td>@ab</td>
-                                    @if (RequestCountsByStatus.ContainsKey(ab))
-                                    {
-                                        <td>@RequestCountsByStatus[ab].ToString() đơn</td>
-                                    }
-                                    else
-                                    {
-                                        <td>0 đơn</td>
-                                    }
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+    </div> 
+    <div class="donhang" id="DonHang" style="display:none;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Biểu đồ trạng thái Đơn Hàng của Tháng @DateTime.Now.Month (%)</h5>
+                            <canvas id="donhang" width="400" height="400"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Biểu đồ trạng thái Đơn Hàng của Năm @DateTime.Now.Year (%)</h5>
+                            <canvas id="donhang1" width="400" height="400"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Chi tiết</h5>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Trạng thái</th>
+                                        <th>Số lượng(đơn)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var ab in statusNames)
+                                    {
+                                        <tr>
+                                            <td>@ab</td>
+                                            @if (RequestCountsByStatus.ContainsKey(ab))
+                                            {
+                                                <td>@RequestCountsByStatus[ab].ToString()</td>
+                                            }
+                                            else
+                                            {
+                                                <td>0 đơn</td>
+                                            }
+                                        </tr>
+                                    }
+                                    <tr>
+                                        <td colspan="3">Tổng số Đơn Hàng trong Tháng @DateTime.Now.Month : @tongdonthang (đơn)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Chi tiết</h5>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Trạng thái</th>
+                                        <th>Số lượng(đơn)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var ab in statusNames)
+                                    {
+                                        <tr>
+                                            <td>@ab</td>
+                                            @if (RequestCountsByStatusYear.ContainsKey(ab))
+                                            {
+                                                <td>@RequestCountsByStatusYear[ab].ToString()</td>
+                                            }
+                                            else
+                                            {
+                                                <td>0 đơn</td>
+                                            }
+                                        </tr>
+                                    }
+                                    <tr>
+                                        <td colspan="3">Tổng số Đơn Hàng trong Năm @DateTime.Now.Year : @tongdonhang (đơn)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div style="height:550px" class="card-body">
+                            <h5 class="card-title">So sánh số Đơn đã Thực hiện</h5>
+                            <canvas id="donhang2"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>            
         </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Chi tiết</h5>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Trạng thái</th>
-                                <th>Số lượng</th>
-                                <th>Tổng thành tiền</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var ab in HDcount)
-                            {
-                                <tr>
-                                    <td>@ab.Key</td>
-                                    <td>@ab.Value</td>
-                                    @if (ab.Key == "Đã Thanh Toán")
-                                    {
-                                        <td>@tongtt VND</td>
-                                    }
-                                    else
-                                    {
-                                        <td>@tong30 VND</td>
-                                    }
-                                </tr>
-                            }
-                            <tr>
-                                <td colspan="3">Tổng doanh thu đạt được trong tháng @DateTime.Now.Month: @tongdoanhthu VND</td>
-                            </tr>
-                        </tbody>
-                    </table>
+    </div>
+    <div class="dotuoi" id="DoTuoi" style="display:none;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="card">
+                        <div class="card-body" >
+                            <h5 class="card-title">Biểu đồ trạng thái tỷ lệ phần trăm(%) các nhóm Tuổi so với Tổng số mẫu</h5>
+                            <canvas id="dotuoi" width="400" height="350"></canvas>
+                        </div>
+                    </div>
+                </div> 
+                <div class="col-md-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Chi tiết</h5>
+                            <table id="detailTable1" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Độ tuổi</th>
+                                        <th>Số lượng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>          
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div style="height:auto" class="card-body">
+                            <h5 class="card-title">So sánh Độ tuổi</h5>
+                            <canvas id="dotuoi1"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div style="height:350px" class="card-body">
-                    <h5 class="card-title">Số đơn đã thực hiện</h5>
-                    <canvas id="myChart"></canvas>
+    <div class="phamvi" id="PhamVi" style="display:none;">
+        <div class="container">
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div style="height:650px" class="card-body">
+                            <h5 class="card-title">Thống kê từng Phạm vi</h5>
+                            <canvas id="phamvi"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Chi tiết</h5>
+                            <table id="detailTable" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Tên phạm vi</th>
+                                        <th>Số lượng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>                                  
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 @code {
     public List<DonXetNghiem> AllDXN { get; set; } = new();
     public List<ThanhToan> AllHD { get; set; } = new();
+    public List<User> AllUser { get; set; } = new();
     public List<int> CompletedRequestsPerMonth { get; set; } = new List<int>();
     public Dictionary<string, int> RequestCountsByStatus { get; set; } = new Dictionary<string, int>();
+    public Dictionary<string, int> RequestCountsByStatusYear { get; set; } = new Dictionary<string, int>();
+    public Dictionary<int, long> TotalRevenuePerMonth { get; set; } = new Dictionary<int, long>();
     public Dictionary<string, int> HDcount { get; set; } = new Dictionary<string, int>();
+    public Dictionary<string, int> HDcountYear { get; set; } = new Dictionary<string, int>();
+    public Dictionary<string, int> testsByDistrict = new Dictionary<string, int>();
+    public Dictionary<string, int> AgeCounts { get; set; } = new Dictionary<string, int>();
     public List<string> statusNames = new List<string> { "Hoàn thành", "Đã Chuyển Tiền", "Chờ kết quả", "Lấy mẫu thất bại", "Từ Chối" };
-    public List<string> HDtrangthai = new List<string> { "Đã Thanh Toán", "30%" };
-    long tongdoanhthu=0,tongtt=0,tong30=0;
+    public int tongdonhang { get; set; } = 0;
+    public int tongdonthang { get; set; } = 0;
+    public Dictionary<string, List<int>> HDcountByRegionPerMonth { get; set; } = new Dictionary<string, List<int>>();
+    public List<string> regions { get; set; } = new List<string> { "Thành phố Huế", "Phong Điền", "Quảng Điền", "Hương Trà", "Phú Vang", "Hương Thủy", "Phú Lộc", "A Lưới", "Nam Đông" };
+    public List<string> HDtrangthai = new List<string> { "Đã Thanh Toán", "30%"};
+    public List<string> thang { get; set; } = new List<string> { "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12" };
+    long tongdoanhthu = 0, tongtt = 0, tong30 = 0;
+    long tongdoanhthuYear = 0, tongttYear = 0, tong365 = 0;
+
     protected override async Task OnInitializedAsync()
     {
+        await LoadData();
+        CalculateTotalRevenue();
+        CalculateTestsByDistrict();
+        CalculateAgeDistribution();
+
+    }
+    private async Task LoadData()
+    {
         AllDXN = await DXNservice.getallAsync();
-        AllHD = await TTservice.getall();
-        // Loop through each month and count completed requests
+        AllHD = await TTservice.getall(); // Lấy danh sách hóa đơn
+        AllUser = await Usertservice.getalluserAsync();
+        tongdonhang = 0;
+        tongdonthang = 0;
+        // Tính toán số đơn đã hoàn thành trong mỗi tháng
         for (int i = 1; i <= 12; i++)
         {
             var completedRequests = FilterCompletedRequestsByMonth(i);
             CompletedRequestsPerMonth.Add(completedRequests);
         }
+
+        // Tính toán số đơn theo trạng thái cho tháng và năm hiện tại
         foreach (var status in statusNames)
         {
-            RequestCountsByStatus[status] = AllDXN.Count(d => d.Trangthai == status && d.ngaytaodon.Month == DateTime.Now.Month);
-        }
+            int countByStatus = AllDXN.Count(d => d.Trangthai == status && d.ngaytaodon.Month == DateTime.Now.Month); // Thay đổi thành d.ngaytaodon.Month
+            RequestCountsByStatus[status] = countByStatus;
+
+            // Đếm số đơn theo năm
+            int countByStatusYear = AllDXN.Count(d => d.Trangthai == status && d.ngaytaodon.Year == DateTime.Now.Year);
+            RequestCountsByStatusYear[status] = countByStatusYear;
+
+            // Cập nhật tổng số lượng đơn hàng trong năm
+            tongdonhang += countByStatusYear;
+            // Cập nhật tổng số lượng đơn hàng trong tháng
+            tongdonthang += countByStatus;
+        } 
+
+        // Tổng số lượng đơn hàng trong tháng và năm
+        tongdonthang = RequestCountsByStatus.Sum(x => x.Value);
+        tongdonhang = RequestCountsByStatusYear.Sum(x => x.Value);
+    }
+    private void CalculateTotalRevenue()
+    {
+
         foreach (var hd in HDtrangthai)
         {
-            HDcount[hd] = AllHD.Count(d => d.trangthai == hd && d.NgayTT1 != null && d.NgayTT1.Value.Month == DateTime.Now.Month 
-                || d.trangthai==hd && d.NgayTT2!=null && d.NgayTT2.Value.Month == DateTime.Now.Month);
-        }
-        foreach(var c in AllHD)
+            HDcount[hd] = AllHD.Count(d => d.trangthai == hd && d.NgayTT1 != null && d.NgayTT1.Value.Month == DateTime.Now.Month
+                || d.trangthai == hd && d.NgayTT2 != null && d.NgayTT2.Value.Month == DateTime.Now.Month);
+
+            HDcountYear[hd] = AllHD.Count(d => d.trangthai == hd && d.NgayTT1 != null && d.NgayTT1.Value.Year == DateTime.Now.Year
+                || d.trangthai == hd && d.NgayTT2 != null && d.NgayTT2.Value.Year == DateTime.Now.Year);
+        }      
+        foreach (var c in AllHD)
         {
-            if(c.NgayTT2!=null && c.NgayTT2.Value.Month == DateTime.Now.Month)
+            if (c.NgayTT2 != null && c.NgayTT2.Value.Month == DateTime.Now.Month)
             {
                 if (c.trangthai == "Đã Thanh Toán")
                 {
                     tongdoanhthu += c.Tongtien;
                     tongtt += c.Tongtien;
                 }
-            }
+            }       
             if (c.NgayTT2 == null)
             {
-                if (c.NgayTT1!=null && c.NgayTT1.Value.Month == DateTime.Now.Month)
+                if (c.NgayTT1 != null && c.NgayTT1.Value.Month == DateTime.Now.Month)
                 {
                     if (c.trangthai == "Đã Thanh Toán")
                     {
@@ -158,8 +416,172 @@
                     }
                 }
             }
-           
+            if (c.NgayTT2 != null && c.NgayTT2.Value.Year == DateTime.Now.Year)
+            {
+                if (c.trangthai == "Đã Thanh Toán")
+                {
+                    tongdoanhthuYear += c.Tongtien;
+                    tongttYear += c.Tongtien;
+                }
+            }
+            if (c.NgayTT2 == null)
+            {
+                if (c.NgayTT1 != null && c.NgayTT1.Value.Year == DateTime.Now.Year)
+                {
+                    if (c.trangthai == "Đã Thanh Toán")
+                    {
+                        tongdoanhthuYear += c.Tongtien;
+                        tongttYear += c.Tongtien;
+                    }
+                    if (c.trangthai == "30%")
+                    {
+                        tongdoanhthuYear += c.DaTT1 ?? 0;
+                        tong365 += c.DaTT1 ?? 0;
+                    }
+                }
+            }   
         }
+        for (int i = 1; i <= DateTime.Now.Month; i++)
+        {
+            // Tính tổng doanh thu cho tháng i
+            long totalRevenue = 0;
+
+            // Duyệt qua danh sách hóa đơn và tính tổng doanh thu cho tháng i
+            foreach (var c in AllHD)
+            {
+                if (c.NgayTT2 != null && c.NgayTT2.Value.Month == i)
+                {
+                    if (c.trangthai == "Đã Thanh Toán")
+                    {
+                        totalRevenue += c.Tongtien;
+                        tongtt += c.Tongtien;
+                    }
+                }
+                if (c.NgayTT2 == null)
+                {
+                    if (c.NgayTT1 != null && c.NgayTT1.Value.Month == i)
+                    {
+                        if (c.trangthai == "Đã Thanh Toán")
+                        {
+                            totalRevenue += c.Tongtien;
+                            tongtt += c.Tongtien;
+                        }
+                        if (c.trangthai == "30%")
+                        {
+                            totalRevenue += c.DaTT1 ?? 0;
+                            tong30 += c.DaTT1 ?? 0;
+                        }
+                    }
+                }
+            }
+            // Lưu tổng doanh thu vào Dictionary
+            TotalRevenuePerMonth[i] = totalRevenue;   
+            
+        }
+        
+    }    
+    private void CalculateTestsByDistrict()
+    {
+        List<string> uniqueDistricts = new List<string>(); // Danh sách các phạm vi duy nhất
+        Dictionary<string, int> testsByDistrict = new Dictionary<string, int>(); // Dictionary lưu số lượng đơn xét nghiệm của từng phạm vi
+                                                                                 // Duyệt qua danh sách người dùng để lấy thông tin vị trí (cấp huyện)
+        foreach (var user in AllUser)
+        {
+            string district = user.CapHuyen;
+            if (!uniqueDistricts.Contains(district))
+            {
+                uniqueDistricts.Add(district);
+            }
+
+            // Đếm số lượng đơn xét nghiệm của người dùng thuộc từng phạm vi
+            int testsCount = AllDXN.Count(d => AllUser.Any(u => u.CapHuyen == district && u.Id == d.UserId));
+
+            // Cập nhật hoặc thêm số lượng đơn xét nghiệm vào dictionary
+            if (testsByDistrict.ContainsKey(district))
+            {
+                testsByDistrict[district] += testsCount;
+            }
+            else
+            {
+                testsByDistrict[district] = testsCount;
+            }
+        }
+
+        // Tiếp tục xử lý dữ liệu và vẽ biểu đồ ở đây
+        DrawTestsByDistrictChart(uniqueDistricts, testsByDistrict);
+    }
+    private void CalculateAgeDistribution()
+    {
+        AgeCounts = new Dictionary<string, int>();
+        int totalUsers = AllUser.Count;
+        string[] ageGroups = { "0-10", "11-20", "21-30", "31-40", "41-50", "51-60", "61-70", "71-80", "81+" };
+
+        // Khởi tạo số lượng người dùng trong mỗi nhóm tuổi là 0
+        foreach (string ageGroup in ageGroups)
+        {
+            AgeCounts[ageGroup] = 0;
+        }
+
+        // Duyệt qua danh sách người dùng
+        foreach (var user in AllUser)
+        {
+            int age = user.Tuoi;
+
+            // Xác định nhóm tuổi của người dùng và tăng số lượng người dùng trong nhóm tuổi đó
+            for (int i = 0; i < ageGroups.Length - 1; i++)
+            {
+                int lowerBound = int.Parse(ageGroups[i].Split('-')[0]);
+                int upperBound = int.Parse(ageGroups[i].Split('-')[1]);
+
+                if (age >= lowerBound && age <= upperBound)
+                {
+                    AgeCounts[ageGroups[i]]++;
+                    break;
+                }
+            }
+
+            // Xử lý trường hợp tuổi lớn hơn 81+
+            if (age >= int.Parse(ageGroups[ageGroups.Length - 1].Split('+')[0]))
+            {
+                AgeCounts[ageGroups[ageGroups.Length - 1]]++;
+            }
+        }
+        List<double> percentages = new List<double>();
+        foreach (var count in AgeCounts.Values)
+        {
+            double percentage = (double)count / totalUsers * 100;
+            percentages.Add(Math.Round(percentage, 2));
+        }
+        var labels = AgeCounts.Keys.Zip(percentages, (key, percentage) => $"{key} ({percentage}%)").ToArray();
+    }
+    private async Task DrawAgePieChart()
+    {
+        // Tạo mảng dữ liệu cho biểu đồ tròn
+        var labels = AgeCounts.Keys.ToArray();
+        var data = AgeCounts.Values.ToArray();
+
+        // Gọi hàm JavaScript interop để vẽ biểu đồ tròn
+        await JSRuntime.InvokeVoidAsync("dotuoi", labels, data);
+        await JSRuntime.InvokeVoidAsync("updateDetailTableTuoi", labels, data);
+    }
+    private async Task DrawBarChart()
+    {
+        // Tạo mảng dữ liệu cho biểu đồ cột
+        var labels = AgeCounts.Keys.ToArray();
+        var data = AgeCounts.Values.ToArray();
+
+        // Gọi hàm JavaScript interop để vẽ biểu đồ cột
+        await JSRuntime.InvokeVoidAsync("dotuoi1", labels, data);
+    }
+    private async Task DrawTestsByDistrictChart(List<string> uniqueDistricts, Dictionary<string, int> testsByDistrict)
+    {
+        // Tạo mảng dữ liệu cho biểu đồ đường
+        var labels = uniqueDistricts.ToArray();
+        var data = uniqueDistricts.Select(district => testsByDistrict.ContainsKey(district) ? testsByDistrict[district] : 0).ToArray();
+
+        // Gọi hàm JavaScript interop để vẽ biểu đồ đường
+        await JSRuntime.InvokeVoidAsync("phamvi", labels, data);
+        await JSRuntime.InvokeVoidAsync("updateDetailTable", labels, data);
     }
     private async Task DrawPieChart()
     {
@@ -168,7 +590,16 @@
         var data = RequestCountsByStatus.Values.ToArray();
 
         // Gọi hàm JavaScript interop để vẽ biểu đồ tròn
-        await JSRuntime.InvokeVoidAsync("renderPieChart", labels, data);
+        await JSRuntime.InvokeVoidAsync("donhang", labels, data);
+    }
+    private async Task DrawPieChartYear()
+    {
+        // Tạo mảng dữ liệu cho biểu đồ tròn
+        var labels = RequestCountsByStatusYear.Keys.ToArray();
+        var data = RequestCountsByStatusYear.Values.ToArray();
+
+        // Gọi hàm JavaScript interop để vẽ biểu đồ tròn
+        await JSRuntime.InvokeVoidAsync("donhang1", labels, data);
     }
     private async Task hoadon()
     {
@@ -177,34 +608,179 @@
         var data = HDcount.Values.ToArray();
 
         // Gọi hàm JavaScript interop để vẽ biểu đồ tròn
-        await JSRuntime.InvokeVoidAsync("renderPieChart1", labels, data);
+        await JSRuntime.InvokeVoidAsync("doanhthu", labels, data);
+    }
+    private async Task hoadonYear()
+    {
+        // Tạo mảng dữ liệu cho biểu đồ tròn
+        var labels = HDcountYear.Keys.ToArray();
+        var data = HDcountYear.Values.ToArray();
+
+        // Gọi hàm JavaScript interop để vẽ biểu đồ tròn
+        await JSRuntime.InvokeVoidAsync("doanhthu1", labels, data);
     }
     public int FilterCompletedRequestsByMonth(int month)
     {
-        return AllDXN.Where(d => d.ngaytaodon.Month == month && d.Trangthai == "Hoàn thành").ToList().Count;
-    }
+        return AllDXN.Count(d => d.ngaytaodon.Month == month && d.Trangthai == "Hoàn thành");
 
+    }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             await OnInitializedAsync(); // Wait for data to be fetched
-            await JSRuntime.InvokeVoidAsync("renderChart", CompletedRequestsPerMonth);
+            await JSRuntime.InvokeVoidAsync("donhang2", CompletedRequestsPerMonth);
+            await JSRuntime.InvokeVoidAsync("doanhthu2", thang, TotalRevenuePerMonth.Values.ToList());
+            await JSRuntime.InvokeVoidAsync("updateDetailTableDoanhThu", thang, TotalRevenuePerMonth.Values.ToList());
+            await DrawAgePieChart();
+            await DrawBarChart();
             await DrawPieChart();
+            await DrawPieChartYear();
             await hoadon();
+            await hoadonYear();
+            
         }
-    }
-
+    }   
 }
 <script>
-    window.renderChart = (data) => {
-        var ctx = document.getElementById('myChart').getContext('2d');
+    window.doanhthu = (labels, data) => {
+        var ctx = document.getElementById('doanhthu').getContext('2d');
+        var doanhthu = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        // Thêm màu sắc cho các trạng thái khác
+                    ],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                tooltips: {
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            var dataset = data.datasets[tooltipItem.datasetIndex];
+                            var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
+                                return previousValue + currentValue;
+                            });
+                            var currentValue = dataset.data[tooltipItem.index];
+                            var percentage = Math.round((currentValue / total) * 100);
+                            return `${data.labels[tooltipItem.index]}: ${currentValue} (${percentage}%)`;
+                        }
+                    }
+                }
+            }
+        });
+    };
+    window.doanhthu1 = (labels, data) => {
+        var ctx = document.getElementById('doanhthu1').getContext('2d');
+        var doanhthu1 = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: [                                               
+                        'rgba(250,128,114)',
+                        'rgba(176,224,230)',
+                        // Thêm màu sắc cho các trạng thái khác
+                    ],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                tooltips: {
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            var dataset = data.datasets[tooltipItem.datasetIndex];
+                            var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
+                                return previousValue + currentValue;
+                            });
+                            var currentValue = dataset.data[tooltipItem.index];
+                            var percentage = Math.round((currentValue / total) * 100);
+                            return `${data.labels[tooltipItem.index]}: ${currentValue} (${percentage}%)`;
+                        }
+                    }
+                }
+            }
+        });
+    };
+    window.doanhthu2 = (labels, data) => {
+        var ctx = document.getElementById('doanhthu2').getContext('2d');
+        var doanhthu2 = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+                datasets: [{
+                    label: 'Doanh thu',
+                    data: data,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            callback: function (value, index, values) {
+                                // Format số có dấu chấm phân tách hàng nghìn
+                                return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                            }
+                        }
+                    }]
+                }
+            }
+        });
+    };
+    function updateDetailTableDoanhThu(labels, data) {
+        var tableBody = document.getElementById('detailTabledoanhthu').getElementsByTagName('tbody')[0];
+
+        // Clear existing rows
+        tableBody.innerHTML = '';
+
+        // Add new rows with data
+        for (var i = 0; i < labels.length; i++) {
+            var row = tableBody.insertRow(i);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            cell1.innerHTML = labels[i];
+            cell2.textContent = formatNumber(data[i]); // Sử dụng textContent thay vì innerHTML
+            cell2.classList.add("formatted-number"); // Thêm lớp CSS cho ô chứa số tiền
+        }
+
+    }
+    function formatNumber(number) {
+        // Kiểm tra nếu biến là null hoặc undefined trước khi gọi phương thức toString()
+        if (number == null) {
+            return "";
+        }
+
+        // Kiểm tra nếu biến không phải là số trước khi gọi phương thức toString()
+        if (typeof number !== 'number') {
+            return "";
+        }
+
+        // Format số với dấu chấm phân tách hàng nghìn và phần trăm, phần nghìn, tỷ, v.v.
+        // Ví dụ: 1.234.555.000 -> 1.234.555.000.000
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }  
+    window.donhang2 = (data) => {
+        var ctx = document.getElementById('donhang2').getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
                 datasets: [{
-                    label: 'Số đơn đã thực hiện',
+                    label: 'Số đơn thực hiện',
                     data: data,
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                     borderColor: 'rgba(75, 192, 192, 1)',
@@ -233,33 +809,170 @@
                 responsive: true,
             }
         });
-    };
-    window.renderPieChart = (labels, data) => {
-        var ctx = document.getElementById('myPieChart').getContext('2d');
-        var myPieChart = new Chart(ctx, {
+    };   
+    window.donhang = (labels, data) => {
+        var ctx = document.getElementById('donhang').getContext('2d');
+        var donhang = new Chart(ctx, {
             type: 'pie',
             data: {
                 labels: labels,
                 datasets: [{
                     data: data,
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(221,160,221)',
                         'rgba(54, 162, 235, 0.6)',
                         'rgb(255, 175, 71)',
-                        'rgb(149, 175, 71)'
+                        'rgb(149, 175, 72)',
+                        'rgb(147,112,219)',
                         // Thêm màu sắc cho các trạng thái khác
                     ],
                     hoverOffset: 4
                 }]
             },
             options: {
-                responsive: true
+                responsive: true,
+                tooltips: {
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            var dataset = data.datasets[tooltipItem.datasetIndex];
+                            var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
+                                return previousValue + currentValue;
+                            });
+                            var currentValue = dataset.data[tooltipItem.index];
+                            var percentage = Math.round((currentValue / total) * 100);
+                            return `${data.labels[tooltipItem.index]}: ${currentValue} (${percentage}%)`;
+                        }
+                    }
+                }
             }
         });
     };
-    window.renderPieChart1 = (labels, data) => {
-        var ctx = document.getElementById('myPieChart1').getContext('2d');
-        var myPieChart1 = new Chart(ctx, {
+    window.donhang1 = (labels, data) => {
+        var ctx = document.getElementById('donhang1').getContext('2d');
+        var donhang1 = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: [
+                        'rgb(255, 0, 191)',
+                        'rgb(0, 191, 255)',
+                        'rgb(244,164,96)',
+                        'rgb(64, 255, 0)'
+
+                        // Thêm màu sắc cho các trạng thái khác
+                    ],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                tooltips: {
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            var dataset = data.datasets[tooltipItem.datasetIndex];
+                            var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
+                                return previousValue + currentValue;
+                            });
+                            var currentValue = dataset.data[tooltipItem.index];
+                            var percentage = Math.round((currentValue / total) * 100);
+                            return `${data.labels[tooltipItem.index]}: ${currentValue} (${percentage}%)`;
+                        }
+                    }
+                }
+               
+            }
+        });
+    };
+    window.khuvuc = (data) => {
+        var ctx = document.getElementById('khuvuc').getContext('2d');
+        var khuvuc = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Thành phố Huế', 'Phong Điền', 'Quảng Điền', 'Hương Trà', 'Phú Vang', 'Hương Thủy', 'Phú Lộc', 'A Lưới', 'Nam Đông'],
+                datasets: data.map((item, index) => {
+                    return {
+                        label: regions[index],
+                        data: item,
+                        backgroundColor: getRandomColor(),
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    };
+                })
+            },
+            options: {
+                plugins: {
+                    datalabels: {
+                        color: 'black',
+                        anchor: 'end',
+                        align: 'top',
+                        formatter: (value, context) => {
+                            return value;
+                        }
+                    }
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                maintainAspectRatio: false,
+                responsive: true,
+            }
+        });
+    };  
+    window.phamvi = (labels, data) => {
+        var ctx = document.getElementById('phamvi').getContext('2d');
+        var phamvi = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Số đơn từng khu vực',
+                    data: data,
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    };
+    window.getDataFromLineChart = (labels, data, dataIndex) => {
+        // Lấy tên khu vực và số lượng từ dữ liệu của điểm được chọn
+        var selectedRegion = labels[dataIndex];
+        var selectedQuantity = data[dataIndex];
+
+        // Cập nhật bảng chi tiết với dữ liệu mới
+        updateDetailTable(selectedRegion, selectedQuantity);
+    };
+    function updateDetailTable(labels, data) {
+        var tableBody = document.getElementById('detailTable').getElementsByTagName('tbody')[0];
+
+        // Clear existing rows
+        tableBody.innerHTML = '';
+
+        // Add new rows with data
+        for (var i = 0; i < labels.length; i++) {
+            var row = tableBody.insertRow(i);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            cell1.innerHTML = labels[i];
+            cell2.innerHTML = data[i];
+        }
+    }
+    window.dotuoi = (labels, data) => {
+        var ctx = document.getElementById('dotuoi').getContext('2d');
+        var dotuoi = new Chart(ctx, {
             type: 'pie',
             data: {
                 labels: labels,
@@ -268,18 +981,108 @@
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.6)',
                         'rgba(54, 162, 235, 0.6)',
-                        // Thêm màu sắc cho các trạng thái khác
+                        'rgba(255, 206, 86, 0.8)',
+                        'rgba(221,160,221)',
+                        'rgba(230,230,250)',
+                        'rgba(176,224,230)',
+                        'rgba(72,209,204)',
+                        'rgba(34,139,34)',
+                        'rgba(102,205,170)',
+                        'rgba(255,99,71)'
                     ],
                     hoverOffset: 4
                 }]
             },
             options: {
-                responsive: true
+                responsive: true,
+                tooltips: {
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            var dataset = data.datasets[tooltipItem.datasetIndex];
+                            var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
+                                return previousValue + currentValue;
+                            });
+                            var currentValue = dataset.data[tooltipItem.index];
+                            var percentage = Math.round((currentValue / total) * 100);
+                            return `${data.labels[tooltipItem.index]}: ${currentValue} (${percentage}%)`;
+                        }
+                    }
+                }
             }
         });
     };
-    
+    function updateDetailTableTuoi(labels, data) {
+        var tableBody = document.getElementById('detailTable1').getElementsByTagName('tbody')[0];
+
+        // Clear existing rows
+        tableBody.innerHTML = '';
+
+        // Add new rows with data
+        for (var i = 0; i < labels.length; i++) {
+            var row = tableBody.insertRow(i);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            cell1.innerHTML = labels[i];
+            cell2.innerHTML = data[i];
+        }
+    }
+    window.dotuoi1 = (labels, data) => {
+        var ctx = document.getElementById('dotuoi1').getContext('2d');
+        var dotuoi1 = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Số lượng',
+                    data: data,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.8)',
+                        'rgba(221,160,221)',
+                        'rgba(230,230,250)',
+                        'rgba(176,224,230)',
+                        'rgba(72,209,204)',
+                        'rgba(34,139,34)',
+                        'rgba(102,205,170)',
+                        'rgba(255,99,71)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    };
 </script>
+<script>
+    function openTab(nameTab) {
+        // ẩn hết
+        var main = document.getElementsByClassName('main')[0].children;
+        for (var e of main) {
+            e.style.display = 'none';
+        }
 
-
-
+        // mở tab
+        switch (nameTab) {
+            case 'DoanhThu':
+                document.getElementById('DoanhThu').style.display = 'block';
+                break;
+            case 'DonHang':
+                document.getElementById('DonHang').style.display = 'block';
+                break;
+            case 'DoTuoi':
+                document.getElementById('DoTuoi').style.display = 'block';
+                break;
+            case 'PhamVi':
+                document.getElementById('PhamVi').style.display = 'block';
+                break;
+        }
+    }
+</script>

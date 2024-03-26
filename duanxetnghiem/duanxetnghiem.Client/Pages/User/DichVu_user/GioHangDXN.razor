@@ -168,6 +168,7 @@
         foreach (var student in itemsToRemove)
         {
             GHang.Remove(student);
+            await DXNservice.deleteAsync(student.id);
             navigation.NavigateTo(navigation.Uri, true);
         }
 
