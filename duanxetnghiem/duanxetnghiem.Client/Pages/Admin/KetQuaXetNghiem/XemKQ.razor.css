@@ -250,3 +250,46 @@ button.btn-primary {
 .total-mobile {
     margin-top: 10px; /* Điều chỉnh khoảng cách với phần tổng tiền */
 }
+/* Reset default list styles */
+ul, ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Style for timeline */
+.timeline-item {
+    position: relative;
+    padding: 20px 40px;
+    background: #f2f2f2;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+    .timeline-item::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 20px;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 10px 10px 10px 0;
+        border-color: transparent #f2f2f2 transparent transparent;
+    }
+
+.timeline-item-content {
+    position: relative;
+}
+
+.time {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 600px) {
+    .timeline-item {
+        padding: 15px;
+    }
+}

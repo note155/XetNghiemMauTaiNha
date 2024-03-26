@@ -1,0 +1,117 @@
+﻿@rendermode InteractiveAuto
+<div class="package-container">
+    <div class="package-item">
+        <div class="package-item-detail">
+            <h3 class="package-item-title">
+                Tên Gói Xét Nghiệm:@gxn.TenGoi
+            </h3>
+            <div class="package-item-meta">
+                
+                <div class="package-item-gender">Thời gian: @gxn.ThoiGian</div>
+            </div>
+            <div class="package-item-bottom">
+                <div class="price-box">
+                    <span class="price">Giá: @gxn.Gia ₫</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="package-details-description">
+    <div class="row">
+        <div class="col-md-6">
+            <h2 style="font-size: 30px;">Thông tin chỉ số gói khám</h2>
+            <div class="information">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Tên
+                            </th>
+                            <th>
+                                CSBT
+                            </th>
+                            <th>
+                                Đơn vị
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var csa in allchiso)
+                        {
+                            <tr>
+                                <td>
+                                    @csa.ten
+                                </td>
+                                <td>
+                                    @csa.CSBT
+                                </td>
+                                <td>
+                                    @csa.DonVi
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h2 style="font-size: 30px;">Mô tả thông tin</h2>
+            <strong>
+                @gxn.Mota
+            </strong>
+        </div>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public int id { get; set; }
+    [Inject]
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+    [SupplyParameterFromForm]
+    public int Inputkq { get; set; } = new();
+
+    public string UserName { get; set; }
+    public User user { get; set; } = new();
+    public User user1 { get; set; } = new();
+    private GoiXetNghiem gxn = new GoiXetNghiem();
+    public List<Chiso> allchiso { get; set; } = new();
+    public List<GXNandCS> cs { get; set; } = new();
+    public List<User> alluser { get; set; } = new();
+    int iduser = 0, goiint = 0;
+    string err = "";
+    protected override async Task OnInitializedAsync()
+    {
+        gxn = await GXNservice.getbyid(id);
+        cs = await GXNservice.getallCSbyidAsync(id);
+        var kk = await CSservice.getallAsync();
+        foreach (var s in kk)
+        {
+            foreach (var m in cs)
+            {
+                if (s.Id == m.ChisoId)
+                {
+                    allchiso.Add(s);
+                }
+            }
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            keolen();
+        }
+    }
+    public async Task keolen()
+    {
+        await JSRuntime.InvokeVoidAsync("scrollToBottom");
+    }
+}
+<script>
+    window.scrollToBottom = () => {
+        window.scrollTo(0, 0);
+    }
+</script>

@@ -1,8 +1,8 @@
 ﻿@page "/listdscoKQ"
 @inject NavigationManager navigation;
 @attribute [Authorize]
-
-<NavMenu />
+@layout AdminLayout
+@using System.Globalization
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -11,6 +11,13 @@
             </div>
             <div class="card-body">
                 <div class="row">
+                    <EditForm Model="Inputkq" method="post" OnValidSubmit="timkiem" FormName="register">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary class="text-danger" role="alert" />
+                        <InputText @bind-Value="Inputkq" placeholder="tìm kiếm" />
+                        <ValidationMessage For="() => Inputkq" class="text-danger" />
+                        <button type="submit" class=" btn-success">Tìm kiếm</button> <!-- Updated button class -->
+                    </EditForm>
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header"></div>
@@ -77,14 +84,26 @@
     public List<KetQuaXetNghiem> allKQ { get; set; } = new();
     public List<Khoa> allkhoa { get; set; } = new();
 
+    [SupplyParameterFromForm]
+    public String Inputkq { get; set; } = new("");
     protected override async Task OnInitializedAsync()
     {
+        await checkbs();
         await LoadAlLStudents();
         allUser = await Usertservice.getalluserAsync();
         allKQ = await KQXNservice.getallAsync();
         allkhoa = await Khoaservice.getallAsync();
     }
-
+    public async Task checkbs()
+    {
+        var authState = await checkbss.GetAuthenticationStateAsync();
+        var UserName = authState.User.Identity.Name;
+        var bs = await bacsiservice.getbyemail(UserName);
+        if (bs == null)
+        {
+            navigation.NavigateTo("/err");
+        }
+    }
 
     private string loadkhoa(int id)
     {
@@ -123,4 +142,34 @@
         }
         return null;
     }
+    private async Task timkiem()
+    {
+        if (string.IsNullOrEmpty(Inputkq))
+        {
+            await LoadAlLStudents(); // Load all students if search query is empty
+        }
+        else
+        {
+            // Define array of formats to parse the search query
+            string[] formats = { "dd/MM/yyyy", "d/M/yyyy" };
+
+            // Parse the search query as a date with multiple formats
+            if (DateTime.TryParseExact(Inputkq, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime searchDate))
+            {
+                // Filter AllDXN based on the search date
+                AllDXN = AllDXN.Where(dx => dx.Ngaydat.Date == searchDate.Date).ToList();
+            }
+            else if (int.TryParse(Inputkq, out int searchId)) // Check if Inputkq can be parsed as an integer
+            {
+                // Filter AllDXN based on the ID
+                AllDXN = AllDXN.Where(dx => dx.Id == searchId).ToList();
+            }
+            else
+            {
+                // Filter AllDXN based on customer's name or doctor's name
+                AllDXN = AllDXN.Where(dx => loadhoten(dx.UserId).Contains(Inputkq, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+        }
+    }
+
 }

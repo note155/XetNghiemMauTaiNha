@@ -239,7 +239,14 @@
                 trangthai = "Chưa Thanh Toán"
             };
         await TTservice.addAsync(tt);
-        navigation.NavigateTo("/ThanhToan/" + don.Id);
+        Tinhtrang ttrang = new Tinhtrang
+            {
+                DonXetNghiemId = don.Id,
+                thoigian = DateTime.Now,
+                trangthai = "Đơn đã được tạo"
+            };
+        await TTrangservice.addAsync(ttrang);
+        navigation.NavigateTo("/giohangdxn");
     }
     public String loadGXN(int id)
     {

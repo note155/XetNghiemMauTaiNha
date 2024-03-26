@@ -3,6 +3,7 @@
 @rendermode InteractiveAuto
 @inject NavigationManager navigation;
 @attribute [Authorize]
+@layout AdminLayout
 
 <div class="patient-registration-container">
     <div class="patient-info">
@@ -15,6 +16,29 @@
             <p><strong>Email:</strong> @user.Email</p>
             <p><strong>Giới tính:</strong> @gioitinh(@user.Gioitinh)</p>
         </div>
+        <div style="width:100%" class="row tientrinh">
+            <h2>
+                Tiến trình
+            </h2>
+            @foreach (var tt in allttrang)
+            {
+                <div class="timeline-item">
+                    <div class="timeline-item-content">
+                        <span class="time">@tt.thoigian.ToString("HH:mm dd/MM/yyyy")</span>
+                        <p>@tt.trangthai</p>
+                    </div>
+                </div>
+            }
+         </div>
+        <div style="width:100%" class="row tientrinh">
+            <h2>
+                Chi tiết xét nghiệm
+            </h2>
+            <p>Ngày nhận mẫu: @mau.ngaynhanmau</p>
+            <p>Khoa: @loadkhoa(mau.khoaId)</p>
+            <p>Phòng: @loadphong(mau.PhongId)</p>
+            <p>Máy thực hiện: @loadmay(mau.MayxetnghiemId ?? 0)</p>
+         </div>
     </div>
 
     <div class="test-registration-form">
@@ -110,27 +134,28 @@
                                 <th>Đơn Vị</th>
                             </tr>
                         </thead>
-                        @foreach (var kqandcs in Inputkq.kQandCs)
+                        @foreach (var tl in gxndachon)
                         {
-                           if (kqandcs.goi != goi1)
+                            <tr><td colspan="4"><strong>Gói Xét Nghiệm:</strong>@tl.TenGoi</td></tr>
+                            @foreach (var kqandcs in Inputkq.kQandCs)
                             {
-                               
-                                goi1 = kqandcs.goi;
-                                <tr><td colspan="4"><strong>Gói Xét Nghiệm:</strong>@loadtengoi(goi1)</td></tr>
+                                if (kqandcs.goi == tl.Id)
+                                {
+                                    <tr>
+                                        <td>@loadtenchiso(kqandcs.id)</td>
+                                        <td>
+                                            <InputText @bind-Value="kqandcs.kq" class="form-control" readonly />
+                                            <ValidationMessage For="() => kqandcs.kq" class="text-danger" />
+                                        </td>
+                                        <td>
+                                            @loadcsbt(kqandcs.id)
+                                        </td>
+                                        <td>
+                                            @loaddonvi(kqandcs.id)
+                                        </td>
+                                    </tr>
+                                }
                             }
-                            <tr>
-                                <td>@loadtenchiso(kqandcs.id)</td>
-                                <td>
-                                    <InputText @bind-Value="kqandcs.kq" class="form-control" readonly />
-                                    <ValidationMessage For="() => kqandcs.kq" class="text-danger" />
-                                </td>
-                                <td>
-                                    @loadcsbt(kqandcs.id)
-                                </td>
-                                <td>
-                                    @loaddonvi(kqandcs.id)
-                                </td>
-                            </tr>
                         }
                     </table>
                     <a href="/listdscoKQ"><button style="background-color:red" class="btn btn-primary"> Trở về </button></a>
@@ -144,9 +169,12 @@
     [Parameter]
     public int id { get; set; }
 
+    public List<Tinhtrang> allttrang { get; set; } = new();
     int goi1 = -1;
     private BacSi SelectedDoctor, SelectedDoctor1 = null;
     public List<GoiXetNghiem> allGXN { get; set; } = new();
+    public List<Phong> allPhong { get; set; } = new();
+    public List<MayXetNghiem> allmay { get; set; } = new();
     public List<GoiXetNghiem> gxndachon { get; set; } = new();
     public List<DXNandGXN> dxn { get; set; } = new();
     public List<Chiso> allchiso { get; set; } = new();
@@ -161,12 +189,16 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await checkbs();
+        allttrang = await TTrangservice.getbyidAsync(id);
         Input = await DXNservice.getbyid(id);
         user = await Usertservice.getuserbyid(Input.UserId);
         allGXN = await GXNservice.getallAsync();
         dxn = await DXNservice.getallGXNAsync(id);
         allkhoa = await Khoaservice.getallAsync();
         loadgxndachon();
+        allPhong = await Phongservice.getallAsync();
+        allmay = await MayXNservice.getallAsync();
         allchiso = await CSservice.getallAsync();
         Inputkq.kQandCs = new List<ChisoKq>();
         SelectedDoctor = await bacsiservice.getbyid(Input.BacSiId??0);
@@ -195,11 +227,22 @@
         {
             foreach(var b in qq)
             {
-                if (a.id == b.ChisoId)
+                if (a.id == b.ChisoId && a.goi == b.idgoi)
                 {
                     a.kq = b.KetQua;
+                    a.goi = b.idgoi ?? 0;
                 }
             }
+        }
+    }
+    public async Task checkbs()
+    {
+        var authState = await checkbss.GetAuthenticationStateAsync();
+        var UserName = authState.User.Identity.Name;
+        var bs = await bacsiservice.getbyemail(UserName);
+        if (bs == null)
+        {
+            navigation.NavigateTo("/err");
         }
     }
     private async Task add()
@@ -220,6 +263,28 @@
             }
             allGXN.RemoveAll(item => item.Id == a.GoiXetNghiemId);
         }
+    }
+    private string loadphong(int id)
+    {
+        foreach (var i in allPhong)
+        {
+            if (i.Id == id)
+            {
+                return i.maphong+" - "+i.ten;
+            }
+        }
+        return null;
+    }
+    private string loadmay(int id)
+    {
+        foreach (var i in allmay)
+        {
+            if (i.Id == id)
+            {
+                return i.Name;
+            }
+        }
+        return null;
     }
     private string loadtengoi(int id)
     {

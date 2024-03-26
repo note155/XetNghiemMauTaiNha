@@ -3,6 +3,7 @@
 @rendermode InteractiveAuto
 @inject NavigationManager navigation;
 @attribute [Authorize]
+@layout AdminLayout
 <div class="container">
     <div class="row">
         <div class="col-md-4">
@@ -75,7 +76,18 @@
     string safeFileName = "";
     protected override async Task OnInitializedAsync()
     {
+        await checkbs();
         await LoadBS();
+    }
+    public async Task checkbs()
+    {
+        var authState = await checkbss.GetAuthenticationStateAsync();
+        var UserName = authState.User.Identity.Name;
+        var bs = await bacsiservice.getbyemail(UserName);
+        if (bs == null)
+        {
+            navigation.NavigateTo("/err");
+        }
     }
     private async Task add()
     {

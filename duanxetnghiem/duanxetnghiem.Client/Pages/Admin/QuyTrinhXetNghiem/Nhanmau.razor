@@ -3,7 +3,7 @@
 @rendermode InteractiveAuto
 @inject NavigationManager navigation;
 @attribute [Authorize]
-
+@layout AdminLayout
 
 
 @if (err.Any())
@@ -113,6 +113,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await checkbs();
         Input = await DXNservice.getbyid(id);
         user = await Usertservice.getuserbyid(Input.UserId);
         allGXN = await GXNservice.getallAsync();
@@ -122,6 +123,16 @@
         allkhoa = await Khoaservice.getallAsync();
         allphong = await Phongservice.getallAsync();
 
+    }
+    public async Task checkbs()
+    {
+        var authState = await checkbss.GetAuthenticationStateAsync();
+        var UserName = authState.User.Identity.Name;
+        var bs = await bacsiservice.getbyemail(UserName);
+        if (bs == null)
+        {
+            navigation.NavigateTo("/err");
+        }
     }
     private async Task add()
     {
@@ -146,6 +157,13 @@
             await Mauservice.addAsync(Inputkq);
             Input.Trangthai = "Chờ kết quả";
             await DXNservice.updateAsync(Input);
+            Tinhtrang ttrang = new Tinhtrang
+                {
+                    DonXetNghiemId = Input.Id,
+                    thoigian = DateTime.Now,
+                    trangthai = "Đang được thực hiện xét nghiệm"
+                };
+            await TTrangservice.addAsync(ttrang);
             navigation.NavigateTo("/ListchoXN");
         
     }

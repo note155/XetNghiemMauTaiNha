@@ -29,6 +29,7 @@ namespace duanxetnghiem.Data
         public DbSet<MayXetNghiem> Mayxetnghiems { get; set; }
         public DbSet<Chat> Chats { get; set; }
         public DbSet<roomchat> Roomchats { get; set; }
+        public DbSet<Tinhtrang> Tinhtrangs { get; set; }
         public object User { get; internal set; }
     }
 

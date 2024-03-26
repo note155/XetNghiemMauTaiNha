@@ -8,6 +8,11 @@
 
 .table {
     width: 100%;
+
+}
+.table-wrapper {
+    max-height: 500px; /* Đặt chiều cao tối đa cho bảng */
+    overflow-y: auto; /* Tạo thanh cuộn dọc khi bảng vượt quá chiều cao */
 }
 
     .table th,

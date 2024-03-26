@@ -70,9 +70,9 @@
 @code {
     [Inject]
     protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
-
-    User patient = new User();
     public string UserName { get; set; }
+    User patient = new User();
+    
     private int aa;
     public List<DonXetNghiem> AllDXN { get; set; } = new();
     public List<DonXetNghiem> DXN { get; set; } = new();

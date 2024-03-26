@@ -1,5 +1,4 @@
-﻿@page "/ThanhToan2/{id:int}"
-
+﻿@page "/ThanhToan/{id:int}"
 @rendermode InteractiveAuto
 @inject NavigationManager navigation;
 @attribute [Authorize]
@@ -69,16 +68,14 @@
                 <div class="panel-body payment-content">
                     <img src="QR.jpg" alt="QR Code" class="qr-code">
                     <div class="payment-info">
-                        <div>
-                            Bạn đã thanh toán lần 1: số tiền :@tt.DaTT1 VND -- ngày : @tt.NgayTT1 
-                        </div>
                         <div>Nội Dung Chuyển Tiền : @Input.Id</div>
                         <!-- Bạn có thể thêm các phần khác tùy ý ở đây -->
                     </div>
                     <div class="payment-methods">
-                        Hình Thức Thanh Toán :
+                        Chọn Hình Thức Thanh Toán Trước:
                         <div>
-                            <button class="@class1">70%</button>
+                            <button @onclick="bamuoi" class="@class1">30%</button>
+                            <button @onclick="mottram" class="@class2">100%</button>
                         </div>
                     </div>
                     <div class="payment-amount">
@@ -117,6 +114,7 @@
     public long tongtien = 0;
     public long tientttruoc;
     string class1 = "btn btn-success";
+    string class2 = "btn btn-outline-success";
     public ThanhToan tt { get; set; } = new ThanhToan();
 
     protected override async Task OnInitializedAsync()
@@ -126,14 +124,37 @@
         allGXN = await GXNservice.getallAsync();
         dxn = await DXNservice.getallGXNAsync(id);
         loadgxndachon();
-        tientttruoc = tongtien * 70 / 100;
+        tientttruoc = tongtien * 30 / 100;
         tt = await TTservice.getbyidDXNAsync(id);
     }
     private async void xacnhan()
     {
-        tt.NgayTT2 = DateTime.Now;
-        tt.trangthai = "Đã Thanh Toán";
-        tt.DaTT2 = tientttruoc;
+        Input.Trangthai = "Đã Chuyển Tiền";
+        await DXNservice.updateAsync(Input);
+        tt.NgayTT1 = DateTime.Now;
+        if (tientttruoc < tongtien)
+        {
+            tt.trangthai = "30%";
+            Tinhtrang ttrang = new Tinhtrang
+                {
+                    DonXetNghiemId = tt.DonXetNghiemId,
+                    thoigian = DateTime.Now,
+                    trangthai = "Đơn đã được thanh toán 30% (" + tt.Tongtien * 30 / 100 + " VND)"
+                };
+            await TTrangservice.addAsync(ttrang);
+        }
+        else
+        {
+            tt.trangthai = "Đã Thanh Toán";
+            Tinhtrang ttrang = new Tinhtrang
+                {
+                    DonXetNghiemId = tt.DonXetNghiemId,
+                    thoigian = DateTime.Now,
+                    trangthai = "Đơn đã được thanh toán toàn bộ(" + tt.Tongtien + " VND)"
+                };
+            await TTrangservice.addAsync(ttrang);
+        }
+        tt.DaTT1 = tientttruoc;
         await TTservice.updateAsync(tt);
         navigation.NavigateTo("/camon/" + id);
     }
@@ -151,6 +172,18 @@
                 }
             }
         }
+    }
+    private void bamuoi()
+    {
+        tientttruoc = tongtien * 30 / 100;
+        class1 = "btn btn-success";
+        class2 = "btn btn-outline-success";
+    }
+    private void mottram()
+    {
+        tientttruoc = tongtien;
+        class2 = "btn btn-success";
+        class1 = "btn btn-outline-success";
     }
     private String gioitinh(bool a)
     {

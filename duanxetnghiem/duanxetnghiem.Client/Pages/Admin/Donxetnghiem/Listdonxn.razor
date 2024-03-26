@@ -131,11 +131,11 @@
     public List<GoiXetNghiem> allGXN { get; set; } = new();
     public List<User> allUser { get; set; } = new();
     private ElementReference searchResultsRef = default(ElementReference);
-
     [SupplyParameterFromForm]
     private WebAssemblyTicket Ticket { get; set; } = new();
     protected override async Task OnInitializedAsync()
     {
+        await checkbs();
         DXN = await DXNservice.getallAsync();
         await LoadAlLStudents();
         allGXN = await GXNservice.getallAsync();
@@ -143,7 +143,16 @@
     }
 
 
-
+    public async Task checkbs()
+    {
+        var authState = await checkbss.GetAuthenticationStateAsync();
+        var UserName = authState.User.Identity.Name;
+        var bs = await bacsiservice.getbyemail(UserName);
+        if (bs == null)
+        {
+            navigation.NavigateTo("/err");
+        }
+    }
     public async Task LoadAlLStudents()
     {
         AllDXN.Clear();

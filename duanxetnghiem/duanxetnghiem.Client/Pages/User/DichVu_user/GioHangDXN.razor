@@ -8,12 +8,31 @@
 
 <h1>Đơn Xét Nghiệm</h1>
 
-@if (!DXNList.Any())
+@if (ChuaChonGoi)
+{
+    <div class="modal fade show" style="display: block; background: rgba(0, 0, 0, 0.5);">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thông báo</h5>
+                    <button type="button" class="btn-close" @onclick="(() => ChuaChonGoi = false)"></button>
+                </div>
+                <div class="modal-body">
+                    Bạn chưa chọn gói xét nghiệm nào.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" @onclick="(() => ChuaChonGoi = false)">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (!GHang.Any())
 {
     <p>Đơn xét nghiệm của bạn đang trống</p>
 }
 
-@if (DXNList.Any())
+@if (GHang.Any())
 {
     <button class="btn btn-danger" @onclick="DeleteSelected">Xóa các mục được chọn</button>
     <table class="table table-striped mt-3">
@@ -35,7 +54,7 @@
                     <td>
                         @foreach(var gxn in ghang.listgxn)
                         {
-                            <p>@gxn.GoiXetNghiemId</p>
+                            <p>@gxn.TenGoi</p>
                         }
                     </td>
                     <td>@ghang.sotien</td>
@@ -51,7 +70,7 @@
     </table>
     <a class="btn btn-secondary float-end mt-3" @onclick="@(() => add())">Thanh toán</a>
     <br />
-    <p class="total-amount">Tổng tiền: @TinhTongTien() VND</p>
+    <p class="total-amount">Tổng tiền: <strong style="color:red;font-size:30px;">@TinhTongTien() VND</strong></p>
 }
 
 
@@ -65,6 +84,8 @@
     public string UserName { get; set; }
     public User user { get; set; } = new();
     public List<User> Alluser { get; set; } = new();
+    public bool ChuaChonGoi = false;
+    public List<GoiXetNghiem> AllGXN { get; set; } = new();
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -74,6 +95,7 @@
         {
             navigation.NavigateTo("/AddUser");
         }
+        AllGXN = await GXNservice.getallAsync();
         DXNList = await DXNservice.getallbyiduserAsync(user.Id);
         Alluser = await Usertservice.getalluserbyemailAsync(UserName);
         foreach (var us in Alluser)
@@ -95,15 +117,31 @@
                     {
                         chon = false,
                         id = dxn.Id,
-                        iduser = dxn.UserId
                     };
+                foreach(var u in Alluser)
+                {
+                    if (dxn.UserId == u.Id)
+                    {
+                        a.iduser = u.Hoten;
+                    }
+                }
                 GHang.Add(a);
             }
         }
         foreach(var g in GHang)
         {
-            g.listgxn = new List<DXNandGXN>();
-            g.listgxn = await DXNservice.getallGXNAsync(g.id);
+            g.listgxn = new List<GoiXetNghiem>();
+            var gxn = await DXNservice.getallGXNAsync(g.id);
+            foreach(var b in AllGXN)
+            {
+                foreach(var c in gxn)
+                {
+                    if (b.Id == c.GoiXetNghiemId)
+                    {
+                        g.listgxn.Add(b);
+                    }
+                }
+            }
             var tt = await TTservice.getbyidDXNAsync(g.id);
             g.sotien = tt.Tongtien;
         }
@@ -111,6 +149,18 @@
 
     private async void add()
     {
+        var itemsToRemove = GHang.Where(student => student.chon == true).ToList();
+        if (itemsToRemove.Count == 0)
+        {
+            ChuaChonGoi = true;
+            return;
+        }
+        string id="";
+        foreach (var student in itemsToRemove)
+        {
+            id += student.id+";";    
+        } 
+        navigation.NavigateTo("ThanhToandxn/"+id);
     }
     private async void DeleteSelected()
     {
@@ -139,8 +189,8 @@
     public class gio
     {
         public int id { get; set; }
-        public int iduser { get; set; }
-        public List<DXNandGXN> listgxn { get; set; }
+        public string iduser { get; set; }
+        public List<GoiXetNghiem> listgxn { get; set; }
         public long sotien { get; set; }
         public Boolean chon { get; set; }
     }

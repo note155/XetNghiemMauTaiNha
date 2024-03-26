@@ -1,0 +1,267 @@
+﻿@page "/camondxn/{id}"
+@using Append.Blazor.Printing
+@inject IPrintingService PrintingService
+@rendermode InteractiveAuto
+@using System.Security.Claims
+@attribute [Authorize]
+<div class="card text-center">
+    <div class="card-body">
+        <h5 class="card-title">Cảm ơn bạn đặt lịch </h5>
+        <p class="card-text">Chúng tôi sẽ liên hệ bạn trong thời gian sớm nhất</p>
+        <img style="width:40px" src="tich.webp">
+        <br>
+        <button class="btn btn-success" @onclick="@(_ => PrintingService.Print(rawHtml, PrintType.RawHtml))">
+            Phiếu Thu
+        </button>
+        @if (tt.DaTT2 != null)
+        {
+            <a href="XCTDon/@id"><button class="btn btn-info mx-3">Xem Đơn</button></a>
+        }
+    </div>
+</div>
+<br>
+<div class="container">
+    <div class="card mb-3" style="max-width: 100%;">
+        <div class="row g-0">
+            <div class="col-md-8">
+
+                <img src="9.jpg" class="img-fluid rounded-start" alt="...">
+            </div>
+            <div class="col-md-4">
+                <div class="card-body d-grid gap-4">
+                    <h3 class="card-title">Quy Trình Thực Hiện</h3>
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Đặt lịch</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Đặt trực tiếp tại website hoặc liện hệ 0988999999</p>
+                        </div>
+                    </div>
+                    <div class="card  p-2">
+                        <div class="card-header">
+                            <h5 class="card-title">Lấy mẫu</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Nhân viên y tế sẽ đến lấy mẫu trực tiếp tại nhà của bạn</p>
+                        </div>
+                    </div>
+                    <div class="card p-2">
+                        <div class="card-header ">
+                            <h5 class="card-title">Trả kết quả</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Kết quả sẽ được gửi đến bạn một cách nhanh ngay khi có kết quả</p>
+                        </div>
+                    </div>
+                    <div class="card p-2">
+                        <div class="card-header ">
+                            <h5 class="card-title">Tư vấn</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Chúng tôi có đội ngũ chuyên nguyệp sẵn sàng tư vấn kết quả xét nghiệm cho bạn</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+
+    [Inject]
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    public string UserName { get; set; }
+    private User user = new User();
+    public DonXetNghiem Input { get; set; } = new();
+    public List<GoiXetNghiem> allGXN { get; set; } = new();
+    public List<GoiXetNghiem> gxndachon { get; set; } = new();
+    public List<DXNandGXN> dxn { get; set; } = new();
+    public List<DonXetNghiem> allDXN { get; set; } = new();
+    public List<User> alluser { get; set; } = new();
+    public long tongtien = 0,datthd=0;
+    string rawHtml = "";
+    public ThanhToan tt { get; set; } = new ThanhToan();
+
+    long datt, datt2;
+    DateTime ngaytt;
+    public List<hd> AllHD { get; set; } = new();
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await keolen();
+        }
+    }
+    public async Task keolen()
+    {
+        await JSRuntime.InvokeVoidAsync("scrollToBottom");
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        UserName = authState.User.Identity.Name;
+        user = await Usertservice.getuserbyemail(UserName);
+        alluser = await Usertservice.getalluserbyemailAsync(UserName);
+        allGXN = await GXNservice.getallAsync();
+        if (!string.IsNullOrEmpty(id))
+        {
+            string[] numbers = id.Split(';');
+            foreach (string number in numbers)
+            {
+                if (!string.IsNullOrEmpty(number))
+                {
+                    if (int.TryParse(number, out int a))
+                    {
+                        var dxn = await DXNservice.getbyid(a);
+                        allDXN.Add(dxn);
+                    }
+                    else
+                    {
+                        // Handle the case where the string is not a valid integer
+                        // For example, log the error or show a message to the user
+                    }
+                }
+            }
+        }
+        await loadtongtien();
+        ngaytt = DateTime.Now;
+        rawHtml = "<h3>CÔNG TY TNHH GIẢI PHÁP PHẦN MỀM ÂU LẠC</h1>" +
+            "<h2 style=\"text-align: center;\">PHIẾU THU</h2>" +
+            "<p style=\"text-align: center;\">Ngày: " + ngaytt.ToString("dd/mm/yyyy") + " -- Số hóa đơn:" + tt.Id + "</p>" +
+            "<p> <span style=\"float: left;\">Họ Tên:" + user.Hoten +
+            "</span><span style=\"float: right;\">Giới Tính: " + gioitinh(user.Gioitinh) + "</span></p>" +
+            "<br><p >Địa Chỉ: " + user.Diachi + "</p>";
+        foreach(var pro in AllHD)
+        {
+            rawHtml += "<p> Bệnh nhân:" + pro.hoten + "</p>";
+            rawHtml += "<table style=\"text-align: center;width:100%;border-collapse: collapse; border: 1px solid black;\">" +
+            "<thead>" +
+            "<tr>" +
+            "<th style=\"border: 1px solid black;\">STT</th>" +
+            "<th style=\"border: 1px solid black;\">Tên Gói</th>" +
+            "<th style=\"border: 1px solid black;\">Đơn vị</th>" +
+            "<th style=\"border: 1px solid black;\">Số Lượng</th>" +
+            "<th style=\"border: 1px solid black;\">Số Tiền</th>" +
+            "</tr>" +
+            "</thead>";
+            int stt = 0;
+            foreach (var goi in pro.gxnlist)
+            {
+                stt++;
+                rawHtml += "<tr>" +
+                           "<td style=\"border: 1px solid black;\">" + stt + "</td>" +
+                           "<td style=\"border: 1px solid black;\">" + goi.TenGoi + "</td>" +
+                           "<td style=\"border: 1px solid black;\">gói</td>" +
+                           "<td style=\"border: 1px solid black;\">1</td>" +
+                           "<td style=\"border: 1px solid black;\">" + goi.Gia + "</td>" +
+                           "</tr>";
+            }
+            rawHtml += "<tr><td colspan=\"5\">Tổng tiền: "+pro.sotien+" VND</td></tr>" +
+            "</table>";
+        }
+
+
+        rawHtml += 
+               "<p>Tổng Thành Tiền: " + tongtien + "VND ------ Bằng Chữ:" + ConvertNumberToWords(tongtien) + " Đồng</p>" +
+            "<p>Số Tiền Đã Thanh Toán: " + datthd + "VND ------ Bằng Chữ:" + ConvertNumberToWords(datthd) + " Đồng</p>"
+               ;
+
+
+    }
+    private async Task loadtongtien()
+    {
+        string tttt="";
+        foreach (var dxn in allDXN)
+        {
+            var tt = await TTservice.getbyidDXNAsync(dxn.Id);
+            tongtien += tt.Tongtien;
+            tttt = tt.trangthai;
+            foreach (var us in alluser)
+            {
+                if (dxn.UserId == us.Id)
+                {
+                    hd a = new()
+                        {
+                            id = dxn.Id,
+                            hoten = us.Hoten,
+                            sotien = tt.Tongtien
+                        };
+                    AllHD.Add(a);
+                }
+            }
+            foreach(var a in AllHD)
+            {
+                a.gxnlist = new List<GoiXetNghiem>();
+                var dsgxn = await DXNservice.getallGXNAsync(a.id);
+                foreach (var ds in dsgxn)
+                {
+
+                    foreach (var b in allGXN)
+                    {
+                        if (b.Id == ds.GoiXetNghiemId)
+                        {
+                            a.gxnlist.Add(b);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (tttt == "Đã Thanh Toán")
+            {
+                datthd = tongtien;
+            }
+            else
+            {
+                datthd = tongtien * 30 / 100;
+            }
+    }
+    private String gioitinh(bool a)
+    {
+        if (a)
+        {
+            return "Nam";
+        }
+        else
+        {
+            return "Nữ";
+        }
+    }
+    static string[] ones = { "", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín" };
+    static string[] teens = { "", "mười", "mười một", "mười hai", "mười ba", "mười bốn", "mười lăm", "mười sáu", "mười bảy", "mười tám", "mười chín" };
+    static string[] tens = { "", "mười", "hai mươi", "ba mươi", "bốn mươi", "năm mươi", "sáu mươi", "bảy mươi", "tám mươi", "chín mươi" };
+    static string ConvertNumberToWords(long number)
+    {
+        if (number < 10)
+            return ones[number];
+        else if (number < 20)
+            return teens[number - 10];
+        else if (number < 100)
+            return tens[number / 10] + " " + ones[number % 10];
+        else if (number < 1000)
+            return ones[number / 100] + " trăm " + ConvertNumberToWords(number % 100);
+        else if (number < 1000000)
+            return ConvertNumberToWords(number / 1000) + " nghìn " + ConvertNumberToWords(number % 1000);
+        else if (number < 1000000000)
+            return ConvertNumberToWords(number / 1000000) + " triệu " + ConvertNumberToWords(number % 1000000);
+        else
+            return ConvertNumberToWords(number / 1000000000) + " tỷ " + ConvertNumberToWords(number % 1000000000);
+    }
+    public class hd
+    {
+        public int id { get; set; }
+        public long sotien { get; set; }
+        public string hoten { get; set; }
+        public List<GoiXetNghiem> gxnlist { get; set; }
+    }
+}
+<script>
+    window.scrollToBottom = () => {
+        window.scrollTo(0, 0);
+    }
+</script>

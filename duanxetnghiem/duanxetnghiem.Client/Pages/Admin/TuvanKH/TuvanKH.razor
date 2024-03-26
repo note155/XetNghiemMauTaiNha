@@ -4,7 +4,7 @@
 @using duanxetnghiem.Data.Model;
 @inject NavigationManager navigation;
 @rendermode InteractiveAuto
-
+@layout AdminLayout
 <h3>Trả lời tư vấn khách hàng</h3>
 <hr />
 @if (errors.Count > 0)
@@ -78,10 +78,21 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await checkbs();
         Input = await TVservice.getbyidAsync(id);
         allBS = await bacsiservice.getallAsync();
         
 
+    }
+    public async Task checkbs()
+    {
+        var authState = await checkbss.GetAuthenticationStateAsync();
+        var UserName = authState.User.Identity.Name;
+        var bs = await bacsiservice.getbyemail(UserName);
+        if (bs == null)
+        {
+            navigation.NavigateTo("/err");
+        }
     }
     private async Task tuvanKH()
     {

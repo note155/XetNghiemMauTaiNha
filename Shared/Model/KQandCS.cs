@@ -17,6 +17,6 @@ namespace Shared.Model
         public int ChisoId { get; set; }
         public Chiso? Chiso { get; set; }
         public string KetQua {  get; set; }
-
+        public int? idgoi { get; set; }
     }
 }

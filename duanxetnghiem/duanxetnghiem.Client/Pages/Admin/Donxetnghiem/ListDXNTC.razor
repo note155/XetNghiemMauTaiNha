@@ -1,13 +1,14 @@
 ﻿@page "/ListDXNTC"
 @using Shared.Model
 @using System.Globalization
+@layout AdminLayout
 @attribute [Authorize]
-<NavMenu />
+
 <div class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title" style="color:red">Đơn yêu cầu đã từ chối</h3>
+                <h3 class="card-title" style="color:red">Đơn yêu cầu đã từ chối </h3>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -83,12 +84,22 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await checkbs();
         await LoadAlLStudents();
         allGXN = await GXNservice.getallAsync();
         allUser = await Usertservice.getalluserAsync();
         allTC = await TCservice.getallAsync();
     }
-
+    public async Task checkbs()
+    {
+        var authState = await checkbss.GetAuthenticationStateAsync();
+        var UserName = authState.User.Identity.Name;
+        var bs = await bacsiservice.getbyemail(UserName);
+        if (bs == null)
+        {
+            navigation.NavigateTo("/err");
+        }
+    }
     public async Task LoadAlLStudents()
     {
         // var students = await GenericService.GetAllAsync(student, "api/Student/All-Students");

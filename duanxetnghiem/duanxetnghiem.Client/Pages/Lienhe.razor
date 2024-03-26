@@ -1,0 +1,102 @@
+﻿@page "/lienhe"
+
+<PageTitle>Liên hệ</PageTitle>
+<h1>Liên hệ</h1>
+
+<div class="row">
+    <div class="col-sm-6">
+        <h2>Thông tin liên hệ</h2>
+        <div class="contact-info">
+            <div class="info-item">
+                <span class="info-label">Địa chỉ:</span>
+                <span class="info-value">23 Lý Nhân Tông, TP Huế</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Số điện thoại:</span>
+                <span class="info-value"> 0988 889 999</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Email:</span>
+                <span class="info-value">aulac@gmail.com</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <h2>Liên hệ tư vấn</h2>
+        @if (errors.Count > 0)
+        {
+            <div class="alert alert-danger" role="alert">
+
+                @foreach (var error in errors)
+                {
+                    <p>@error</p>
+                }
+            </div>
+        }
+        <EditForm Model="Input" method="post" OnValidSubmit="tuvanKH" FormName="dangky">
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" role="alert" />
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="hoten">Họ và tên :</label>
+                    <InputText @bind-Value="Input.hoten" class="form-control" placeholder="" />
+                    <ValidationMessage For="() => Input.hoten" class="text-danger" />
+                </div>
+                <div class="form-group">
+                    <label for="sdt">Điện thoại liên hệ :</label>
+                    <InputText @bind-Value="Input.sdt" class="form-control" placeholder="" />
+                    <ValidationMessage For="() => Input.sdt" class="text-danger" />
+                </div>
+                <div class="form-group">
+                    <label for="email">Địa chỉ Email :</label>
+                    <InputText @bind-Value="Input.email" class="form-control" placeholder="" />
+                    <ValidationMessage For="() => Input.email" class="text-danger" />
+                </div>
+                <div class="form-group">
+                    <label for="noidung">Nội dung :</label>
+                    <InputTextArea @bind-Value="Input.noidung" class="form-control" placeholder="" />
+                    <ValidationMessage For="() => Input.noidung" class="text-danger" />
+                </div>
+                <div class="form-group button-cell">
+                    <button type="submit" class="btn btn-lg btn-primary">Gửi</button>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+</div>
+@code{
+    [SupplyParameterFromForm]
+    public Tuvan Input { get; set; } = new();
+    List<string> errors = new List<string>();
+    int a = 0;
+    private async Task tuvanKH()
+    {
+        if (a == 0)
+        {
+            errors.Clear();
+        }
+        if (string.IsNullOrEmpty(Input.hoten))
+        {
+            errors.Add("Vui lòng nhập họ tên");
+        }
+        if (string.IsNullOrEmpty(Input.email))
+        {
+            errors.Add("Vui lòng nhập email");
+        }
+        if (string.IsNullOrEmpty(Input.sdt))
+        {
+            errors.Add("Vui lòng nhập số điện thoại");
+        }
+        if (string.IsNullOrEmpty(Input.noidung))
+        {
+            errors.Add("Vui lòng nhập nội dung");
+        }
+        if (errors.Any())
+        {
+            return;
+        }
+        await TVservice.addAsync(Input);
+        a++;
+        errors.Add("Đã gửi thành công");
+    }
+}

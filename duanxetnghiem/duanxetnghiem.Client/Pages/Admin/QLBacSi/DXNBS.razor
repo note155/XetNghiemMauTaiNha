@@ -1,8 +1,8 @@
 ﻿@page "/DXNBS"
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
+@layout AdminLayout
 
-<NavMenu />
 
 <div class="container mt-4">
     <div class="row">
@@ -101,6 +101,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await checkbs();
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         UserName = authState.User.Identity.Name;
         allGXN = await GXNservice.getallAsync();
@@ -108,7 +109,16 @@
         bs = await bacsiservice.getbyemail(UserName);
         await LoadAlLStudents();
     }
-
+    public async Task checkbs()
+    {
+        var authState = await checkbss.GetAuthenticationStateAsync();
+        var UserName = authState.User.Identity.Name;
+        var bs = await bacsiservice.getbyemail(UserName);
+        if (bs == null)
+        {
+            navigation.NavigateTo("/err");
+        }
+    }
 
 
     public async Task LoadAlLStudents()

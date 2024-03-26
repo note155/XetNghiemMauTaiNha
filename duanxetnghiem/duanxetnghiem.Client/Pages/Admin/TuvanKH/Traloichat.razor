@@ -2,7 +2,8 @@
 @attribute [Authorize]
 @rendermode InteractiveAuto
 @inject NavigationManager navigation
-
+@using duanxetnghiem.Client.Pages.Layout
+@layout AdminLayout
 <div class="row">
 	@if (idbs == 0)
 	{
@@ -16,7 +17,7 @@
 	{
 		<div class="card ">
 			<div class="card-header">
-				Thông tin bệnh nhân
+				Thông tin người tư vấn
 			</div>
 			<div class="card-body">
 				<div class="row">
@@ -44,6 +45,33 @@
 		</div>
 
 		<div id="chat-container" class="chat-container" @ref="chatContainerRef">
+			@if ( iddon != 0)
+			{
+				<div class="card-wrapper">
+						<div class="card w-auto ">
+							<div class="card-header">
+							<strong>@dau.Name</strong>@dau.Time
+						</div>
+							<div class="card-body">
+							<p class="card-text"><button @onclick="(() => mo(true))" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Xem đơn @iddon</button></p>
+							</div>
+						</div>
+				</div>
+			}
+			@if (idgoi!=0)
+			{
+
+				<div class="card-wrapper">
+					<div class="card w-auto ">
+						<div class="card-header">
+							<strong>@dau.Name</strong>@dau.Time
+						</div>
+						<div class="card-body">
+							<p class="card-text"><button @onclick="(() => mogoi(true))" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Xem Gói @idgoi</button></p>
+						</div>
+					</div>
+				</div>
+			}
 			@foreach (var chat in messages)
 			{
 				<div class="card-wrapper">
@@ -84,14 +112,51 @@
 	</div>
 </div>
 
+
+<!-- Modal -->
+<div  id="myModal" class="modal fade" role="dialog">
+	<div  class="modal-dialog">
+
+        <!-- Modal content-->
+        <div  class="modal-content">
+            <div  class="modal-header">
+                
+				@if (ok)
+				{
+					<h4 class="modal-title">Đơn xét nghiệm: @iddon</h4>
+				}
+				@if (okgoi)
+				{
+					<h4 class="modal-title">Gói xét nghiệm: @idgoi</h4>
+				}
+                <button style="width:auto;height:auto;color:black;" type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div  class="modal-body">
+                @if (ok)
+                {
+                    <DXNMTN Id="@iddon" />
+                }
+				@if (okgoi)
+				{
+					<CTDNT Id="@idgoi" />
+				}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @code {
 
 	private HubConnection hubConnection;
 	private List<chatt> messages = new List<chatt>();
+	private chatt dau { get; set; } = new();
 	private string userInput;
 	private string messageInput;
 
 	//khaibao
+	Boolean ok = false,okgoi=false;
 	[Parameter]
 	public int id { get; set; }
 	[Inject]
@@ -104,7 +169,7 @@
 	public List<BacSi> allBS { get; set; } = new();
 	private ElementReference chatContainerRef;
 	public roomchat room { get; set; } = new();
-	public int idbs = 0;
+	public int idbs = 0,iddon=0,idgoi=0;
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		if (firstRender)
@@ -116,6 +181,7 @@
 
 	protected override async Task OnInitializedAsync()
 	{
+		await checkbs();
 		var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
 		UserName = authState.User.Identity.Name;
 		bs = await bacsiservice.getbyemail(UserName);		
@@ -125,6 +191,32 @@
 		userchat = await Usertservice.getuserbyid(room.userid);
 		alluser = await Usertservice.getalluserAsync();
 		allBS = await bacsiservice.getallAsync();
+		string[] mangChuoi = room.Name.Split(':');
+		if(mangChuoi.Length >= 2)
+		{
+			if (mangChuoi[0] == "Tư Vấn Đơn ")
+			{
+				iddon = int.Parse(mangChuoi[1]);
+			}
+			if (mangChuoi[0] == "Tư Vấn Gói ")
+			{
+				idgoi = int.Parse(mangChuoi[1]) ;
+			}
+		}
+		try
+		{
+			var uri = new Uri(navigation.Uri);
+			var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+			if (query.ContainsKey("id") && int.TryParse(query["id"], out int parsedId))
+			{
+				iddon = parsedId;
+			}
+		}
+		catch (Exception ex)
+		{
+			// Handle exception appropriately (e.g., logging, error message to users)
+			Console.WriteLine($"Error: {ex.Message}");
+		}
 		if (allChat.Any())
 		{
 			foreach (var chat in allChat)
@@ -172,6 +264,17 @@
 		});
 		await hubConnection.StartAsync();
 		await hubConnection.SendAsync("AddToRoom", userchat.Hoten, id);
+		dau = messages.FirstOrDefault();
+	}
+	public async Task checkbs()
+	{
+		var authState = await checkbss.GetAuthenticationStateAsync();
+		var UserName = authState.User.Identity.Name;
+		var bs = await bacsiservice.getbyemail(UserName);
+		if (bs == null)
+		{
+			navigation.NavigateTo("/err");
+		}
 	}
 	private async Task UpdateChatMessages()
 	{
@@ -229,6 +332,14 @@
 		public string Message { get; set; }
 		public string Name { get; set; }
 		public DateTime Time { get; set; }
+	}
+	public void mo(bool okk)
+	{
+		ok = okk;
+	}
+	public void mogoi(bool okk)
+	{
+		okgoi = okk;
 	}
 }
 <script>

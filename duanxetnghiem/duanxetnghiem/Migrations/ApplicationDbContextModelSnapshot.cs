@@ -304,6 +304,9 @@ namespace duanxetnghiem.Migrations
                     b.Property<int>("KetQuaXetNghiemId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("idgoi")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ChisoId");
@@ -449,6 +452,31 @@ namespace duanxetnghiem.Migrations
                     b.HasIndex("DonXetNghiemId");
 
                     b.ToTable("thanhToans");
+                });
+
+            modelBuilder.Entity("Shared.Model.Tinhtrang", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DonXetNghiemId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("thoigian")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("trangthai")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DonXetNghiemId");
+
+                    b.ToTable("Tinhtrangs");
                 });
 
             modelBuilder.Entity("Shared.Model.TuChoi", b =>
@@ -951,6 +979,17 @@ namespace duanxetnghiem.Migrations
                 });
 
             modelBuilder.Entity("Shared.Model.ThanhToan", b =>
+                {
+                    b.HasOne("duanxetnghiem.Data.Model.DonXetNghiem", "DonXetNghiem")
+                        .WithMany()
+                        .HasForeignKey("DonXetNghiemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DonXetNghiem");
+                });
+
+            modelBuilder.Entity("Shared.Model.Tinhtrang", b =>
                 {
                     b.HasOne("duanxetnghiem.Data.Model.DonXetNghiem", "DonXetNghiem")
                         .WithMany()

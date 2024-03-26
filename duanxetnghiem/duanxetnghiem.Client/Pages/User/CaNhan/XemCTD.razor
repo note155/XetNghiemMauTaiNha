@@ -20,7 +20,8 @@
 
     <div class="test-registration-form">
         <h2>Thông tin đơn đăng ký xét nghiệm</h2>
-        <div style="background-color:@a;color:black" class="btn btn-primary btn-lg disabled">  <strong>Trạng Thái: </strong>@Input.Trangthai</div>
+        <div style="background-color:@a;color:black" class="btn btn-primary btn-lg disabled">  <strong>Trạng Thái: </strong>@Input.Trangthai</div> 
+        <a href="tinhtrangdon/@id">Xem quy trình đã thực hiện</a>
         <EditForm Model="Input" method="post" OnValidSubmit="add" FormName="register" class="profile-form">
             <DataAnnotationsValidator />
             <hr />
@@ -167,7 +168,7 @@
                                     if (kqandcs.goi != goi1)
                                     {
                                         goi1 = kqandcs.goi;
-                                        <tr><td colspan="4"><strong>Gói Xét Nghiệm:</strong>@loadtengoi(goi)</td></tr>
+                                        <tr><td colspan="4"><strong>Gói Xét Nghiệm:</strong>@loadtengoi(goi1)</td></tr>
                                     }
                                     <tr>
                                         <td>@loadtenchiso(kqandcs.id)</td>
@@ -188,14 +189,25 @@
 
                         }
                     </EditForm>
-                    <button class="btn btn-success" @onclick="@(_ => PrintingService.Print(rawHtml, PrintType.RawHtml))">
-                        Tải Kết Quả
-                    </button>
-                    <button @onclick="tuvan">Liên hệ tư vấn </button>
+                    
+                    <div class="row">
+                        @if (rooms == null)
+                        {
+                            <button class="btn btn-success m-2" style="width:45%" @onclick="tuvan" data-toggle="modal" data-target="#myModal">Liên hệ tư vấn </button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-success m-2" style="width:45%" @onclick="tuvan" data-toggle="modal">Liên hệ tư vấn </button>
+                        }
+                        <button style="width:45%" class="btn btn-success m-2" @onclick="@(_ => PrintingService.Print(rawHtml, PrintType.RawHtml))">
+                            Tải Kết Quả
+                        </button>
+                    </div>
                 </div>
             }
         }
         <a href="/lichsuDl"><button style="background-color:red" class="btn btn-primary"> Trở về </button></a>
+
     </div>
 </div>
 
@@ -232,7 +244,7 @@
 
     [Parameter]
     public int id { get; set; }
-
+    roomchat rooms { get; set; } = new();
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -247,6 +259,7 @@
         allGXN = await GXNservice.getallAsync();
         AllBS = await bacsiservice.getallAsync();
         dxn = await DXNservice.getallGXNAsync(id);
+
         if(Input.Trangthai!="Từ Chối")
         {
             tt = await TTservice.getbyidDXNAsync(id);            
@@ -336,7 +349,10 @@
 
             rawHtml += "</table>";
         }
-
+        var us = await Usertservice.getuserbyemail(UserName);
+        var allroom = await Roomchatservice.getallbyidAsync(us.Id);
+        string name = "Tư Vấn Đơn :" + id;
+         rooms = allroom.FirstOrDefault(a => a.Name == name);
     }
     private void loadgxndachon()
     {
@@ -457,31 +473,8 @@
     private async void tuvan()
     {
 
-        var us = await Usertservice.getuserbyemail(UserName);
-        var allroom = await Roomchatservice.getallbyidAsync(us.Id);
-        string name = "Tư Vấn Đơn :" + id;
-        var rooms = allroom.FirstOrDefault(a => a.Name == name);
-        if (rooms == null)
-        {
-            roomchat room = new()
-                {
-                    Name = "Tư Vấn Đơn :" + id,
-                    userid = us.Id,
-                    ngaytao = DateTime.Now
-                };
-            var ro = await Roomchatservice.addAsync(room);
-            Chat ha = new()
-                {
-                    data = "Tôi cần hỗ trợ cho đơn " + id,
-                    roomchatid = ro.Id,
-                    thoigian = DateTime.Now,
-                    trangthai = 1,
-                    userid = us.Id
-                };
-            await Chatservice.addAsync(ha);
-            navigation.NavigateTo("/Chat/" + ro.Id);
-        }
-        else
+        
+        if (rooms != null)
         {
             navigation.NavigateTo("/Chat/" + rooms.Id);
         }
@@ -536,6 +529,7 @@
         }
         return null;
     }
+
     private string loaddonvi(int id)
     {
         foreach (var i in allchiso)
@@ -558,4 +552,82 @@
         }
         return null;
     }
+    int iduser = 0;
+    string err1 = "";
+    BacSi bs { get; set; } = null;
+    private void layuser(int idbs)
+    {
+        iduser = idbs;
+        bs = AllBS.FirstOrDefault(p => p.Id == idbs);
+    }
+    private async Task addbs()
+    {
+        err1 = "";
+        if (iduser == 0)
+        {
+            err1 = "Vui lòng chọn người bác sĩ";
+            return;
+        }
+        var us = await Usertservice.getuserbyemail(UserName);
+        roomchat room = new()
+            {
+                Name = "Tư Vấn Đơn :" + id,
+                userid = us.Id,
+                ngaytao = DateTime.Now,
+                idbs=iduser
+            };
+        var ro = await Roomchatservice.addAsync(room);
+        Chat ha = new()
+            {
+                data = "Tôi cần hỗ trợ cho đơn " + id,
+                roomchatid = ro.Id,
+                thoigian = DateTime.Now,
+                trangthai = 1,
+                userid = us.Id
+            };
+        await Chatservice.addAsync(ha);
+        navigation.NavigateTo("/Chat/" + ro.Id);
+    }
 }
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Chọn bác sĩ tư vấn</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                @if (err1 != "")
+                {
+                    <div class="alert alert-danger">@err1</div> <br>
+                }
+                <InputSelect ValueChanged="@((int value)=>layuser(value))" ValueExpression="@(()=>iduser)" Value="iduser" class="form-control" id="userid">
+                    <option value="0">Chọn bác sĩ tư vấn</option>
+                    @foreach (var use in AllBS)
+                    {
+                        <option value="@use.Id">@use.Hoten</option>
+                    }
+                </InputSelect>
+                <h2>Thông tin Bác sĩ</h2>
+                @if (bs != null)
+                {
+                    <div class="info">
+                        <img style="width:70%" src="@bs.Anh">
+                        <p style="color:black" class="text-left"><strong>Họ tên:</strong> @bs.Hoten</p>
+                        <p style="color:black" class="text-left"><strong>Chức vụ:</strong> @bs.Chucvu</p>
+                        <p style="color:black" class="text-left"><strong>Tuổi:</strong> @bs.SDT</p>
+                        <p style="color:black" class="text-left"><strong>Số điện thoại:</strong> @bs.Email</p>
+
+                    </div>
+                }
+                <a @onclick="addbs" style="width:100%;color:black" class="btn btn-primary">Tư vấn</a>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>

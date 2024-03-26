@@ -1,6 +1,7 @@
 ﻿@page "/BSdelete/{id:int}"
 @inject NavigationManager navigation;
 @attribute [Authorize]
+@layout AdminLayout
 @code {
     [Parameter]
     public int id { get; set; }

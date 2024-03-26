@@ -270,7 +270,9 @@ button.btn-primary {
         font-weight: bold; /* Increase font weight for better visibility */
         color: #333; /* Adjust text color for readability */
     }
-
+.button-space {
+    margin-right: 10px; /* Điều chỉnh khoảng cách theo nhu cầu */
+}
 @media only screen and (max-width: 768px) {
     .patient-registration-container {
         flex-direction: column; /* Hiển thị các phần tử dọc theo nhau */

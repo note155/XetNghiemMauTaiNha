@@ -1,7 +1,8 @@
 ﻿@page "/ListDXNDD"
 @attribute [Authorize]
+@layout AdminLayout
 @using System.Globalization
-<NavMenu />
+
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -93,9 +94,20 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await checkbs();
         await LoadAlLStudents();
         allUser = await Usertservice.getalluserAsync();
         allBS = await bacsiservice.getallAsync();
+    }
+    public async Task checkbs()
+    {
+        var authState = await checkbss.GetAuthenticationStateAsync();
+        var UserName = authState.User.Identity.Name;
+        var bs = await bacsiservice.getbyemail(UserName);
+        if (bs == null)
+        {
+            navigation.NavigateTo("/err");
+        }
     }
     private async Task timkiem()
     {

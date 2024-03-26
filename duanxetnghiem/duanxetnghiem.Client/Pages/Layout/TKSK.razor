@@ -1,0 +1,96 @@
+﻿@using Microsoft.AspNetCore.Components
+@using Microsoft.JSInterop
+@using System.Collections.Generic
+@using System.Linq
+@using Shared.form
+
+<div style="width:80%;">
+    <canvas id="@CanvasId" width="400" height="400"></canvas>
+</div>
+
+@code {
+    [Parameter]
+    public List<Chisotk> Dscs { get; set; }
+    [Parameter]
+    public string Csbt { get; set; }
+    [Parameter]
+    public string CanvasId { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("drawLineChart", Dscs.Select(x => x.Ketqua).ToList(), Dscs.Select(x => x.Thoigian).ToList(), Csbt, CanvasId);
+        }
+    }
+
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+<script>
+    window.drawLineChart = (kqRBCTs, thoigians, csbtRBC, canvasId) => {
+        var ctx = document.getElementById(canvasId).getContext('2d');
+        var kqRBCValues = kqRBCTs.map(parseFloat);
+        // Sử dụng moment.js để định dạng ngày/tháng/năm
+        var thoigianLabels = thoigians.map(th => moment(th).format('DD/MM/YYYY'));
+        var csbtRBCValues = csbtRBC.split('-').map(parseFloat);
+
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Min'].concat(thoigianLabels).concat(['Max']),
+                datasets: [{
+                    label: canvasId,
+                    data: [csbtRBCValues[0]].concat(kqRBCValues).concat([csbtRBCValues[1]]),
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 2,
+                    fill: false
+                },
+                {
+                    label: 'CSBT',
+                    data: Array(thoigianLabels.length + 2).fill(csbtRBCValues[0]),
+                    borderColor: 'rgb(0, 147, 238)',
+                    backgroundColor: 'rgb(0, 147, 238)',
+                    borderWidth: 1,
+                    fill: false
+                },
+                {
+                    label: 'CSBT',
+                    data: Array(thoigianLabels.length + 2).fill(csbtRBCValues[1]),
+                    borderColor: 'rgb(0, 147, 238)',
+                    backgroundColor: 'rgb(0, 147, 238)',
+                    borderWidth: 1,
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Get the segment points
+        var segments = chart.getDatasetMeta(0).data;
+
+        // Check each data point and update colors accordingly
+        for (var i = 0; i < kqRBCValues.length; i++) {
+            // Check if the data point is outside the threshold
+            if (kqRBCValues[i] < csbtRBCValues[0] || kqRBCValues[i] > csbtRBCValues[1]) {
+                // Update the color of the line segment
+                segments[i]._model.borderColor = 'rgba(0, 0, 255, 1)';
+                segments[i]._model.backgroundColor = 'rgba(0, 0, 255, 0.2)';
+            }
+        }
+
+        // Update the chart
+        chart.update();
+    };
+</script>

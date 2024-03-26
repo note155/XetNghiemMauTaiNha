@@ -34,27 +34,45 @@
 
 <br>
 <br>
-<table class="table table-bordered">
-	<thead>
-		<tr>
-			<th>ID</th>
-			<th>Room</th>
-			<th>Trạng thái</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var unreadRoom in unreadRooms)
-		{
-			<tr>
-				<td>@unreadRoom.RoomId</td>
-				<td><a href="/Chat/@unreadRoom.RoomId">#Room:@roomNameDictionary[unreadRoom.RoomId]</a></td>
-				<td>@unreadRoom.UnreadChatCount tin nhắn chờ</td>
-				<td><a class="btn btn-info" href="/Chat/@unreadRoom.RoomId">Xem</a></td>
-			</tr>
-		}
-	</tbody>
-</table>
+	<div class="row">
+		<div class="col-sm-7">
+			<div class="table-wrapper">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Room</th>
+							<th>Trạng thái</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+					@if (unreadRooms.Any())
+					{
+						@foreach (var unreadRoom in unreadRooms)
+						{
+							<tr>
+								<td>@unreadRoom.RoomId</td>
+								<td><a href="/Chat/@unreadRoom.RoomId">#Room:@roomNameDictionary[unreadRoom.RoomId]</a></td>
+								<td>@unreadRoom.UnreadChatCount tin nhắn chờ</td>
+								<td><a class="btn btn-info" href="/Chat/@unreadRoom.RoomId">Xem</a></td>
+							</tr>
+						}
+					}
+					else
+					{
+					<tr>Chưa có Room Chat nào đã được tạo</tr>
+					}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="col-sm-5">
+			<img style="width:100%" src="chat.jpg">
+		</div>
+	</div>
+
+
 @code {
 	[Inject]
 	protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
@@ -72,6 +90,10 @@
 		var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
 		UserName = authState.User.Identity.Name;
 		user = await Usertservice.getuserbyemail(UserName);
+		if (user == null)
+		{
+			navigation.NavigateTo("/AddUser");
+		}
 		allroom = await Roomchatservice.getallbyidAsync(user.Id);
 		foreach (var room in allroom)
 		{

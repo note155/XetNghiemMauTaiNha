@@ -2,20 +2,21 @@
 @using System.Globalization
 @inject NavigationManager navigation;
 @attribute [Authorize]
+@layout AdminLayout
 
-<NavMenu />
+
 <div class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Danh Sách Đơn Đang Chờ Kết Quả</h3>
+                <h3 class="card-title">Danh Sách Đơn Đang Chờ Kết Quả @Inputkq</h3>
             </div>
             <div class="card-body">
                 <div class="row">
                     <EditForm Model="Inputkq" method="post" OnValidSubmit="timkiem" FormName="register">
                         <DataAnnotationsValidator />
                         <ValidationSummary class="text-danger" role="alert" />
-                        <InputText @bind-Value="Inputkq" placeholder="Tìm kiếm" />
+                        <InputText @bind-Value="Inputkq" placeholder="tìm kiếm" />
                         <ValidationMessage For="() => Inputkq" class="text-danger" />
                         <button type="submit" class=" btn-success">Tìm kiếm</button> <!-- Updated button class -->
                     </EditForm>
@@ -76,13 +77,25 @@
 @code {
     public List<DonXetNghiem> AllDXN { get; set; } = new();
     public List<User> allUser { get; set; } = new();
+    [SupplyParameterFromForm]
     public String Inputkq { get; set; } = new("");
     protected override async Task OnInitializedAsync()
     {
+        await checkbs();
         await LoadAlLStudents();
         allUser = await Usertservice.getalluserAsync();
-    }
 
+    }
+    public async Task checkbs()
+    {
+        var authState = await checkbss.GetAuthenticationStateAsync();
+        var UserName = authState.User.Identity.Name;
+        var bs = await bacsiservice.getbyemail(UserName);
+        if (bs == null)
+        {
+            navigation.NavigateTo("/err");
+        }
+    }
 
 
     public async Task LoadAlLStudents()
@@ -119,31 +132,27 @@
         }
         else
         {
-            // Check if the search input is a valid ID
-            if (int.TryParse(Inputkq, out int searchId))
+            // Define array of formats to parse the search query
+            string[] formats = { "dd/MM/yyyy", "d/M/yyyy" };
+
+            // Parse the search query as a date with multiple formats
+            if (DateTime.TryParseExact(Inputkq, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime searchDate))
             {
-                // Filter AllDXN based on the search ID
+                // Filter AllDXN based on the search date
+                AllDXN = AllDXN.Where(dx => dx.Ngaydat.Date == searchDate.Date).ToList();
+            }
+            else if (int.TryParse(Inputkq, out int searchId)) // Check if Inputkq can be parsed as an integer
+            {
+                // Filter AllDXN based on the ID
                 AllDXN = AllDXN.Where(dx => dx.Id == searchId).ToList();
             }
             else
             {
-                // Define array of formats to parse the search query as a date
-                string[] formats = { "dd/MM/yyyy", "d/M/yyyy" };
-
-                // Parse the search query as a date with multiple formats
-                if (DateTime.TryParseExact(Inputkq, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime searchDate))
-                {
-                    // Filter AllDXN based on the search date
-                    AllDXN = AllDXN.Where(dx => dx.Ngaydat.Date == searchDate.Date).ToList();
-                }
-                else
-                {
-                    // Filter AllDXN based on customer's name, doctor's name, or ID
-                    AllDXN = AllDXN.Where(dx => dx.Id.ToString().Contains(Inputkq) ||
-                                                 loadhoten(dx.UserId).Contains(Inputkq, StringComparison.OrdinalIgnoreCase) ).ToList();
-                }
+                // Filter AllDXN based on customer's name or doctor's name
+                AllDXN = AllDXN.Where(dx => loadhoten(dx.UserId).Contains(Inputkq, StringComparison.OrdinalIgnoreCase)).ToList();
             }
         }
     }
+
 
 }

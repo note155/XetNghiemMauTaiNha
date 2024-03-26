@@ -3,134 +3,142 @@
 @rendermode InteractiveAuto
 @inject NavigationManager navigation;
 @attribute [Authorize]
-<EditForm Model="Input" method="post" OnValidSubmit="add" FormName="register" class="profile-form">
-    <DataAnnotationsValidator />
-    <hr />
 
-    @if (err.Any())
-    {
-        <div class="alert alert-danger" role="alert">
-            @foreach (var error in err)
-            {
-                <p>@error</p>
-            }
-        </div>
-    }
-    <div class="patient-registration-container">
-        <div class="patient-info-container">
-            <div class="patient-info">
-                <h3 style="color:red"> Chọn người thân bạn cần đặt lịch </h3>
-                <InputSelect ValueChanged="@((int value)=>layuser(value))" ValueExpression="@(()=>iduser)" Value="iduser" class="form-control" id="userid">
-                    @foreach(var use in alluser)
-                    {
-                        <option value="@use.Id">@use.Hoten</option>
-                    }
-                </InputSelect>
-                <h2>Thông tin bệnh nhân</h2>
-                @if (user != null)
+@if (alluser.Skip(1).Any())
+{
+    <EditForm Model="Input" method="post" OnValidSubmit="add" FormName="register" class="profile-form">
+        <DataAnnotationsValidator />
+        <hr />
+
+        @if (err.Any())
+        {
+            <div class="alert alert-danger" role="alert">
+                @foreach (var error in err)
                 {
-                    <div class="info">
-                        <p><strong>Họ tên:</strong> @user.Hoten</p>
-                        <p><strong>Tuổi:</strong> @user.Tuoi</p>
-                        <p><strong>Số điện thoại:</strong> @user.SDT</p>
-                        <p><strong>Địa chỉ:</strong> @user.Diachi / @user.CapXa / @user.CapHuyen / Thành phố Huế</p>
-                        <p><strong>Email:</strong> @user.Email</p>
-                        <p><strong>Giới tính:</strong> @gioitinh(@user.Gioitinh)</p>
-                        <a href="/adduser" class="btn btn-info">Thêm thông tin người thân</a>
-                    </div>
+                    <p>@error</p>
                 }
             </div>
-            <div class="patient-info">
-                <h2>Các gói xét nghiệm</h2>
-                <div class="info" style="height: 360px; overflow-y: auto;">
-                    <table>
-                        @foreach (var ds in listgxn)
+        }
+        <div class="patient-registration-container">
+            <div class="patient-info-container">
+                <div class="patient-info">
+                    <h3 style="color:red"> Chọn người thân bạn cần đặt lịch </h3>
+                    <InputSelect ValueChanged="@((int value)=>layuser(value))" ValueExpression="@(()=>iduser)" Value="iduser" class="form-control" id="userid">
+                        @foreach (var use in alluser)
                         {
-                            <tr>
-                                <td><input type="checkbox" @onchange="@(() => LoadBSInfo(ds.Id))" checked="@ds.IsSelected" /></td>
-                                <td>@ds.TenGoi</td>
-                                <td>@ds.Gia</td>
-                            </tr>
+                            <option value="@use.Id">@use.Hoten</option>
                         }
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="test-registration-form">
-            <h2>Đơn đăng ký đặt lịch xét nghiệm</h2>
-            <div class="form-group">
-                <label for="Ngaydat">Ngày Lấy Máu</label>
-                <InputDate @bind-Value="Input.Ngaydat" class="form-control" id="Ngaydat" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
-                <ValidationMessage For="() => Input.Ngaydat" class="text-danger" />
-            </div>
-            <div class="form-group">
-                <label for="giolaymau">Giờ lấy máu</label>
-                <InputSelect id="giolaymau" @bind-Value="Input.giolaymau" class="form-control">
-                    <option value="">Chọn</option>
-                    <option value="5h30">5h30</option>
-                    <option value="6h">6h</option>
-                    <option value="6h30">6h30</option>
-                    <option value="7h">7h</option>
-                    <option value="7h30">7h30</option>
-                    <option value="8h">8h</option>
-                    <option value="8h30">8h30</option>
-                    <option value="9h">9h</option>
-                    <option value="9h30">9h30</option>
-                    <option value="10h">10h</option>
-                    <option value="10h30">10h30</option>
-                    <option value="11h">11h</option>
-                    <option value="11h30">11h30</option>
-                    <option value="12h">12h</option>
-                    <option value="12h30">12h30</option>
-                    <option value="13h">13h</option>
-                    <option value="13h30">13h30</option>
-                    <option value="14h">14h</option>
-                    <option value="14h30">14h30</option>
-                    <option value="15h">15h</option>
-                    <option value="15h30">15h30</option>
-                    <option value="16h">16h</option>
-                    <option value="16h30">16h30</option>
-                    <option value="17h">17h</option>
-                    <option value="17h30">17h30</option>
-                    <option value="18h">18h</option>
-                    <option value="18h30">18h30</option>
-                    <option value="19h">19h</option>
-                    <option value="19h30">19h30</option>
-                    <option value="20h">20h</option>
-                    <option value="20h30">20h30</option>
-                    <option value="21h">21h</option>
-                </InputSelect>
-            </div>
-            <div class="form-group">
-                <label for="ghiChu">Ghi chú </label>
-                <InputTextArea @bind-Value="Input.ghiChu" class="form-control" id="ghiChu" />
-                <ValidationMessage For="() => Input.ghiChu" class="text-danger" />
-            </div>
-            <div class="doctor-info">
-                <div class="selected-packages-header">
-                    <h3>Các gói đã chọn:</h3>
-                </div>
-                <div class="selected-packages">
-                    @foreach (var bs in gxndachon)
+                    </InputSelect>
+                    <h2>Thông tin bệnh nhân</h2>
+                    @if (user != null)
                     {
-                        <div class="package">
-                            <div class="package-content">
-                                <p><strong>Tên Gói:</strong> @bs.TenGoi</p>
-                                <div class="price">Giá: @bs.Gia VND</div>
-                            </div>
-                            <button type="button" @onclick="@( () => remove(bs.Id) )" class="remove-btn">X</button>
+                        <div class="info">
+                            <p><strong>Họ tên:</strong> @user.Hoten</p>
+                            <p><strong>Tuổi:</strong> @user.Tuoi</p>
+                            <p><strong>Số điện thoại:</strong> @user.SDT</p>
+                            <p><strong>Địa chỉ:</strong> @user.Diachi / @user.CapXa / @user.CapHuyen / Thành phố Huế</p>
+                            <p><strong>Email:</strong> @user.Email</p>
+                            <p><strong>Giới tính:</strong> @gioitinh(@user.Gioitinh)</p>
+                            <a href="/adduser" class="btn btn-info">Thêm thông tin người thân</a>
                         </div>
                     }
                 </div>
-                <div class="total-mobile">
-                    <p>Tổng tiền: <span class="total">@tongtien VND</span></p>
+                <div class="patient-info">
+                    <h2>Các gói xét nghiệm</h2>
+                    <div class="info" style="height: 360px; overflow-y: auto;">
+                        <table>
+                            @foreach (var ds in listgxn)
+                            {
+                                <tr>
+                                    <td><input type="checkbox" @onchange="@(() => LoadBSInfo(ds.Id))" checked="@ds.IsSelected" /></td>
+                                    <td>@ds.TenGoi</td>
+                                    <td>@ds.Gia</td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
                 </div>
             </div>
-            <a href="/"><button style="background-color:red" class="btn btn-primary"> Hủy </button></a>
-            <button type="submit" class="btn btn-primary">Đăng Ký</button>
+            <div class="test-registration-form">
+                <h2>Đơn đăng ký đặt lịch xét nghiệm</h2>
+                <div class="form-group">
+                    <label for="Ngaydat">Ngày Lấy Máu</label>
+                    <InputDate @bind-Value="Input.Ngaydat" class="form-control" id="Ngaydat" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                    <ValidationMessage For="() => Input.Ngaydat" class="text-danger" />
+                </div>
+                <div class="form-group">
+                    <label for="giolaymau">Giờ lấy máu</label>
+                    <InputSelect id="giolaymau" @bind-Value="Input.giolaymau" class="form-control">
+                        <option value="">Chọn</option>
+                        <option value="5h30">5h30</option>
+                        <option value="6h">6h</option>
+                        <option value="6h30">6h30</option>
+                        <option value="7h">7h</option>
+                        <option value="7h30">7h30</option>
+                        <option value="8h">8h</option>
+                        <option value="8h30">8h30</option>
+                        <option value="9h">9h</option>
+                        <option value="9h30">9h30</option>
+                        <option value="10h">10h</option>
+                        <option value="10h30">10h30</option>
+                        <option value="11h">11h</option>
+                        <option value="11h30">11h30</option>
+                        <option value="12h">12h</option>
+                        <option value="12h30">12h30</option>
+                        <option value="13h">13h</option>
+                        <option value="13h30">13h30</option>
+                        <option value="14h">14h</option>
+                        <option value="14h30">14h30</option>
+                        <option value="15h">15h</option>
+                        <option value="15h30">15h30</option>
+                        <option value="16h">16h</option>
+                        <option value="16h30">16h30</option>
+                        <option value="17h">17h</option>
+                        <option value="17h30">17h30</option>
+                        <option value="18h">18h</option>
+                        <option value="18h30">18h30</option>
+                        <option value="19h">19h</option>
+                        <option value="19h30">19h30</option>
+                        <option value="20h">20h</option>
+                        <option value="20h30">20h30</option>
+                        <option value="21h">21h</option>
+                    </InputSelect>
+                </div>
+                <div class="form-group">
+                    <label for="ghiChu">Ghi chú </label>
+                    <InputTextArea @bind-Value="Input.ghiChu" class="form-control" id="ghiChu" />
+                    <ValidationMessage For="() => Input.ghiChu" class="text-danger" />
+                </div>
+                <div class="doctor-info">
+                    <div class="selected-packages-header">
+                        <h3>Các gói đã chọn:</h3>
+                    </div>
+                    <div class="selected-packages">
+                        @foreach (var bs in gxndachon)
+                        {
+                            <div class="package">
+                                <div class="package-content">
+                                    <p><strong>Tên Gói:</strong> @bs.TenGoi</p>
+                                    <div class="price">Giá: @bs.Gia VND</div>
+                                </div>
+                                <button type="button" @onclick="@( () => remove(bs.Id) )" class="remove-btn">X</button>
+                            </div>
+                        }
+                    </div>
+                    <div class="total-mobile">
+                        <p>Tổng tiền: <span class="total">@tongtien VND</span></p>
+                    </div>
+                </div>
+                <a href="/"><button style="background-color:red" class="btn btn-primary"> Hủy </button></a>
+                <button type="submit" class="btn btn-primary">Đăng Ký</button>
+            </div>
         </div>
-    </div>
-</EditForm>
+    </EditForm>
+}
+else
+{
+    <strong>Bạn chưa có thông tin người thân trong hệ thống </strong> <a href="/adduser"><button class="btn btn-success">Nhấn vào đây để thêm người thân</button></a>
+}
 
 @code {
     [Inject]
@@ -138,6 +146,7 @@
 
     private List<string> err = new List<string>();
     private User user = new User();
+    private User userthanhtoan = new User();
     public List<GoiXetNghiem> allGXN { get; set; } = new();
     public List<User> alluser { get; set; } = new();
     public List<BacSi> AllBS { get; set; } = new();
@@ -156,12 +165,12 @@
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         UserName = authState.User.Identity.Name;
-        user = await Usertservice.getuserbyemail(UserName);
-        
+        user = await Usertservice.getuserbyemail(UserName);           
         if (user == null)
         {
             navigation.NavigateTo("/AddUser");
         }
+        userthanhtoan = user;
         alluser = await Usertservice.getalluserbyemailAsync(user.Email);
         allGXN = await GXNservice.getallAsync();
         getds();
@@ -244,13 +253,20 @@
         }
         ThanhToan tt = new ThanhToan
             {
-                UserId = user.Id,
+                UserId = userthanhtoan.Id,
                 DonXetNghiemId = don.Id,
                 Tongtien = tongtien,
                 trangthai = "Chưa Thanh Toán"
             };
         await TTservice.addAsync(tt);
-        navigation.NavigateTo("/ThanhToan/" + don.Id);
+        Tinhtrang ttrang = new Tinhtrang
+            {
+                DonXetNghiemId = don.Id,
+                thoigian = DateTime.Now,
+                trangthai = "Đơn đã được tạo"
+            };
+        await TTrangservice.addAsync(ttrang);
+        navigation.NavigateTo("/giohangdxn");
     }
     public String loadGXN(int id)
     {

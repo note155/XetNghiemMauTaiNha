@@ -6,29 +6,26 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace duanxetnghiem.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate2 : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Maus",
+                name: "Tinhtrangs",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DonXetNghiemId = table.Column<int>(type: "int", nullable: false),
-                    ngaynhanmau = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    khoa = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    bacsiid = table.Column<int>(type: "int", nullable: true),
-                    phongthuchien = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    maythuchien = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    trangthai = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    thoigian = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Maus", x => x.Id);
+                    table.PrimaryKey("PK_Tinhtrangs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Maus_DonXetNghiems_DonXetNghiemId",
+                        name: "FK_Tinhtrangs_DonXetNghiems_DonXetNghiemId",
                         column: x => x.DonXetNghiemId,
                         principalTable: "DonXetNghiems",
                         principalColumn: "Id",
@@ -36,8 +33,8 @@ namespace duanxetnghiem.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Maus_DonXetNghiemId",
-                table: "Maus",
+                name: "IX_Tinhtrangs_DonXetNghiemId",
+                table: "Tinhtrangs",
                 column: "DonXetNghiemId");
         }
 
@@ -45,7 +42,7 @@ namespace duanxetnghiem.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Maus");
+                name: "Tinhtrangs");
         }
     }
 }

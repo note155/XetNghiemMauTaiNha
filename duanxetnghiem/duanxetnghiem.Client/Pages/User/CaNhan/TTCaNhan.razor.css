@@ -81,3 +81,32 @@
     .btn:hover {
         background-color: #0056b3;
     }
+@media screen and (max-width: 767px) {
+    .container {
+        margin-top: 10px; /* Further reduced margin for smaller screens */
+    }
+
+    .activity-history,
+    .patient-info {
+        margin-bottom: 20px; /* Added margin bottom */
+        padding: 15px; /* Further reduced padding */
+    }
+
+        .activity-history h3,
+        .patient-info h3 {
+            font-size: 20px; /* Further reduced font size */
+        }
+
+    .form-group label {
+        font-size: 16px; /* Further reduced font size */
+    }
+
+    .form-group p {
+        font-size: 14px; /* Further reduced font size */
+    }
+
+    .btn {
+        font-size: 14px; /* Further reduced font size */
+        padding: 6px 12px; /* Further reduced padding */
+    }
+}

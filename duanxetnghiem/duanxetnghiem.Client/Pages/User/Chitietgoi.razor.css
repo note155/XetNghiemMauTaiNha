@@ -1,7 +1,38 @@
 ﻿
-body {
+/* Modal Header */
+.modal-header {
+    background-color: #007bff; /* Header background color */
+    color: #fff; /* Header text color */
+    border-bottom: none; /* Remove bottom border */
+    border-radius: 5px 5px 0 0; /* Rounded corners */
 }
 
+    .modal-header .modal-title {
+        font-weight: bold; /* Bold modal title */
+    }
+
+/* Modal Body */
+.modal-body {
+    padding: 20px; /* Add padding */
+}
+
+/* Modal Footer */
+.modal-footer {
+    background-color: #f8f9fa; /* Footer background color */
+    border-top: none; /* Remove top border */
+    border-radius: 0 0 5px 5px; /* Rounded corners */
+}
+
+/* Close Button */
+.close {
+    color: #fff; /* Close button color */
+    opacity: 1; /* Make the close button fully visible */
+    transition: opacity 0.2s ease; /* Add transition effect */
+}
+
+    .close:hover {
+        opacity: 0.8; /* Reduce opacity on hover */
+    }
 
 .background-container {
     background-size: cover; /* Đảm bảo hình nền che phủ đầy đủ phần container */

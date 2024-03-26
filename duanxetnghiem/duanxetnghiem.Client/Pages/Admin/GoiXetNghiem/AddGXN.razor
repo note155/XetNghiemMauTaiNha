@@ -1,6 +1,7 @@
 ﻿@page "/AddGXN"
 @rendermode InteractiveAuto
 @inject NavigationManager navigation;
+@layout AdminLayout
 @attribute [Authorize]
 <div class="container">
     <div class="col-md-8">
@@ -51,7 +52,20 @@
     public GoiXetNghiem Input { get; set; } = new();
 
     private List<string> err = new List<string>();
-
+    protected override async Task OnInitializedAsync()
+    {
+        await checkbs();
+    }
+    public async Task checkbs()
+    {
+        var authState = await checkbss.GetAuthenticationStateAsync();
+        var UserName = authState.User.Identity.Name;
+        var bs = await bacsiservice.getbyemail(UserName);
+        if (bs == null)
+        {
+            navigation.NavigateTo("/err");
+        }
+    }
     private async Task add()
     {
         err.Clear(); // Xóa thông báo lỗi cũ

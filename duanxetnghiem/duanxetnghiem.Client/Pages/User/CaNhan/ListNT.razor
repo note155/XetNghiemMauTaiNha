@@ -19,7 +19,7 @@
                             {
                                 <p><em>Loading ...</em></p>
                             }
-                            @if (Alluser.Any())
+                            @if (Alluser.Skip(1).Any())
                             {
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -35,7 +35,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach (var DXN in Alluser)
+                                                @foreach (var DXN in Alluser.Skip(1))
                                                 {
                                                     
                                                     <tr>

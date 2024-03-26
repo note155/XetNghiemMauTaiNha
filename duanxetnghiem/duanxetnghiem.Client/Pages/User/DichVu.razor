@@ -122,9 +122,14 @@
                                 <div class="alert alert-info p-2">                                
                                     <button @onclick="@(() => themgio(goi.Id,2))" style="width:100%" data-toggle="modal" data-target="#myModal">Đặt cho người thân</button>
                                 </div>
-                            <div class="alert alert-info p-2">
-                                <button @onclick="@(() => themgio(goi.Id,3))" style="width:100%" >Liên hệ tư vấn</button>
-                            </div>
+                                <div class="alert alert-info p-2">
+                                    <button @onclick="@(() => themgio(goi.Id,3))" style="width:100%" >Liên hệ tư vấn</button>
+                                </div>
+                                <div class="alert alert-info p-2">
+                                <a href="/ChiTietGoiXetNghiem/@goi.Id">
+                                    <button  style="width:100%">Xem chi tiết</button>
+                                </a>
+                                </div>
                         </div>
                     </div>
                 </div>

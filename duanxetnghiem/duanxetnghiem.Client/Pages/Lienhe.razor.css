@@ -1,0 +1,35 @@
+﻿/* Định dạng phần form liên hệ */
+.form-container {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+}
+
+/* Định dạng nút gửi */
+.button-cell {
+    text-align: right;
+}
+
+/* Định dạng cảnh báo lỗi */
+.alert-danger {
+    margin-top: 10px;
+}
+.contact-info {
+    margin-top: 20px;
+}
+
+.info-item {
+    margin-bottom: 10px;
+}
+
+.info-label {
+    font-weight: bold;
+    display: inline-block;
+    width: 120px; /* Điều chỉnh độ rộng của nhãn (label) */
+}
+
+.info-value {
+    display: inline-block;
+    margin-left: 10px;
+}

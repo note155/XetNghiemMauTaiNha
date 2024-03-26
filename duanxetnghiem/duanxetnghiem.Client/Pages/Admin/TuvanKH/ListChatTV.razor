@@ -1,6 +1,7 @@
 ﻿@page "/listchatBS"
 @attribute [Authorize]
-<NavMenu />
+@layout AdminLayout
+
 <div class="container">
     <h2 class="mt-5">Danh sách chat tư vấn</h2>
 
@@ -71,6 +72,7 @@
     public Dictionary<int, string> roomNameDictionary { get; set; } = new Dictionary<int, string>();
     protected override async Task OnInitializedAsync()
     {
+        await checkbs();
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         UserName = authState.User.Identity.Name;
         bs = await bacsiservice.getbyemail(UserName);
@@ -88,7 +90,16 @@
         // Sắp xếp lại danh sách unreadRooms dựa trên UnreadChatCount giảm dần
         unreadRooms = unreadRooms.OrderByDescending(room => room.UnreadChatCount).ToList();
     }
-
+    public async Task checkbs()
+    {
+        var authState = await checkbss.GetAuthenticationStateAsync();
+        var UserName = authState.User.Identity.Name;
+        var bs = await bacsiservice.getbyemail(UserName);
+        if (bs == null)
+        {
+            navigation.NavigateTo("/err");
+        }
+    }
     public class RoomUnreadChatCount
     {
         public int RoomId { get; set; }

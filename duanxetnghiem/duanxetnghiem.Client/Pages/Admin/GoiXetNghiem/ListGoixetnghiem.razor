@@ -2,9 +2,10 @@
 @rendermode InteractiveAuto
  @inject IJSRuntime JS
  @inject NavigationManager navigation;
+ @layout AdminLayout
 @attribute [Authorize]
 
-<NavMenu />
+
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -78,8 +79,19 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await checkbs();
         await LoadAlLGoi();
 
+    }
+    public async Task checkbs()
+    {
+        var authState = await checkbss.GetAuthenticationStateAsync();
+        var UserName = authState.User.Identity.Name;
+        var bs = await bacsiservice.getbyemail(UserName);
+        if (bs == null)
+        {
+            navigation.NavigateTo("/err");
+        }
     }
     public async Task LoadAlLGoi()
     {

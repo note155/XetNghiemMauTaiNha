@@ -133,6 +133,7 @@
 
     private List<string> err = new List<string>();
     private User user = new User();
+    private User userthanhtoan = new User();
     public List<GoiXetNghiem> allGXN { get; set; } = new();
     public List<BacSi> AllBS { get; set; } = new();
     public string UserName { get; set; }
@@ -162,10 +163,14 @@
             idgoi = int.Parse(numbers[1]);
         }
         user = await Usertservice.getuserbyid(iduser);
+
         if (user == null)
         {
             navigation.NavigateTo("/AddUser");
         }
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        UserName = authState.User.Identity.Name;
+        userthanhtoan = await Usertservice.getuserbyemail(UserName);
         allGXN = await GXNservice.getallAsync();
         getds();
 
@@ -270,13 +275,20 @@
         }
         ThanhToan tt = new ThanhToan
             {
-                UserId = user.Id,
+                UserId = userthanhtoan.Id,
                 DonXetNghiemId = don.Id,
                 Tongtien = tongtien,
                 trangthai = "Chưa Thanh Toán"
             };
         await TTservice.addAsync(tt);
-        navigation.NavigateTo("/ThanhToan/" + don.Id);
+        Tinhtrang ttrang = new Tinhtrang
+            {
+                DonXetNghiemId = don.Id,
+                thoigian = DateTime.Now,
+                trangthai = "Đơn đã được tạo"
+            };
+        await TTrangservice.addAsync(ttrang);
+        navigation.NavigateTo("/giohangdxn");
     }
     public String loadGXN(int id)
     {

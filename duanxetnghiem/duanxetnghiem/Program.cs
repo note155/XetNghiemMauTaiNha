@@ -40,6 +40,7 @@ builder.Services.AddScoped<IKhoa, KhoaRepository>();
 builder.Services.AddScoped<IPhong, PhongRepository>();
 builder.Services.AddScoped<IRoomchat, RoomchatRepository>();
 builder.Services.AddScoped<IChat, ChatRepository>();
+builder.Services.AddScoped<ITinhtrang, TinhgtrangRepository>();
 builder.Services.AddScoped(http => new HttpClient
 {
     BaseAddress = new Uri(builder.Configuration.GetSection("BaseAdress").Value)

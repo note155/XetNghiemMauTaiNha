@@ -5,14 +5,14 @@
 namespace duanxetnghiem.Migrations
 {
     /// <inheritdoc />
-    public partial class SystemCodes2 : Migration
+    public partial class InitialMigratio1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "idbs",
-                table: "Roomchats",
+                name: "idgoi",
+                table: "KQandCSs",
                 type: "int",
                 nullable: true);
         }
@@ -21,8 +21,8 @@ namespace duanxetnghiem.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "idbs",
-                table: "Roomchats");
+                name: "idgoi",
+                table: "KQandCSs");
         }
     }
 }

@@ -2,6 +2,7 @@
 @using Shared.Model
 @rendermode InteractiveAuto
  @inject NavigationManager navigation;
+ @layout AdminLayout
 @attribute [Authorize]
 
 <div class="patient-registration-container">
@@ -124,11 +125,22 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await checkbs();
         Input = await DXNservice.getbyid(id);
         user = await Usertservice.getuserbyid(Input.UserId);
         allGXN = await GXNservice.getallAsync();
         dxn = await DXNservice.getallGXNAsync(id);
         loadgxndachon();
+    }
+    public async Task checkbs()
+    {
+        var authState = await checkbss.GetAuthenticationStateAsync();
+        var UserName = authState.User.Identity.Name;
+        var bs = await bacsiservice.getbyemail(UserName);
+        if (bs == null)
+        {
+            navigation.NavigateTo("/err");
+        }
     }
     private void loadgxndachon()
     {
@@ -168,6 +180,13 @@
         await TTservice.deleteAsync(tt.Id);
         await DXNservice.updateAsync(Input);
         await TCservice.addAsync(Xoadxn);
+        Tinhtrang ttrang = new Tinhtrang
+            {
+                DonXetNghiemId = Input.Id,
+                thoigian = DateTime.Now,
+                trangthai = "Đơn bị từ chối - lý do: "+Xoadxn.Lydo 
+            };
+        await TTrangservice.addAsync(ttrang);
         navigation.NavigateTo("/ListDXN");
     }
     public String loadGXN(int id)

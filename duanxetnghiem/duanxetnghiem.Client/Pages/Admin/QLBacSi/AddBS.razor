@@ -2,6 +2,7 @@
 @rendermode InteractiveAuto
 @inject NavigationManager navigation;
 @attribute [Authorize]
+@layout AdminLayout
 <div class="container">
     <div class="col-md-8">
         <h2 class="mb-4">Thêm bác sĩ</h2>
@@ -53,7 +54,10 @@
 @code {
     [SupplyParameterFromForm]
     public BacSi Input { get; set; } = new();
-
+    protected override async Task OnInitializedAsync()
+    {
+        await checkbs();
+    }
 
     private List<string> err = new List<string>();
 
@@ -77,6 +81,7 @@
             err.Add("Email không được để trống");
         }
 
+
         if (err.Count == 0)
         {
             if (file == null)
@@ -89,6 +94,16 @@
             }
             await bacsiservice.addAsync(Input);
             navigation.NavigateTo("/ListBS");
+        }
+    }
+    public async Task checkbs()
+    {
+        var authState = await checkbss.GetAuthenticationStateAsync();
+        var UserName = authState.User.Identity.Name;
+        var bs = await bacsiservice.getbyemail(UserName);
+        if (bs == null)
+        {
+            navigation.NavigateTo("/err");
         }
     }
 

@@ -8,7 +8,10 @@
                 <h3>Lịch sử hoạt động</h3>
                 <ul>
                     <li>Số đơn đã đăng ký: @AllDXN.Count</li>
-                    <li>Đơn đăng ký gần đây: @time.ToString("dd/MM/yyyy HH:mm:ss tt")</li>
+                    @if (AllDXN.Count!=0)
+                    {
+                        <li>Đơn đăng ký gần đây: @time.ToString("dd/MM/yyyy HH:mm:ss tt")</li>
+                    }
                     <!-- Thêm các mục hoạt động khác tại đây -->
                 </ul>
             </div>
@@ -68,8 +71,11 @@
             navigation.NavigateTo("/AddUser");
         }
         AllDXN = await DXNservice.getallbyiduserAsync(patient.Id);
-        var dxnWithMaxId = AllDXN.OrderByDescending(dxn => dxn.Id).First();
-        time = dxnWithMaxId.ngaytaodon;
+        if (AllDXN.Count!=0)
+        {
+            var dxnWithMaxId = AllDXN.OrderByDescending(dxn => dxn.Id).First();
+            time = dxnWithMaxId.ngaytaodon;
+        }
     }
     private String gioitinh(bool a)
     {

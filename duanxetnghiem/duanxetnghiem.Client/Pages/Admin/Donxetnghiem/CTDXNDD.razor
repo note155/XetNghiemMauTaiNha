@@ -1,5 +1,6 @@
 ﻿@page "/DXNDD/{id:int}"
 @rendermode InteractiveAuto
+@layout AdminLayout
  @inject NavigationManager navigation;
 @attribute [Authorize]
 <div class="patient-registration-container">
@@ -162,6 +163,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await checkbs();
         Input = await DXNservice.getbyid(id);
         user = await Usertservice.getuserbyid(Input.UserId);
         allGXN = await GXNservice.getallAsync();
@@ -170,6 +172,16 @@
         loadgxndachon();
         valor = Input.BacSiId ?? 0;
         SelectedDoctor = AllBS.FirstOrDefault(bs => bs.Id == valor)!;
+    }
+    public async Task checkbs()
+    {
+        var authState = await checkbss.GetAuthenticationStateAsync();
+        var UserName = authState.User.Identity.Name;
+        var bs = await bacsiservice.getbyemail(UserName);
+        if (bs == null)
+        {
+            navigation.NavigateTo("/err");
+        }
     }
     private void loadgxndachon()
     {

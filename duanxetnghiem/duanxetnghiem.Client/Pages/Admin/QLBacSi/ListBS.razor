@@ -3,8 +3,7 @@
  @inject IJSRuntime JS
  @inject NavigationManager navigation;
 @attribute [Authorize]
-
-<NavMenu />
+@layout AdminLayout
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -80,6 +79,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await checkbs();
         await LoadAllBS();
         GroupBSByChucVu();
     }
@@ -95,7 +95,16 @@
             AllBS.Add(doctor);
         }
     }
-
+    public async Task checkbs()
+    {
+        var authState = await checkbss.GetAuthenticationStateAsync();
+        var UserName = authState.User.Identity.Name;
+        var bs = await bacsiservice.getbyemail(UserName);
+        if (bs == null)
+        {
+            navigation.NavigateTo("/err");
+        }
+    }
     public void GroupBSByChucVu()
     {
         GroupedBSByChucVu = AllBS.GroupBy(bs => bs.Chucvu)

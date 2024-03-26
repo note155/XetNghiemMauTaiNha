@@ -2,6 +2,7 @@
 @rendermode InteractiveAuto
  @inject NavigationManager navigation;
  @attribute [Authorize]
+ @layout AdminLayout
 <div id="map" style="height: 400px;"></div>
 <div class="patient-registration-container">
     <div class="patient-info">
@@ -130,7 +131,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-
+        await checkbs();
         Input = await DXNservice.getbyid(id);
         user = await Usertservice.getuserbyid(Input.UserId);
         allGXN = await GXNservice.getallAsync();
@@ -139,6 +140,16 @@
         loadgxndachon();
         diachi2 = user.Diachi + ", " +user.CapXa+", "+user.CapHuyen+", Thừa Thiên Huế";
 
+    }
+    public async Task checkbs()
+    {
+        var authState = await checkbss.GetAuthenticationStateAsync();
+        var UserName = authState.User.Identity.Name;
+        var bs = await bacsiservice.getbyemail(UserName);
+        if (bs == null)
+        {
+            navigation.NavigateTo("/err");
+        }
     }
     private void loadgxndachon()
     {
@@ -160,6 +171,13 @@
     {
         Input.Trangthai = "Đã Lấy Mẫu";
         await DXNservice.updateAsync(Input);
+        Tinhtrang ttrang = new Tinhtrang
+            {
+                DonXetNghiemId = Input.Id,
+                thoigian = DateTime.Now,
+                trangthai = "Đã lấy mẫu thành công"
+            };
+        await TTrangservice.addAsync(ttrang);
         navigation.NavigateTo("/DXNBS");
     }
     private async Task chuathanhcong()
@@ -178,6 +196,13 @@
         Input.Trangthai = "Lấy mẫu thất bại";
         await DXNservice.updateAsync(Input);
         await TCservice.addAsync(Chuathanhcong);
+        Tinhtrang ttrang = new Tinhtrang
+            {
+                DonXetNghiemId = Input.Id,
+                thoigian = DateTime.Now,
+                trangthai = "Lấy mẫu thất bại - Lý do:"+Chuathanhcong.Lydo
+            };
+        await TTrangservice.addAsync(ttrang);
         navigation.NavigateTo("/DXNBS");
     }
     public String loadGXN(int id)

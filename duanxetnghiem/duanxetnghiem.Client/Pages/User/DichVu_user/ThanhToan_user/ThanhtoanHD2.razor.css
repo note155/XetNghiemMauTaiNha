@@ -1,0 +1,138 @@
+﻿
+body {
+    font-family: Arial, sans-serif;
+    margin: 0; /* Đảm bảo không có khoảng trắng nào nằm giữa body và lề của trình duyệt */
+    padding: 0; /* Đảm bảo không có padding nào được áp dụng cho body */
+    background-size: cover; /* Phủ toàn bộ kích thước của body */
+    background-position: center; /* Canh chỉnh hình ảnh ở giữa */
+    background-attachment: fixed; /* Giữ hình nền cố định khi cuộn trang */
+    background-image: url('hinhnen.jpg');
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1000px;
+    margin: auto;
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #f8f8f8;
+    color: #333;
+}
+
+.background-container {
+    background-size: cover;
+    background-position: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+    table th, table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+.instructions img {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.panel {
+    flex-grow: 1;
+    border: 1px solid #1a8cff;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 40px; /* Để giảm khoảng cách giữa các panel */
+}
+
+.panel-header {
+    background-color: #E8E8E8;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.panel-body {
+    padding: 20px;
+    background-color: #ffffff;
+}
+
+.right-panel {
+    width: 650px; /* Định chiều rộng cố định của phần thanh toán */
+}
+
+.left-panel {
+    flex: 1;
+    margin-right: 10px;
+    /* Để tạo khoảng cách giữa các panel */
+}
+
+.qr-code {
+    width: 100%;
+    max-width: 300px; /* Để làm cho ảnh QR to ra */
+    margin-bottom: 10px;
+}
+
+.payment-methods {
+    margin-bottom: 10px;
+    text-align: center; /* Căn giữa nút bên trong */
+}
+
+    .payment-methods button {
+        padding: 8px 20px;
+        border: none;
+        cursor: pointer;
+        border: 1px solid #00ce00;
+        margin: auto; /* Đảm bảo nút ở giữa trang */
+    }
+
+.instructions img {
+    max-width: 100%; /* Đặt kích thước tối đa cho ảnh */
+    height: auto; /* Đảm bảo tỷ lệ khung hình được duy trì */
+    margin-top: 10px;
+}
+
+.payment-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Căn lề giữa theo chiều dọc */
+    align-items: center; /* Căn lề giữa theo chiều ngang */
+}
+
+.payment-info,
+.payment-amount {
+    margin-bottom: 10px; /* Khoảng cách giữa các phần nội dung */
+    border-radius: 5px;
+}
+
+    .payment-info div,
+    .payment-amount div {
+        font-weight: bold; /* Đậm */
+        color: #333; /* Màu chữ */
+    }
+
+.section {
+    margin-bottom: 10px;
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: lighter;
+    margin-bottom: 10px;
+}

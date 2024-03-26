@@ -1,0 +1,112 @@
+﻿/* CSS */
+.timeline {
+    position: relative;
+    padding: 20px 0;
+}
+
+.timeline-item {
+    position: relative;
+    margin: 10px 0;
+}
+
+    .timeline-item::before {
+        content: '';
+        position: absolute;
+        width: 4px;
+        height: 100%;
+        background-color: #007bff; /* Màu của đường đi */
+        left: 15px;
+        top: 0;
+    }
+
+    .timeline-item:first-child::before {
+        top: 50%;
+    }
+
+    .timeline-item:last-child::before {
+        height: 50%;
+    }
+
+    .timeline-item .time {
+        display: block;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .timeline-item .status {
+        display: block;
+        font-size: 16px;
+        margin-top: 5px;
+    }
+/* CSS */
+.timeline {
+    list-style-type: none;
+    padding: 0;
+    position: relative;
+}
+
+.timeline-item {
+    padding-left: 20px;
+    margin-bottom: 20px;
+}
+
+    .timeline-item:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 4px;
+        background-color: #007bff; /* Màu sắc của đường đi */
+    }
+
+.timeline-item-content {
+    position: relative;
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.time {
+    display: block;
+    color: #007bff; /* Màu sắc của thời gian */
+    font-weight: bold;
+}
+/* CSS */
+.card {
+    margin-bottom: 20px;
+}
+
+.timeline {
+    list-style-type: none;
+    padding: 0;
+    position: relative;
+}
+
+.timeline-item {
+    padding-left: 20px;
+    margin-bottom: 20px;
+}
+
+    .timeline-item:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 4px;
+        background-color: #007bff; /* Màu sắc của đường đi */
+    }
+
+.timeline-item-content {
+    position: relative;
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.time {
+    display: block;
+    color: #007bff; /* Màu sắc của thời gian */
+    font-weight: bold;
+}

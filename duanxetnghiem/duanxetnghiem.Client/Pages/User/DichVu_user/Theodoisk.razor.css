@@ -1,0 +1,51 @@
+﻿.container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+h3 {
+    text-align: center;
+}
+
+.goi-xet-nghiem {
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.goi-xet-nghiem-title {
+    font-weight: bold;
+}
+
+.chiso-item {
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.chiso-ten {
+    font-weight: bold;
+}
+/* Định dạng phần chi tiết */
+.chiso-item {
+    margin-bottom: 20px;
+}
+
+.chiso-ten {
+    font-weight: bold;
+}
+
+/* Định dạng gói xét nghiệm */
+.goi-xet-nghiem {
+    margin-bottom: 30px;
+}
+
+.goi-xet-nghiem-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+

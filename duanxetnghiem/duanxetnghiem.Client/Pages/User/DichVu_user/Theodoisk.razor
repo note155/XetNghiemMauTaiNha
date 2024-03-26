@@ -1,0 +1,250 @@
+﻿@page "/TDSK"
+@rendermode InteractiveAuto
+@using Shared.form
+@using duanxetnghiem.Client.Pages.Layout
+@using System.Globalization;
+@attribute [Authorize]
+<div class="container">
+    <h3>Theo dõi sức khỏe của bệnh nhân @user.Hoten</h3>
+    <div class="row">
+        @if (danhsach.Count!=0)
+        {
+            @foreach (var dslon in danhsach)
+            {
+                <div class="goi-xet-nghiem">
+                    <p class="goi-xet-nghiem-title">Gói xét nghiệm: @dslon.tengoi</p>
+                    <p>Đã đăng ký gói @dslon.solan lần</p>
+                    @foreach (var dsnho in dslon.dscs)
+                    {
+                        <div class="row chiso-item">
+                            <p class="chiso-ten">Tên chỉ số: @dsnho.ten</p>
+                            <p>Chỉ số bình thường: @dsnho.CSBT</p>  <p>Đơn vị: @dsnho.DonVi</p>
+                            @{
+                                i++;
+                                var canvasId = $"{i}{dsnho.ten}";
+                                var filteredChiso = dslon.danhSachChiso.Where(a => a.idchiso == dsnho.Id && a.idgoi == dslon.idgoi).ToList();
+                            }
+                            <div class="col-sm-6">
+                                <TKSK Dscs="@filteredChiso" Csbt="@dsnho.CSBT" CanvasId="@canvasId" />
+                            </div>
+                            <div class="col-sm-5">
+                                <strong>Chi tiết</strong>
+                                @if (filteredChiso.Count >= 2)
+                                {
+                                    var cuoi = filteredChiso[^1];
+                                    var kecuoi = filteredChiso[^2];
+                                    string a = KiemTra(cuoi.Ketqua, dsnho.CSBT);
+                                    string b = doichieu(cuoi.Ketqua, kecuoi.Ketqua);
+                                    <p><strong>Đơn gần nhất của bạn vào ngày @cuoi.Thoigian</strong></p>
+                                    <p>@a</p>
+                                    <p><strong>Đối chiếu với đơn của ngày @kecuoi.Thoigian</strong></p>
+                                    <p>@b</p>
+                                }
+                                else
+                                {
+                                    var cuoi = filteredChiso[^1];
+                                    string a = KiemTra(cuoi.Ketqua, dsnho.CSBT);
+                                    <p><strong>Đơn gần nhất của bạn vào ngày @cuoi.Thoigian</strong></p>
+                                    <p>@a</p>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            <p> Bạn chưa có đơn xét nghiệm nào đã hoàn thành trong hệ thống</p>
+        }
+    </div>
+</div>
+
+
+
+
+@code {
+    [Inject]
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    public string UserName { get; set; }
+    private User user = new User();
+    List<DonXetNghiem> dsdxn = new List<DonXetNghiem>();
+    List<GoiXetNghiem> allgoixn = new List<GoiXetNghiem>();
+    List<Chiso> allchiso = new List<Chiso>();
+    List<KetQuaXetNghiem> dskqxn = new List<KetQuaXetNghiem>();
+    List<haha> danhsach = new List<haha>();
+    int i = 0;
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        UserName = authState.User.Identity.Name;
+        user = await Usertservice.getuserbyemail(UserName);
+        if (user == null)
+        {
+            navigation.NavigateTo("/AddUser");
+        }
+        allgoixn = await GXNservice.getallAsync();
+        allchiso = await CSservice.getallAsync();
+        var ds = await DXNservice.getallbyiduserAsync(user.Id);
+        foreach(var a in ds)
+        {
+            if (a.Trangthai == "Hoàn thành")
+            {
+                dsdxn.Add(a);
+            }
+        }
+        foreach (var a in dsdxn)
+        {
+            var b = await KQXNservice.getbyid(a.Id);
+            dskqxn.Add(b);
+            var goixn = await DXNservice.getallGXNAsync(a.Id);
+            foreach (var goi in goixn)
+            {
+                var existsInDanhsach = danhsach.Any(c => c.idgoi == goi.GoiXetNghiemId);
+                if (!existsInDanhsach)
+                {
+                    haha dsa = new()
+                    {
+                        idgoi=goi.GoiXetNghiemId,
+                        tengoi = tengoixn(goi.GoiXetNghiemId),
+                        solan=1
+                    };
+                    dsa.dscs = new List<Chiso>();
+                    dsa.danhSachChiso = new List<Chisotk>();
+                    var ma = await GXNservice.getallCSbyidAsync(dsa.idgoi);
+                    foreach(var da in ma)
+                    {
+                        foreach(var ka in allchiso)
+                        {
+                            if (da.ChisoId == ka.Id)
+                            {
+                                dsa.dscs.Add(ka);
+                            }
+                        }
+                    }
+                    var csdo = await KQXNservice.getallCSbyidAsync(b.Id);
+                    foreach (var sa in csdo)
+                    {
+
+                        Chisotk tk = new()
+                                {
+                                idgoi = sa.idgoi ?? goi.GoiXetNghiemId,
+                                    idchiso = sa.ChisoId,
+                                    Ketqua = sa.KetQua,
+                                    Thoigian = b.ngaycoKQ
+                                };
+                        dsa.danhSachChiso.Add(tk);
+                    }
+                    danhsach.Add(dsa);
+                }
+                if (existsInDanhsach)
+                {
+                    foreach (var c in danhsach)
+                    {
+                        if (c.idgoi == goi.GoiXetNghiemId)
+                        {
+                            c.solan++;
+                            var csdo = await KQXNservice.getallCSbyidAsync(b.Id);
+                            foreach (var sa in csdo)
+                            {
+                                Chisotk tk = new()
+                                    {
+                                        idgoi = sa.idgoi ?? goi.GoiXetNghiemId,
+                                        idchiso = sa.ChisoId,
+                                        Ketqua = sa.KetQua,
+                                        Thoigian = b.ngaycoKQ
+                                    };
+                                c.danhSachChiso.Add(tk);
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
+
+    }
+    public string tengoixn(int id)
+    {
+        foreach(var goi in allgoixn)
+        {
+            if (goi.Id == id)
+            {
+                return goi.TenGoi;
+            }
+        }
+        return null;
+    }
+    public string KiemTra(string kq, string csbt)
+    {
+        float kqValue;
+        float csbtMin, csbtMax;
+
+        // Chuyển đổi giá trị kq từ chuỗi sang số thực
+        if (!float.TryParse(kq, NumberStyles.Float, CultureInfo.InvariantCulture, out kqValue))
+        {
+            return "Lỗi: Giá trị kết quả không hợp lệ.";
+        }
+
+        // Tách giá trị nhỏ nhất và lớn nhất của csbt
+        string[] parts = csbt.Split('-');
+
+        if (parts.Length != 2 || !float.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out csbtMin) || !float.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out csbtMax))
+        {
+            return "Lỗi: Chuỗi giới hạn không hợp lệ.";
+        }
+
+        // Kiểm tra xem kq có nằm trong khoảng csbt không và trả về kết quả tương ứng
+        if (kqValue.CompareTo(csbtMin) >= 0 && kqValue.CompareTo(csbtMax) <= 0)
+        {
+            return "An toàn: Chỉ số nằm trong mức bình thường";
+        }
+        else if (kqValue.CompareTo(csbtMin) < 0)
+        {
+            float phanTram = Math.Abs((csbtMin - kqValue) / csbtMin) * 100;
+            return $"Nguy hiểm: Chỉ số dưới mức bình thường. Thấp hơn chỉ số bình thường: {phanTram.ToString("0.00")}% ▼";
+        }
+        else
+        {
+            float phanTram = Math.Abs((kqValue - csbtMax) / kqValue) * 100;
+            return $"Nguy hiểm: Chỉ số cao hơn mức bình thường. Cao hơn chỉ số bình thường: {phanTram.ToString("0.00")}% ▲";
+        }
+
+        return "Lỗi: Không xác định được.";
+    }
+
+
+    public string doichieu(string cuoi, string kecuoi)
+    {
+        float cuoiValue, kecuoiValue;
+        if (!float.TryParse(cuoi, NumberStyles.Float, CultureInfo.InvariantCulture, out cuoiValue) || !float.TryParse(kecuoi, NumberStyles.Float, CultureInfo.InvariantCulture, out kecuoiValue))
+        {
+            return "Lỗi: Giá trị kết quả không hợp lệ.";
+        }
+        if (cuoiValue > kecuoiValue)
+        {
+            float phanTram = ((cuoiValue - kecuoiValue) / cuoiValue) * 100;
+            return "Đã tăng thêm " + phanTram.ToString("0.00") + "% ▲";
+        }
+        if (cuoiValue < kecuoiValue)
+        {
+            float phanTram = ((kecuoiValue - cuoiValue) / kecuoiValue) * 100;
+            return "Đã giảm đi " + phanTram.ToString("0.00") + "% ▼";
+        }
+        if (cuoiValue == kecuoiValue)
+        {
+            return "Không có thay đổi";
+        }
+        return "Lỗi: Không xác định được.";
+    }
+
+    public class haha
+    {
+        public int idgoi { get; set; }
+        public string tengoi { get; set; }
+        public List<Chiso> dscs { get; set; }
+        public List<Chisotk> danhSachChiso { get; set; }
+        public int solan { get; set; }
+    }
+}

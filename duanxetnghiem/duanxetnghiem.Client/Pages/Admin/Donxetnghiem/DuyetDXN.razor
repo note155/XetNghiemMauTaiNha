@@ -1,5 +1,6 @@
 ﻿@page "/XetDuyetDXN/{id:int}"
 @rendermode InteractiveWebAssembly
+@layout AdminLayout
  @inject NavigationManager navigation;
 @attribute [Authorize]
 <div class="patient-registration-container">
@@ -187,6 +188,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await checkbs();
         Input = await DXNservice.getbyid(id);
         user = await Usertservice.getuserbyid(Input.UserId);
         allGXN = await GXNservice.getallAsync();
@@ -195,6 +197,16 @@
         DXN = await DXNservice.getallAsync();
         loadgxndachon();
         
+    }
+    public async Task checkbs()
+    {
+        var authState = await checkbss.GetAuthenticationStateAsync();
+        var UserName = authState.User.Identity.Name;
+        var bs = await bacsiservice.getbyemail(UserName);
+        if (bs == null)
+        {
+            navigation.NavigateTo("/err");
+        }
     }
     private void loadgxndachon()
     {
@@ -281,6 +293,13 @@
         Input.BacSiId = idbs;
         Input.Trangthai = "Chờ lấy mẫu";
         await DXNservice.updateAsync(Input);
+        Tinhtrang ttrang = new Tinhtrang
+            {
+                DonXetNghiemId = Input.Id,
+                thoigian = DateTime.Now,
+                trangthai = "Đơn đã được duyệt - Người lấy mẫu: Bs."+SelectedDoctor.Hoten
+            };
+        await TTrangservice.addAsync(ttrang);
         navigation.NavigateTo("/ListDXN");
     }
     public String loadGXN(int id)
