@@ -10,7 +10,7 @@
     background-image: url('imggoixn/hinhnen13.png');
     background-size: cover;
     background-position: center;
-    height: 400px;
+    height: 450px;
     margin-bottom: 8rem;
     text-align: center;
 }
@@ -28,7 +28,7 @@ p {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     line-height: 24px;
     text-align: center;
     color: #fff;
@@ -36,7 +36,7 @@ p {
 
 .btn {
     width: 160px;
-    height: 40px;
+    height: 45px;
     border: 1px solid #000000;
     border-radius: 5px;
     display: flex;
@@ -73,7 +73,7 @@ p {
 
 /*Thanh tìm kiếm */
 .container {
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
 }
 
 .search-container {
@@ -142,9 +142,9 @@ button:hover {
     display: flex;
     flex-direction: column;
     position: relative;
-    height: 500px;
-    width: 100px;
-    padding: 35px;
+    height: 550px;
+    width: 400px;
+    padding: 10px;
 }
 
     .package-item:nth-child(3n) {
@@ -180,29 +180,30 @@ button:hover {
 }
 
 .package-item-price {
-    font-size: 25px;
+    font-size: 23px;
     font-weight: bold;
     margin-bottom: 10px;
     color: #FFF;
     background-color: #4da5ff;
-    height: 40px;
-    width: 200px;
+    height: 45px;
+    width: 210px;
     border-radius: 6px;
     text-align: center
 }
 
-.package-item-gender {
-    font-size: 18px;
-    margin-bottom: 5px;
-    margin-top: 10px;
-}
-
 .package-item-title {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: bold;
     margin-bottom: 10px;
     color: #333;
 }
+
+.package-item-gender {
+    font-size: 16px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
 
 @media screen and (max-width: 768px) {
     .package-item {
@@ -224,57 +225,15 @@ button:hover {
     }
 }
 
-
-.plus-icon-container {
-    display: inline-block;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 90px;
-    right: 0;
-    margin: 10px;
-    font-size: 0.1rem;
-    color: #f00; /* Màu trắng */
-    font-size: 0.1rem;
+.custom-link {
+    flex-grow: 1; /* Chia đều không gian còn lại */
+    cursor: pointer;
+    font-size: 13px;
+    text-align: center; /* Canh giữa nội dung */
+    padding: 2px; /* Tùy chỉnh khoảng cách giữa các liên kết */
 }
 
-.plus-icon {
-    color: #f00; /* Màu trắng */
-    font-size: 0.1rem;
+.circle-icon {
+    font-size: 8px; /* Điều chỉnh kích thước của biểu tượng */
+    margin-right: 5px; /* Khoảng cách giữa biểu tượng và văn bản */
 }
-/* Modal Header */
-.modal-header {
-    background-color: #007bff; /* Header background color */
-    color: #fff; /* Header text color */
-    border-bottom: none; /* Remove bottom border */
-    border-radius: 5px 5px 0 0; /* Rounded corners */
-}
-
-    .modal-header .modal-title {
-        font-weight: bold; /* Bold modal title */
-    }
-
-/* Modal Body */
-.modal-body {
-    padding: 20px; /* Add padding */
-}
-
-/* Modal Footer */
-.modal-footer {
-    background-color: #f8f9fa; /* Footer background color */
-    border-top: none; /* Remove top border */
-    border-radius: 0 0 5px 5px; /* Rounded corners */
-}
-
-/* Close Button */
-.close {
-    color: #fff; /* Close button color */
-    opacity: 1; /* Make the close button fully visible */
-    transition: opacity 0.2s ease; /* Add transition effect */
-}
-
-    .close:hover {
-        opacity: 0.8; /* Reduce opacity on hover */
-    }
-

@@ -39,17 +39,19 @@
         </div>
             <div class="form-group">
                 <label for="BacSiId">Nhân viên lấy máu</label>
-                <InputSelect ValueChanged="@((int value)=>LoadBSInfo(value))" ValueExpression="@(()=>valor)" Value="valor" class="form-control" id="BacSiId">
-                    <option value="">Chọn Bác Sĩ</option>
-                    @foreach (var bs in AllBS)
+                <input type="text" @bind="searchQuery" @oninput="OnSearchQueryChanged" list="staffList" placeholder="Tìm kiếm nhân viên" class="form-control" />
+                <datalist id="staffList">
+                    @foreach (var bs in FilteredStaffMembers)
                     {
-                        if (bs.Chucvu == "Bác sĩ lấy mẫu máu" || bs.Chucvu == "Thực tập" || bs.Chucvu == "Cộng tác viên")
-                        {
-                            <option value="@bs.Id">@bs.Hoten   --   @bs.Chucvu</option>
-                        }
+                        <option value="@($"{bs.Id} - {bs.Hoten} - {bs.Chucvu}")" data-id="@bs.Id"></option>
                     }
-                </InputSelect>
+                </datalist>
+                <input type="hidden" @bind="idbs" />
             </div>
+
+
+
+
             @if (SelectedDoctor != null)
             {
                 <div class="doctor-info">
@@ -170,6 +172,8 @@
     private User user = new User();
     public List<GoiXetNghiem> allGXN { get; set; } = new();
     public List<BacSi> AllBS { get; set; } = new();
+    private List<BacSi> FilteredStaffMembers { get; set; } = new();
+    private string searchQuery = "";
     public List<DonXetNghiem> AllDXN { get; set; } = new();
     public List<DonXetNghiem> DXN { get; set; } = new();
     private BacSi SelectedDoctor = null;
@@ -193,10 +197,23 @@
         user = await Usertservice.getuserbyid(Input.UserId);
         allGXN = await GXNservice.getallAsync();
         AllBS = await bacsiservice.getallAsync();
+        FilteredStaffMembers = AllBS;
+        FilterStaffMembers();
         dxn = await DXNservice.getallGXNAsync(id);
         DXN = await DXNservice.getallAsync();
         loadgxndachon();
         
+    }
+    private void OnSearchQueryChanged(ChangeEventArgs e)
+    {
+        searchQuery = e.Value.ToString();
+        FilterStaffMembers();
+        string[] numbers = searchQuery.Split('-');
+
+        if (numbers.Length >= 3)
+        {
+            LoadBSInfo(int.Parse(numbers[0]));
+        }
     }
     public async Task checkbs()
     {
@@ -206,6 +223,17 @@
         if (bs == null)
         {
             navigation.NavigateTo("/err");
+        }
+    }
+    private void FilterStaffMembers()
+    {
+        if (string.IsNullOrWhiteSpace(searchQuery))
+        {
+            FilteredStaffMembers = AllBS; // If search query is empty, display all staff members
+        }
+        else
+        {
+            FilteredStaffMembers = AllBS.Where(bs => bs.Hoten.ToLower().Contains(searchQuery.ToLower())).ToList();
         }
     }
     private void loadgxndachon()
