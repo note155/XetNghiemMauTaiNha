@@ -85,8 +85,9 @@
             // Check if the data point is outside the threshold
             if (kqRBCValues[i] < csbtRBCValues[0] || kqRBCValues[i] > csbtRBCValues[1]) {
                 // Update the color of the line segment
-                segments[i]._model.borderColor = 'rgba(0, 0, 255, 1)';
+                segments[i]._model.borderColor = 'rgb(0, 200, 150)';
                 segments[i]._model.backgroundColor = 'rgba(0, 0, 255, 0.2)';
+                fill: false
             }
         }
 

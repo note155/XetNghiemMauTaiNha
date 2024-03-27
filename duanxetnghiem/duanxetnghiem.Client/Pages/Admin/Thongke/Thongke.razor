@@ -1,11 +1,10 @@
-﻿
-@page "/trangchuthongke"
+﻿@page "/trangchuthongke"
 @rendermode InteractiveAuto
 <aside class="sidebar">
     <ul class="nav">
         <li class="nav-item1"><a class="nav-link active" onclick="openTab('DoanhThu')"><i class="fa fa-home"></i></a></li>
         <li class="nav-item"><a class="nav-link" onclick="openTab('DoanhThu')"> Thống kê doanh thu</a></li>
-        <li class="nav-item"><a class="nav-link" onclick="openTab('DonHang')">Thống kê đơn hàng</a></li>
+        <li class="nav-item"><a class="nav-link" onclick="openTab('DonHang')">Thống kê đơn xét nghiệm</a></li>
         <li class="nav-item"><a class="nav-link" onclick="openTab('DoTuoi')">Thống kê độ tuổi</a></li>
         <li class="nav-item"><a class="nav-link" onclick="openTab('PhamVi')">Thống kê phạm vi</a></li>
     </ul>                                                                                                                                                                             
@@ -144,7 +143,7 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Biểu đồ trạng thái Đơn Hàng của Tháng @DateTime.Now.Month (%)</h5>
+                            <h5 class="card-title">Biểu đồ trạng thái Đơn xét nghiệm của Tháng @DateTime.Now.Month (%)</h5>
                             <canvas id="donhang" width="400" height="400"></canvas>
                         </div>
                     </div>
@@ -152,7 +151,7 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Biểu đồ trạng thái Đơn Hàng của Năm @DateTime.Now.Year (%)</h5>
+                            <h5 class="card-title">Biểu đồ trạng thái Đơn xét nghiệm của Năm @DateTime.Now.Year (%)</h5>
                             <canvas id="donhang1" width="400" height="400"></canvas>
                         </div>
                     </div>
@@ -186,7 +185,7 @@
                                         </tr>
                                     }
                                     <tr>
-                                        <td colspan="3">Tổng số Đơn Hàng trong Tháng @DateTime.Now.Month : @tongdonthang (đơn)</td>
+                                        <td colspan="3">Tổng số Đơn xét nghiệm trong Tháng @DateTime.Now.Month : @tongdonthang (đơn)</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -220,7 +219,7 @@
                                         </tr>
                                     }
                                     <tr>
-                                        <td colspan="3">Tổng số Đơn Hàng trong Năm @DateTime.Now.Year : @tongdonhang (đơn)</td>
+                                        <td colspan="3">Tổng số Đơn xét nghiệm trong Năm @DateTime.Now.Year : @tongdonhang (đơn)</td>
                                     </tr>
                                 </tbody>
                             </table>

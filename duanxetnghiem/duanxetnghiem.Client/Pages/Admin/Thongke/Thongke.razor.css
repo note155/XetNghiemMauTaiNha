@@ -5,9 +5,9 @@
     top: 0; /* Phía trên của màn hình */
     left: 0; /* Phía bên trái của màn hình */
     height: 100%; /* Chiều cao 100% của màn hình */
-    width: 260px; /* Độ rộng của thanh menu */
+    width: 280px; /* Độ rộng của thanh menu */
     background-color: #0063c8; /* Màu nền của thanh menu */
-    padding: 20px;
+    padding: 10px;
 }
 
 .nav-item1 {
