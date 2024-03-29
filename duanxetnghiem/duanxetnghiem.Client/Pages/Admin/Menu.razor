@@ -1,5 +1,176 @@
-﻿<h3>Menu</h3>
-
-@code {
-
-}
+﻿@page "/admin"
+@layout AdminLayout
+<div class="package-container mt-5" style="margin-bottom: 8rem;">
+    <div class="row justify-content-center">
+        <div class="row with-background">
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col">
+                            <div class="card-body" style="max-width: 100%;">
+                                <div class="col-md-4 d-flex justify-content-center">
+                                    <img style="max-width: 80px; max-height: 80px; margin-top: 5px; margin-bottom:10px;" src="kinhnghiem.png" alt="Hình ảnh bài viết" class="img-fluid">
+                                </div>
+                                <h5 class="card-title justify-content-center" style="font-size: 30px">Đơn cần duyệt</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col">
+                            <div class="card-body">
+                                <div class="col-md-4 d-flex justify-content-center">
+                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="tuvanketqua.png" alt="Article Image" class="img-fluid">
+                                </div>
+                                <h5 class="card-title justify-content-center" style="font-size: 30px">Xác nhận mẫu</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col">
+                            <div class="card-body">
+                                <div class="col-md-4 d-flex justify-content-center">
+                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="nhanluc.png" alt="Article Image" class="img-fluid">
+                                </div>
+                                <h5 class="card-title justify-content-center" style="font-size: 30px">Quản lý đơn đã duyệt</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col">
+                            <div class="card-body">
+                                <div class="col-md-4 d-flex justify-content-center">
+                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="chiphi1.png" alt="Article Image" class="img-fluid">
+                                </div>
+                                <h5 class="card-title justify-content-center" style="font-size: 30px">Quản lý đơn từ chối</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col">
+                            <div class="card-body">
+                                <div class="col-md-4 d-flex justify-content-center">
+                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="quymo.png" alt="Article Image" class="img-fluid">
+                                </div>
+                                <h5 class="card-title justify-content-center" style="font-size: 30px">Quy mô</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col">
+                            <div class="card-body">
+                                <div class="col-md-4 d-flex justify-content-center">
+                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="thoigiantuvan1.png" alt="Article Image" class="img-fluid">
+                                </div>
+                                <h5 class="card-title justify-content-center" style="font-size: 30px">Thời gian</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col">
+                            <div class="card-body">
+                                <div class="col-md-4 d-flex justify-content-center">
+                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="traketquachinhxac.png" alt="Article Image" class="img-fluid">
+                                </div>
+                                <h5 class="card-title justify-content-center" style="font-size: 30px">Trả kết quả</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col">
+                            <div class="card-body">
+                                <div class="col-md-4 d-flex justify-content-center">
+                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="dungcu.png" alt="Article Image" class="img-fluid">
+                                </div>
+                                <h5 class="card-title justify-content-center" style="font-size: 30px">Thiết bị</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col">
+                            <div class="card-body">
+                                <div class="col-md-4 d-flex justify-content-center">
+                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="hoso.png" alt="Article Image" class="img-fluid">
+                                </div>
+                                <h5 class="card-title justify-content-center" style="font-size: 30px">Hồ sơ</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col">
+                            <div class="card-body">
+                                <div class="col-md-4 d-flex justify-content-center">
+                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="hoso.png" alt="Article Image" class="img-fluid">
+                                </div>
+                                <h5 class="card-title justify-content-center" style="font-size: 30px">Hồ sơ</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col">
+                            <div class="card-body">
+                                <div class="col-md-4 d-flex justify-content-center">
+                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="hoso.png" alt="Article Image" class="img-fluid">
+                                </div>
+                                <h5 class="card-title justify-content-center" style="font-size: 30px">Hồ sơ</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col">
+                            <div class="card-body">
+                                <div class="col-md-4 d-flex justify-content-center">
+                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="hoso.png" alt="Article Image" class="img-fluid">
+                                </div>
+                                <h5 class="card-title justify-content-center" style="font-size: 30px">Hồ sơ</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

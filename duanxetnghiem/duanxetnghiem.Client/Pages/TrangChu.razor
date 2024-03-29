@@ -1,11 +1,10 @@
 ﻿@page "/"
-
 @rendermode InteractiveAuto
 @using Microsoft.AspNetCore.Components.Web
 @using duanxetnghiem.Client.Pages.Admin
 @inject NavigationManager navigation;
 
-@if (UserName!=null && bs != null)
+@if (UserName != null && bs != null)
 {
     <NavMenu />
 }
@@ -483,7 +482,7 @@
     <div class="card-body overlay1">
         <div class="row justify-content-center align-items-center" style="padding: 60px 5%; ">
             <div class="col-md-3 col-sm-12 d-flex align-items-center justify-content-center">
-                <div style="width: 100px; height: 100px; background: rgba(217, 217, 217, 0.5); border-radius: 50px;margin-bottom:10px;"><img style="width:100%" src="/logo.jpg"></div>
+                <div style="width: 100px; height: 100px; background: rgba(217, 217, 217, 0.5); border-radius: 50px;margin-bottom:10px;"></div>
             </div>
             <div class="col-md-6 col-sm-12">
                 <div style="font-family: 'Roboto'; font-style: normal; font-weight: 800; font-size: 2.5rem; line-height: 32px; color: #FFFFFF; margin-bottom:20px; text-align:center;">
@@ -633,6 +632,10 @@
         if (UserName != null)
         {
             bs = await bacsiservice.getbyemail(UserName);
+            if (bs != null)
+            {
+                navigation.NavigateTo("/admin");
+            }
             khach = await Usertservice.getuserbyemail(UserName);
             if (khach != null)
             {

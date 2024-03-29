@@ -31,6 +31,11 @@
             </div>
         </div>
         <div class="col-sm-8">
+            <h3>Dự kiến thời gian hoàn thành</h3>
+            <div class="timeline">
+                <p><span class="text-danger">Ngày dự kiến : @ngayHoanThanhDuKien.ToString("dd/MM/yyyy")</span></p>
+                <p>Số giờ thực hiện : @gioDuKien giờ</p>
+            </div>
             <h3>Quá trình</h3>
             <div class="timeline">
                 @foreach (var tt in allttrang)
@@ -39,6 +44,7 @@
                         <div class="timeline-item-content">
                             <span class="time">@tt.thoigian.ToString("HH:mm dd/MM/yyyy")</span>
                             <p>@tt.trangthai</p>
+
                         </div>
                     </div>
                 }
@@ -50,22 +56,29 @@
 @code {
     [Parameter]
     public int id { get; set; }
-
+    private string currentStatus = "";
     public List<Tinhtrang> allttrang { get; set; } = new();
     private User user = new User();
     private ThanhToan tt = new ThanhToan();
     public DonXetNghiem Input { get; set; } = new();
-    int a = 0,c=6;
+    int a = 0, c = 6;
+    DateTime ngayHoanThanhDuKien = DateTime.Now;
+    int gioDuKien = 0;
     protected override async Task OnInitializedAsync()
     {
         allttrang = await TTrangservice.getbyidAsync(id);
         Input = await DXNservice.getbyid(id);
         tt = await TTservice.getbyidDXNAsync(id);
-        if (tt.trangthai == "30%"||tt.DaTT2!=null) c = 7;
+        if (tt.trangthai == "30%" || tt.DaTT2 != null) c = 7;
         user = await Usertservice.getuserbyid(Input.UserId);
         int b = allttrang.Count;
         double tinh = (double)b / c * 100;
         a = (int)tinh;
+        // Dự báo thời gian trạng thái "Xét nghiệm thành công - Đã có kết quả"
+        // Tính toán dự kiến thời gian hoàn thành và ngày hoàn thành
+        ngayHoanThanhDuKien = Input.ngaytaodon.AddHours(24); // Giả sử mỗi gói xét nghiệm mất 24 giờ để hoàn thành
+        gioDuKien = 24;
+
     }
     private String gioitinh(bool a)
     {

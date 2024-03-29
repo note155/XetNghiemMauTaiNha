@@ -1,4 +1,5 @@
-﻿/* CSS */
+﻿
+/* CSS */
 .timeline {
     position: relative;
     padding: 20px 0;
@@ -110,3 +111,8 @@
     color: #007bff; /* Màu sắc của thời gian */
     font-weight: bold;
 }
+
+.text-danger {
+    color: red;
+}
+
