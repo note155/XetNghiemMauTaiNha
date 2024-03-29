@@ -1,0 +1,108 @@
+﻿/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Container styles */
+.container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Row styles */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* Column styles */
+.col-sm-4 {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+    padding: 15px;
+}
+
+.col-sm-8 {
+    flex: 0 0 66.666667%;
+    max-width: 66.666667%;
+    padding: 15px;
+}
+
+/* Doctor image styles */
+.doctor-img {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+}
+
+/* Doctor name styles */
+.doctor-name {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* Button styles */
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+/* Section title styles */
+.section-title {
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: #007bff;
+}
+
+/* Preview section styles */
+.preview-section {
+    margin-top: 20px;
+}
+
+    .preview-section h3 {
+        font-size: 28px;
+        margin-bottom: 10px;
+        color: #007bff;
+    }
+
+.preview-content {
+    border: 1px solid #ddd;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+/* Text styles */
+p {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+strong {
+    font-weight: bold;
+    color: #333;
+}
+
+span {
+    font-size: 18px;
+    font-weight: bold;
+    color: #007bff;
+}

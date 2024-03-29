@@ -30,6 +30,7 @@
 @if (!GHang.Any())
 {
     <p>Đơn xét nghiệm của bạn đang trống</p>
+    <div class="row" style="height:500px"></div>
 }
 
 @if (GHang.Any())
@@ -71,6 +72,7 @@
     <a class="btn btn-success float-end mt-3" @onclick="@(() => add())">Thanh toán</a>
     <br />
     <p class="total-amount">Tổng tiền: <strong style="color:red;font-size:30px;">@TinhTongTien() VND</strong></p>
+    <div class="row" style="height:500px"></div>
 }
 
 

@@ -57,7 +57,7 @@
 							</div>
 							<div class="team-item-details">
 								<h3 class="team-item-title">
-									<a class="txtnamebs" href="/ChiTietThongTinBacSi">@goi.Hoten</a>
+									<a class="txtnamebs" href="/Chitietbs/@goi.Id">@goi.Hoten</a>
 								</h3>
 								<div class="team-item-meta">@goi.Chucvu</div>
 								<div class="team-item-review">
@@ -110,6 +110,7 @@
 		</ul>
 	</nav>
 </nav>
+
 @code {
 	[Inject]
 	protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
@@ -194,15 +195,25 @@
 		}
 		else
 		{  
-			roomchat room = new()
-				{
-					idbs = idbs,
-					Name = "Tư vấn",
-					ngaytao = DateTime.Now,
-					userid = us.Id
-				};
-			var haha =await Roomchatservice.addAsync(room);
-			navigation.NavigateTo("/Chat/" + haha.Id);
+			var allroom = await Roomchatservice.getallbyidAsync(us.Id);
+			string name = "Tư vấn";
+			var rooms = allroom.LastOrDefault(a => a.Name == name);
+			if (rooms != null && (DateTime.Now - rooms.ngaytao).TotalDays < 10)
+			{
+				navigation.NavigateTo("/Chat/" + rooms.Id);
+			}
+			else
+			{
+				roomchat room = new()
+					{
+						idbs = idbs,
+						Name = "Tư vấn",
+						ngaytao = DateTime.Now,
+						userid = us.Id
+					};
+				var haha = await Roomchatservice.addAsync(room);
+				navigation.NavigateTo("/Chat/" + haha.Id);
+			}
 		}
 	}
 }

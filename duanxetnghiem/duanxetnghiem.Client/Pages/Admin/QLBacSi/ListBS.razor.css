@@ -22,6 +22,9 @@
 
     .table th, .table td {
         padding: 8px;
+        overflow: hidden; /* Tránh tràn nội dung ra ngoài */
+        text-overflow: ellipsis; /* Cắt bớt nội dung dài và thêm dấu ... */
+        /* white-space: nowrap; */ /* Ngăn chặn từng từ xuống dòng */
     }
 
     .table th {
@@ -51,14 +54,8 @@
     max-width: 50px; /* Đặt chiều rộng tối đa của ảnh là 50px */
     max-height: 50px; /* Đặt chiều cao tối đa của ảnh là 50px */
 }
+
 .table {
     width: 100%;
     table-layout: fixed; /* Giữ nguyên chiều rộng của các cột */
 }
-
-    .table th, .table td {
-        padding: 8px;
-        overflow: hidden; /* Tránh tràn nội dung ra ngoài */
-        text-overflow: ellipsis; /* Cắt bớt nội dung dài và thêm dấu ... */
-        white-space: nowrap; /* Ngăn chặn từng từ xuống dòng */
-    }

@@ -81,7 +81,7 @@
         <img src="imgadduser/hinhnen5.png" class="img-fluid" alt="Hình ảnh mô tả">
     </div>
 </div>
-
+<div class="row" style="height:500px"></div>
 
 @code {
     [Inject]
@@ -110,7 +110,17 @@
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         UserName = authState.User.Identity.Name;
     }
-
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await keolen();
+        }
+    }
+    public async Task keolen()
+    {
+        await JSRuntime.InvokeVoidAsync("scrollToBottom");
+    }
     private void FilterData(string selectedValue)
     {
         aa = selectedValue;
@@ -210,3 +220,8 @@
         }
     }
 }
+<script>
+    window.scrollToBottom = () => {
+        window.scrollTo(0, 0);
+    }
+</script>

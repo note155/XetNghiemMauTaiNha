@@ -647,6 +647,9 @@ namespace duanxetnghiem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Chuyenkhoa")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -657,6 +660,15 @@ namespace duanxetnghiem.Migrations
 
                     b.Property<string>("SDT")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Sonamkn")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Thongtin")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Trinhdo")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("trangthai")

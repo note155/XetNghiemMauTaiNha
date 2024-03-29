@@ -4,6 +4,7 @@
 @inject NavigationManager navigation;
 @attribute [Authorize]
 @layout AdminLayout
+@using Blazored.TextEditor
 <div class="container">
     <div class="row">
         <div class="col-md-4">
@@ -54,12 +55,69 @@
                     <InputText @bind-Value="Input.Email" class="form-control" id="Email" />
                     <ValidationMessage For="() => Input.Email" class="text-danger" />
                 </div>
-                <button type="submit" class="btn btn-primary">Lưu</button>
-            </EditForm>
+                <div class="mb-3">
+                    <label for="Sonamkn" class="form-label">Số năm kinh nghiệm</label>
+                    <InputNumber @bind-Value="Input.Sonamkn" class="form-control" id="Sonamkn" />
+                    <ValidationMessage For="() => Input.Sonamkn" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="Trinhdo" class="form-label">Trình độ</label>
+                    <InputText @bind-Value="Input.Trinhdo" class="form-control" id="Trinhdo" />
+                    <ValidationMessage For="() => Input.Trinhdo" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="Chuyenkhoa" class="form-label">Chuyên khoa</label>
+                    <InputText @bind-Value="Input.Chuyenkhoa" class="form-control" id="Chuyenkhoa" />
+                    <ValidationMessage For="() => Input.Chuyenkhoa" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="Email" class="form-label">Thông tin bổ xung</label>
+                    <BlazoredTextEditor @ref=QuillHtml Placeholder="write somthing...">
+                       <ToolbarContent>
+                            <select class="ql-header">
+                                <option selected=""></option>
+                                <option value="1"></option>
+                                <option value="2"></option>
+                                <option value="3"></option>
+                                <option value="4"></option>
+                                <option value="5"></option>
+                            </select>
+                            <span class="ql-formats">
+                                <button class="ql-bold"></button>
+                                <button class="ql-italic"></button>
+                                <button class="ql-underline"></button>
+                                <button class="ql-strike"></button>
+                            </span>
+                            <span class="ql-formats">
+                                <select class="ql-color"></select>
+                                <select class="ql-background"></select>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-list" value="ordered"></button>
+                                <button class="ql-list" value="bullet"></button>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-link"></button>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-video"></button>
+                            </span>
+
+                       </ToolbarContent>
+                        <EditorContent>
+                            @preview
+                        </EditorContent>
+                   </BlazoredTextEditor>
+
+
+                        </div>
+                        <button type="submit" class="btn btn-primary">Lưu</button>
+                    </EditForm>
+
         </div>
     </div>
 </div>
-
+<div class="row" style="height:500px"></div>
 @code {
     [SupplyParameterFromForm]
     public BacSi Input { get; set; } = new();
@@ -68,6 +126,8 @@
     public int id { get; set; }
 
     string a = "";
+    private BlazoredTextEditor QuillHtml;
+    private MarkupString preview;
     public string img="img/";
     private WebAssemblyTicket Ticket { get; set; } = new();
     private WebAssemblyTicket load { get; set; } = new();
@@ -108,10 +168,13 @@
         {
             err.Add("Email không được để trống");
         }
-
+        if (!string.IsNullOrWhiteSpace(await QuillHtml.GetText()))
+        {
+            preview = (MarkupString)await QuillHtml.GetHTML();
+        }
         if (err.Count == 0)
         {
-
+            Input.Thongtin = preview.ToString();
             await bacsiservice.updateAsync(Input);
             navigation.NavigateTo("/ListBS");
         }
@@ -119,6 +182,8 @@
     public async Task LoadBS()
     {
         Input = await bacsiservice.getbyid(id);
+        preview=new MarkupString(Input.Thongtin);
+
     }
 
     private void setfile(InputFileChangeEventArgs e)

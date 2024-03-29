@@ -113,9 +113,18 @@
                                 <a class="custom-link" @onclick="@(() => themgio(goi.Id,1))">
                                     <span><i class="fas fa-circle circle-icon"></i> Đặt lịch bản thân</span>
                                 </a>
-                                <a class="custom-link" @onclick="@(() => themgio(goi.Id,2))" data-toggle="modal" data-target="#myModal">
-                                    <span><i class="fas fa-circle circle-icon"></i>Đặt lịch người thân</span>
-                                </a>
+                                @if (user1 == null || UserName ==null)
+                                {
+                                    <a class="custom-link" @onclick="@(() => themgio(goi.Id,2))" >
+                                        <span><i class="fas fa-circle circle-icon"></i>Đặt lịch người thân</span>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="custom-link" @onclick="@(() => themgio(goi.Id,2))" data-toggle="modal" data-target="#myModal">
+                                        <span><i class="fas fa-circle circle-icon"></i>Đặt lịch người thân</span>
+                                    </a>
+                                }
                                 <a class="custom-link" @onclick="@(() => themgio(goi.Id,3))">
                                     <span><i class="fas fa-circle circle-icon"></i>Liên hệ tư vấn</span>
                                 </a>

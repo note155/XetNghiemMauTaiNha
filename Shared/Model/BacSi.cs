@@ -12,5 +12,11 @@ namespace duanxetnghiem.Data.Model
         public string SDT { get; set; }
         public string Email { get; set; }
         public string? trangthai { get; set; } 
+        public int? Sonamkn { get; set; }
+        public string? Chuyenkhoa { get; set; }
+        public string? Trinhdo { get; set; }
+        public string? Thongtin { get; set; }
+
+
     }
 }

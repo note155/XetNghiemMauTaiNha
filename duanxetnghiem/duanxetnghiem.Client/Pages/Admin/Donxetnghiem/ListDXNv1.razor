@@ -1,0 +1,109 @@
+﻿@page "/Duyetdon"
+@using Shared.form
+@rendermode InteractiveAuto
+
+<h3>ListDXNv1 @allDon.Count()</h3>
+<div id="bingMap" style="width: 100%; height: 400px;"></div>
+@code {
+    public List<DonXetNghiem> AllDXN { get; set; } = new();
+    public List<Don> allDon { get; set; } = new();
+    public List<Don> listdonduocchon { get; set; } = new();
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDon();
+    }
+    public async Task LoadDon()
+    {
+        AllDXN.Clear();
+        var DXN = await DXNservice.getallAsync();
+        if (DXN is null) return;
+        foreach (var student in DXN)
+        {
+            if (student.Trangthai == "Đã Chuyển Tiền")
+            {
+                AllDXN.Add(student);
+            }
+        }
+        allDon.Clear();
+        foreach (var donxn in AllDXN)
+        {
+            var us = await Usertservice.getuserbyid(donxn.UserId);
+            string dc = us.Diachi + ", " + us.CapXa + ", " + us.CapHuyen + ", Thừa Thiên Huế";
+            Don a = new()
+                {
+                    dxn = donxn,
+                    diachi = dc,
+                    nguoi = us
+                };
+            allDon.Add(a);
+        }
+    }
+
+}
+<script>
+    function initMap() {
+        // Initialize map with center at Hue city
+        var map = new Microsoft.Maps.Map(document.getElementById('bingMap'), {
+            credentials: 'AvJeIjn2sAoBGbyZw0PImFkcys5P60orulBL-i8ArqPp96C4h2_CL2xmY0YuJehi',
+            center: new Microsoft.Maps.Location(16.4637, 107.5909), // Coordinates of Huế city
+            zoom: 12 // Zoom level (adjust as needed)
+        });
+
+        // Load the Search module
+        Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
+            var searchManager = new Microsoft.Maps.Search.SearchManager(map);
+
+            // Geocode all addresses in the list
+            @foreach (var address in allDon)
+    {
+        <text>
+                    searchManager.geocode({
+                        where: "@address.diachi",
+                        callback: function (geocodeResult) {
+                            if (geocodeResult && geocodeResult.results && geocodeResult.results.length > 0) {
+                                var location = geocodeResult.results[0].location;
+                                var pin = new Microsoft.Maps.Pushpin(location, {
+                                    title: 'Địa chỉ',
+                                    subTitle: "@address.nguoi.Hoten"
+                                });
+
+                                // Add click event to show popup
+                                Microsoft.Maps.Events.addHandler(pin, 'click', function () {
+                                    var infobox = new Microsoft.Maps.Infobox(location, {
+                                        title: 'Thông tin chi tiết',
+                                        description: 'Địa chỉ: @address.diachi<br />Tên người: @address.nguoi.Hoten',
+                                        visible: true
+                                    });
+                                    infobox.setOptions({ showPointer: true });
+                                    map.entities.push(infobox);
+                                });
+
+                                map.entities.push(pin);
+                            }
+                        }
+                    });
+        </text>
+    }
+                    });
+    }
+</script>
+
+
+
+<script src="https://www.bing.com/api/maps/mapcontrol?key=AvJeIjn2sAoBGbyZw0PImFkcys5P60orulBL-i8ArqPp96C4h2_CL2xmY0YuJehi&callback=initMap" async defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var form = document.getElementById("rejectForm");
+        form.style.display = "none";
+    });
+</script>
+<script>
+    function toggleForm() {
+        var form = document.getElementById("rejectForm");
+        if (form.style.display === "none") {
+            form.style.display = "block";
+        } else {
+            form.style.display = "none";
+        }
+    }
+</script>

@@ -1,0 +1,113 @@
+﻿@page "/Chitietbs/{id:int}"
+@rendermode InteractiveAuto
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <img src="@Input.Anh" class="doctor-img" alt="Ảnh bác sĩ">
+            <h4 class="doctor-name">@Input.Hoten</h4>
+            <p><strong>Chuyên khoa:</strong> <span class="specialization">@Input.Chuyenkhoa</span></p>
+            <button @onclick="@(() => tuvanbacsi())" class="btn btn-primary">Liên hệ tư vấn</button>
+        </div>
+        <div class="col-sm-8">
+            <h2 class="section-title">HOẠT ĐỘNG CHUYÊN NGÀNH</h2>
+            <div class="row">
+                <div class="col-sm-6">
+                    <p><strong>Trình độ:</strong> <span class="qualification">@Input.Trinhdo</span></p>
+                    <p><strong>Chức vụ:</strong> <span class="position">@Input.Chucvu</span></p>
+                </div>
+                <div class="col-sm-6">
+                    <p><strong>Số năm kinh nghiệm:</strong> <span class="experience">@Input.Sonamkn</span></p>
+                    <p><strong>Chuyên khoa:</strong> <span class="specialization">@Input.Chuyenkhoa</span></p>
+                </div>
+            </div>
+            <div class="preview-section">
+                <h3>Thông tin khác:</h3>
+                <div class="preview-content">
+                    @preview
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+    public BacSi Input { get; set; } = new();
+    private MarkupString preview;
+    [Inject]
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    public string UserName { get; set; }
+    public List<roomchat> Allroom { get; set; } = new();
+    Boolean ChuaChonGoi = false;
+    int a = 0;
+    protected override async Task OnInitializedAsync()
+    {
+        Input = await bacsiservice.getbyid(id);
+        preview = new MarkupString(Input.Thongtin);
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        UserName = authState.User.Identity.Name;
+        Allroom = await Roomchatservice.getallAsync();
+    }
+    private async Task tuvanbacsi()
+    {
+        if (UserName == null)
+        {
+            navigation.NavigateTo("/Account/Login");
+            return;
+        }
+        var us = await Usertservice.getuserbyemail(UserName);
+        if (us == null)
+        {
+            navigation.NavigateTo("/AddUser");
+            return;
+        }
+        a = Allroom.Count(a => a.idbs == id && a.ngaytao.Date == DateTime.Now.Date);
+        if (a > 10)
+        {
+            ChuaChonGoi = true;
+            return;
+        }
+        else
+        {
+            var allroom = await Roomchatservice.getallbyidAsync(us.Id);
+            string name = "Tư vấn";
+            var rooms = allroom.LastOrDefault(a => a.Name == name );
+            if (rooms != null && (DateTime.Now - rooms.ngaytao).TotalDays < 10)
+            {
+                navigation.NavigateTo("/Chat/" + rooms.Id);
+            }
+            else
+            {
+                roomchat room = new()
+                    {
+                        idbs = id,
+                        Name = "Tư vấn",
+                        ngaytao = DateTime.Now,
+                        userid = us.Id
+                    };
+                var haha = await Roomchatservice.addAsync(room);
+                navigation.NavigateTo("/Chat/" + haha.Id);
+            }
+        }
+    }
+}
+@if (ChuaChonGoi)
+{
+    <div class="modal fade show" style="display: block; background: rgba(0, 0, 0, 0.5);">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thông báo</h5>
+                    <button style="width:10%" type="button" class="btn-close" @onclick="(() => ChuaChonGoi = false)"></button>
+                </div>
+                <div class="modal-body">
+                    Bác sĩ hiện khổng thể nhận yêu cầu tư vấn. Bạn có thể chọn bác sĩ khác hoặc yêu cầu tư vấn vào thời điểm khác
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" @onclick="(() => ChuaChonGoi = false)">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

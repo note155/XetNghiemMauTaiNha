@@ -106,7 +106,7 @@
                 </div>
 
                 <!-- Input for list of KQandCS -->
-                <button style="background-color:chocolate" onclick="Nhankq">Nhận kết quả xét nghiệm từ máy</button>
+                <button style="background-color: chocolate" @onclick:preventDefault="true" @onclick="Nhankq">Nhận kết quả xét nghiệm từ máy</button>
                 <h3>Danh sách Kết Quả và Chỉ Số</h3>
                 @if (Inputkq.kQandCs != null)
                 {
@@ -169,7 +169,6 @@
     public List<MayXetNghiem> allMayXN { get; set; } = new();
     [SupplyParameterFromForm]
     public KQXN Inputkq { get; set; } = new();
-
     protected override async Task OnInitializedAsync()
     {
         await checkbs();
@@ -216,7 +215,6 @@
     }
     private async Task Nhankq()
     {
-
     }
     private async Task addkq()
     {
