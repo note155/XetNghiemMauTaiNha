@@ -1,16 +1,215 @@
 ﻿@page "/Duyetdon"
 @using Shared.form
+@inject IJSRuntime JsRuntime;
 @rendermode InteractiveAuto
-
-<h3>ListDXNv1 @allDon.Count()</h3>
 <div id="bingMap" style="width: 100%; height: 400px;"></div>
+<div id="infoWindow" class="infoWindow">
+    <div id="infoContent"></div>
+    <button class="btn btn-danger" id="closeBtn" onclick="toggleInfoWindow()">Đóng</button><button class="btn btn-success mx-3"  @onclick="WriteToConsole">Thêm vào danh sách</button>
+</div>
+<div class="row" style="height:100px">
+    <a href="/ListDXN">Danh sách</a>
+</div>
+<div class="row">
+    @if (err.Any())
+    {
+        <div class="alert alert-danger" role="alert">
+            @foreach (var error in err)
+            {
+                <p>@error</p>
+            }
+        </div>
+    }
+</div>
+<EditForm Model="coDon" method="post" OnValidSubmit="add" FormName="register" class="profile-form">
+<DataAnnotationsValidator />
+<div class="row">
+    <div class="col-sm-5">
+            @if (Donachon.Any())
+            {
+        <div class="row">
+                <strong>Danh sách đơn đã chọn:</strong>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Khách hàng</th>
+                                <th>Thời gian</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var idd in Donachon)
+                            {
+                                <tr @onclick="()=>Donle(idd.dxn.Id)">
+                                    <th scope="row">@idd.dxn.Id</th>
+                                    <td>@idd.nguoi.Hoten</td>
+                                    <td>@idd.dxn.giolaymau @idd.dxn.Ngaydat.ToString("dd/MM/yyyy")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+               
+        </div>
+        <div class="row">
+            <strong>Chọn nhân viên lấy mẫu</strong>
+                <div class="form-group">
+                    <input type="text" @bind="searchQuery" @oninput="OnSearchQueryChanged" list="staffList" placeholder="Tìm kiếm nhân viên" class="form-control" />
+                    <datalist id="staffList">
+                        @foreach (var bs in FilteredStaffMembers)
+                        {
+                            <option value="@($"{bs.Id} - {bs.Hoten} - {bs.Chucvu}")" data-id="@bs.Id"></option>
+                        }
+                    </datalist>
+                    <input type="hidden" @bind="idbs" />
+                </div>
+                    <button type="submit" class="btn btn-success">Duyệt toàn bộ đơn đã chọn</button>
+        </div>
+                }
+                else
+                {
+                <p>Chưa có đơn nào được chọn</p>
+                }
+    </div>
+    <div class="col-sm-7">
+        @if (coDon.nguoi !=null)
+        {
+            <div class="card ">
+                <div class="card-header">
+                    THÔNG TIN ĐƠN ĐĂNG KÝ
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">Khách hàng: @coDon.nguoi.Hoten</h4>
+                    <p class="card-text"><strong>Địa chỉ: </strong> @coDon.diachi</p>
+                    <p class="card-text"><strong>Giới tính: </strong> @gioitinh(coDon.nguoi.Gioitinh)</p>
+                    <p class="card-text"><strong>Năm sinh: </strong> @coDon.nguoi.Tuoi</p>
+                    <h4 class="card-title">Thông tin liên lạc</h4>
+                    <p class="card-text"><strong>SDT: </strong> @coDon.nguoi.SDT</p>
+                    <p class="card-text"><strong>Email: </strong> @coDon.nguoi.Email</p>
+                    <h4 class="card-title">Thông tin đăng ký</h4>
+                    <div>
+                            <div class="form-group">
+                                <label for="Ngaydat">Ngày Lấy Máu</label>
+                                <InputDate @bind-Value="coDon.dxn.Ngaydat" class="form-control" id="Ngaydat" />
+                                <ValidationMessage For="() => coDon.dxn.Ngaydat" class="text-danger" />
+                            </div>
+                            <div class="form-group">
+                                <label for="giolaymau">Giờ lấy máu</label>
+                                <InputSelect id="giolaymau" @bind-Value="coDon.dxn.giolaymau" class="form-control">
+                                    <option value="5h30">5h30</option>
+                                    <option value="6h">6h</option>
+                                    <option value="6h30">6h30</option>
+                                    <option value="7h">7h</option>
+                                    <option value="7h30">7h30</option>
+                                    <option value="8h">8h</option>
+                                    <option value="8h30">8h30</option>
+                                    <option value="9h">9h</option>
+                                    <option value="9h30">9h30</option>
+                                    <option value="10h">10h</option>
+                                    <option value="10h30">10h30</option>
+                                    <option value="11h">11h</option>
+                                    <option value="11h30">11h30</option>
+                                    <option value="12h">12h</option>
+                                    <option value="12h30">12h30</option>
+                                    <option value="13h">13h</option>
+                                    <option value="13h30">13h30</option>
+                                    <option value="14h">14h</option>
+                                    <option value="14h30">14h30</option>
+                                    <option value="15h">15h</option>
+                                    <option value="15h30">15h30</option>
+                                    <option value="16h">16h</option>
+                                    <option value="16h30">16h30</option>
+                                    <option value="17h">17h</option>
+                                    <option value="17h30">17h30</option>
+                                    <option value="18h">18h</option>
+                                    <option value="18h30">18h30</option>
+                                    <option value="19h">19h</option>
+                                    <option value="19h30">19h30</option>
+                                    <option value="20h">20h</option>
+                                    <option value="20h30">20h30</option>
+                                    <option value="21h">21h</option>
+                                </InputSelect>
+                            </div>
+                            <div class="form-group">
+                                <label for="ghiChu">Ghi chú của bệnh nhân</label>
+                                <InputTextArea @bind-Value="coDon.dxn.ghiChu" class="form-control" id="ghiChu" />
+                                <ValidationMessage For="() => coDon.dxn.ghiChu" class="text-danger" />
+                            </div>                       
+                    </div>
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-header">
+                                Các gói đã chọn
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                @foreach (var bs in coDon.gxndachon)
+                                {
+                                    <li class="list-group-item"><strong>Tên gói: </strong>@bs.TenGoi  -  <h5 style="color:forestgreen;">Giá:@bs.Gia</h5></li>
+                                }
+                               </ul>
+                        </div>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+</EditForm>
+<div class="row" style="height:200px"></div>
 @code {
+    protected static int i { get; set; } = 0;
+    protected static int icheck { get; set; } = 0;
+    [JSInvokable]
+    public static void CSCallBackMethod(int content)
+    {
+        // Xử lý giá trị content ở đây
+        Console.WriteLine(content);
+        if (content != 0)
+        {
+            haha = content;
+            if (kt)
+            {
+                icheck++;
+                iddon.Add(haha);
+                kt = false;
+            }
+        }
+        i++;
+
+    }
+    public static Boolean kt = false;
+    public static int haha { get; set; } = new();
     public List<DonXetNghiem> AllDXN { get; set; } = new();
+    [SupplyParameterFromForm]
+    public Don coDon { get; set; } = new();
     public List<Don> allDon { get; set; } = new();
-    public List<Don> listdonduocchon { get; set; } = new();
+    public List<Don> Donachon { get; set; } = new();
+    public static List<int> iddon { get; set; } = new();// Khởi tạo namesave với một giá trị mặc định
+    private List<string> err = new List<string>();
+    int valor, idbs;
+    private BacSi SelectedDoctor = null;
+    public List<DXNandGXN> dxn { get; set; } = new();
+    public long tongtien = 0;
+    public List<GoiXetNghiem> allGXN { get; set; } = new();
+    private string searchQuery = "";
+    private List<BacSi> FilteredStaffMembers { get; set; } = new();
+    public List<BacSi> AllBS { get; set; } = new();
     protected override async Task OnInitializedAsync()
     {
+        allGXN = await GXNservice.getallAsync();
         await LoadDon();
+        AllBS = await bacsiservice.getallAsync();
+        FilteredStaffMembers = AllBS;
+        FilterStaffMembers();
+    }
+    private void FilterStaffMembers()
+    {
+        if (string.IsNullOrWhiteSpace(searchQuery))
+        {
+            FilteredStaffMembers = AllBS; // If search query is empty, display all staff members
+        }
+        else
+        {
+            FilteredStaffMembers = AllBS.Where(bs => bs.Hoten.ToLower().Contains(searchQuery.ToLower())).ToList();
+        }
     }
     public async Task LoadDon()
     {
@@ -29,18 +228,137 @@
         {
             var us = await Usertservice.getuserbyid(donxn.UserId);
             string dc = us.Diachi + ", " + us.CapXa + ", " + us.CapHuyen + ", Thừa Thiên Huế";
+
             Don a = new()
                 {
                     dxn = donxn,
                     diachi = dc,
-                    nguoi = us
+                    nguoi = us,
                 };
+            a.gxndachon = new List<GoiXetNghiem>();
+            var gdc = await DXNservice.getallGXNAsync(a.dxn.Id);
+            foreach(var g in gdc)
+            {
+                foreach(var goi in allGXN)
+                {
+                    if (goi.Id==g.GoiXetNghiemId)
+                    {
+                        a.gxndachon.Add(goi);
+                    }
+                }
+            }
             allDon.Add(a);
         }
     }
+    private async Task WriteToConsole()
+    {
+        kt = true;
+        await JsRuntime.InvokeAsync<object>("CSMethod1",0);
+        Xulydon();
+        if (coDon.diachi == null && Donachon.Count()>=1)
+        {
+            coDon = Donachon.FirstOrDefault();
+        }
+    }
+    public async void Donle(int id)
+    {
+        coDon = Donachon.FirstOrDefault(a => a.dxn.Id == id);   
+    }
+    private async Task add()
+    {
+        err.Clear(); // Xóa danh sách lỗi trước đó
+                     // Kiểm tra ngày lấy máu
+                     // Kiểm tra giờ lấy máu
+        foreach(var duyetDon in Donachon)
+        {
+            if (string.IsNullOrWhiteSpace(duyetDon.dxn.giolaymau))
+            {
+                err.Add("Giờ lấy máu của Đơn"+duyetDon.dxn.Id+" không được để trống.");
+            }
+            if (duyetDon.gxndachon.Count == 0)
+            {
+                err.Add("Vui lòng chọn gói xét nghiệm.");
+            }
+            // Kiểm tra gói xét nghiệm
+            // Kiểm tra nhân viên lấy máu
+            if (idbs == 0)
+            {
+                err.Add("Vui lòng chọn nhân viên lấy máu.");
+            }
 
+            // Nếu có lỗi, hiển thị thông báo lỗi và không tiếp tục thực hiện việc cập nhật dữ liệu
+            if (err.Any())
+            {
+                return;
+            }
+            duyetDon.dxn.BacSiId = idbs;
+            duyetDon.dxn.Trangthai = "Chờ lấy mẫu";
+            await DXNservice.updateAsync(duyetDon.dxn);
+            Tinhtrang ttrang = new Tinhtrang
+                {
+                    DonXetNghiemId = duyetDon.dxn.Id,
+                    thoigian = DateTime.Now,
+                    trangthai = "Đơn đã được duyệt - Người lấy mẫu: Bs." + SelectedDoctor.Hoten
+                };
+            await TTrangservice.addAsync(ttrang);
+        }
+        Donachon.Clear();
+        coDon = new();
+    }
+    public async void Xulydon()
+    {
+        // Xóa tất cả các pushpin hiện có trên bản đồ
+
+        // Cập nhật lại danh sách các điểm trên bản đồ với danh sách mới đã thêm vào danh sách chọn
+        foreach (var id in iddon)
+        {
+            foreach (var a in allDon.ToList())
+            {
+                if (a.dxn.Id == id)
+                {
+                    Donachon.Add(a);
+                    allDon.Remove(a);
+                }
+            }
+        }
+    }
+    private async void LoadBSInfo(int id)
+    {
+        idbs = id;
+        valor = id;
+        if (id != 0)
+        {
+            SelectedDoctor = AllBS.FirstOrDefault(bs => bs.Id == id)!;
+        }
+    }
+    private void OnSearchQueryChanged(ChangeEventArgs e)
+    {
+        searchQuery = e.Value.ToString();
+        FilterStaffMembers();
+        string[] numbers = searchQuery.Split('-');
+
+        if (numbers.Length >= 3)
+        {
+            LoadBSInfo(int.Parse(numbers[0]));
+        }
+    }
+    private String gioitinh(bool a)
+    {
+        if (a)
+        {
+            return "Nam";
+        }
+        else
+        {
+            return "Nữ";
+        }
+    }
 }
 <script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        initMap();
+    });
     function initMap() {
         // Initialize map with center at Hue city
         var map = new Microsoft.Maps.Map(document.getElementById('bingMap'), {
@@ -48,11 +366,9 @@
             center: new Microsoft.Maps.Location(16.4637, 107.5909), // Coordinates of Huế city
             zoom: 12 // Zoom level (adjust as needed)
         });
-
-        // Load the Search module
+      
         Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
             var searchManager = new Microsoft.Maps.Search.SearchManager(map);
-
             // Geocode all addresses in the list
             @foreach (var address in allDon)
     {
@@ -66,30 +382,44 @@
                                     title: 'Địa chỉ',
                                     subTitle: "@address.nguoi.Hoten"
                                 });
-
-                                // Add click event to show popup
-                                Microsoft.Maps.Events.addHandler(pin, 'click', function () {
-                                    var infobox = new Microsoft.Maps.Infobox(location, {
-                                        title: 'Thông tin chi tiết',
-                                        description: 'Địa chỉ: @address.diachi<br />Tên người: @address.nguoi.Hoten',
-                                        visible: true
-                                    });
-                                    infobox.setOptions({ showPointer: true });
-                                    map.entities.push(infobox);
-                                });
-
                                 map.entities.push(pin);
+
+                                Microsoft.Maps.Events.addHandler(pin, 'click', function () {
+                                    var content = `<div class="alert alert-success"> <strong>Thông tin khách hàng: </strong>@address.nguoi.Hoten</div>
+                                                     <p><strong>Số điện thoại: </strong>@address.nguoi.SDT</p>
+                                                     <p><strong>Địa chỉ: </strong>@address.diachi</p>
+                                                     <p><strong>Email: </strong>@address.nguoi.Email</p>
+                                                     <p><strong>Thời gian: </strong>@address.dxn.giolaymau @address.dxn.Ngaydat.ToString("dd/MM/yyyy")</p>`;
+
+
+                                    showInfoWindow(content);
+                                    CSMethod1(@address.dxn.Id);
+                                });
                             }
                         }
                     });
         </text>
     }
                     });
+
+    }
+    function CSMethod1(content) {
+        DotNet.invokeMethodAsync('duanxetnghiem.Client', 'CSCallBackMethod', content).then(data => {
+            console.log(data);
+        });
+    }
+
+    function toggleInfoWindow() {
+        var infoWindow = document.getElementById("infoWindow");
+        infoWindow.classList.toggle("show");
+    }
+
+    function showInfoWindow(content) {
+        var infoContent = document.getElementById("infoContent");
+        infoContent.innerHTML = content;
+        toggleInfoWindow();
     }
 </script>
-
-
-
 <script src="https://www.bing.com/api/maps/mapcontrol?key=AvJeIjn2sAoBGbyZw0PImFkcys5P60orulBL-i8ArqPp96C4h2_CL2xmY0YuJehi&callback=initMap" async defer></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -107,3 +437,5 @@
         }
     }
 </script>
+
+

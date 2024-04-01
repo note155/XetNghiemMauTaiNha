@@ -1,4 +1,5 @@
 using System.Net;
+using System.Net.NetworkInformation;
 using Append.Blazor.Printing;
 using duanxetnghiem.Components;
 using duanxetnghiem.Components.Account;
@@ -11,7 +12,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Shared.ketnoi;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -45,6 +45,7 @@ builder.Services.AddScoped(http => new HttpClient
 {
     BaseAddress = new Uri(builder.Configuration.GetSection("BaseAdress").Value)
 });
+
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultScheme = IdentityConstants.ApplicationScheme;

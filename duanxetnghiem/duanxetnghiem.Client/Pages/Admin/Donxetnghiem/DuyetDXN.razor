@@ -292,32 +292,6 @@
         {
             return;
         }
-        // Kiểm tra thay đổi của gxndachon
-        foreach (var newItem in gxndachon.Except(previousGxndachon))
-        {
-            DXNandGXN a = new DXNandGXN
-                {
-                    DonXetNghiemId = id,
-                    GoiXetNghiemId = newItem.Id
-                };
-            await DXNservice.addnew(a);
-        }
-
-        foreach (var removedItem in previousGxndachon.Except(gxndachon))
-        {
-            // removedItem là phần tử đã bị xóa
-            // Thực hiện hành động tương ứng, ví dụ: xóa khỏi cơ sở dữ liệu
-            foreach(var a in dxn)
-            {
-                if (a.GoiXetNghiemId == removedItem.Id)
-                {
-                    await DXNservice.deletegxnAsync(a.Id);
-                }
-            }
-        }
-
-        // Đặt lại danh sách trước đó để chuẩn bị cho lần lặp tiếp theo
-        previousGxndachon = new List<GoiXetNghiem>(gxndachon);
         Input.BacSiId = idbs;
         Input.Trangthai = "Chờ lấy mẫu";
         await DXNservice.updateAsync(Input);

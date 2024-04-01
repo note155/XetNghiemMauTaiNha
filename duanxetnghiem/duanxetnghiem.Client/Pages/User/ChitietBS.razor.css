@@ -1,108 +1,91 @@
-﻿/* Reset CSS */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+﻿
+@media (max-width: 700px) {
+    .doctor-img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .col-sm-4 {
+        margin-bottom: 20px;
+    }
+
+    .col-sm-8 {
+        padding-left: 0;
+    }
 }
 
-/* Container styles */
-.container {
-    max-width: 1140px;
-    margin: 0 auto;
-    padding: 20px;
+/* CSS chung */
+.package-container {
+    max-width: 100%;
+    padding: 40px 20px; /* Thêm padding cho các cạnh của container để tránh tràn ra ngoài màn hình */
+    box-sizing: border-box; /* Đảm bảo padding không làm thay đổi kích thước của container */
 }
 
-/* Row styles */
-.row {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-/* Column styles */
 .col-sm-4 {
-    flex: 0 0 33.333333%;
-    max-width: 33.333333%;
-    padding: 15px;
-}
-
-.col-sm-8 {
-    flex: 0 0 66.666667%;
-    max-width: 66.666667%;
-    padding: 15px;
-}
-
-/* Doctor image styles */
-.doctor-img {
-    width: 100%;
-    height: auto;
-    border-radius: 50%;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Đổ bóng */
-}
-
-/* Doctor name styles */
-.doctor-name {
-    font-size: 32px;
-    margin-bottom: 10px;
-    color: #333;
-}
-
-/* Button styles */
-.btn {
-    display: inline-block;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #007bff;
-    color: #fff;
+    /* Đường dẫn đến hình nền */
+    background-image: url('imgchitietbacsi/hinhen2.png');
+    height: 600px;
+    /* Kích thước và tùy chỉnh hiển thị hình nền */
+    background-size: cover;
+    background-position: center;
+    /* Tạo một lớp nền mờ */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    /* Căn lề nội dung vào giữa */
     text-align: center;
-    text-decoration: none;
-    font-size: 18px;
-    transition: background-color 0.3s ease;
 }
 
-    .btn:hover {
-        background-color: #0056b3;
-    }
+.doctor-img {
+    width: 350px;
+    height: auto;
+    border-radius: 50%; /* Bo tròn ảnh */
+    display: block; /* Đảm bảo phần tử là một khối */
+    margin-left: auto; /* Căn lề trái */
+    margin-right: auto; /* Căn lề phải */
+}
 
-/* Section title styles */
+.doctor-name {
+    margin-top: 60px;
+    text-align: center;
+    font-size: 1.6rem;
+}
+
+.specialization1 {
+    text-align: center; /* Căn lề nội dung vào giữa */
+    display: block; /* Đảm bảo nội dung là một khối */
+    font-size: 1.1rem;
+    color: #3398ff;
+}
+
+.btn-primary {
+    margin-top: 50px;
+    font-size: 18px; /* Điều chỉnh kích thước font của nút */
+    padding: 10px 20px; /* Điều chỉnh khoảng cách bên trong nút */
+    display: block; /* Đảm bảo nút là một khối */
+    margin-left: auto; /* Căn lề trái */
+    margin-right: auto; /* Căn lề phải */
+    text-align: center; /* Căn lề văn bản vào giữa */
+    width: 100%; /* Đảm bảo chiều rộng của nút phù hợp với nội dung */
+    margin-bottom: 50px;
+}
+
 .section-title {
-    font-size: 36px;
-    margin-bottom: 20px;
-    color: #007bff;
+    font-size: 2.3rem;
+    margin-bottom: 45px;
 }
 
-/* Preview section styles */
 .preview-section {
-    margin-top: 20px;
+    margin-top: 30px;
 }
-
-    .preview-section h3 {
-        font-size: 28px;
-        margin-bottom: 10px;
-        color: #007bff;
-    }
 
 .preview-content {
-    border: 1px solid #ddd;
-    padding: 20px;
-    background-color: #f9f9f9;
+    padding: 15px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
 }
 
-/* Text styles */
 p {
     font-size: 18px;
-    margin-bottom: 10px;
-    color: #555;
 }
 
-strong {
-    font-weight: bold;
-    color: #333;
-}
-
-span {
-    font-size: 18px;
-    font-weight: bold;
-    color: #007bff;
+.qualification {
 }

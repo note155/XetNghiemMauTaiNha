@@ -12,6 +12,7 @@ namespace Shared.form
         public DonXetNghiem? dxn { get; set; }
         public User? nguoi { get; set; }
         public string diachi { get; set; }
-        public Boolean chon { get; set; }
+        public List<GoiXetNghiem> gxndachon { get; set; }
+
     }
 }

@@ -1,42 +1,34 @@
 ﻿@page "/Testmap"
 @using Shared.form
 @rendermode InteractiveAuto
+@inject IJSRuntime JsRuntime;
 
-<style>
-    .infoWindow {
-        position: fixed;
-        top: 50%;
-        left: -400px; /* Điều chỉnh vị trí bật qua từ bên trái */
-        transform: translate(0, -50%);
-        background-color: white;
-        padding: 20px;
-        border: 1px solid #ccc;
-        z-index: 1000;
-        transition: left 0.5s ease; /* Hiệu ứng chuyển động */
-    }
-
-        .infoWindow.show {
-            left: 20px; /* Điều chỉnh vị trí hiển thị */
-        }
-</style>
-
-<h3>ListDXNv1 @allDon.Count()</h3>
-<div id="bingMap" style="width: 100%; height: 400px;"></div>
-<div id="infoWindow" class="infoWindow">
-    @id
-    <div id="infoContent">
+@foreach(var donchung in allDon)
+{
+    <div style="width:500px;border: 1px solid #000;padding: 10px;" class="row">
+        <strong style="color:red">@donchung.nguoi.Hoten</strong>
+        <div class="col-sm-6">
+            <p>SDT: @donchung.nguoi.SDT</p>
+            <p style="color:red">Giới tính: @donchung.nguoi.Gioitinh</p>
+        </div>
+        <div class="col-sm-6">
+            <p>Email: @donchung.nguoi.Email</p>
+        </div>
+        <p>Địa chỉ: @donchung.diachi</p>
+        
+        <button>Đóng</button><button>Thêm</button>
     </div>
-    <button id="closeBtn" onclick="toggleInfoWindow()">Đóng</button>
-</div>
-
+}
 @code {
+    protected static int ia { get; set; } = 0;
     public List<DonXetNghiem> AllDXN { get; set; } = new();
     public List<Don> allDon { get; set; } = new();
-    public List<Don> donchung { get; set; } = new();
-    public static int id = 0;
+
+    private string? namesave;
     protected override async Task OnInitializedAsync()
     {
         await LoadDon();
+        
     }
     public async Task LoadDon()
     {
@@ -60,92 +52,10 @@
                     dxn = donxn,
                     diachi = dc,
                     nguoi = us,
-                    chon=false
                 };
             allDon.Add(a);
         }
     }
-    [JSInvokable]
-    public static async Task<int> setid(string idmoi)
-    {
-       return id = int.Parse(idmoi);
-    }
-
-}
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    initMap();
-});
-
-function initMap() {
-    // Initialize map with center at Hue city
-    var map = new Microsoft.Maps.Map(document.getElementById('bingMap'), {
-        credentials: 'AvJeIjn2sAoBGbyZw0PImFkcys5P60orulBL-i8ArqPp96C4h2_CL2xmY0YuJehi',
-        center: new Microsoft.Maps.Location(16.4637, 107.5909), // Coordinates of Huế city
-        zoom: 12 // Zoom level (adjust as needed)
-    });
-    //module
-        Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
-            var searchManager = new Microsoft.Maps.Search.SearchManager(map);
-
-            // Geocode all addresses in the list
-            @foreach (var address in allDon)
-    {
-        <text>
-                    searchManager.geocode({
-                        where: "@address.diachi",
-                        callback: function (geocodeResult) {
-                            if (geocodeResult && geocodeResult.results && geocodeResult.results.length > 0) {
-                                var location = geocodeResult.results[0].location;
-                                var pin = new Microsoft.Maps.Pushpin(location, {
-                                    title: 'Địa chỉ',
-                                    subTitle: "@address.nguoi.Hoten"
-                                });
-                                map.entities.push(pin);
-
-                                Microsoft.Maps.Events.addHandler(pin, 'click', function () {
-                                    var content = "@address.dxn.Id";
-                                    DotNet.invokeMethodAsync('duanxetnghiem.Client', 'setid', '@address.dxn.Id').then(data => {
-                                        console.log(data);
-                                        });
-                                    showInfoWindow(content);
-                                });
-                            }
-                        }
-                    });
-        </text>
-    }
-    });
 
 }
 
-function toggleInfoWindow() {
-    var infoWindow = document.getElementById("infoWindow");
-    infoWindow.classList.toggle("show");
-}
-
-function showInfoWindow(content) {
-    var infoContent = document.getElementById("infoContent");
-    infoContent.innerHTML = content;
-    toggleInfoWindow();
-}
-
-</script>
-
-<script src="https://www.bing.com/api/maps/mapcontrol?key=AvJeIjn2sAoBGbyZw0PImFkcys5P60orulBL-i8ArqPp96C4h2_CL2xmY0YuJehi&callback=initMap" async defer></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var form = document.getElementById("rejectForm");
-        form.style.display = "none";
-    });
-</script>
-<script>
-    function toggleForm() {
-        var form = document.getElementById("rejectForm");
-        if (form.style.display === "none") {
-            form.style.display = "block";
-        } else {
-            form.style.display = "none";
-        }
-    }
-</script>

@@ -1,11 +1,11 @@
 ﻿@page "/Chitietbs/{id:int}"
 @rendermode InteractiveAuto
-<div class="container">
+<div class="package-container">
     <div class="row">
         <div class="col-sm-4">
             <img src="@Input.Anh" class="doctor-img" alt="Ảnh bác sĩ">
             <h4 class="doctor-name">@Input.Hoten</h4>
-            <p><strong>Chuyên khoa:</strong> <span class="specialization">@Input.Chuyenkhoa</span></p>
+            <p><span class="specialization1">Chuyên khoa: @Input.Chuyenkhoa</span></p>
             <button @onclick="@(() => tuvanbacsi())" class="btn btn-primary">Liên hệ tư vấn</button>
         </div>
         <div class="col-sm-8">
@@ -72,7 +72,7 @@
         {
             var allroom = await Roomchatservice.getallbyidAsync(us.Id);
             string name = "Tư vấn";
-            var rooms = allroom.LastOrDefault(a => a.Name == name );
+            var rooms = allroom.LastOrDefault(a => a.Name == name);
             if (rooms != null && (DateTime.Now - rooms.ngaytao).TotalDays < 10)
             {
                 navigation.NavigateTo("/Chat/" + rooms.Id);
