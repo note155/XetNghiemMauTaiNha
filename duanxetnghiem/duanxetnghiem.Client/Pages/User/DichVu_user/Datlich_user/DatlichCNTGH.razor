@@ -31,7 +31,7 @@
                 {
                     <div class="info">
                         <p><strong>Họ tên:</strong> @user.Hoten</p>
-                        <p><strong>Tuổi:</strong> @user.Tuoi</p>
+                        <p><strong>Ngày sinh:</strong> @user.Ngaysinh.ToString("dd/MM/yyyy")</p>
                         <p><strong>Số điện thoại:</strong> @user.SDT</p>
                         <p><strong>Địa chỉ:</strong> @user.Diachi, @user.CapXa, @user.CapHuyen, TT Huế</p>
                         <p><strong>Email:</strong> @user.Email</p>
@@ -69,38 +69,13 @@
                 <label for="giolaymau">Giờ lấy máu</label>
                 <InputSelect id="giolaymau" @bind-Value="Input.giolaymau" class="form-control">
                     <option value="">Chọn</option>
-                    <option value="5h30">5h30</option>
-                    <option value="6h">6h</option>
-                    <option value="6h30">6h30</option>
-                    <option value="7h">7h</option>
-                    <option value="7h30">7h30</option>
-                    <option value="8h">8h</option>
-                    <option value="8h30">8h30</option>
-                    <option value="9h">9h</option>
-                    <option value="9h30">9h30</option>
-                    <option value="10h">10h</option>
-                    <option value="10h30">10h30</option>
-                    <option value="11h">11h</option>
-                    <option value="11h30">11h30</option>
-                    <option value="12h">12h</option>
-                    <option value="12h30">12h30</option>
-                    <option value="13h">13h</option>
-                    <option value="13h30">13h30</option>
-                    <option value="14h">14h</option>
-                    <option value="14h30">14h30</option>
-                    <option value="15h">15h</option>
-                    <option value="15h30">15h30</option>
-                    <option value="16h">16h</option>
-                    <option value="16h30">16h30</option>
-                    <option value="17h">17h</option>
-                    <option value="17h30">17h30</option>
-                    <option value="18h">18h</option>
-                    <option value="18h30">18h30</option>
-                    <option value="19h">19h</option>
-                    <option value="19h30">19h30</option>
-                    <option value="20h">20h</option>
-                    <option value="20h30">20h30</option>
-                    <option value="21h">21h</option>
+                    @if (timeList.Any())
+                    {
+                        @foreach (var time in timeList)
+                        {
+                            <option value="@time">@time</option>
+                        }
+                    }
                 </InputSelect>
             </div>
             <div class="form-group">
@@ -155,7 +130,7 @@
     public long tongtien = 0;
     public List<GioHang> gh { get; set; } = new();
     public List<User> alluser { get; set; } = new();
-
+    List<string> timeList = new();
     [SupplyParameterFromForm]
     public donXNform Input { get; set; } = new();
 
@@ -176,7 +151,25 @@
         getds();
         gh = await GHservice.getallistrue(user.Id);
         loadGH();
+        timeList = GenerateTimeList();
+    }
+    static List<string> GenerateTimeList()
+    {
+        List<string> timeList = new List<string>();
 
+        // Tạo danh sách thời gian từ 05:30 đến 21:00
+        TimeSpan time = TimeSpan.FromHours(5.5); // 05:30
+        TimeSpan endTime = TimeSpan.FromHours(20.8); // 21:00
+        while (time <= endTime)
+        {
+            string startTime = time.ToString(@"hh\:mm");
+            string endTimeString = time.Add(TimeSpan.FromMinutes(15)).ToString(@"hh\:mm");
+            string timeRange = $"{startTime} - {endTimeString}";
+            timeList.Add(timeRange);
+            time = time.Add(TimeSpan.FromMinutes(15)); // Tăng thêm 15 phút
+        }
+
+        return timeList;
     }
     private void loadGH()
     {

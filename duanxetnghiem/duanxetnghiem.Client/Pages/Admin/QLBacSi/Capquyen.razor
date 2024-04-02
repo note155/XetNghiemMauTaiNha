@@ -1,0 +1,83 @@
+﻿@page "/Capquyen"
+@rendermode InteractiveAuto
+@attribute [Authorize]
+@layout AdminLayout
+<h3>Cấp Quyền</h3>
+<div class="row">
+	<div class="col-sm-6">
+		<h4>Bác sĩ được cấp quyền</h4>
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col">Họ Tên</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach(var bs in dscq)
+				{
+					<tr>
+						<td>@bs.Hoten</td>
+						<td><button @onclick="()=>huyquyen(bs.Id)"> Hủy quyền</button></td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+	<div class="col-sm-6">
+		<h4>Bác sĩ được chưa cấp quyền</h4>
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col">Họ Tên</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var bs in dsbs)
+				{
+					<tr>
+						<td>@bs.Hoten</td>
+						<td><button @onclick="()=>capquyenbs(bs.Id)"> Cấp quyền</button></td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
+@code {
+	public List<BacSi> dsbs { get; set; } = new();
+	public List<BacSi> dscq { get; set; } = new();
+	public List<BacSi> allbs { get; set; } = new();
+	protected override async Task OnInitializedAsync()
+	{
+		allbs = await bacsiservice.getallAsync();
+		foreach(var bs in allbs)
+		{
+			if (bs.trangthai == "1")
+			{
+				dscq.Add(bs);
+			}
+			else
+			{
+				dsbs.Add(bs);
+			}
+		}
+	}
+	public async Task capquyenbs(int id)
+	{
+		var vs = dsbs.FirstOrDefault(a => a.Id == id);
+		vs.trangthai = "1";
+		await bacsiservice.updateAsync(vs);
+		dsbs.Remove(vs);
+		dscq.Add(vs);
+	}
+	public async Task huyquyen(int id)
+	{
+		var vs = dscq.FirstOrDefault(a => a.Id == id);
+		vs.trangthai = "0";
+		await bacsiservice.updateAsync(vs);
+		dsbs.Add(vs);
+		dscq.Remove(vs);
+	}
+}

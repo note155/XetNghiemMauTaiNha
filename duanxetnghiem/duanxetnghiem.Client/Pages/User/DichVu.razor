@@ -30,7 +30,7 @@
                 {
                     <div class="info">
                         <p style="color:black" class="text-left"><strong>Họ tên:</strong> @user.Hoten</p>
-                        <p style="color:black" class="text-left"><strong>Tuổi:</strong> @user.Tuoi</p>
+                        <p style="color:black" class="text-left"><strong>Tuổi:</strong> @user.Ngaysinh</p>
                         <p style="color:black" class="text-left"><strong>Số điện thoại:</strong> @user.SDT</p>
                         <p style="color:black" class="text-left"><strong>Địa chỉ:</strong> @user.Diachi, @user.CapXa, @user.CapHuyen, TT Huế</p>
                         <p style="color:black" class="text-left"><strong>Email:</strong> @user.Email</p>
@@ -113,9 +113,9 @@
                                 <a class="custom-link" @onclick="@(() => themgio(goi.Id,1))">
                                     <span><i class="fas fa-circle circle-icon"></i> Đặt lịch bản thân</span>
                                 </a>
-                                @if (user1 == null || UserName ==null)
+                                @if (user1 == null || UserName == null)
                                 {
-                                    <a class="custom-link" @onclick="@(() => themgio(goi.Id,2))" >
+                                    <a class="custom-link" @onclick="@(() => themgio(goi.Id,2))">
                                         <span><i class="fas fa-circle circle-icon"></i>Đặt lịch người thân</span>
                                     </a>
                                 }

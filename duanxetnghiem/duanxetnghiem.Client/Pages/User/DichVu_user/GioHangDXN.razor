@@ -43,6 +43,7 @@
                 <th scope="col">Người sử dụng</th>
                 <th>Gói Xét Nghiệm</th>
                 <th scope="col">Số tiền của đơn</th>
+                <th scope="col"></th>
                 <th scope="col">Chọn</th> <!-- Thêm cột chọn -->
             </tr>
         </thead>
@@ -59,6 +60,7 @@
                         }
                     </td>
                     <td>@ghang.sotien</td>
+                    <td><a href="/EditDL/@ghang.id" class="btn btn-success">Chỉnh sửa</a></td>
                     <td>
                         <div class="form-check form-switch">
                             <input @bind=ghang.chon class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">

@@ -26,7 +26,7 @@
                 {
                     <div class="info">
                         <p style="color:black" class="text-left"><strong>Họ tên:</strong> @user.Hoten</p>
-                        <p style="color:black" class="text-left"><strong>Tuổi:</strong> @user.Tuoi</p>
+                        <p style="color:black" class="text-left"><strong>Tuổi:</strong> @user.Ngaysinh</p>
                         <p style="color:black" class="text-left"><strong>Số điện thoại:</strong> @user.SDT</p>
                         <p style="color:black" class="text-left"><strong>Địa chỉ:</strong> @user.Diachi, @user.CapXa, @user.CapHuyen, TT Huế</p>
                         <p style="color:black" class="text-left"><strong>Email:</strong> @user.Email</p>
@@ -47,32 +47,38 @@
 
     </div>
 </div>
-<div class="package-container">
-    <div class="package-item">
-        <div class="package-item-photo">
-            <img src="https://cdn.medon.vn/images/2023/04/27/4a89c892-783a-4625-9481-471504f4b2d0.png" alt="Package Photo">
-        </div>
-        <div class="package-item-detail">
-            <h3 class="package-item-title">
-                Tên Gói Xét Nghiệm:@gxn.TenGoi
-            </h3>
-            <div class="package-item-meta">
-                Thời gian
-                <div class="package-item-gender">@gxn.ThoiGian</div>
-            </div>
-            <div class="package-item-bottom">
-                <div class="price-box">
-                    <span class="price">Giá:@gxn.Gia ₫</span>
+<div class="container d-flex align-items-center justify-content-center" style="margin-bottom:35rem;">
+    <div class="card-body overlay">
+        <div class="package-container">
+            <div class="package-item">
+                <div class="package-item-photo">
+                    <img src="https://cdn.medon.vn/images/2023/04/27/4a89c892-783a-4625-9481-471504f4b2d0.png" alt="Package Photo">
                 </div>
-                <div class="actions">
-                    <button @onclick="@(() => themgio(id,1))" data-toggle="modal" class="btn btn-primary btn-booking">Đặt lịch cho bản thân</button>
-                    <button @onclick="@(() => themgio(id,2))" data-toggle="modal" data-target="#myModal" class="btn btn-primary btn-booking">Đặt lịch người thân</button>
-                    <button @onclick="@(() => themgio(id,3))" data-toggle="modal" class="btn btn-primary btn-booking">Liên hệ tư vấn</button>
+                <div class="package-item-detail">
+                    <div class="package-item-price">@string.Format("{0:#,##0}", Convert.ToDecimal(@gxn.Gia)) VND</div>
+                    <h3 class="package-item-title">@gxn.TenGoi</h3>
+                    <div class="package-item-meta">
+                        <div class="package-item-gender">
+                            Thời gian : @gxn.ThoiGian
+                        </div>
+                        <div class="alert alert-info" style="display: flex; justify-content: space-between;">
+                            <a class="custom-link" @onclick="@(() => themgio(id,1))">
+                                <span><i class="fas fa-circle circle-icon"></i> Đặt lịch bản thân</span>
+                            </a>
+                            <a class="custom-link" @onclick="@(() => themgio(id,2))" data-toggle="modal" data-target="#myModal">
+                                <span><i class="fas fa-circle circle-icon"></i>Đặt lịch người thân</span>
+                            </a>
+                            <a class="custom-link" @onclick="@(() => themgio(id,3))">
+                                <span><i class="fas fa-circle circle-icon"></i>Liên hệ tư vấn</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <div class="package-details-description">
     <div class="row">
         <div class="col-md-6">
@@ -89,11 +95,11 @@
                             </th>
                             <th>
                                 Đơn vị
-                                </th>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach(var csa in allchiso)
+                        @foreach (var csa in allchiso)
                         {
                             <tr>
                                 <td>
@@ -114,7 +120,7 @@
         <div class="col-md-6">
             <h2 style="font-size: 30px;">Mô tả thông tin</h2>
             <strong>
-               @gxn.Mota
+                @gxn.Mota
             </strong>
         </div>
     </div>
@@ -142,9 +148,9 @@
         gxn = await GXNservice.getbyid(id);
         cs = await GXNservice.getallCSbyidAsync(id);
         var kk = await CSservice.getallAsync();
-        foreach(var s in kk)
+        foreach (var s in kk)
         {
-            foreach(var m in cs)
+            foreach (var m in cs)
             {
                 if (s.Id == m.ChisoId)
                 {
@@ -175,7 +181,7 @@
     {
         if (firstRender)
         {
-             keolen();    
+            keolen();
         }
     }
     public async Task themgio(int id, int haha)
@@ -191,45 +197,45 @@
             return;
         }
 
-            if (haha == 1)
+        if (haha == 1)
+        {
+            navigation.NavigateTo("/datlichid/" + id);
+        }
+        if (haha == 2)
+        {
+            goiint = id;
+        }
+        if (haha == 3)
+        {
+            var us = await Usertservice.getuserbyemail(UserName);
+            var allroom = await Roomchatservice.getallbyidAsync(us.Id);
+            string name = "Tư Vấn Gói :" + id;
+            var rooms = allroom.FirstOrDefault(a => a.Name == name);
+            if (rooms == null)
             {
-                navigation.NavigateTo("/datlichid/" + id);
+                roomchat room = new()
+                    {
+                        Name = "Tư Vấn Gói :" + id,
+                        userid = us.Id,
+                        ngaytao = DateTime.Now
+                    };
+                var ro = await Roomchatservice.addAsync(room);
+                Chat ha = new()
+                    {
+                        data = "Tôi cần hỗ trợ cho gói: " + id,
+                        roomchatid = ro.Id,
+                        thoigian = DateTime.Now,
+                        trangthai = 1,
+                        userid = us.Id
+                    };
+                await Chatservice.addAsync(ha);
+                navigation.NavigateTo("/Chat/" + ro.Id);
             }
-            if (haha == 2)
+            else
             {
-                goiint = id;
+                navigation.NavigateTo("/Chat/" + rooms.Id);
             }
-            if (haha == 3)
-            {
-                var us = await Usertservice.getuserbyemail(UserName);
-                var allroom = await Roomchatservice.getallbyidAsync(us.Id);
-                string name = "Tư Vấn Gói :" + id;
-                var rooms = allroom.FirstOrDefault(a => a.Name == name);
-                if (rooms == null)
-                {
-                    roomchat room = new()
-                        {
-                            Name = "Tư Vấn Gói :" + id,
-                            userid = us.Id,
-                            ngaytao = DateTime.Now
-                        };
-                    var ro = await Roomchatservice.addAsync(room);
-                    Chat ha = new()
-                        {
-                            data = "Tôi cần hỗ trợ cho gói: " + id,
-                            roomchatid = ro.Id,
-                            thoigian = DateTime.Now,
-                            trangthai = 1,
-                            userid = us.Id
-                        };
-                    await Chatservice.addAsync(ha);
-                    navigation.NavigateTo("/Chat/" + ro.Id);
-                }
-                else
-                {
-                    navigation.NavigateTo("/Chat/" + rooms.Id);
-                }
-            }
+        }
     }
     public async Task keolen()
     {

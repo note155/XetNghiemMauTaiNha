@@ -68,7 +68,7 @@
     public int id { get; set; }
     [Inject]
     protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
-
+    private int currentId;
     [SupplyParameterFromForm]
     public int Inputkq { get; set; } = new();
 
@@ -81,6 +81,34 @@
     public List<User> alluser { get; set; } = new();
     int iduser = 0, goiint = 0;
     string err = "";
+    protected override async Task OnParametersSetAsync()
+    {
+        if (currentId != id)
+        {
+            currentId = id;
+            await LoadData();
+        }
+    }
+
+    private async Task LoadData()
+    {
+        // Load data based on the current Id here
+        // For example:
+        gxn = await GXNservice.getbyid(currentId);
+        cs = await GXNservice.getallCSbyidAsync(currentId);
+        var kk = await CSservice.getallAsync();
+        allchiso.Clear(); // Clear existing data
+        foreach (var s in kk)
+        {
+            foreach (var m in cs)
+            {
+                if (s.Id == m.ChisoId)
+                {
+                    allchiso.Add(s);
+                }
+            }
+        }
+    }
     protected override async Task OnInitializedAsync()
     {
         gxn = await GXNservice.getbyid(id);
@@ -98,20 +126,5 @@
         }
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            keolen();
-        }
-    }
-    public async Task keolen()
-    {
-        await JSRuntime.InvokeVoidAsync("scrollToBottom");
-    }
 }
-<script>
-    window.scrollToBottom = () => {
-        window.scrollTo(0, 0);
-    }
-</script>
+

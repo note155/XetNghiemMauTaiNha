@@ -66,7 +66,7 @@ namespace duanxetnghiem.Services
                 && x.Hoten == user.Hoten
                 && x.SDT == user.SDT
                 && x.Diachi == user.Diachi
-                && x.Tuoi == user.Tuoi
+                && x.Ngaysinh == user.Ngaysinh
                 && x.Gioitinh == user.Gioitinh
             );
             return existingUser?.Id ?? -1;

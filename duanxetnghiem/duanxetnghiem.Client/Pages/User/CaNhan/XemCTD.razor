@@ -10,7 +10,7 @@
         <h2>Thông tin bệnh nhân</h2>
         <div class="info">
             <p><strong>Họ tên:</strong> @user.Hoten</p>
-            <p><strong>Tuổi:</strong> @user.Tuoi</p>
+            <p><strong>Ngày sinh:</strong> @user.Ngaysinh.ToString("dd/MM/yyyy")</p>
             <p><strong>Số điện thoại:</strong> @user.SDT</p>
             <p><strong>Địa chỉ:</strong> @user.Diachi</p>
             <p><strong>Email:</strong> @user.Email</p>
@@ -315,7 +315,7 @@
             "<h2 style=\"text-align: center;\">KẾT QUẢ XÉT NGHIỆM</h2>" +
             "<p style=\"text-align: center;\">Ngày có kết quả: " + Inputkq.ngaycoKQ + " -- Số :" + Input.Id + "</p>" +
             "<p> <span style=\"float: left;\">Họ Tên Người Bệnh:" + user.Hoten +
-            "</span><span style=\"float: right;\">Tuổi:"+user.Tuoi +"........................  Giới Tính: " + gioitinh(user.Gioitinh) + "</span></p>" +
+            "</span><span style=\"float: right;\">Ngày sinh:" + user.Ngaysinh + "........................  Giới Tính: " + gioitinh(user.Gioitinh) + "</span></p>" +
             "<br><p >Địa Chỉ: " + user.Diachi +" / " +@user.CapXa+ " / "+ @user.CapHuyen +"/ Thành phố Huế" +"</p>" +
             "<p>Khoa: "+Inputkq.khoa+"..............................................Nhóm máu: "+Inputkq.nhommau+"</p>"+
             "<p>Ghi chú: "+Inputkq.ghiChu+"</p>"+

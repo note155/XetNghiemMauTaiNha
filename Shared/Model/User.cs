@@ -13,6 +13,7 @@ namespace duanxetnghiem.Data.Model
         public string Email { get; set; }
         public string SDT { get; set; }
         public bool Gioitinh { get; set; }
-        public int Tuoi {  get; set; }
+        public DateTime Ngaysinh {  get; set; }
+        public string? Quanhe {  get; set; }
     }
 }

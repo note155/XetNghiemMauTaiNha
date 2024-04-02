@@ -616,7 +616,7 @@
     [Inject]
     protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
     public string UserName { get; set; }
-    public BacSi bs { get; set; } = new();
+    public static BacSi bs { get; set; } = new();
     public List<DonXetNghiem> AllDXN { get; set; } = new();
     private List<string> trangthai = new List<string>();
     //public User khach { get; set; } = new();

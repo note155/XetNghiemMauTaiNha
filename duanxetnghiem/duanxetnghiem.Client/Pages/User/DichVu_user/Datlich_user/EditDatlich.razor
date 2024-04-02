@@ -1,4 +1,4 @@
-﻿@page "/datlich"
+﻿@page "/EditDL/{id:int}"
 @using Shared.form
 @rendermode InteractiveAuto
 @inject NavigationManager navigation;
@@ -95,7 +95,7 @@
                 </div>
             </div>
             <a href="/"><button style="background-color:red" class="btn btn-primary"> Hủy </button></a>
-            <button type="submit" class="btn btn-primary">Đăng Ký</button>
+            <button type="submit" class="btn btn-primary">Sửa</button>
         </div>
     </div>
 </EditForm>
@@ -103,7 +103,7 @@
 @code {
     [Inject]
     protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
-
+    private List<GoiXetNghiem> previousGxndachon = new List<GoiXetNghiem>();
     private List<string> err = new List<string>();
     private User user = new User();
     public List<GoiXetNghiem> allGXN { get; set; } = new();
@@ -114,9 +114,12 @@
     int valor = 0, idbs;
     public long tongtien = 0;
     List<string> timeList = new();
+    public DonXetNghiem donxnd { get; set; } = new();
+    public List<DXNandGXN> dxn { get; set; } = new();
     [SupplyParameterFromForm]
     public donXNform Input { get; set; } = new();
-
+    [Parameter]
+    public int id { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -130,7 +133,33 @@
         timeList = GenerateTimeList();
         allGXN = await GXNservice.getallAsync();
         getds();
-        Input.Ngaydat = DateTime.Now;
+        donxnd = await DXNservice.getbyid(id);
+        Input.giolaymau = donxnd.giolaymau;
+        Input.Ngaydat = donxnd.Ngaydat;
+        Input.ghiChu = donxnd.ghiChu;
+        dxn = await DXNservice.getallGXNAsync(id);
+        foreach (var g in dxn)
+        {
+            foreach(var gxn in allGXN)
+            {
+                if (gxn.Id == g.GoiXetNghiemId)
+                {
+                    gxndachon.Add(gxn);
+                    tongtien += gxn.Gia;
+                }
+            }
+        }
+        foreach (var a in listgxn)
+        {
+            foreach (var g in dxn)
+            {
+                if (a.Id == g.GoiXetNghiemId)
+                {
+                    a.IsSelected = true;
+                }    
+            }
+        }
+        previousGxndachon = new List<GoiXetNghiem>(gxndachon);
     }
     private void getds()
     {
@@ -148,6 +177,7 @@
                     ThoiGian = a.ThoiGian
                 });
         }
+
     }
     private void remove(int id)
     {
@@ -188,41 +218,37 @@
             keolen();
             return;
         }
-        DonXetNghiem donXetNghiem = new DonXetNghiem
-            {
-                UserId = user.Id,
-                BacSiId = null,
-                Ngaydat = Input.Ngaydat,
-                ghiChu = Input.ghiChu,
-                Trangthai = "Chờ Thanh Toán",
-                giolaymau = Input.giolaymau,
-                ngaytaodon = DateTime.Now,
-            };
-        DonXetNghiem don = await DXNservice.addAsync(donXetNghiem);
-        foreach (var gxn in gxndachon)
+        donxnd.giolaymau= Input.giolaymau;
+        donxnd.Ngaydat = Input.Ngaydat;
+        donxnd.ghiChu = Input.ghiChu;
+        await DXNservice.updateAsync(donxnd);
+
+        ThanhToan tt = await TTservice.getbyidDXNAsync(id);
+        tt.Tongtien = tongtien;
+        await TTservice.updateAsync(tt);
+        foreach (var newItem in gxndachon.Except(previousGxndachon))
         {
             DXNandGXN a = new DXNandGXN
                 {
-                    DonXetNghiemId = don.Id,
-                    GoiXetNghiemId = gxn.Id
+                    DonXetNghiemId = id,
+                    GoiXetNghiemId = newItem.Id
                 };
             await DXNservice.addnew(a);
         }
-        ThanhToan tt = new ThanhToan
+
+        foreach (var removedItem in previousGxndachon.Except(gxndachon))
+        {
+            // removedItem là phần tử đã bị xóa
+            // Thực hiện hành động tương ứng, ví dụ: xóa khỏi cơ sở dữ liệu
+            foreach (var a in dxn)
             {
-                UserId = user.Id,
-                DonXetNghiemId = don.Id,
-                Tongtien = tongtien,
-                trangthai = "Chưa Thanh Toán"
-            };
-        await TTservice.addAsync(tt);
-        Tinhtrang ttrang = new Tinhtrang
-            {
-                DonXetNghiemId = don.Id,
-                thoigian = DateTime.Now,
-                trangthai = "Đơn đã được tạo"
-            };
-        await TTrangservice.addAsync(ttrang);
+                if (a.GoiXetNghiemId == removedItem.Id)
+                {
+                    await DXNservice.deletegxnAsync(a.Id);
+                }
+            }
+        }
+
         navigation.NavigateTo("/giohangdxn");
     }
     public String loadGXN(int id)

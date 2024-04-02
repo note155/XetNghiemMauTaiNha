@@ -524,7 +524,11 @@
         // Duyệt qua danh sách người dùng
         foreach (var user in AllUser)
         {
-            int age = user.Tuoi;
+            int age = DateTime.Now.Year- user.Ngaysinh.Year;//sửa
+            if (DateTime.Now.Month < user.Ngaysinh.Month || (DateTime.Now.Month == user.Ngaysinh.Month && DateTime.Now.Day < user.Ngaysinh.Day))
+            {
+                age--;
+            }
 
             // Xác định nhóm tuổi của người dùng và tăng số lượng người dùng trong nhóm tuổi đó
             for (int i = 0; i < ageGroups.Length - 1; i++)

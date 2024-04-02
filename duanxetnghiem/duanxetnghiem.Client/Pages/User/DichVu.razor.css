@@ -7,7 +7,7 @@
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5); /* Điều chỉnh độ mờ của overlay tại đây */
-    background-image: url('imggoixn/hinhnen13.png');
+    background-image: url('imgGoiXN/hinhnen13.png');
     background-size: cover;
     background-position: center;
     height: 450px;
@@ -237,3 +237,4 @@ button:hover {
     font-size: 8px; /* Điều chỉnh kích thước của biểu tượng */
     margin-right: 5px; /* Khoảng cách giữa biểu tượng và văn bản */
 }
+

@@ -2,13 +2,16 @@
 @using Shared.form
 @inject IJSRuntime JsRuntime;
 @rendermode InteractiveAuto
+@attribute [Authorize]
+@layout AdminLayout
 <div id="bingMap" style="width: 100%; height: 400px;"></div>
 <div id="infoWindow" class="infoWindow">
     <div id="infoContent"></div>
-    <button class="btn btn-danger" id="closeBtn" onclick="toggleInfoWindow()">Đóng</button><button class="btn btn-success mx-3"  @onclick="WriteToConsole">Thêm vào danh sách</button>
+    <button  class="btn btn-danger" id="closeBtn" onclick="toggleInfoWindow()">Đóng</button><button class="btn btn-success mx-3"  @onclick="WriteToConsole">Thêm vào danh sách</button>
 </div>
 <div class="row" style="height:100px">
-    <a href="/ListDXN">Danh sách</a>
+    <a style="width:auto" href="/ListDXN"><button class="btn btn-info">Danh sách</button></a>
+    <strong>Đang có @allDon.Count() cần được duyệt</strong>
 </div>
 <div class="row">
     @if (err.Any())
@@ -23,7 +26,7 @@
 </div>
 <EditForm Model="coDon" method="post" OnValidSubmit="add" FormName="register" class="profile-form">
 <DataAnnotationsValidator />
-<div class="row">
+    <div class="row" style="border: 1px solid #000;padding: 10px;">
     <div class="col-sm-5">
             @if (Donachon.Any())
             {
@@ -35,6 +38,7 @@
                                 <th scope="col">#</th>
                                 <th scope="col">Khách hàng</th>
                                 <th>Thời gian</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -44,6 +48,7 @@
                                     <th scope="row">@idd.dxn.Id</th>
                                     <td>@idd.nguoi.Hoten</td>
                                     <td>@idd.dxn.giolaymau @idd.dxn.Ngaydat.ToString("dd/MM/yyyy")</td>
+                                    <td><a style="color:red" @onclick="()=>remove(idd.dxn.Id)">x</a></td>
                                 </tr>
                             }
                         </tbody>
@@ -62,6 +67,21 @@
                     </datalist>
                     <input type="hidden" @bind="idbs" />
                 </div>
+                    @if (SelectedDoctor != null)
+                    {
+                        <div class="row">
+                            <strong>Thông tin nhân viên lấy mẫu</strong>
+                            <div class="col-sm-4"><img src="@SelectedDoctor.Anh" style="width:100%"></div>
+                            <div class="col-sm-8">
+                                <p><strong>Họ tên:</strong> @SelectedDoctor.Hoten</p>
+                                <p><strong>Chức vụ:</strong> @SelectedDoctor.Chucvu</p>
+                                <p><strong>Số điện thoại:</strong> @SelectedDoctor.SDT</p>
+                                <p><strong>Email:</strong> @SelectedDoctor.Email</p>
+                            </div>
+
+                        </div>
+                    }
+
                     <button type="submit" class="btn btn-success">Duyệt toàn bộ đơn đã chọn</button>
         </div>
                 }
@@ -81,7 +101,7 @@
                     <h4 class="card-title">Khách hàng: @coDon.nguoi.Hoten</h4>
                     <p class="card-text"><strong>Địa chỉ: </strong> @coDon.diachi</p>
                     <p class="card-text"><strong>Giới tính: </strong> @gioitinh(coDon.nguoi.Gioitinh)</p>
-                    <p class="card-text"><strong>Năm sinh: </strong> @coDon.nguoi.Tuoi</p>
+                    <p class="card-text"><strong>Năm sinh: </strong> @coDon.nguoi.Ngaysinh</p>
                     <h4 class="card-title">Thông tin liên lạc</h4>
                     <p class="card-text"><strong>SDT: </strong> @coDon.nguoi.SDT</p>
                     <p class="card-text"><strong>Email: </strong> @coDon.nguoi.Email</p>
@@ -95,38 +115,13 @@
                             <div class="form-group">
                                 <label for="giolaymau">Giờ lấy máu</label>
                                 <InputSelect id="giolaymau" @bind-Value="coDon.dxn.giolaymau" class="form-control">
-                                    <option value="5h30">5h30</option>
-                                    <option value="6h">6h</option>
-                                    <option value="6h30">6h30</option>
-                                    <option value="7h">7h</option>
-                                    <option value="7h30">7h30</option>
-                                    <option value="8h">8h</option>
-                                    <option value="8h30">8h30</option>
-                                    <option value="9h">9h</option>
-                                    <option value="9h30">9h30</option>
-                                    <option value="10h">10h</option>
-                                    <option value="10h30">10h30</option>
-                                    <option value="11h">11h</option>
-                                    <option value="11h30">11h30</option>
-                                    <option value="12h">12h</option>
-                                    <option value="12h30">12h30</option>
-                                    <option value="13h">13h</option>
-                                    <option value="13h30">13h30</option>
-                                    <option value="14h">14h</option>
-                                    <option value="14h30">14h30</option>
-                                    <option value="15h">15h</option>
-                                    <option value="15h30">15h30</option>
-                                    <option value="16h">16h</option>
-                                    <option value="16h30">16h30</option>
-                                    <option value="17h">17h</option>
-                                    <option value="17h30">17h30</option>
-                                    <option value="18h">18h</option>
-                                    <option value="18h30">18h30</option>
-                                    <option value="19h">19h</option>
-                                    <option value="19h30">19h30</option>
-                                    <option value="20h">20h</option>
-                                    <option value="20h30">20h30</option>
-                                    <option value="21h">21h</option>
+                                    @if (timeList.Any())
+                                    {
+                                        @foreach (var time in timeList)
+                                        {
+                                            <option value="@time">@time</option>
+                                        }
+                                    }
                                 </InputSelect>
                             </div>
                             <div class="form-group">
@@ -142,7 +137,7 @@
                             <ul class="list-group list-group-flush">
                                 @foreach (var bs in coDon.gxndachon)
                                 {
-                                    <li class="list-group-item"><strong>Tên gói: </strong>@bs.TenGoi  -  <h5 style="color:forestgreen;">Giá:@bs.Gia</h5></li>
+                                    <li @onclick="()=>mogoi(bs.Id)" data-toggle="modal" data-target="#myModal" class="list-group-item"><strong>Tên gói: </strong>@bs.TenGoi  -  <h5 style="color:forestgreen;">Giá:@bs.Gia</h5></li>
                                 }
                                </ul>
                         </div>
@@ -155,6 +150,7 @@
 </EditForm>
 <div class="row" style="height:200px"></div>
 @code {
+    List<string> timeList = new();
     protected static int i { get; set; } = 0;
     protected static int icheck { get; set; } = 0;
     [JSInvokable]
@@ -175,7 +171,8 @@
         i++;
 
     }
-    public static Boolean kt = false;
+    Boolean okgoi = false;
+    public static Boolean kt = false,hienthi=false;
     public static int haha { get; set; } = new();
     public List<DonXetNghiem> AllDXN { get; set; } = new();
     [SupplyParameterFromForm]
@@ -184,7 +181,7 @@
     public List<Don> Donachon { get; set; } = new();
     public static List<int> iddon { get; set; } = new();// Khởi tạo namesave với một giá trị mặc định
     private List<string> err = new List<string>();
-    int valor, idbs;
+    int valor, idbs, idgoi = 0;
     private BacSi SelectedDoctor = null;
     public List<DXNandGXN> dxn { get; set; } = new();
     public long tongtien = 0;
@@ -194,11 +191,31 @@
     public List<BacSi> AllBS { get; set; } = new();
     protected override async Task OnInitializedAsync()
     {
+        await checkbs();
         allGXN = await GXNservice.getallAsync();
         await LoadDon();
         AllBS = await bacsiservice.getallAsync();
         FilteredStaffMembers = AllBS;
         FilterStaffMembers();
+        timeList = GenerateTimeList();
+    }
+    static List<string> GenerateTimeList()
+    {
+        List<string> timeList = new List<string>();
+
+        // Tạo danh sách thời gian từ 05:30 đến 21:00
+        TimeSpan time = TimeSpan.FromHours(5.5); // 05:30
+        TimeSpan endTime = TimeSpan.FromHours(20.8); // 21:00
+        while (time <= endTime)
+        {
+            string startTime = time.ToString(@"hh\:mm");
+            string endTimeString = time.Add(TimeSpan.FromMinutes(15)).ToString(@"hh\:mm");
+            string timeRange = $"{startTime} - {endTimeString}";
+            timeList.Add(timeRange);
+            time = time.Add(TimeSpan.FromMinutes(15)); // Tăng thêm 15 phút
+        }
+
+        return timeList;
     }
     private void FilterStaffMembers()
     {
@@ -209,6 +226,17 @@
         else
         {
             FilteredStaffMembers = AllBS.Where(bs => bs.Hoten.ToLower().Contains(searchQuery.ToLower())).ToList();
+        }
+    }
+    public void remove(int iddonc)
+    {
+        var tt= Donachon.FirstOrDefault(a=>a.dxn.Id == iddonc);
+        Donachon.RemoveAll(a=>a.dxn.Id==iddonc);
+        iddon.Remove(iddonc);
+        allDon.Add(tt);
+        if (Donachon.Count() == 0)
+        {
+            coDon = new();
         }
     }
     public async Task LoadDon()
@@ -250,6 +278,12 @@
             allDon.Add(a);
         }
     }
+    public void mogoi(int id)
+    {
+        okgoi = true;
+        idgoi = id;
+        StateHasChanged();
+    }
     private async Task WriteToConsole()
     {
         kt = true;
@@ -259,6 +293,7 @@
         {
             coDon = Donachon.FirstOrDefault();
         }
+        await JsRuntime.InvokeAsync<object>("toggleInfoWindow");
     }
     public async void Donle(int id)
     {
@@ -304,6 +339,7 @@
         }
         Donachon.Clear();
         coDon = new();
+        navigation.NavigateTo("duyetdon");
     }
     public async void Xulydon()
     {
@@ -351,6 +387,16 @@
         else
         {
             return "Nữ";
+        }
+    }
+    public async Task checkbs()
+    {
+        var authState = await checkbss.GetAuthenticationStateAsync();
+        var UserName = authState.User.Identity.Name;
+        var bs = await bacsiservice.getbyemail(UserName);
+        if (bs == null)
+        {
+            navigation.NavigateTo("/err");
         }
     }
 }
@@ -437,5 +483,29 @@
         }
     }
 </script>
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                @if (okgoi)
+                {
+                    <h4 class="modal-title">Gói xét nghiệm: @idgoi</h4>
+                }
+                <button style="width:auto;height:auto;color:black;" type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                @if (okgoi)
+                {
+                    <CTDNT Id="@idgoi" />
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
