@@ -1,0 +1,58 @@
+﻿@media (max-width: 767px) {
+    .table th, .table td {
+        white-space: nowrap; /* Ngăn chặn việc các cột bị tràn xuống dòng mới */
+    }
+
+    /* Thiết lập độ rộng tối thiểu cho các cột */
+    .table th, .table td {
+        min-width: 100px; /* Điều chỉnh độ rộng tối thiểu tùy thuộc vào nhu cầu của bạn */
+    }
+}
+
+/* Định dạng cho thông báo modal */
+.modal {
+    display: block;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* Định dạng cho nút "Xóa các mục được chọn" và "Chọn tất cả" */
+.mb-3 button {
+    margin-right: 10px;
+}
+
+/* Định dạng cho bảng danh sách đơn xét nghiệm */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+    .table th,
+    .table td {
+        padding: 10px;
+        text-align: left;
+    }
+
+.thead-dark th {
+    background-color: #343a40;
+    color: white;
+}
+
+/* Định dạng cho checkbox */
+.form-check-input[type="checkbox"] {
+    margin-top: 7px;
+}
+
+/* Định dạng cho tổng tiền */
+.total-amount {
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+/* Định dạng cho trang web khi xem trên điện thoại di động */
+@media only screen and (max-width: 768px) {
+    /* Giảm kích thước của tổng tiền */
+    .total-amount {
+        font-size: 16px;
+    }
+}

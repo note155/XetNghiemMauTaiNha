@@ -46,7 +46,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="Mota" class="form-label">Mô tả</label>
-                    <InputText @bind-Value="Input.Mota" class="form-control" id="Mota" />
+                    <InputTextArea @bind-Value="Input.Mota" class="form-control" id="Mota" />
                     <ValidationMessage For="() => Input.Mota" class="text-danger" />
                 </div>
                 <button type="submit" class="btn btn-primary">Lưu</button>
@@ -95,10 +95,6 @@
         if (string.IsNullOrEmpty(Input.ThoiGian))
         {
             err.Add("Thời gian không được để trống");
-        }
-        if (string.IsNullOrEmpty(Input.Mota))
-        {
-            err.Add("Mô tả không được để trống");
         }
 
         if (err.Count == 0)

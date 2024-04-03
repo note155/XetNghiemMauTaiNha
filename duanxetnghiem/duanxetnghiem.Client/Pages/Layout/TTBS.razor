@@ -1,0 +1,51 @@
+﻿@rendermode InteractiveAuto
+<div class="package-container">
+    <div class="row">
+        <div class="col-sm-4">
+            <img  src="@Input.Anh" class="doctor-img" alt="Ảnh bác sĩ">
+            <h4 class="doctor-name">@Input.Hoten</h4>
+            <p><span class="specialization1">Chuyên khoa: @Input.Chuyenkhoa</span></p>
+        </div>
+        <div class="col-sm-8">
+            <h2 class="section-title">HOẠT ĐỘNG CHUYÊN NGÀNH</h2>
+            <div class="row">
+                <div class="col-sm-6">
+                    <p><strong>Trình độ:</strong> <span class="qualification">@Input.Trinhdo</span></p>
+                    <p><strong>Chức vụ:</strong> <span class="position">@Input.Chucvu</span></p>
+                </div>
+                <div class="col-sm-6">
+                    <p><strong>Số năm kinh nghiệm:</strong> <span class="experience">@Input.Sonamkn</span></p>
+                    <p><strong>Chuyên khoa:</strong> <span class="specialization">@Input.Chuyenkhoa</span></p>
+                </div>
+            </div>
+            <div class="preview-section">
+                <h3>Thông tin khác:</h3>
+                <div class="preview-content">
+                    @preview
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+    public BacSi Input { get; set; } = new();
+    private MarkupString preview;
+    private int currentId;
+    protected override async Task OnInitializedAsync()
+    {
+        Input = await bacsiservice.getbyid(id);
+        preview = new MarkupString(Input.Thongtin);
+    }
+    protected override async Task OnParametersSetAsync()
+    {
+        if (currentId != id)
+        {
+            currentId = id;
+            Input = await bacsiservice.getbyid(currentId);
+            preview = new MarkupString(Input.Thongtin);
+        }
+    }
+}

@@ -70,10 +70,18 @@
                 </InputSelect>
             </div>
             <div class="form-group">
-                <label class="form-label" for="Tuoi">Ngày sinh của bạn</label>
+                <label class="form-label" for="Tuoi">Ngày sinh </label>
                 <InputDate @bind-Value="Input.Ngaysinh" class="form-control" placeholder="" />
                 <ValidationMessage For="() => Input.Ngaysinh" class="text-danger" />
             </div>
+            @if (kt != null)
+            {
+                <div class="form-group">
+                    <label class="form-label" for="Diachi">Quan hệ</label>
+                    <InputText @bind-Value="Input.Quanhe" class="form-control" placeholder="" />
+                    <ValidationMessage For="() => Input.Quanhe" class="text-danger" />
+                </div>
+            }
             <button type="submit" class="w-100 btn btn-lg btn-primary">Cập Nhật Thông Tin</button>
         </EditForm>
     </div>
@@ -105,10 +113,12 @@
     List<string> HPVang = new List<string> { "thị trấn Phú Đa", "xã Phú An", "xã Phú Diên", "xã Phú Gia", "xã Phú Hải", "xã Phú Hồ", "xã Phú Lương", "xã Phú Mỹ", "xã Phú Thuận", "xã Phú Xuân", "xã Vinh An", "xã Vinh Hà", "xã Vinh Thanh", "xã Vinh Xuân" };
     List<string> HQDien = new List<string> { "thị trấn Sịa", "xã Quảng An", "xã Quảng Công", "xã Quảng Lợi", "xã Quảng Ngạn", "xã Quảng Phú", "xã Quảng Phước", "xã Quảng Thái", "xã Quảng Thành", "xã Quảng Thọ", "xã Quảng Vinh" };
     int a;
+    public User kt { get; set; } = new();
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         UserName = authState.User.Identity.Name;
+        kt = await Usertservice.getuserbyemail(UserName);
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

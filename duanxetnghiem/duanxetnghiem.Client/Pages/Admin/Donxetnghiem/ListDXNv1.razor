@@ -7,7 +7,7 @@
 <div id="bingMap" style="width: 100%; height: 400px;"></div>
 <div id="infoWindow" class="infoWindow">
     <div id="infoContent"></div>
-    <button  class="btn btn-danger" id="closeBtn" onclick="toggleInfoWindow()">Đóng</button><button class="btn btn-success mx-3"  @onclick="WriteToConsole">Thêm vào danh sách</button>
+    <button class="btn btn-danger" id="closeBtn" onclick="toggleInfoWindowtat()">Đóng</button><button class="btn btn-success mx-3" @onclick="WriteToConsole">Thêm vào danh sách</button>
 </div>
 <div class="row" style="height:100px">
     <a style="width:auto" href="/ListDXN"><button class="btn btn-info">Danh sách</button></a>
@@ -101,7 +101,7 @@
                     <h4 class="card-title">Khách hàng: @coDon.nguoi.Hoten</h4>
                     <p class="card-text"><strong>Địa chỉ: </strong> @coDon.diachi</p>
                     <p class="card-text"><strong>Giới tính: </strong> @gioitinh(coDon.nguoi.Gioitinh)</p>
-                    <p class="card-text"><strong>Năm sinh: </strong> @coDon.nguoi.Ngaysinh</p>
+                        <p class="card-text"><strong>Ngày sinh: </strong> @coDon.nguoi.Ngaysinh.ToString("dd/MM/yyyy")</p>
                     <h4 class="card-title">Thông tin liên lạc</h4>
                     <p class="card-text"><strong>SDT: </strong> @coDon.nguoi.SDT</p>
                     <p class="card-text"><strong>Email: </strong> @coDon.nguoi.Email</p>
@@ -189,6 +189,7 @@
     private string searchQuery = "";
     private List<BacSi> FilteredStaffMembers { get; set; } = new();
     public List<BacSi> AllBS { get; set; } = new();
+    
     protected override async Task OnInitializedAsync()
     {
         await checkbs();
@@ -199,6 +200,7 @@
         FilterStaffMembers();
         timeList = GenerateTimeList();
     }
+
     static List<string> GenerateTimeList()
     {
         List<string> timeList = new List<string>();
@@ -293,7 +295,7 @@
         {
             coDon = Donachon.FirstOrDefault();
         }
-        await JsRuntime.InvokeAsync<object>("toggleInfoWindow");
+        await JsRuntime.InvokeAsync<object>("toggleInfoWindowtat");
     }
     public async void Donle(int id)
     {
@@ -459,7 +461,11 @@
         var infoWindow = document.getElementById("infoWindow");
         infoWindow.classList.toggle("show");
     }
-
+    function toggleInfoWindowtat() {
+        var infoContent = document.getElementById("infoContent");
+        infoContent.innerHTML = "";
+        toggleInfoWindow();
+    }
     function showInfoWindow(content) {
         var infoContent = document.getElementById("infoContent");
         infoContent.innerHTML = content;

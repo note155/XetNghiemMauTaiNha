@@ -17,6 +17,9 @@
      /* Hiển thị trên cùng một dòng */
     /* Tạo khoảng cách giữa các mục */
 }
+.modal-content {
+    width: 900px;
+}
 .profile-form {
     display: flex;
     flex-direction: column;

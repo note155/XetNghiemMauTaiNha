@@ -1,0 +1,91 @@
+﻿
+@media (max-width: 700px) {
+    .doctor-img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .col-sm-4 {
+        margin-bottom: 20px;
+    }
+
+    .col-sm-8 {
+        padding-left: 0;
+    }
+}
+
+/* CSS chung */
+.package-container {
+    max-width: 100%;
+    padding: 40px 20px; /* Thêm padding cho các cạnh của container để tránh tràn ra ngoài màn hình */
+    box-sizing: border-box; /* Đảm bảo padding không làm thay đổi kích thước của container */
+}
+
+.col-sm-4 {
+    /* Đường dẫn đến hình nền */
+    background-image: url('imgchitietbacsi/hinhen2.png');
+    height: 600px;
+    /* Kích thước và tùy chỉnh hiển thị hình nền */
+    background-size: cover;
+    background-position: center;
+    /* Tạo một lớp nền mờ */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    /* Căn lề nội dung vào giữa */
+    text-align: center;
+}
+
+.doctor-img {
+    width: 80%;
+    height: auto;
+    border-radius: 50%; /* Bo tròn ảnh */
+    display: block; /* Đảm bảo phần tử là một khối */
+    margin-left: auto; /* Căn lề trái */
+    margin-right: auto; /* Căn lề phải */
+}
+
+.doctor-name {
+    margin-top: 60px;
+    text-align: center;
+    font-size: 1.6rem;
+}
+
+.specialization1 {
+    text-align: center; /* Căn lề nội dung vào giữa */
+    display: block; /* Đảm bảo nội dung là một khối */
+    font-size: 1.1rem;
+    color: #3398ff;
+}
+
+.btn-primary {
+    margin-top: 50px;
+    font-size: 18px; /* Điều chỉnh kích thước font của nút */
+    padding: 10px 20px; /* Điều chỉnh khoảng cách bên trong nút */
+    display: block; /* Đảm bảo nút là một khối */
+    margin-left: auto; /* Căn lề trái */
+    margin-right: auto; /* Căn lề phải */
+    text-align: center; /* Căn lề văn bản vào giữa */
+    width: 100%; /* Đảm bảo chiều rộng của nút phù hợp với nội dung */
+    margin-bottom: 50px;
+}
+
+.section-title {
+    font-size: 2.3rem;
+    margin-bottom: 45px;
+}
+
+.preview-section {
+    margin-top: 30px;
+}
+
+.preview-content {
+    padding: 15px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+p {
+    font-size: 18px;
+}
+
+.qualification {
+}

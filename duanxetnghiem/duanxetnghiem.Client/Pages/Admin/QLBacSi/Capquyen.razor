@@ -3,9 +3,15 @@
 @attribute [Authorize]
 @layout AdminLayout
 <h3>Cấp Quyền</h3>
+
+<div class="search-container">
+	<input type="text" @bind="Inputkq" @bind:event="oninput" @onkeypress="nhanenter" placeholder="Nhập tên bác sĩ" />
+	<button @onclick="timkiem">Tìm kiếm</button>
+</div>
+
 <div class="row">
 	<div class="col-sm-6">
-		<h4>Bác sĩ được cấp quyền</h4>
+		<h4>Bác sĩ đã được cấp quyền</h4>
 		<table class="table">
 			<thead>
 				<tr>
@@ -14,10 +20,10 @@
 				</tr>
 			</thead>
 			<tbody>
-				@foreach(var bs in dscq)
+				@foreach (var bs in dscq)
 				{
 					<tr>
-						<td>@bs.Hoten</td>
+						<td data-toggle="modal" data-target="#myModal" @onclick="()=>htbs(bs.Id)">@bs.Hoten</td>
 						<td><button @onclick="()=>huyquyen(bs.Id)"> Hủy quyền</button></td>
 					</tr>
 				}
@@ -25,7 +31,7 @@
 		</table>
 	</div>
 	<div class="col-sm-6">
-		<h4>Bác sĩ được chưa cấp quyền</h4>
+		<h4>Bác sĩ chưa được cấp quyền</h4>
 		<table class="table">
 			<thead>
 				<tr>
@@ -37,7 +43,7 @@
 				@foreach (var bs in dsbs)
 				{
 					<tr>
-						<td>@bs.Hoten</td>
+						<td data-toggle="modal" data-target="#myModal" @onclick="()=>htbs(bs.Id)">@bs.Hoten</td>
 						<td><button @onclick="()=>capquyenbs(bs.Id)"> Cấp quyền</button></td>
 					</tr>
 				}
@@ -45,14 +51,44 @@
 		</table>
 	</div>
 </div>
+<!-- Modal -->
+<div  id="myModal" class="modal fade" role="dialog">
+	<div class="modal-dialog" >
+
+		<!-- Modal content-->
+		<div  class="modal-content">
+			@if (haha)
+			{
+				<div  class="modal-header">
+					Chi tiết bác sĩ: #@idbs
+					<button style="width:auto;height:auto;color:black;" type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div  class="modal-body">
+					<TTBS id="@idbs"/>
+				</div>
+			}
+		</div>
+	</div>
+</div>
 @code {
 	public List<BacSi> dsbs { get; set; } = new();
 	public List<BacSi> dscq { get; set; } = new();
 	public List<BacSi> allbs { get; set; } = new();
+	public List<BacSi> allbs1 { get; set; } = new();
+	public String Inputkq { get; set; } = new("");
+	int idbs = 0;
+	Boolean haha = false;
 	protected override async Task OnInitializedAsync()
 	{
 		allbs = await bacsiservice.getallAsync();
-		foreach(var bs in allbs)
+		allbs1 = allbs;
+		getbs();
+	}
+	public void getbs()
+	{
+		dscq.Clear();
+		dsbs.Clear();
+		foreach (var bs in allbs)
 		{
 			if (bs.trangthai == "1")
 			{
@@ -63,6 +99,11 @@
 				dsbs.Add(bs);
 			}
 		}
+	}
+	public void htbs(int bs)
+	{
+		idbs = bs;
+		haha = true;
 	}
 	public async Task capquyenbs(int id)
 	{
@@ -79,5 +120,25 @@
 		await bacsiservice.updateAsync(vs);
 		dsbs.Add(vs);
 		dscq.Remove(vs);
+	}
+	private async Task nhanenter(KeyboardEventArgs e)
+	{
+		if (e.Key == "Enter")
+		{
+			timkiem();
+		}
+	}
+	private async Task timkiem()
+	{
+		allbs = allbs1;
+		if (string.IsNullOrEmpty(Inputkq))
+		{			
+			getbs();
+		}
+		else
+		{
+			allbs = allbs.Where(dx => dx.Hoten.Contains(Inputkq, StringComparison.OrdinalIgnoreCase)).ToList();
+			getbs();
+		}
 	}
 }

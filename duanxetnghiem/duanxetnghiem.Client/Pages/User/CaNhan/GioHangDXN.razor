@@ -5,7 +5,6 @@
 @using Shared.form
 @inject NavigationManager navigation;
 @attribute [Authorize]
-
 <h1>Đơn Xét Nghiệm</h1>
 
 @if (ChuaChonGoi)
@@ -35,16 +34,20 @@
 
 @if (GHang.Any())
 {
-    <button class="btn btn-danger" @onclick="DeleteSelected">Xóa các mục được chọn</button>
+    <div class="mb-3">
+        <button class="btn btn-danger" @onclick="DeleteSelected">Xóa các mục được chọn</button>
+        <button class="btn btn-success" @onclick="chontatca">@nd</button>
+    </div>
+    <div class="table-responsive">
     <table class="table table-striped mt-3">
         <thead class="thead-dark">
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Người sử dụng</th>
-                <th>Gói Xét Nghiệm</th>
+                <th scope="col">Gói Xét Nghiệm</th>
                 <th scope="col">Số tiền của đơn</th>
                 <th scope="col"></th>
-                <th scope="col">Chọn</th> <!-- Thêm cột chọn -->
+                <th scope="col">Chọn</th>
             </tr>
         </thead>
         <tbody>
@@ -54,35 +57,35 @@
                     <td>@ghang.id</td>
                     <td>@ghang.iduser</td>
                     <td>
-                        @foreach(var gxn in ghang.listgxn)
+                        @foreach (var gxn in ghang.listgxn)
                         {
-                            <p>@gxn.TenGoi</p>
+                            <p>@gxn.TenGoi - <span class="text-success">@gxn.Gia.ToString("N0") VND</span></p>
                         }
                     </td>
-                    <td>@ghang.sotien</td>
+                    <td>@ghang.sotien.ToString("N0") VND</td>
                     <td><a href="/EditDL/@ghang.id" class="btn btn-success">Chỉnh sửa</a></td>
                     <td>
                         <div class="form-check form-switch">
                             <input @bind=ghang.chon class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
                         </div>
                     </td>
-                    <!-- Thêm checkbox -->
                 </tr>
             }
         </tbody>
     </table>
-    <a class="btn btn-success float-end mt-3" @onclick="@(() => add())">Thanh toán</a>
-    <br />
-    <p class="total-amount">Tổng tiền: <strong style="color:red;font-size:30px;">@TinhTongTien() VND</strong></p>
-    <div class="row" style="height:500px"></div>
+    </div>
+    <div class="mb-3">
+        <a class="btn btn-success float-end" @onclick="@(() => add())">Thanh toán</a>
+        <p class="total-amount">Tổng tiền: <strong style="color:red;font-size:30px;">@TinhTongTien() VND</strong></p>
+    </div>
+    <div class="row" style="height:100px"></div>
 }
-
 
 @code {
     [Inject]
     protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
-
-    Boolean check = false;
+    Boolean nhan = false;
+    string nd = "Chọn tất cả";
     public List<DonXetNghiem> DXNList { get; set; } = new();
     public List<gio> GHang { get; set; } = new();
     public string UserName { get; set; }
@@ -150,7 +153,26 @@
             g.sotien = tt.Tongtien;
         }
     }
-
+    public void chontatca()
+    {
+        if (nd == "Chọn tất cả")
+        {
+            foreach (var a in GHang)
+            {
+                a.chon = true;
+            }
+            nd = "Bỏ chọn tất cả";
+        }
+        else
+        {
+            foreach (var a in GHang)
+            {
+                a.chon = false;
+            }
+            nd = "Chọn tất cả";
+        }
+        
+    }
     private async void add()
     {
         var itemsToRemove = GHang.Where(student => student.chon == true).ToList();
