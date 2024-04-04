@@ -9,7 +9,7 @@
     <p>@err</p>
 }
 
-<div class="container mt-5 text-center xetnghiem-container " style="margin-bottom: 30rem;">
+<div class="container mt-5 text-center xetnghiem-container " style="margin-bottom: 38rem;">
     <div class="card-body overlay">
         <h4 class="card-title">Xét Nghiệm Máu Tại Nhà</h4>
         <p class="card-text">Dịch vụ xét nghiệm máu chất lượng cao, tiện lợi và an toàn ngay tại nhà bạn</p>
@@ -111,7 +111,7 @@
         <EditForm Model="Inputkq" method="post" OnValidSubmit="add" FormName="register">
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" role="alert" />
-            <InputText style="width: 70%; height: 40px; border-radius: 5px;" @bind-Value="Inputkq" placeholder="Nhập kết quả xét nghiệm" />
+            <InputText style="width: 80%; height: 40px; border-radius: 5px;" @bind-Value="Inputkq" placeholder="Nhập kết quả xét nghiệm" />
             <ValidationMessage For="() => Inputkq" class="text-danger" />
             <br>
             <br>
@@ -129,60 +129,50 @@
 <!-- Dịch vụ của chúng tôi -->
 <div class="package-container d-flex align-items-center justify-content-center dichvu-container">
     <div class="col-md-6 d-flex flex-column align-items-center">
-        <h4>
-            Dịch vụ của chúng tôi
-        </h4>
-        <p>
-            Chúng tôi cung cấp các gói xét nghiệm máu chuyên sâu.
-        </p>
-        <p>
-            Đảm bảo phục vụ mọi nhu cầu của bạn.
-        </p>
+        <h4>Dịch vụ của chúng tôi</h4>
+        <p>Chúng tôi cung cấp các gói xét nghiệm máu chuyên sâu.</p>
+        <p>Đảm bảo phục vụ mọi nhu cầu của bạn.</p>
         <a href="/dichvu" class="btn btn-dark">Gói dịch vụ Y Khoa</a>
     </div>
     <div class="col-md-6 d-flex flex-column align-items-center">
         <div class="row">
-            <div class=" col-md-6 ">
-                <div class="card1" style="margin-bottom:8px;">
-                    <div class="package-item-photo" b-rxw84ra1o5="">
-                        <a  class="post-image-container" tabindex="-1" b-rxw84ra1o5="">
-                            <div class="package-item-photo" b-rxw84ra1o5="">
-                                <img src="img/1.jpg" alt="" loading="lazy" b-rxw84ra1o5="">
+            <div class="col-md-6">
+                <div class="card1" style="margin-bottom: 8px;">
+                    <div class="package-item-photo">
+                        <a class="post-image-container" tabindex="-1">
+                            <div class="package-item-photo">
+                                <img src="img/1.jpg" alt="" loading="lazy">
                             </div>
                         </a>
                     </div>
-                    <div class="package-item-detail" b-rxw84ra1o5="">
-                        <div class="package-item-price" b-rxw84ra1o5="">120.000 VND</div>
-                        <h3 class="package-item-title" b-rxw84ra1o5="">Bộ mỡ máu (4 Chất)</h3>
-                        <div class="package-item-meta" b-rxw84ra1o5="">
-                            <div class="package-item-gender" b-rxw84ra1o5="">Thời gian : 1 Ngày </div>
-                            <div class="plus-icon-container" style=" top: 55px;" b-rxw84ra1o5="">
-                                <div class="actions1" b-rxw84ra1o5="">
-                                  
-                                </div>
+                    <div class="package-item-detail">
+                        <div class="package-item-price">2.300.000 VND</div>
+                        <h3 class="package-item-title">gói cơ bản</h3>
+                        <div class="package-item-meta">
+                            <div class="package-item-gender">Thời gian: 1 tiếng</div>
+                            <div class="plus-icon-container" style="top: 55px;">
+                                <div class="actions1"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 ">
+            <div class="col-md-6">
                 <div class="card1">
-                    <div class="package-item-photo" b-rxw84ra1o5="">
-                        <a  class="post-image-container" tabindex="-1" b-rxw84ra1o5="">
-                            <div class="package-item-photo" b-rxw84ra1o5="">
-                                <img src="img/1.jpg" alt="" loading="lazy" b-rxw84ra1o5="">
+                    <div class="package-item-photo">
+                        <a class="post-image-container" tabindex="-1">
+                            <div class="package-item-photo">
+                                <img src="img/1.jpg" alt="" loading="lazy">
                             </div>
                         </a>
                     </div>
-                    <div class="package-item-detail" b-rxw84ra1o5="">
-                        <div class="package-item-price" b-rxw84ra1o5="">300.000 VND</div>
-                        <h3 class="package-item-title" b-rxw84ra1o5="">Đường máu</h3>
-                        <div class="package-item-meta" b-rxw84ra1o5="">
-                            <div class="package-item-gender" b-rxw84ra1o5="">Thời gian : 1 Ngày </div>
-                            <div class="plus-icon-container" style=" top: 55px;" b-rxw84ra1o5="">
-                                <div class="actions1" b-rxw84ra1o5="">
-                                   
-                                </div>
+                    <div class="package-item-detail">
+                        <div class="package-item-price">2.300.000 VND</div>
+                        <h3 class="package-item-title">gói cơ bản</h3>
+                        <div class="package-item-meta">
+                            <div class="package-item-gender">Thời gian: 1 tiếng</div>
+                            <div class="plus-icon-container" style="top: 55px;">
+                                <div class="actions1"></div>
                             </div>
                         </div>
                     </div>
@@ -499,7 +489,7 @@
             <div class="col-md-4">
                 <div class="card1-body d-grid gap-4">
                     <h3 class="card1-title">Quy Trình Thực Hiện</h3>
-                    <div class="card1 p-2">
+                    <div class="card2 p-2">
                         <div class="card-header">
                             <h5 class="card-title1">Đặt lịch</h5>
                         </div>
@@ -507,7 +497,7 @@
                             <p class="card-text1">Đặt trực tiếp tại website hoặc liện hệ 0988999999</p>
                         </div>
                     </div>
-                    <div class="card1  p-2">
+                    <div class="card2  p-2">
                         <div class="card-header">
                             <h5 class="card-title1">Lấy mẫu</h5>
                         </div>
@@ -515,7 +505,7 @@
                             <p class="card-text1">Nhân viên y tế sẽ đến lấy mẫu trực tiếp tại nhà.</p>
                         </div>
                     </div>
-                    <div class="card1 p-2">
+                    <div class="card2 p-2">
                         <div class="card-header ">
                             <h5 class="card-title1">Trả kết quả</h5>
                         </div>
@@ -523,7 +513,7 @@
                             <p class="card-text1">Kết quả sẽ gửi đến bạn một cách nhanh ngay khi có kết quả.</p>
                         </div>
                     </div>
-                    <div class="card1 p-2">
+                    <div class="card2 p-2">
                         <div class="card-header ">
                             <h5 class="card-title1">Tư vấn</h5>
                         </div>

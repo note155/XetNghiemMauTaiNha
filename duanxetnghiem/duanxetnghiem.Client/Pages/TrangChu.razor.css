@@ -38,13 +38,14 @@
 
 .btn {
     width: 250px;
-    margin-right: 15px;
+    margin-right: 10px;
     font-size: 18px;
 }
 
 .btn-outline-dark {
     color: #000000;
     border-color: #000000;
+    margin-bottom: 5px;
 }
 
     .btn-outline-dark:hover {
@@ -56,6 +57,7 @@
     background-color: #000;
     color: #fff;
     border-color: #fff;
+    margin-bottom: 5px;
 }
 
     .btn-dark:hover {
@@ -199,26 +201,57 @@ p {
     text-align: center;
 }
 
+.card1 {
+    background-color: #fff; /* Màu nền trắng */
+    padding: 20px; /* Khoảng cách lề */
+    border-radius: 10px; /* Bo tròn góc */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+}
+
+.package-item-detail {
+    text-align: center; /* Canh giữa nội dung */
+    padding: 15px; /* Khoảng cách giữa các phần tử bên trong */
+}
+
+.package-item-price {
+    font-size: 1.5rem; /* Kích thước chữ số tiền */
+    font-weight: bold; /* Đậm chữ số tiền */
+    margin-bottom: 10px; /* Khoảng cách với phần tử tiếp theo */
+    background-color: #66b2ff;
+    border-radius: 5px;
+    color: #ffffff; /* Màu chữ */
+    height: 45px;
+}
+
+.package-item-title {
+    font-size: 1.2rem; /* Kích thước tiêu đề */
+    margin-bottom: 10px; /* Khoảng cách với phần tử tiếp theo */
+}
+
+.package-item-meta {
+    margin-top: 10px; /* Khoảng cách từ phần tử tiêu đề */
+}
+
+.package-item-gender {
+    font-style: italic; /* Font chữ in nghiêng */
+}
+
 .plus-icon-container {
-    display: inline-block;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 70px;
-    right: 0;
-    margin: 10px;
-    font-size: 0.1rem;
-    color: #f00; /* Màu trắng */
-    font-size: 0.1rem;
+    position: relative; /* Định vị tương đối */
 }
 
-.plus-icon {
-    color: #f00; /* Màu trắng */
-    font-size: 0.1rem;
+.actions1 {
+    /* Thêm CSS cho hành động nút plus */
 }
 
+.package-item-photo img {
+    transition: transform 0.3s ease; /* Hiệu ứng chuyển động */
+}
 
+.package-item-photo:hover img,
+.package-item-photo:focus img {
+    transform: scale(1.1); /* Phóng to hình ảnh khi hover hoặc focus */
+}
 /*Vì sao chọn chúng tôi*/
 .visao-container {
     margin-bottom: 50px; /* Điều chỉnh giảm khoảng cách dưới */
@@ -401,7 +434,7 @@ p {
     }
 
 /*quy trinh dat lich*/
-.card1 {
+.card2 {
     background-image: url('imgtrangchu/hinhnen19.png');
     background-size: cover; /* Đảm bảo hình nền được phủ toàn bộ phần nền */
     background-position: center; /* Căn giữa hình nền */
@@ -411,7 +444,7 @@ p {
     background-color: #ffffff; /* Màu nền ban đầu */
 }
 
-.card1-title {
+.card2-title {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 600;
@@ -494,4 +527,3 @@ p {
         width: 100%; /* Đảm bảo iframe chiếm toàn bộ chiều rộng của phần tử cha */
         height: 400px; /* Đặt chiều cao của iframe */
     }
-
