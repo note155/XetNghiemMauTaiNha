@@ -4,10 +4,6 @@
 @using duanxetnghiem.Client.Pages.Admin
 @inject NavigationManager navigation;
 
-@if (UserName != null && bs != null)
-{
-    <NavMenu />
-}
 @if (err != "")
 {
     <p>@err</p>

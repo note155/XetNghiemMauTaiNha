@@ -19,116 +19,63 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    @if (TrangChu.bs != null && TrangChu.bs.trangthai == "1")
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link" href="/duyetdon">Đơn cần duyệt</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Quản lý đơn
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="/listDXNDD">Đơn đã duyệt</a>
-                                <a class="dropdown-item" href="/listDXNTC">Đơn bị từ chối</a>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/DXNBS">Đơn cần lấy mẫu</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/listchatBS">Tư vấn (Chat)</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/ListchoXN">Xác nhận mẫu</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/listDXNKQ">Trả kết quả</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Quản lý
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="/listBS">Bác sĩ</a>
-                                <a class="dropdown-item" href="/listGXN">Gói xét nghiệm</a>
-                                <a class="dropdown-item" href="/listdscoKQ">Đơn có kết quả</a>
-                                <a class="dropdown-item" href="/listTV">DS Yêu cầu tư Vấn</a>
-                                <a class="dropdown-item" href="/trangchuthongke">Thống kê</a>
-                                <a class="dropdown-item" href="/Capquyen">Cấp Quyền</a>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <form action="Account/Logout" method="post">
-                                <AntiforgeryToken />
-                                <input type="hidden" name="ReturnUrl" value="#home" />
-                                <button type="submit" class="btn btn-light p-2">
-                                    Đăng xuất
-                                </button>
-                            </form>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link disabled" href="duyetdon" aria-disabled="false">Đơn cần duyệt</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Quản lý đơn
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="nav-link disabled" href="#" aria-disabled="false">Đơn đã duyệt</a>
-                                <a class="nav-link disabled" href="#" aria-disabled="false">Đơn bị từ chối</a>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/DXNBS">Đơn cần lấy mẫu</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/listchatBS">Tư vấn (Chat)</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/ListchoXN">Xác nhận mẫu</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/listDXNKQ">Trả kết quả</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Quản lý
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#" aria-disabled="false">Bác sĩ</a>
-                                <a class="dropdown-item" href="#" aria-disabled="false">Gói xét nghiệm</a>
-                                <a class="dropdown-item" href="#" aria-disabled="false">Đơn có kết quả</a>
-                                <a class="dropdown-item" href="#" aria-disabled="false">DS Yêu cầu tư Vấn</a>
-                                <a class="dropdown-item" href="#" aria-disabled="false">Thống kê</a>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <form action="Account/Logout" method="post">
-                                <AntiforgeryToken />
-                                <input type="hidden" name="ReturnUrl" value="#home" />
-                                <button type="submit" class="btn btn-light p-2">
-                                    Đăng xuất
-                                </button>
-                            </form>
-                        </li>
-
-                    }
+                    <li class="nav-item">
+                        <a class="nav-link" href="/listDXN">Đơn cần duyệt</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Quản lý đơn
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/listDXNDD">Đơn đã duyệt</a>
+                            <a class="dropdown-item" href="/listDXNTC">Đơn bị từ chối</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/ListchoXN">Xác nhận mẫu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/listDXNKQ">Trả kết quả</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/listchatBS">Tư Vấn(Chat)</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/DXNBS">Đơn cần lấy mẫu</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Quản lý
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/SuattBS">Thông tin cá nhân</a>
+                            <a class="dropdown-item" href="/listBS">Bác sĩ</a>
+                            <a class="dropdown-item" href="/listGXN">Gói xét nghiệm</a>
+                            <a class="dropdown-item" href="/listdscoKQ">Kết quả</a>
+                            <a class="dropdown-item" href="/listTV">Tư Vấn</a>
+                            <a class="dropdown-item" href="/trangchuthongke">Thống kê</a>
+                            <a class="dropdown-item" href="/Capquyen">Cấp quyền</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <form action="Account/Logout" method="post">
+                            <AntiforgeryToken />
+                            <input type="hidden" name="ReturnUrl" value="#home" />
+                            <button type="submit" class="btn btn-light p-2">
+                                Đăng xuất
+                            </button>
+                        </form>
+                    </li>
                 </Authorized>
-                @* <NotAuthorized>
-                <li class="nav-item">
-                <a class="nav-link" href="Account/Login">Đăng nhập</a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link" href="Account/Register">Đăng ký</a>
-                </li>
-                </NotAuthorized> *@
-
+                <NotAuthorized>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Account/Login">Đăng nhập</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Account/Register">Đăng ký</a>
+                    </li>
+                </NotAuthorized>
             </AuthorizeView>
-
         </ul>
     </div>
 </nav>

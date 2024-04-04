@@ -80,6 +80,7 @@
 	Boolean haha = false;
 	protected override async Task OnInitializedAsync()
 	{
+		await checkbs();
 		allbs = await bacsiservice.getallAsync();
 		allbs1 = allbs;
 		getbs();
@@ -104,6 +105,16 @@
 	{
 		idbs = bs;
 		haha = true;
+	}
+	public async Task checkbs()
+	{
+		var authState = await checkbss.GetAuthenticationStateAsync();
+		var UserName = authState.User.Identity.Name;
+		var bs = await bacsiservice.getbyemail(UserName);
+		if (bs == null)
+		{
+			navigation.NavigateTo("/err");
+		}
 	}
 	public async Task capquyenbs(int id)
 	{

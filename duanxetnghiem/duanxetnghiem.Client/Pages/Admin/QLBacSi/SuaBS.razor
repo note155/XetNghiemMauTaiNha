@@ -1,0 +1,231 @@
+﻿@page "/SuattBS"
+@inject HttpClient client
+@rendermode InteractiveAuto
+@inject NavigationManager navigation;
+@attribute [Authorize]
+@layout AdminLayout
+@using Blazored.TextEditor
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <img src=@Input.Anh class="profile-image" alt="Avatar">
+            <EditForm Model="@Ticket" method="post" OnValidSubmit="@OnSubmit" enctype="multipart/form-data">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <InputFile class="form-control mt-2" OnChange="@setfile" multiple />
+                <button class="btn btn-primary mt-2" type="submit">Xác Nhận Đổi Ảnh</button>
+            </EditForm>
+        </div>
+        <div class="col-md-8">
+            <h2 class="mb-4">Thông tin bác sĩ</h2>
+            <EditForm Model="Input" method="post" OnValidSubmit="add" FormName="register" class="profile-form">
+                <DataAnnotationsValidator />
+                <hr />
+                @if (err.Any())
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @foreach (var error in err)
+                        {
+                            <p>@error</p>
+                        }
+                    </div>
+                }
+                <div class="mb-3">
+                    <label for="Hoten" class="form-label">Họ Tên</label>
+                    <InputText @bind-Value="Input.Hoten" class="form-control" id="Hoten" />
+                    <ValidationMessage For="() => Input.Hoten" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="Chucvu" class="form-label">Chức Vụ</label>
+                    <InputSelect @bind-Value="Input.Chucvu" class="form-control" id="Chucvu">
+                        <option value="0">Chọn</option>
+                        <option value="Cộng tác viên">Cộng tác viên</option>
+                        <option value="Thực tập">Thực tập</option>
+                        <option value="Bác sĩ lấy mẫu máu">Bác sĩ lấy mẫu máu</option>
+                        <option value="Bác sĩ phân tích mẫu">Bác sĩ phân tích mẫu</option>
+                    </InputSelect>
+                </div>
+                <div class="mb-3">
+                    <label for="SDT" class="form-label">Số Điện Thoại</label>
+                    <InputText @bind-Value="Input.SDT" class="form-control" id="SDT" />
+                    <ValidationMessage For="() => Input.SDT" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="Email" class="form-label">Email</label>
+                    <InputText @bind-Value="Input.Email" class="form-control" id="Email" />
+                    <ValidationMessage For="() => Input.Email" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="Sonamkn" class="form-label">Số năm kinh nghiệm</label>
+                    <InputNumber @bind-Value="Input.Sonamkn" class="form-control" id="Sonamkn" />
+                    <ValidationMessage For="() => Input.Sonamkn" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="Trinhdo" class="form-label">Trình độ</label>
+                    <InputText @bind-Value="Input.Trinhdo" class="form-control" id="Trinhdo" />
+                    <ValidationMessage For="() => Input.Trinhdo" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="Chuyenkhoa" class="form-label">Chuyên khoa</label>
+                    <InputText @bind-Value="Input.Chuyenkhoa" class="form-control" id="Chuyenkhoa" />
+                    <ValidationMessage For="() => Input.Chuyenkhoa" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="Email" class="form-label">Thông tin bổ xung</label>
+                    <BlazoredTextEditor @ref=QuillHtml Placeholder="write somthing...">
+                        <ToolbarContent>
+                            <select class="ql-header">
+                                <option selected=""></option>
+                                <option value="1"></option>
+                                <option value="2"></option>
+                                <option value="3"></option>
+                                <option value="4"></option>
+                                <option value="5"></option>
+                            </select>
+                            <span class="ql-formats">
+                                <button class="ql-bold"></button>
+                                <button class="ql-italic"></button>
+                                <button class="ql-underline"></button>
+                                <button class="ql-strike"></button>
+                            </span>
+                            <span class="ql-formats">
+                                <select class="ql-color"></select>
+                                <select class="ql-background"></select>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-list" value="ordered"></button>
+                                <button class="ql-list" value="bullet"></button>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-link"></button>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-video"></button>
+                            </span>
+
+                        </ToolbarContent>
+                        <EditorContent>
+                            @preview
+                        </EditorContent>
+                    </BlazoredTextEditor>
+
+
+                </div>
+                <button type="submit" class="btn btn-primary">Lưu</button>
+            </EditForm>
+
+        </div>
+    </div>
+</div>
+<div class="row" style="height:500px"></div>
+@code {
+    [SupplyParameterFromForm]
+    public BacSi Input { get; set; } = new();
+
+
+    string a = "";
+    private BlazoredTextEditor QuillHtml;
+    private MarkupString preview;
+    public string img = "img/";
+    private WebAssemblyTicket Ticket { get; set; } = new();
+    private WebAssemblyTicket load { get; set; } = new();
+    private long maxFileSize = 5120000;
+    private List<string> err = new List<string>();
+    string safeFileName = "";
+    protected override async Task OnInitializedAsync()
+    {
+        await checkbs();
+        await LoadBS();
+    }
+    public async Task checkbs()
+    {
+        var authState = await checkbss.GetAuthenticationStateAsync();
+        var UserName = authState.User.Identity.Name;
+        var bs = await bacsiservice.getbyemail(UserName);
+        if (bs == null)
+        {
+            navigation.NavigateTo("/err");
+        }
+    }
+    private async Task add()
+    {
+        err.Clear(); // Xóa thông báo lỗi cũ
+        if (string.IsNullOrEmpty(Input.Hoten))
+        {
+            err.Add("Họ Tên không được để trống");
+        }
+        if (string.IsNullOrEmpty(Input.Chucvu) || Input.Chucvu == "0")
+        {
+            err.Add("Chức Vụ không được để trống");
+        }
+        if (string.IsNullOrEmpty(Input.SDT))
+        {
+            err.Add("Số Điện Thoại không được để trống");
+        }
+        if (string.IsNullOrEmpty(Input.Email))
+        {
+            err.Add("Email không được để trống");
+        }
+        if (!string.IsNullOrWhiteSpace(await QuillHtml.GetText()))
+        {
+            preview = (MarkupString)await QuillHtml.GetHTML();
+        }
+        if (err.Count == 0)
+        {
+            Input.Thongtin = preview.ToString();
+            await bacsiservice.updateAsync(Input);
+            navigation.NavigateTo("/ListBS");
+        }
+    }
+    public async Task LoadBS()
+    {
+        var authState = await checkbss.GetAuthenticationStateAsync();
+        var UserName = authState.User.Identity.Name;
+        Input = await bacsiservice.getbyemail(UserName);
+        preview = new MarkupString(Input.Thongtin);
+
+    }
+
+    private void setfile(InputFileChangeEventArgs e)
+    {
+        Ticket.Attachments = e.GetMultipleFiles();
+    }
+    private async Task OnSubmit()
+    {
+        err.Clear();
+        try
+        {
+            using MultipartFormDataContent content = new();
+
+
+            foreach (var file in Ticket.Attachments)
+            {
+                // Add file attachment
+                string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+                safeFileName = $"{timestamp}{Path.GetExtension(file.Name)}";
+                var fileContent = new StreamContent(file.OpenReadStream(maxFileSize));
+                fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse(file.ContentType);
+                content.Add(fileContent, "Attachments", safeFileName);
+            }
+
+            // Send to API endpoint
+            var response = await client.PostAsync("/upload", content);
+
+            string Message = response.IsSuccessStatusCode ? "Đổi ảnh thành công" : response.ReasonPhrase;
+            err.Add(Message);
+            Ticket = new();
+            Input.Anh = img + safeFileName;
+            await bacsiservice.updateAsync(Input);
+        }
+        catch (Exception e)
+        {
+            String Message = "Upload failed. Error: " + e.Message;
+            err.Add(Message);
+        }
+    }
+
+    private class WebAssemblyTicket
+    {
+        public IReadOnlyList<IBrowserFile> Attachments { get; set; }
+    }
+}
