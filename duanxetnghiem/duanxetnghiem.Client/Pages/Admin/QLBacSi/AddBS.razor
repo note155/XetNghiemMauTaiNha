@@ -26,12 +26,13 @@
             <div class="mb-3">
                 <label for="Chucvu" class="form-label">Chức Vụ</label>
                 <InputSelect @bind-Value="Input.Chucvu" class="form-control" id="Chucvu">
-                    <option value="0">Chọn</option>
+                    <option value="">Chọn</option>
                     <option value="Cộng tác viên">Cộng tác viên</option>
                     <option value="Thực tập">Thực tập</option>
                     <option value="Bác sĩ lấy mẫu máu">Bác sĩ lấy mẫu máu</option>
                     <option value="Bác sĩ phân tích mẫu">Bác sĩ phân tích mẫu</option>
                 </InputSelect>
+                <ValidationMessage For="() => Input.Chucvu" class="text-danger" />
             </div>
             <div class="mb-3">
                 <label for="SDT" class="form-label">Số Điện Thoại</label>

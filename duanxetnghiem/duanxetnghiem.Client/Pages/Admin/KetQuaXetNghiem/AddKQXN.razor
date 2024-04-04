@@ -5,14 +5,22 @@
 @layout AdminLayout
 @attribute [Authorize]
 
-@if (err.Any())
+@if (isLoading)
 {
-    <div id="errorContainer" class="alert alert-danger" role="alert">
-        @foreach (var error in err)
-        {
-            <p>@error</p>
-        }
+    <div id="loader-container" class="loader-container">
+        <div class="loader"></div>
     </div>
+    <script>
+        window.onload = function () {
+            document.getElementById("loader-container").addEventListener("click", function (event) {
+                event.stopPropagation();
+            });
+
+            document.body.addEventListener("keydown", function (event) {
+                event.stopPropagation();
+            });
+        };
+    </script>
 }
 <div class="patient-registration-container">
     <div class="patient-info">
@@ -59,12 +67,16 @@
                 <div class="form-group">
                     <label for="ngaycoKQ">Bác Sĩ Thực Hiện</label>
                     <InputSelect id="giolaymau" @bind-Value="Inputkq.bsid" class="form-control">
-                        <option value=0>Chọn</option>
+                        <option value="0">Chọn</option>
                         @foreach(var bs in allBS)
                         {
                             <option value="@bs.Id">@bs.Hoten</option>
                         }
                     </InputSelect>
+                    @if (err2 != "")
+                    {
+                        <p style="color:red" class="error-message">@err2</p>
+                    }
                 </div>
                 <div class="form-group">
                     <label for="maythuchien">Máy Thực Hiện Xét Nghiệm</label>
@@ -78,10 +90,14 @@
                             }
                         }
                     </InputSelect>
+                    @if (err3 != "")
+                    {
+                        <p style="color:red" class="error-message">@err3</p>
+                    }
                 </div>
                 <div class="form-group">
                     <label for="ngaycoKQ">Ngày Có Kết Quả</label>
-                    <InputDate @bind-Value="Inputkq.ngaycoKQ" class="form-control" id="ngaycoKQ" />
+                    <InputDate @bind-Value="Inputkq.ngaycoKQ" class="form-control" id="ngaycoKQ" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
                     <ValidationMessage For="() => Inputkq.ngaycoKQ" class="text-danger" />
                 </div>
                 <div class="form-group">
@@ -93,6 +109,10 @@
                             <option value="@khoa.Id">@khoa.ten</option>
                         }
                     </InputSelect>
+                    @if (err1 != "")
+                    {
+                        <p style="color:red" class="error-message">@err1</p>
+                    }
                 </div>
                 <div class="form-group">
                     <label for="nhommau">Nhóm Máu</label>
@@ -108,6 +128,15 @@
                 <!-- Input for list of KQandCS -->
                 <button style="background-color: chocolate" @onclick:preventDefault="true" @onclick="Nhankq">Nhận kết quả xét nghiệm từ máy</button>
                 <h3>Danh sách Kết Quả và Chỉ Số</h3>
+                @if (err.Any())
+                {
+                    <div id="errorContainer" class="alert alert-danger" role="alert">
+                        @foreach (var error in err)
+                        {
+                            <p>@error</p>
+                        }
+                    </div>
+                }
                 @if (Inputkq.kQandCs != null)
                 {
                     <table class="table table-bordered">
@@ -143,13 +172,14 @@
                             }
                         }
                     </table>
-                    <a href="/ListDXN"><button style="background-color:red" class="btn btn-primary"> Hủy </button></a>
+                    <a href="/listDXNKQ"><button style="background-color:red" class="btn btn-primary"> Hủy </button></a>
                     <button style="background-color:lawngreen" type="submit" class="btn btn-primary">Trả kết quả</button>
                 }
             </EditForm>
         </div>
     </div>
 </div>
+
 @code {
     [Parameter]
     public int id { get; set; }
@@ -169,6 +199,7 @@
     public List<MayXetNghiem> allMayXN { get; set; } = new();
     [SupplyParameterFromForm]
     public KQXN Inputkq { get; set; } = new();
+    string err1 = "", err2 = "", err3 = "";
     protected override async Task OnInitializedAsync()
     {
         await checkbs();
@@ -218,18 +249,23 @@
     }
     private async Task addkq()
     {
+        isLoading = true;
+        err1 = ""; err2 = ""; err3 = "";
         err.Clear();
         if (Inputkq.khoa==0||Inputkq.khoa==null)
         {
             err.Add("vui lòng chọn khoa");
+            err1 = "vui lòng chọn khoa";
         }
         if (Inputkq.bsid == 0)
         {
             err.Add("vui lòng chọn bác sĩ thực hiện");
+            err2 = "vui lòng chọn bác sĩ thực hiện";
         }
         if (Inputkq.maythuchien == 0 || Inputkq.maythuchien == null)
         {
             err.Add("vui lòng chọn máy thực hiện");
+            err3 = "vui lòng chọn máy thực hiện";
         }
         if (string.IsNullOrEmpty(Inputkq.nhommau))
         {
@@ -287,6 +323,7 @@
                 trangthai = "Xét nghiệm thành công - Đã có kết quả"
             };
         await TTrangservice.addAsync(ttrang);
+        isLoading = false;
         navigation.NavigateTo("/listDXNKQ");
     }
     private void loadgxndachon()
@@ -359,6 +396,8 @@
             return "Nữ";
         }
     }
+    private bool isLoading = false;
+
 }
 <script>
     window.scrollToError = function () {

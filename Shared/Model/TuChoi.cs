@@ -14,6 +14,7 @@ namespace Shared.Model
         public int Id { get; set; }
         public int DonXetNghiemId { get; set; }
         public DonXetNghiem? DonXetNghiem { get; set; }
+        [Required(ErrorMessage = "Bắt buộc phải có lý do")]
         public string Lydo {  get; set; }
     }
 }

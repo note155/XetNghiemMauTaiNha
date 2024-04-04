@@ -10,15 +10,7 @@
         <DataAnnotationsValidator />
         <hr />
 
-        @if (err.Any())
-        {
-            <div class="alert alert-danger" role="alert">
-                @foreach (var error in err)
-                {
-                    <p>@error</p>
-                }
-            </div>
-        }
+       
         <div class="patient-registration-container">
             <div class="patient-info-container">
                 <div class="patient-info">
@@ -44,6 +36,15 @@
                     }
                 </div>
                 <div class="patient-info">
+                    @if (err.Any())
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @foreach (var error in err)
+                            {
+                                <p>@error</p>
+                            }
+                        </div>
+                    }
                     <h2>Các gói xét nghiệm</h2>
                     <div class="info" style="height: 360px; overflow-y: auto;">
                         <table>
@@ -78,6 +79,7 @@
                             }
                         }
                     </InputSelect>
+                    <ValidationMessage For="() => Input.giolaymau" class="text-danger" />
                 </div>
                 <div class="form-group">
                     <label for="ghiChu">Ghi chú </label>

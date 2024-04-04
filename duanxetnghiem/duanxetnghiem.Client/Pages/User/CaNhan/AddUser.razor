@@ -32,24 +32,26 @@
             <div class="form-group">
                 <label class="form-label" for="CapHuyen">Quận/Huyện</label>
                 <InputSelect style="border-color:greenyellow;" class="form-control" ValueChanged="@((string value)=>FilterData(value))" ValueExpression="@(()=>aa)" Value="aa">
-                    <option value="0">Vui Lòng Chọn</option>
+                    <option value="">Vui Lòng Chọn</option>
                     @foreach (var qh in Quan)
                     {
                         <option value="@qh">@qh</option>
                     }
                 </InputSelect>
+                <ValidationMessage For="() => Input.CapHuyen" class="text-danger" />
             </div>
-            @if (aa != "0")
+            @if (aa != "")
             {
                 <div class="form-group">
                     <label class="form-label" for="CapHuyen">Phường/Xã</label>
                     <InputSelect style="border-color:greenyellow;" class="form-control" ValueChanged="@((string value)=>Filterxa(value))" ValueExpression="@(()=>xa)" Value="xa">
-                        <option value="0">Vui Lòng Chọn</option>
+                        <option value="">Vui Lòng Chọn</option>
                         @foreach (var qh in phuong)
                         {
                             <option value="@qh">@qh</option>
                         }
                     </InputSelect>
+                    <ValidationMessage For="() => Input.CapXa" class="text-danger" />
                 </div>
             }
             <div class="form-group">
@@ -59,7 +61,7 @@
             </div>
             <div class="form-group">
                 <label class="form-label" for="SDT">Số Điện Thoại</label>
-                <InputText @bind-Value="Input.SDT" class="form-control" placeholder="" />
+                <InputText @bind-Value="Input.SDT" class="form-control" placeholder="" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)" />
                 <ValidationMessage For="() => Input.SDT" class="text-danger" />
             </div>
             <div class="form-group">

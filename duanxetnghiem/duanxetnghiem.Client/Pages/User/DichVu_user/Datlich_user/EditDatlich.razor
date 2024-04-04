@@ -33,6 +33,15 @@
                 }
             </div>
             <div class="patient-info">
+                @if (err.Any())
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @foreach (var error in err)
+                        {
+                            <p>@error</p>
+                        }
+                    </div>
+                }
                 <h2>Các gói xét nghiệm</h2>
                 <div class="info" style="height: 360px; overflow-y: auto;">
                     <table>
@@ -66,7 +75,7 @@
                             <option value="@time">@time</option>
                         }
                     }
-
+                    <ValidationMessage For="() => Input.giolaymau" class="text-danger" />
                 </InputSelect>
             </div>
             <div class="form-group">

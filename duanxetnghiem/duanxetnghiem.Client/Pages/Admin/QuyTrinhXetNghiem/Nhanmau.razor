@@ -61,7 +61,7 @@
                 <hr />
                 <div class="form-group">
                     <label for="ngaynhanmau">Ngày Nhận Được Mẫu</label>
-                    <InputDate @bind-Value="Inputkq.ngaynhanmau" class="form-control" id="ngaynhanmau" />
+                    <InputDate @bind-Value="Inputkq.ngaynhanmau" class="form-control" id="ngaynhanmau" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
                     <ValidationMessage For="() => Inputkq.ngaynhanmau" class="text-danger" />
                 </div>
                 <div class="form-group">
@@ -73,7 +73,10 @@
                             <option value="@khoa.Id">@khoa.ten</option>
                         }
                     </InputSelect>
-                    
+                    @if (err1 != "")
+                    {
+                        <p style="color:red" class="error-message">@err1</p>
+                    }
                 </div>
                 @if (Inputkq.khoaId != null || Inputkq.khoaId != 0)
                 {
@@ -86,9 +89,13 @@
                                 <option value="@phong.Id">Phòng: @phong.maphong -- @phong.ten</option>
                             }
                         </InputSelect>
+                        @if (err2 != "")
+                        {
+                            <p style="color:red" class="error-message">@err2</p>
+                        }
                     </div>
                 }
-                    <a href="/ListDXN"><button style="background-color:red" class="btn btn-primary"> Hủy </button></a>
+                <a href="/ListchoXN"><button style="background-color:red" class="btn btn-primary"> Hủy </button></a>
                     <button type="submit" style="background-color:lawngreen" class="btn btn-primary">Xác Nhận Đã Nhận Mẫu</button>
                 
             </EditForm>
@@ -107,7 +114,7 @@
     public DonXetNghiem Input { get; set; } = new();
     private User user { get; set; } = new();
     private List<string> err = new List<string>();
-
+    string err1 = "", err2 = "";
     [SupplyParameterFromForm]
     public Mau Inputkq { get; set; } = new();
 
@@ -141,16 +148,17 @@
     private async Task addkq()
     {
         err.Clear();
+        err1 = ""; err2 = "";
         if (Inputkq.khoaId == null||Inputkq.khoaId==0)
         {
-            err.Add("vui lòng chọn Khoa");
-            await JSRuntime.InvokeVoidAsync("scrollToError");
+            err.Add("Vui lòng chọn Khoa");
+            err1 = "Vui lòng chọn Khoa";
             return;
         }
         if (Inputkq.PhongId == null|| Inputkq.PhongId==0)
         {
-            err.Add("vui lòng chọn phòng thực hiện");
-            await JSRuntime.InvokeVoidAsync("scrollToError");
+            err.Add("Vui lòng chọn phòng thực hiện");
+            err2 = "Vui lòng chọn phòng thực hiện";
             return;
         }       
             Inputkq.DonXetNghiemId = id;
@@ -206,12 +214,3 @@
         }
     }
 }
-<script>
-    window.scrollToError = function () {
-        var errorContainer = document.getElementById("errorContainer");
-        if (errorContainer) {
-            errorContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-    }
-
-</script>
