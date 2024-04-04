@@ -35,6 +35,13 @@ namespace duanxetnghiem.Client.Services
             return respone;
         }
 
+        public async Task<int> getallbyidbsAsync(int id)
+        {
+            var allstudent = await _httpClient.GetAsync($"api/Roomchat/All-Roomchatbyidbs/{id}");
+            var respone = await allstudent.Content.ReadFromJsonAsync<int>();
+            return respone;
+        }
+
         public async Task<roomchat> getbyidAsync(int id)
         {
             var response = await _httpClient.GetAsync($"api/Roomchat/Single-Roomchat/{id}");

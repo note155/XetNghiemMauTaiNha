@@ -31,8 +31,14 @@ namespace duanxetnghiem.Controller
             var users = await _RCRepository.getallbyidAsync(id);
             return Ok(users);
         }
+        [HttpGet("All-Roomchatbyidbs/{id}")]
+        public async Task<ActionResult<List<roomchat>>> GetAllbyidbsrAsync(int id)
+        {
+            var users = await _RCRepository.getallbyidbsAsync(id);
+            return Ok(users);
+        }
 
-		[HttpGet("All-Roomchat")]
+        [HttpGet("All-Roomchat")]
 		public async Task<ActionResult<List<roomchat>>> GetAllAsync()
 		{
 			var users = await _RCRepository.getallAsync();

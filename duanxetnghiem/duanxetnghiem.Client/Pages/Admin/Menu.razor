@@ -1,17 +1,29 @@
 ﻿@page "/admin"
 @layout AdminLayout
-<div class="package-container mt-5" style="margin-bottom: 8rem;">
+@rendermode InteractiveAuto
+@using Microsoft.AspNetCore.Components.Web
+@inject NavigationManager navigation;
+<!-- Danh muc quản lý menu -->
+<div class="package-container mt-5" style="margin-bottom: 8rem;margin-top:0px;">
     <div class="row justify-content-center">
         <div class="row with-background">
             <div class="col-md-3 mb-4">
                 <div class="card">
                     <div class="row g-0">
                         <div class="col">
-                            <div class="card-body" style="max-width: 100%;">
-                                <div class="col-md-4 d-flex justify-content-center">
-                                    <img style="max-width: 80px; max-height: 80px; margin-top: 5px; margin-bottom:10px;" src="kinhnghiem.png" alt="Hình ảnh bài viết" class="img-fluid">
-                                </div>
-                                <h5 class="card-title justify-content-center" style="font-size: 30px">Đơn cần duyệt</h5>
+                            <div class="card-body">
+                                <a href="/listDXN">
+                                    <div class="col-md-4 d-flex justify-content-center ">
+                                        <div style="position: relative;">
+                                            <img style="max-width: 80px; max-height: 80px; margin-top: 5px; margin-bottom:30px;" src="imgadmin/icondoncanduyet.png" alt="Hình ảnh bài viết" class="img-fluid">
+                                            <div class="circle-container" style="position: absolute; top: 0px; right: -40px;">
+                                                <img src="imgadmin/iconthongbao3.png" alt="Your Image" class="img-fluid" style="max-width: 60px; max-height: 60px;">
+                                                <p class="circle-count" style="margin-left: 0px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">@TotalDonCanDuyetCount</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h5 class="card-title justify-content-center" style="font-size: 30px;">Đơn cần duyệt</h5>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -22,10 +34,18 @@
                     <div class="row g-0">
                         <div class="col">
                             <div class="card-body">
-                                <div class="col-md-4 d-flex justify-content-center">
-                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="tuvanketqua.png" alt="Article Image" class="img-fluid">
-                                </div>
-                                <h5 class="card-title justify-content-center" style="font-size: 30px">Xác nhận mẫu</h5>
+                                <a href="/ListchoXN">
+                                    <div class="col-md-4 d-flex justify-content-center ">
+                                        <div style="position: relative;">
+                                            <img style="max-width: 80px; max-height: 80px; margin-top: 5px; margin-bottom:30px;" src="imgadmin/iconxacnhanmau.png" alt="Hình ảnh bài viết" class="img-fluid">
+                                            <div class="circle-container" style="position: absolute; top: 0px; right: -40px;">
+                                                <img src="imgadmin/iconthongbao3.png" alt="Your Image" class="img-fluid" style="max-width: 60px; max-height: 60px;">
+                                                <p class="circle-count" style="margin-left: 0px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">@TotalXacNhanMauCount</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h5 class="card-title justify-content-center" style="font-size: 30px;">Xác nhận mẫu</h5>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -36,10 +56,18 @@
                     <div class="row g-0">
                         <div class="col">
                             <div class="card-body">
-                                <div class="col-md-4 d-flex justify-content-center">
-                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="nhanluc.png" alt="Article Image" class="img-fluid">
-                                </div>
-                                <h5 class="card-title justify-content-center" style="font-size: 30px">Quản lý đơn đã duyệt</h5>
+                                <a href="/listDXNKQ">
+                                    <div class="col-md-4 d-flex justify-content-center ">
+                                        <div style="position: relative;">
+                                            <img style="max-width: 80px; max-height: 80px; margin-top: 5px; margin-bottom:30px;" src="imgadmin/icontraketqua.png" alt="Hình ảnh bài viết" class="img-fluid">
+                                            <div class="circle-container" style="position: absolute; top: 0px; right: -40px;">
+                                                <img src="imgadmin/iconthongbao3.png" alt="Your Image" class="img-fluid" style="max-width: 60px; max-height: 60px;">
+                                                <p class="circle-count" style="margin-left: 0px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">@TotalDXNKQCount</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h5 class="card-title justify-content-center" style="font-size: 30px;">Trả kết quả</h5>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -50,10 +78,18 @@
                     <div class="row g-0">
                         <div class="col">
                             <div class="card-body">
-                                <div class="col-md-4 d-flex justify-content-center">
-                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="chiphi1.png" alt="Article Image" class="img-fluid">
-                                </div>
-                                <h5 class="card-title justify-content-center" style="font-size: 30px">Quản lý đơn từ chối</h5>
+                                <a href="/listdscoKQ">
+                                    <div class="col-md-4 d-flex justify-content-center ">
+                                        <div style="position: relative;">
+                                            <img style="max-width: 80px; max-height: 80px; margin-top: 5px; margin-bottom:30px;" src="imgadmin/icondoncoketqua.png" alt="Hình ảnh bài viết" class="img-fluid">
+                                            <div class="circle-container" style="position: absolute; top: 0px; right: -40px;">
+                                                <img src="imgadmin/iconthongbao3.png" alt="Your Image" class="img-fluid" style="max-width: 60px; max-height: 60px;">
+                                                <p class="circle-count" style="margin-left: 0px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">@TotalDSKQCount</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h5 class="card-title justify-content-center" style="font-size: 30px;">Đơn có kết quả</h5>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -64,10 +100,18 @@
                     <div class="row g-0">
                         <div class="col">
                             <div class="card-body">
-                                <div class="col-md-4 d-flex justify-content-center">
-                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="quymo.png" alt="Article Image" class="img-fluid">
-                                </div>
-                                <h5 class="card-title justify-content-center" style="font-size: 30px">Quy mô</h5>
+                                <a href="/DXNBS">
+                                    <div class="col-md-4 d-flex justify-content-center ">
+                                        <div style="position: relative;">
+                                            <img style="max-width: 80px; max-height: 80px; margin-top: 5px; margin-bottom:30px;" src="imgadmin/icondoncanlaymau.png" alt="Hình ảnh bài viết" class="img-fluid">
+                                            <div class="circle-container" style="position: absolute; top: 0px; right: -40px;">
+                                                <img src="imgadmin/iconthongbao3.png" alt="Your Image" class="img-fluid" style="max-width: 60px; max-height: 60px;">
+                                                <p class="circle-count" style="margin-left: 0px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">@TotalDXNBSCount</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h5 class="card-title justify-content-center" style="font-size: 30px;">Đơn cần lấy mẫu</h5>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -78,10 +122,18 @@
                     <div class="row g-0">
                         <div class="col">
                             <div class="card-body">
-                                <div class="col-md-4 d-flex justify-content-center">
-                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="thoigiantuvan1.png" alt="Article Image" class="img-fluid">
-                                </div>
-                                <h5 class="card-title justify-content-center" style="font-size: 30px">Thời gian</h5>
+                                <a href="/listchatBS">
+                                    <div class="col-md-4 d-flex justify-content-center">
+                                        <div style="position: relative;">
+                                            <img style="max-width: 80px; max-height: 80px; margin-top: 5px; margin-bottom:30px;" src="imgadmin/icontuvanbacsi.png" alt="Hình ảnh bài viết" class="img-fluid">
+                                            <div class="circle-container" style="position: absolute; top: 0px; right: -40px;">
+                                                <img src="imgadmin/iconthongbao3.png" alt="Your Image" class="img-fluid" style="max-width: 60px; max-height: 60px;">
+                                                <p class="circle-count" style="margin-left: 0px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">@TotalBSTVCount</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h5 class="card-title justify-content-center" style="font-size: 30px;">Bác sĩ tư vấn</h5>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -92,11 +144,14 @@
                     <div class="row g-0">
                         <div class="col">
                             <div class="card-body">
-                                <div class="col-md-4 d-flex justify-content-center">
-                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="traketquachinhxac.png" alt="Article Image" class="img-fluid">
-                                </div>
-                                <h5 class="card-title justify-content-center" style="font-size: 30px">Trả kết quả</h5>
+                                <a href="/trangchuthongke">
+                                    <div class="col-md-4 d-flex justify-content-center">
+                                        <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:30px;" src="imgadmin/iconthongke1.png" alt="Article Image" class="img-fluid">
+                                    </div>
+                                    <h5 class="card-title justify-content-center" style="font-size: 30px;">Thống kê</h5>
+                                </a>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -106,66 +161,18 @@
                     <div class="row g-0">
                         <div class="col">
                             <div class="card-body">
-                                <div class="col-md-4 d-flex justify-content-center">
-                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="dungcu.png" alt="Article Image" class="img-fluid">
-                                </div>
-                                <h5 class="card-title justify-content-center" style="font-size: 30px">Thiết bị</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="card">
-                    <div class="row g-0">
-                        <div class="col">
-                            <div class="card-body">
-                                <div class="col-md-4 d-flex justify-content-center">
-                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="hoso.png" alt="Article Image" class="img-fluid">
-                                </div>
-                                <h5 class="card-title justify-content-center" style="font-size: 30px">Hồ sơ</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="card">
-                    <div class="row g-0">
-                        <div class="col">
-                            <div class="card-body">
-                                <div class="col-md-4 d-flex justify-content-center">
-                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="hoso.png" alt="Article Image" class="img-fluid">
-                                </div>
-                                <h5 class="card-title justify-content-center" style="font-size: 30px">Hồ sơ</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="card">
-                    <div class="row g-0">
-                        <div class="col">
-                            <div class="card-body">
-                                <div class="col-md-4 d-flex justify-content-center">
-                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="hoso.png" alt="Article Image" class="img-fluid">
-                                </div>
-                                <h5 class="card-title justify-content-center" style="font-size: 30px">Hồ sơ</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="card">
-                    <div class="row g-0">
-                        <div class="col">
-                            <div class="card-body">
-                                <div class="col-md-4 d-flex justify-content-center">
-                                    <img style="max-width: 80px;max-height: 80px ;margin-top: 5px; margin-bottom:10px;" src="hoso.png" alt="Article Image" class="img-fluid">
-                                </div>
-                                <h5 class="card-title justify-content-center" style="font-size: 30px">Hồ sơ</h5>
+                                <a href="/listTV">
+                                    <div class="col-md-4 d-flex justify-content-center ">
+                                        <div style="position: relative;">
+                                            <img style="max-width: 80px; max-height: 80px; margin-top: 5px; margin-bottom:30px;" src="imgadmin/icondstuvan.png" alt="Hình ảnh bài viết" class="img-fluid">
+                                            <div class="circle-container" style="position: absolute; top: 0px; right: -40px;">
+                                                <img src="imgadmin/iconthongbao3.png" alt="Your Image" class="img-fluid" style="max-width: 60px; max-height: 60px;">
+                                                <p class="circle-count" style="margin-left: 0px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">@TotalDSTVCount</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h5 class="card-title justify-content-center" style="font-size: 30px;">DS yêu cầu tư vấn</h5>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -174,3 +181,242 @@
         </div>
     </div>
 </div>
+<!-- Quản lý các dịch vụ -->
+<div class="container">
+    <div class="package-container1 d-flex align-items-center justify-content-center dichvu-container ">
+        <div class="col-md-6 d-flex flex-column align-items-center ">
+            <h4>
+                Quản lý các dịch vụ
+            </h4>
+            <p>
+                Thêm danh sách gói xét nghiệm - bác sĩ.
+            </p>
+        </div>
+        <div class="col-md-6 d-flex flex-column align-items-center">
+            <div class="row">
+                <div class=" col-md-6 ">
+                    <div class="card1" style="margin-bottom:8px;">
+                        <div class="package-item-photo" b-rxw84ra1o5="">
+                            <a href="#myBooking" class="post-image-container" tabindex="-1" b-rxw84ra1o5="">
+                                <div class="package-item-photo" b-rxw84ra1o5="">
+                                    <img src="imgadmin/goixetnghiem8.png" alt="" loading="lazy" b-rxw84ra1o5="">
+                                </div>
+                            </a>
+                        </div>
+                        <div class="package-item-detail" b-rxw84ra1o5="">
+                            <a href="/listGXN" class="btn btn-dark">
+                                Thêm gói xét nghiệm
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 ">
+                    <div class="card1">
+                        <div class="package-item-photo" b-rxw84ra1o5="">
+                            <a href="#myBooking" class="post-image-container" tabindex="-1" b-rxw84ra1o5="">
+                                <div style="width:80%" class="package-item-photo" b-rxw84ra1o5="">
+                                    <img src="imgadmin/bacsi6.png" alt="" loading="lazy" b-rxw84ra1o5="">
+                                </div>
+                            </a>
+                        </div>
+                        <div class="package-item-detail" b-rxw84ra1o5="">
+                            <a href="/listBS" class="btn btn-dark">
+                                Thêm bác sĩ
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    public List<DonXetNghiem> AllDXN { get; set; } = new();
+    public List<DonXetNghiem> DXN { get; set; } = new();
+    public List<User> allUser { get; set; } = new();
+    public string UserName { get; set; }
+    public BacSi bs { get; set; } = new();
+    public List<Tuvan> allTV { get; set; } = new();
+    int teest;
+
+    [Inject]
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+    public Dictionary<int, string> roomNameDictionary { get; set; } = new Dictionary<int, string>();
+    public List<roomchat> allroom { get; set; } = new List<roomchat>();
+    public int TotalDonCanDuyetCount { get; set; }
+    public int TotalXacNhanMauCount { get; set; }
+    public int TotalDXNKQCount { get; set; }
+    public int TotalDSKQCount { get; set; }
+    public int TotalDXNBSCount { get; set; }
+    public int TotalDSTVCount { get; set; }
+    public int TotalBSTVCount { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        await checkbs();
+        // Gọi hàm để gán dữ liệu cho DXN
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        UserName = authState.User.Identity.Name;
+        bs = await bacsiservice.getbyemail(UserName);
+        await LoadDXNData();
+        await CalculateTotalDXNCount();
+
+        await LoadAllDXNM();
+        CalculateTotalDXNMCount();
+
+        await LoadAllDXNKQ();
+        CalculateTotalDXNKQCount();
+
+        await LoadAllDSKQ();
+        CalculateTotalDSKQCount();
+
+        await LoadAllDXNBS();
+        CalculateTotalDXNBSCount();
+
+        await LoadAllDSTV();
+        CalculateTotalDSTVCount();
+
+        await LoadAllBSTV();
+        CalculateTotalBSTVCount();
+    }
+    public async Task checkbs()
+    {
+        var authState = await checkbss.GetAuthenticationStateAsync();
+        var UserName = authState.User.Identity.Name;
+        var bs = await bacsiservice.getbyemail(UserName);
+        if (bs == null)
+        {
+            navigation.NavigateTo("/err");
+        }
+    }
+    // Hàm để gán dữ liệu cho DXN
+    private async Task LoadDXNData()
+    {
+        // Gán dữ liệu cho DXN từ service hoặc nơi lấy dữ liệu
+        DXN = await DXNservice.getallAsync();
+        // Gán dữ liệu cho allUser từ service hoặc nơi lấy dữ liệu
+        allUser = await Usertservice.getalluserAsync();
+        teest = await Roomchatservice.getallbyidbsAsync(bs.Id);
+        TotalBSTVCount = teest;
+    }
+    // Hàm để tính toán số lượng đơn
+    private async Task CalculateTotalDXNCount()
+    {
+        // Lọc danh sách DXN theo điều kiện "Chờ Thanh Toán" hoặc "Đã Chuyển Tiền"
+        AllDXN = DXN.Where(student => student.Trangthai == "Chờ Thanh Toán" || student.Trangthai == "Đã Chuyển Tiền").ToList();
+
+        // Tính số lượng đơn từ danh sách đã lọc
+        TotalDonCanDuyetCount = AllDXN != null ? AllDXN.Count : 0;
+    }
+
+
+    public async Task LoadAllDXNM()
+    {
+        var DXN = await DXNservice.getallAsync();
+        AllDXN.Clear();
+
+        if (DXN is null) return;
+
+        foreach (var student in DXN)
+        {
+            if (student.Trangthai == "Đã Lấy Mẫu")
+            {
+                AllDXN.Add(student);
+            }
+        }
+    }
+    public void CalculateTotalDXNMCount()
+    {
+        TotalXacNhanMauCount = AllDXN != null ? AllDXN.Count : 0;
+    }
+
+    public async Task LoadAllDXNKQ()
+    {
+        // var students = await GenericService.GetAllAsync(student, "api/Student/All-Students");
+        var DXN = await DXNservice.getallAsync();
+        AllDXN.Clear();
+
+        if (DXN is null) return;
+        foreach (var student in DXN)
+        {
+            if (student.Trangthai == "Chờ kết quả")
+            {
+                AllDXN.Add(student);
+            }
+        }
+    }
+    public void CalculateTotalDXNKQCount()
+    {
+        TotalDXNKQCount = AllDXN != null ? AllDXN.Count : 0;
+    }
+
+    public async Task LoadAllDSKQ()
+    {
+        // var students = await GenericService.GetAllAsync(student, "api/Student/All-Students");
+        var DXN = await DXNservice.getallAsync();
+        AllDXN.Clear();
+
+        if (DXN is null) return;
+        foreach (var student in DXN)
+        {
+            if (student.Trangthai == "Hoàn thành")
+            {
+                AllDXN.Add(student);
+            }
+        }
+    }
+    public void CalculateTotalDSKQCount()
+    {
+        TotalDSKQCount = AllDXN != null ? AllDXN.Count : 0;
+    }
+
+    public async Task LoadAllDXNBS()
+    {
+        // var students = await GenericService.GetAllAsync(student, "api/Student/All-Students");
+        var DXN = await DXNservice.getallAsync();
+        AllDXN.Clear();
+
+        if (DXN is null) return;
+        foreach (var student in DXN)
+        {
+            if (student.BacSiId == bs.Id && student.Trangthai == "Chờ lấy mẫu")
+            {
+                AllDXN.Add(student);
+            }
+        }
+    }
+    public void CalculateTotalDXNBSCount()
+    {
+        TotalDXNBSCount = AllDXN != null ? AllDXN.Count(a=>a.BacSiId==bs.Id) : 0;
+    }
+
+
+    public async Task LoadAllDSTV()
+    {
+        var tv = await TVservice.getallAsync();
+        foreach (var ss in tv)
+        {
+            if (ss.bacsiid == null)
+            {
+                allTV.Add(ss);
+            }
+        }
+    }
+    public void CalculateTotalDSTVCount()
+    {
+        TotalDSTVCount = allTV != null ? allTV.Count : 0;
+    }
+
+    public async Task LoadAllBSTV()
+    {
+
+    }
+    public async void CalculateTotalBSTVCount()
+    {
+        
+    }
+
+
+}

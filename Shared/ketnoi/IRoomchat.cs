@@ -12,6 +12,7 @@ namespace Shared.ketnoi
         Task<roomchat> addAsync(roomchat roomchat);
         Task<roomchat> updateAsync(roomchat roomchat);
         Task<List<roomchat>> getallbyidAsync(int id);
+        Task<int> getallbyidbsAsync(int id);
         Task<roomchat> getbyidAsync(int id);
 		Task<List<roomchat>> getallAsync();
 

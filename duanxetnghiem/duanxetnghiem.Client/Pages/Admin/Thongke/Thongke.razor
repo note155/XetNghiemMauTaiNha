@@ -481,19 +481,14 @@
     }    
     private void CalculateTestsByDistrict()
     {
-        List<string> uniqueDistricts = new List<string>(); // Danh sách các phạm vi duy nhất
         Dictionary<string, int> testsByDistrict = new Dictionary<string, int>(); // Dictionary lưu số lượng đơn xét nghiệm của từng phạm vi
                                                                                  // Duyệt qua danh sách người dùng để lấy thông tin vị trí (cấp huyện)
         foreach (var user in AllUser)
         {
             string district = user.CapHuyen;
-            if (!uniqueDistricts.Contains(district))
-            {
-                uniqueDistricts.Add(district);
-            }
 
             // Đếm số lượng đơn xét nghiệm của người dùng thuộc từng phạm vi
-            int testsCount = AllDXN.Count(d => AllUser.Any(u => u.CapHuyen == district && u.Id == d.UserId));
+            int testsCount = AllDXN.Count(d => d.UserId == user.Id);
 
             // Cập nhật hoặc thêm số lượng đơn xét nghiệm vào dictionary
             if (testsByDistrict.ContainsKey(district))
@@ -507,7 +502,7 @@
         }
 
         // Tiếp tục xử lý dữ liệu và vẽ biểu đồ ở đây
-        DrawTestsByDistrictChart(uniqueDistricts, testsByDistrict);
+        DrawTestsByDistrictChart(testsByDistrict.Keys.ToList(), testsByDistrict);
     }
     private void CalculateAgeDistribution()
     {

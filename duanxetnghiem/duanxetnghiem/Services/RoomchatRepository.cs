@@ -35,6 +35,21 @@ namespace duanxetnghiem.Services
             return gioHangs;
         }
 
+        public async Task<int> getallbyidbsAsync(int id)
+        {
+            var count = await _context.Chats
+                .Join(_context.Roomchats,
+                    c => c.roomchatid,
+                    r => r.Id,
+                    (c, r) => new { Chat = c, Roomchat = r })
+                .Where(x => x.Chat.trangthai == 1 && x.Roomchat.idbs == id)
+                .Select(x => x.Roomchat.Id)
+                .Distinct()
+                .CountAsync();
+
+            return count;
+        }
+
         public async Task<roomchat> getbyidAsync(int id)
         {
             return await _context.Roomchats.FindAsync(id);

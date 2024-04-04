@@ -1,17 +1,18 @@
-﻿
-/*Vì sao chọn chúng tôi*/
+﻿/*<!-- Danh muc quản lý menu -->*/
 .visao-container {
-    margin-bottom: 50px; /* Điều chỉnh giảm khoảng cách dưới */
+    margin-bottom: 20px; /* Điều chỉnh giảm khoảng cách dưới */
+    
 }
 
 .card {
     transition: transform 0.3s ease-in-out;
     height: 100%;
-    padding: 15px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     background-color: #ffffff;
+    color: #000000;
 }
 
     .card:not(.no-hover):hover {
@@ -61,9 +62,111 @@
 .card-title {
     font-size: 2.3rem;
     margin-bottom: 1rem;
-    color: #000000;
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 700;
-    background-color: aquamarine;
+    color: #000000;
 }
+
+a {
+    text-decoration: none;
+}
+
+    a:hover,
+    a:active {
+        text-decoration: none; /* Loại bỏ dấu gạch chân dưới */
+    }
+.circle-container {
+    position: relative;
+    display: inline-block; /* Đảm bảo phần tử không chiếm cả chiều rộng */
+}
+
+    .circle-container img {
+        max-width: 80px;
+        max-height: 80px;
+    }
+
+.circle-count {
+    position: absolute;
+    top: 5px;
+    right: -20px;
+    color: dodgerblue;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.0rem;
+}
+
+/*Dịch vụ của chúng tôi*/
+@media (max-width: 767px) {
+    .dichvu-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .col-md-6.d-flex.flex-column.align-items-center {
+        order: 2;
+        margin-bottom: 0.2rem;
+    }
+
+    .col-md.d-flex.flex-column.align-items-center {
+        order: 1;
+        margin-bottom: 0.2rem;
+    }
+
+    .card {
+        width: 100%; /* Đảm bảo rằng card chiếm toàn bộ chiều rộng */
+        max-width: 100%; /* Ngăn không cho card trở nên quá lớn */
+    }
+}
+
+.dichvu-container {
+    background-image: url('imgadmin/hinhen2.png');
+    background-size: cover;
+    background-position: center;
+    height: auto;
+    text-align: center;
+}
+
+h4 {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 48px;
+}
+
+p {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1.0rem;
+    line-height: 24px;
+    text-align: center;
+}
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1.2rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.btn-dark {
+    color: #fff;
+    background-color: #66b2ff;
+    border-color: #fff;
+}
+
+    .btn-dark:hover {
+        background-color: #23272b;
+        border-color: #fff;
+    }
