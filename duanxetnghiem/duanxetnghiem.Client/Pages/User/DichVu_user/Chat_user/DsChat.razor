@@ -1,133 +1,132 @@
 ﻿@page "/Listchat"
 @inject NavigationManager navigation;
 @attribute [Authorize]
+@rendermode InteractiveAuto
 <h3>Chat trực tiếp với bác sĩ</h3>
+
 <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Đăng ký</button>
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" role="dialog">
-	<div class="modal-dialog">
-		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title">Thêm đoạn chat mới</h4>
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			</div>
-			<div class="modal-body">
-				<EditForm Model="Inputkq" method="post" OnValidSubmit="add" FormName="register">
-					<DataAnnotationsValidator />
-					<ValidationSummary class="text-danger" role="alert" />
-					<div class="row">
-						<InputText class="form-group" @bind-Value="Inputkq" placeholder="Nhập tên" />
-						<ValidationMessage For="() => Inputkq" class="text-danger" />
-						<button type="submit" class="btn btn-dark ">Đăng ký</button>
-					</div>
-				</EditForm>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-
-	</div>
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thêm đoạn chat mới</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                @if (err != "")
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <p>@err</p>
+                    </div>
+                }
+                <EditForm Model="Inputkq" method="post" OnValidSubmit="add" FormName="register">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary class="text-danger" role="alert" />
+                    <div class="form-group">
+                        <InputText @bind-Value="Inputkq" class="form-control" placeholder="Nhập tên" />
+                        <ValidationMessage For="() => Inputkq" class="text-danger" />
+                    </div>
+                    <button type="submit" class="btn btn-dark">Đăng ký</button>
+                </EditForm>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
 </div>
 
-<br>
-<br>
-	<div class="row">
-		<div class="col-sm-7">
-			<div class="table-wrapper">
-				<table class="table table-bordered">
-					<thead>
-						<tr>
-							<th>ID</th>
-							<th>Room</th>
-							<th>Trạng thái</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-					@if (unreadRooms.Any())
-					{
-						@foreach (var unreadRoom in unreadRooms)
-						{
-							<tr>
-								<td>@unreadRoom.RoomId</td>
-								<td><a href="/Chat/@unreadRoom.RoomId">#Room:@roomNameDictionary[unreadRoom.RoomId]</a></td>
-								<td>@unreadRoom.UnreadChatCount tin nhắn chờ</td>
-								<td><a class="btn btn-info" href="/Chat/@unreadRoom.RoomId">Xem</a></td>
-							</tr>
-						}
-					}
-					else
-					{
-					<tr>Chưa có Room Chat nào đã được tạo</tr>
-					}
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<div class="col-sm-5">
-			<img style="width:100%" src="chat.jpg">
-		</div>
-	</div>
+<br />
+<br />
+
+<div class="row">
+    <div class="col-md-7">
+        <!-- Danh sách trò chuyện -->
+        @if (unreadRooms.Any())
+        {
+            @foreach (var unreadRoom in unreadRooms)
+            {
+                <div class="chat-item" @onclick="()=>chuyentrang(unreadRoom.RoomId)">
+                    <h5>#Room: @roomNameDictionary[unreadRoom.RoomId]</h5>
+                    <p>@unreadRoom.UnreadChatCount tin nhắn chờ</p>
+                    <button class="btn-view">Xem</button>
+                </div>
+            }
+        }
+        else
+        {
+            <p>Chưa có Room Chat nào đã được tạo</p>
+        }
+    </div>
+    <div class="col-md-5">
+        <img style="width:100%" src="chat.jpg" alt="Chat Image">
+    </div>
+</div>
 
 
 @code {
-	[Inject]
-	protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
-	public string UserName { get; set; }
-	public User user { get; set; } = new();
-	public List<roomchat> allroom { get; set; } = new();
-	public List<RoomUnreadChatCount> unreadRooms { get; set; } = new List<RoomUnreadChatCount>();
-	public Dictionary<int, string> roomNameDictionary { get; set; } = new Dictionary<int, string>();
+    [Inject]
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    public string UserName { get; set; }
+    public User user { get; set; } = new();
+    public List<roomchat> allroom { get; set; } = new();
+    public List<RoomUnreadChatCount> unreadRooms { get; set; } = new List<RoomUnreadChatCount>();
+    public Dictionary<int, string> roomNameDictionary { get; set; } = new Dictionary<int, string>();
+    string err = "";
+    [SupplyParameterFromForm]
+    public string Inputkq { get; set; } = "";
 
-	[SupplyParameterFromForm]
-	public String Inputkq { get; set; } = new("");
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        UserName = authState.User.Identity.Name;
+        user = await Usertservice.getuserbyemail(UserName);
+        if (user == null)
+        {
+            navigation.NavigateTo("/AddUser");
+        }
+        allroom = await Roomchatservice.getallbyidAsync(user.Id);
+        foreach (var room in allroom)
+        {
+            var dschat = await Chatservice.getallbyidroomAsync(room.Id);
+            var unreadCount = dschat.Count(chat => chat.trangthai == 2);
+            unreadRooms.Add(new RoomUnreadChatCount { RoomId = room.Id, UnreadChatCount = unreadCount });
+            roomNameDictionary.Add(room.Id, room.Name);
+        }
+        // Sắp xếp lại danh sách unreadRooms dựa trên UnreadChatCount giảm dần
+        unreadRooms = unreadRooms.OrderByDescending(room => room.UnreadChatCount).ToList();
+    }
+    public void chuyentrang(int id)
+    {
+        navigation.NavigateTo("/Chat/" + id);
+    }
+    private async Task add()
+    {
+        err = "";
+        if (string.IsNullOrEmpty(Inputkq))
+        {
+            err = "Bạn vui lòng đặt tên room để nhanh được hỗ trợ nhé";
+        }
+        else
+        {
+            roomchat room = new roomchat
+                {
+                    Name = Inputkq,
+                    userid = user.Id,
+                    ngaytao = DateTime.Now
+                };
+            var a = await Roomchatservice.addAsync(room);
+            allroom.Add(a);
+            navigation.NavigateTo("/Chat/" + a.Id);
+        }
+    }
 
-	protected override async Task OnInitializedAsync()
-	{
-		var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-		UserName = authState.User.Identity.Name;
-		user = await Usertservice.getuserbyemail(UserName);
-		if (user == null)
-		{
-			navigation.NavigateTo("/AddUser");
-		}
-		allroom = await Roomchatservice.getallbyidAsync(user.Id);
-		foreach (var room in allroom)
-		{
-			{
-				var dschat = await Chatservice.getallbyidroomAsync(room.Id);
-				var unreadCount = dschat.Count(chat => chat.trangthai == 2);
-				unreadRooms.Add(new RoomUnreadChatCount { RoomId = room.Id, UnreadChatCount = unreadCount });
-				roomNameDictionary.Add(room.Id, room.Name);
-			}
-		}
-		// Sắp xếp lại danh sách unreadRooms dựa trên UnreadChatCount giảm dần
-		unreadRooms = unreadRooms.OrderByDescending(room => room.UnreadChatCount).ToList();
-	}
-	private async Task add()
-	{
-		if (string.IsNullOrEmpty(Inputkq))
-		{
-		}
-		else
-		{
-			roomchat room = new roomchat
-			{
-				Name=Inputkq,
-				userid=user.Id,
-				ngaytao=DateTime.Now
-			};
-			var a = await Roomchatservice.addAsync(room);
-			allroom.Add(a);
-			navigation.NavigateTo("/Chat/" + a.Id);
-		}
-	}
-	public class RoomUnreadChatCount
-	{
-		public int RoomId { get; set; }
-		public int UnreadChatCount { get; set; }
-	}
+    public class RoomUnreadChatCount
+    {
+        public int RoomId { get; set; }
+        public int UnreadChatCount { get; set; }
+    }
 }

@@ -63,7 +63,7 @@
     public int id { get; set; }
 
     string a = "";
-    public string img = "img/";
+    public string img = "/api/Images/img/";
     private WebAssemblyTicket Ticket { get; set; } = new();
     private WebAssemblyTicket load { get; set; } = new();
     private long maxFileSize = 5120000;
@@ -136,7 +136,7 @@
             string Message = response.IsSuccessStatusCode ? "Đổi ảnh thành công" : response.ReasonPhrase;
             err.Add(Message);
             Ticket = new();
-            Input.Anh = img + safeFileName;
+            Input.Anh =img+ safeFileName;
             await GXNservice.updateAsync(Input);
         }
         catch (Exception e)

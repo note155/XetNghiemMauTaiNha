@@ -47,5 +47,23 @@ h3 {
     font-weight: bold;
     color: #333;
 }
+@media screen and (max-width: 768px) {
+    .container {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .goi-xet-nghiem {
+        margin-bottom: 15px;
+    }
+
+    .goi-xet-nghiem-title {
+        font-size: 16px;
+    }
+
+    .chiso-item {
+        margin-bottom: 15px;
+    }
+}
 
 

@@ -109,7 +109,7 @@ app.MapPost("/upload", async ([FromForm] WebAssemblyTicket ticket,
     {
         // Save locally
         string safeFileName = WebUtility.HtmlEncode(file.FileName);
-        var path = Path.Combine("D:\\khoaluan\\duanxetnghiem\\duanxetnghiem\\duanxetnghiem.Client\\wwwroot\\img", safeFileName);
+        var path = Path.Combine(env.ContentRootPath, "wwwroot", "img", safeFileName);
         await using FileStream fs = new(path, FileMode.Create);
         await file.CopyToAsync(fs);
 

@@ -57,7 +57,7 @@
             </div>
             <div class="form-group">
                 <label class="form-label" for="SDT">Số Điện Thoại</label>
-                <InputText @bind-Value="Input.SDT" class="form-control" placeholder="" />
+                <InputText @bind-Value="Input.SDT" class="form-control" placeholder="" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)" />
                 <ValidationMessage For="() => Input.SDT" class="text-danger" />
             </div>
             <div class="form-group">
