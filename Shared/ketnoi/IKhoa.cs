@@ -11,5 +11,9 @@ namespace Shared.ketnoi
     public interface IKhoa
     {
         Task<List<Khoa>> getallAsync();
+        Task<Khoa> addAsync(Khoa khoa);
+        Task<Khoa> updateAsync(Khoa khoa);
+        Task<Khoa> deleteAsync(int id);
+        Task<Khoa> getbyid(int Id);
     }
 }

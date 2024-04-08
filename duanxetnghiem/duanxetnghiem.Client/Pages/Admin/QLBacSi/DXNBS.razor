@@ -2,91 +2,41 @@
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
 @layout AdminLayout
+@rendermode InteractiveAuto
+  
+@if (AllDXN.Any())
+{
+    var groupedDXN = AllDXN.GroupBy(dxn => dxn.Ngaydat.Date).OrderBy(group => group.Key);
+    foreach (var group in groupedDXN)
+    {
+        <div class="table-users">
+            <div class="header">@group.Key.ToString("dd/MM/yyyy")</div>
 
+            <table cellspacing="0">
+                <tr>
+                    <th>Họ Tên</th>
+                    <th>SĐT</th>
+                    <th>Thời Gian</th>
+                    <th width="230">Địa Chỉ</th>
+                    <th></th>
+                </tr>
+                @foreach (var DXN in group)
+                {
+                    <tr>
+                        <td>@loadhoten(DXN.UserId)</td>
+                        <td>@loadsdt(DXN.UserId)</td>
+                        <td>@DXN.giolaymau @DXN.Ngaydat.ToString("dd/MM/yyyy")</td>
+                        <td>@loaddiachi(DXN.UserId)</td>
+                        <td>
+                            <a class="btn btn-info" @onclick="()=>duyet(DXN.Id)">Xem Chi Tiết</a>
+                        </td>
+                    </tr>
+                }
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="card-title">Đơn yêu cầu xét nghiệm</h3>
-                    <p class="m-0">Người thực hiện lấy máu tại nhà: @bs.Hoten</p>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="card-header bg-secondary text-white">
-                                    Danh sách yêu cầu xét nghiệm
-                                    <a href="/Lichlaymau/@bs.Id">
-                                        <span style="color:palegoldenrod; font-weight: bold;">
-                                            *Lịch lấy máu
-                                        </span>
-                                    </a>
-                                </div>
-                                @if (!AllDXN.Any())
-                                {
-                                    <p><em>Loading ...</em></p>
-                                }
-                                @if (AllDXN.Any())
-                                {
-                                    <div class="card-body">
-                                        @{
-                                            // Nhóm các DXN theo ngày đặt
-                                            var groupedDXN = AllDXN.GroupBy(dxn => dxn.Ngaydat.Date);
-                                        }
-
-                                        @foreach (var group in groupedDXN)
-                                        {
-                                            <h4>@group.Key.ToString("dd/MM/yyyy")</h4>
-                                            <div class="table-responsive">
-                                                <table class="table table-striped table-hover">
-                                                    <thead class="thead-dark">
-                                                        <tr>
-                                                            <th>Id</th>
-                                                            <th>Họ Tên Khách Hàng</th>
-                                                            <th>Trạng thái</th>
-                                                            <th>Ngày lấy máu</th>
-                                                            <th>Giờ lấy máu</th>
-                                                            <th>Địa chỉ</th>
-                                                            <th></th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach (var DXN in group)
-                                                        {
-                                                            <tr>
-                                                                <td>@DXN.Id</td>
-                                                                <td>@loadhoten(DXN.UserId)</td>
-                                                                <td>@DXN.Trangthai</td>
-                                                                <td>@DXN.Ngaydat.ToString("dd/MM/yyyy")</td>
-                                                                <td>@DXN.giolaymau</td>
-                                                                <td>@loaddiachi(DXN.UserId)</td>
-                                                                <td>
-                                                                    <a class="btn btn-info" href="/XacNhanLayMau/@DXN.Id">Xem Chi Tiết</a>
-                                                                </td>
-                                                            </tr>
-                                                        }
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        }
-                                    </div>
-                                }
-
-                                else
-                                {
-                                    <div class="alert alert-info">Rỗng.....</div>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </table>
         </div>
-    </div>
-</div>
-
+    }
+}
 
 @code {
     [Inject]
@@ -97,7 +47,7 @@
     public List<GoiXetNghiem> allGXN { get; set; } = new();
     public List<User> allUser { get; set; } = new();
     public BacSi bs { get; set; } = new();
-    
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -108,6 +58,10 @@
         allUser = await Usertservice.getalluserAsync();
         bs = await bacsiservice.getbyemail(UserName);
         await LoadAlLStudents();
+    }
+    public void duyet(int id)
+    {
+        navigation.NavigateTo("/XacNhanLayMau/"+id, true);
     }
     public async Task checkbs()
     {
@@ -135,17 +89,7 @@
                 AllDXN.Add(student);
             }
         }
-    }
-    public String loadGXN(int id)
-    {
-        foreach (var gxn in allGXN)
-        {
-            if (gxn.Id == id)
-            {
-                return gxn.TenGoi;
-            }
-        }
-        return null;
+        AllDXN = AllDXN.OrderBy(dxn => dxn.Ngaydat).ToList();
     }
     public String loadhoten(int id)
     {
@@ -164,7 +108,19 @@
         {
             if (us.Id == id)
             {
-                return us.Diachi;
+                string dc= us.Diachi+", "+us.CapXa+", "+us.CapHuyen ;
+                return dc;
+            }
+        }
+        return null;
+    }
+    public String loadsdt(int id)
+    {
+        foreach (var us in allUser)
+        {
+            if (us.Id == id)
+            {
+                return us.SDT;
             }
         }
         return null;

@@ -1,27 +1,9 @@
 ﻿@page "/"
 @rendermode InteractiveAuto
+@layout TrangchuLayout
 @using Microsoft.AspNetCore.Components.Web
 @using duanxetnghiem.Client.Pages.Admin
 @inject NavigationManager navigation;
-
-@if (err != "")
-{
-    <p>@err</p>
-}
-
-<div class="container mt-5 text-center xetnghiem-container " style="margin-bottom: 38rem;">
-    <div class="card-body overlay">
-        <h4 class="card-title">Xét Nghiệm Máu Tại Nhà</h4>
-        <p class="card-text">Dịch vụ xét nghiệm máu chất lượng cao, tiện lợi và an toàn ngay tại nhà bạn</p>
-        <AuthorizeView>
-            <Authorized>
-                <div style="z-index: 900;" class="notification-icon" @onclick="ToggleNotification">
-                    <i class="fas fa-bell"></i> Thông báo
-                    <span class="badge rounded-pill bg-success">@count</span>
-                </div>
-            </Authorized>
-        </AuthorizeView>
-        <div style="height:auto;" class="row"></div>
 
         <!--Code thông báo-->
         @{
@@ -108,23 +90,7 @@
                 <div class="alert alert-info"> Bạn hiện chưa có thông báo nào</div>
             }
         </div>
-        <EditForm Model="Inputkq" method="post" OnValidSubmit="add" FormName="register">
-            <DataAnnotationsValidator />
-            <ValidationSummary class="text-danger" role="alert" />
-            <InputText style="width: 80%; height: 40px; border-radius: 5px;" @bind-Value="Inputkq" placeholder="Nhập kết quả xét nghiệm" />
-            <ValidationMessage For="() => Inputkq" class="text-danger" />
-            <br>
-            <br>
-            <br>
-            <div class="row justify-content-center">
-                <a href="/datlich" class="btn btn-outline-dark">Đặt lịch hẹn</a>
-                <br>
-                <button type="submit" class="btn btn-dark ">Xem kết quả</button>
-            </div>
-        </EditForm>
 
-    </div>
-</div>
 
 <!-- Dịch vụ của chúng tôi -->
 <div class="package-container d-flex align-items-center justify-content-center dichvu-container">

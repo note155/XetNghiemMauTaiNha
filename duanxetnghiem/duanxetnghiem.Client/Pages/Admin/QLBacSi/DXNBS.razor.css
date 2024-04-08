@@ -1,79 +1,151 @@
-﻿/* Custom CSS for better mobile experience */
+﻿body {
+    background-color: #65c3ca;
+    box-sizing: border-box;
+}
 
-/* Card styling */
-.card {
-    border: 1px solid #ccc;
+.header {
+    background-color: #2f7e86;
+    color: white;
+    font-size: 1.5em;
+    padding: 1rem;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+img {
+    border-radius: 50%;
+    height: 60px;
+    width: 60px;
+}
+
+.table-users {
+    border: 1px solid #2f7e86;
     border-radius: 10px;
-    margin-bottom: 20px;
-}
-
-/* Card header styling */
-.card-header {
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #ccc;
-}
-
-/* Card body styling */
-.card-body {
-    padding: 20px;
-}
-
-/* Table styling */
-.table {
-    width: 100%;
-    margin-bottom: 0;
-    background-color: #fff;
-    border-radius: 10px;
-    border-collapse: collapse;
-}
-
-    /* Table header styling */
-    .table thead th {
-        background-color: #007bff;
-        color: #fff;
-        font-weight: bold;
-        border: 1px solid #ccc;
-    }
-
-    /* Table body styling */
-    .table tbody td {
-        border: 1px solid #ccc;
-    }
-
-/* Button styling */
-.btn {
-    padding: 8px 16px;
-    font-size: 14px;
-    border-radius: 5px;
-}
-
-/* Success button */
-.btn-success {
-    background-color: #28a745;
-    border-color: #28a745;
-    color: #fff;
-}
-
-/* Info button */
-.btn-info {
-    background-color: #17a2b8;
-    border-color: #17a2b8;
-    color: #fff;
-}
-
-/* Alert styling */
-.alert {
-    border-radius: 10px;
-}
-/* Custom CSS for responsive tables */
-.table-responsive {
-    overflow-x: auto;
-}
-
-/* Custom CSS for table columns width */
-.table th,
-.table td {
-    white-space: nowrap;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
+    max-width: calc(100% - 2em);
+    margin: 1em auto;
     overflow: hidden;
-    text-overflow: ellipsis;
+    width: 800px;
+}
+
+table {
+    width: 100%;
+}
+
+td, th {
+    color: #275b60;
+    padding: 10px;
+}
+
+td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+th {
+    background-color: #a6d1d4;
+    font-weight: 300;
+}
+
+tr:nth-child(2n) {
+    background-color: white;
+}
+
+tr:nth-child(2n+1) {
+    background-color: #cce0e1;
+}
+
+@media screen and (max-width: 700px) {
+    table, tr, td {
+        display: block;
+    }
+
+        td:first-child {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100px;
+        }
+
+        td:not(:first-child) {
+            clear: both;
+            margin-left: 100px;
+            padding: 4px 20px 4px 90px;
+            position: relative;
+            text-align: left;
+        }
+
+        td:nth-child(2):before {
+            content: 'SDT: ';
+        }
+
+        td:nth-child(3):before {
+            content: 'Thời Gian: ';
+        }
+
+        td:nth-child(4):before {
+            content: 'Địa Chỉ: ';
+        }
+
+        td:nth-child(5):before {
+            content: 'Chi Tiết: ';
+        }
+
+        tr:first-child {
+            display: none;
+        }
+}
+
+@media screen and (max-width: 500px) {
+    .header {
+        background-color: transparent;
+        color: #89c1c7;
+        font-size: 2em;
+        font-weight: 700;
+        padding: 0;
+        text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    img {
+        border: 3px solid;
+        border-color: #cce0e1;
+        height: 100px;
+        margin: 0.5rem 0;
+        width: 100px;
+    }
+
+    td:first-child {
+        background-color: #b8dce0;
+        border-bottom: 1px solid #a6d1d4;
+        border-radius: 10px 10px 0 0;
+        position: relative;
+        top: 0;
+        transform: translateY(0);
+        width: 100%;
+    }
+
+    td:not(:first-child) {
+        margin: 0;
+        padding: 5px 1em;
+        width: 100%;
+    }
+
+    td:last-child {
+        padding-bottom: 1rem !important;
+    }
+
+    tr {
+        background-color: white !important;
+        border: 1px solid #d2e4e5;
+        border-radius: 10px;
+        box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+        margin: 0.5rem 0;
+        padding: 0;
+    }
+
+    .table-users {
+        border: none;
+        box-shadow: none;
+        overflow: visible;
+    }
 }

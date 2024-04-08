@@ -1,0 +1,88 @@
+﻿@inject NavigationManager NavigationManager
+<header class="header-area overlay">
+    <nav class="navbar navbar-expand-md navbar-dark">
+        <div class="container">
+            <a href="#" class="navbar-brand">Âu Lạc</a>
+
+            <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#main-nav">
+                <span class="menu-icon-bar"></span>
+                <span class="menu-icon-bar"></span>
+                <span class="menu-icon-bar"></span>
+            </button>
+
+            <div id="main-nav" class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    <li><a href="datlich" class="nav-item nav-link">Đặt Lịch Hẹn</a></li>
+                    <li><a href="DichVuXetNghiem" class="nav-item nav-link">Dịch Vụ Y Tế</a></li>
+                    <li><a href="DanhSachBS" class="nav-item nav-link">Đội Ngũ Bác Sĩ</a></li>
+                    <AuthorizeView>
+                        <Authorized>
+                            <li><a href="giohangdxn" class="nav-item nav-link">Đơn Xét Nghiệm</a></li>
+                            <li class="dropdown ">
+                                <a class="nav-item nav-link" data-toggle="dropdown">Người Thân</a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a href="datlichCNT" class="dropdown-item">Đặt Lịch Cho Người Thân</a>
+                                    <a href="listNT" class="dropdown-item">Danh Sách Thông Tin Người Thân</a>
+                                </div>
+                            </li>
+                            <li class="dropdown">
+                                <a class="nav-item nav-link" data-toggle="dropdown">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
+                                    </svg>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="/patient-info">Thông Tin Cá Nhân</a>
+                                    <a class="dropdown-item" href="/TDSK">Theo Dõi Sức Khỏe</a>
+                                    <a class="dropdown-item" href="/lichsuDl">Lịch Sử</a>
+                                    <a class="dropdown-item" href="/listchat">Tư Vấn Trực Tiếp</a>
+                                    <a class="dropdown-item" href="/Account/Manage/ChangePassword">Đổi Mật Khẩu</a>
+                                    <form action="Account/Logout" method="post">
+                                        <AntiforgeryToken />
+                                        <input type="hidden" name="ReturnUrl" value="#home" />
+                                        <button class="dropdown-item" type="submit">
+                                            Đăng Xuất
+                                        </button>
+                                    </form>
+                                </div>
+                            </li>
+
+
+                        </Authorized>
+                        <NotAuthorized>
+                            <li><a href="Account/Login" class="nav-item nav-link">Đăng Nhập</a></li>
+                            <li><a href="Account/Register" class="nav-item nav-link">Đăng Ký</a></li>
+                        </NotAuthorized>
+                    </AuthorizeView>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="banner">
+        <div class="container">
+            <h1>Âu Lạc - Xét Nghiệm Máu Tại Nhà</h1>
+            <p>Chăm sóc sức khỏe một cách thuận tiện và đơn giản. Đặt lịch ngay!</p>
+            <a href="/datlich" class="button button-primary">Đặt lịch ngay</a>
+        </div>
+    </div>
+</header>
+@code {
+    private string? currentUrl;
+
+    protected override void OnInitialized()
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+}

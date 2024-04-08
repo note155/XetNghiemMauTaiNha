@@ -10,5 +10,9 @@ namespace Shared.ketnoi
     public interface IPhong
     {
         Task<List<Phong>> getallAsync();
+        Task<Phong> addAsync(Phong phong);
+        Task<Phong> updateAsync(Phong phong);
+        Task<Phong> deleteAsync(int id);
+        Task<Phong> getbyid(int Id);
     }
 }

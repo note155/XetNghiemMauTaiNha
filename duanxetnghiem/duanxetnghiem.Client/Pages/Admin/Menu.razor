@@ -16,8 +16,8 @@
                 <div class="card">
                     <div class="row g-0">
                         <div class="col">
-                            <div class="card-body">
-                                <a href="/Duyetdon">
+                            <div @onclick="duyet" class="card-body">
+                                <a >
                                     <div class="col-md-4 d-flex justify-content-center ">
                                         <div style="position: relative;">
                                             <img style="max-width: 80px; max-height: 80px; margin-top: 5px; margin-bottom:30px;" src="imgadmin/icondoncanduyet.png" alt="Hình ảnh bài viết" class="img-fluid">
@@ -293,6 +293,10 @@
         {
             navigation.NavigateTo("/err");
         }
+    }
+    public void duyet()
+    {
+        navigation.NavigateTo("/Duyetdon", true);
     }
     // Hàm để gán dữ liệu cho DXN
     private async Task LoadDXNData()
