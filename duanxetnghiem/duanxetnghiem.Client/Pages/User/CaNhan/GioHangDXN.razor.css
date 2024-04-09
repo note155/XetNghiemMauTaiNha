@@ -1,4 +1,15 @@
-﻿@media (max-width: 767px) {
+﻿
+h1 {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 600;
+    font-style: normal;
+    color: #428DFF;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+@media (max-width: 767px) {
     .table th, .table td {
         white-space: nowrap; /* Ngăn chặn việc các cột bị tràn xuống dòng mới */
     }
@@ -56,3 +67,39 @@
         font-size: 16px;
     }
 }
+
+/*thanh toán*/
+.btn {
+    display: inline-block;
+    padding: 0.5em 1em;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.btn1 {
+    display: inline-block;
+    padding: 0.5em 1em;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+    height: 50px;
+    width: 150px;
+    font-size: 1.4rem;
+    color: white;
+    padding: 7px 5px;
+    text-align: center;
+}
+
+.btn-success1 {
+    background-color: #66b2ff;
+    color: #fff;
+}
+
+    .btn-success1:hover {
+        background-color: #3398ff; /* Màu mới khi nút được hover */
+    }

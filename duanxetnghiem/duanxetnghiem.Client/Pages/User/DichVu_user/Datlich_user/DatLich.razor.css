@@ -37,7 +37,7 @@ table {
 }
 
     .patient-info h2 {
-        color: #4CAF50;
+        color: #208095;
         margin-bottom: 10px;
     }
 
@@ -61,7 +61,7 @@ table {
 }
 
     .test-registration-form h2 {
-        color: #4CAF50;
+        color: #208095;
         margin-bottom: 20px;
     }
 
@@ -269,3 +269,4 @@ select.form-control option {
         margin-top: 20px; /* Khoảng cách từ phần tổng tiền đến các gói đã chọn */
     }
 }
+

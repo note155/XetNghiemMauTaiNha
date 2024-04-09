@@ -1,4 +1,5 @@
-﻿/* cyrillic-ext */
+﻿
+/* cyrillic-ext */
 @font-face {
     font-family: 'Lobster';
     font-style: normal;
@@ -339,7 +340,7 @@ p {
 
 .button-primary {
     position: relative;
-    background-color: #c0ca33;
+    background-color: #17a2b8;
     color: #fff;
     font-size: 1.8rem;
     font-weight: 700;
@@ -511,7 +512,7 @@ p {
 
         .navbar .dropdown-menu .dropdown-item:hover {
             background: transparent;
-            color: #c0ca33;
+            color: #1B96B8;
         }
 
         .navbar .dropdown-menu .dropdown-item::before {
@@ -521,7 +522,7 @@ p {
             left: 0;
             top: 0;
             width: 5px;
-            background-color: #c0ca33;
+            background-color: #1B96B8;
             opacity: 0;
             transition: opacity 0.2s ease-in;
         }
@@ -538,11 +539,11 @@ p {
 }
 
     .navbar.fixed-top.navbar-dark .navbar-nav .nav-link.active {
-        color: #c0ca33;
+        color: #1B96B8;
     }
 
     .navbar.fixed-top.navbar-dark .navbar-nav .nav-link::after {
-        background-color: #c0ca33;
+        background-color: #1B96B8;
     }
 
 
@@ -680,3 +681,4 @@ p {
         transform: scaleY(1);
     }
 }
+

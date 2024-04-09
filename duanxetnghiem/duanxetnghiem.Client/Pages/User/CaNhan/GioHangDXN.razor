@@ -6,7 +6,7 @@
 @inject NavigationManager navigation;
 @attribute [Authorize]
 <h1>Đơn Xét Nghiệm</h1>
-
+<hr />
 @if (ChuaChonGoi)
 {
     <div class="modal fade show" style="display: block; background: rgba(0, 0, 0, 0.5);">
@@ -39,43 +39,43 @@
         <button class="btn btn-success" @onclick="chontatca">@nd</button>
     </div>
     <div class="table-responsive">
-    <table class="table table-striped mt-3">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Người sử dụng</th>
-                <th scope="col">Gói Xét Nghiệm</th>
-                <th scope="col">Số tiền của đơn</th>
-                <th scope="col"></th>
-                <th scope="col">Chọn</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var ghang in GHang)
-            {
+        <table class="table table-striped mt-3">
+            <thead class="thead-dark">
                 <tr>
-                    <td>@ghang.id</td>
-                    <td>@ghang.iduser</td>
-                    <td>
-                        @foreach (var gxn in ghang.listgxn)
-                        {
-                            <p>@gxn.TenGoi - <span class="text-success">@gxn.Gia.ToString("N0") VND</span></p>
-                        }
-                    </td>
-                    <td>@ghang.sotien.ToString("N0") VND</td>
-                    <td><a href="/EditDL/@ghang.id" class="btn btn-success">Chỉnh sửa</a></td>
-                    <td>
-                        <div class="form-check form-switch">
-                            <input @bind=ghang.chon class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                        </div>
-                    </td>
+                    <th scope="col">ID</th>
+                    <th scope="col">Người sử dụng</th>
+                    <th scope="col">Gói Xét Nghiệm</th>
+                    <th scope="col">Số tiền của đơn</th>
+                    <th scope="col"></th>
+                    <th scope="col">Chọn</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var ghang in GHang)
+                {
+                    <tr>
+                        <td>@ghang.id</td>
+                        <td>@ghang.iduser</td>
+                        <td>
+                            @foreach (var gxn in ghang.listgxn)
+                            {
+                                <p>@gxn.TenGoi - <span class="text-success">@gxn.Gia.ToString("N0") VND</span></p>
+                            }
+                        </td>
+                        <td>@ghang.sotien.ToString("N0") VND</td>
+                        <td><a href="/EditDL/@ghang.id" class="btn btn-success">Chỉnh sửa</a></td>
+                        <td>
+                            <div class="form-check form-switch">
+                                <input @bind=ghang.chon class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
     <div class="mb-3">
-        <a class="btn btn-success float-end" @onclick="@(() => add())">Thanh toán</a>
+        <a class="btn1 btn-success1 float-end" @onclick="@(() => add())">Thanh toán</a>
         <p class="total-amount">Tổng tiền: <strong style="color:red;font-size:30px;">@TinhTongTien() VND</strong></p>
     </div>
     <div class="row" style="height:100px"></div>
@@ -110,22 +110,22 @@
             var don = await DXNservice.getallbyiduserAsync(us.Id);
             foreach (var a in don)
             {
-                if(a.Trangthai=="Chờ Thanh Toán" && a.UserId!=user.Id)
+                if (a.Trangthai == "Chờ Thanh Toán" && a.UserId != user.Id)
                 {
                     DXNList.Add(a);
                 }
             }
         }
-        foreach(var dxn in DXNList)
+        foreach (var dxn in DXNList)
         {
-            if(dxn.Trangthai=="Chờ Thanh Toán")
+            if (dxn.Trangthai == "Chờ Thanh Toán")
             {
                 gio a = new()
                     {
                         chon = false,
                         id = dxn.Id,
                     };
-                foreach(var u in Alluser)
+                foreach (var u in Alluser)
                 {
                     if (dxn.UserId == u.Id)
                     {
@@ -135,13 +135,13 @@
                 GHang.Add(a);
             }
         }
-        foreach(var g in GHang)
+        foreach (var g in GHang)
         {
             g.listgxn = new List<GoiXetNghiem>();
             var gxn = await DXNservice.getallGXNAsync(g.id);
-            foreach(var b in AllGXN)
+            foreach (var b in AllGXN)
             {
-                foreach(var c in gxn)
+                foreach (var c in gxn)
                 {
                     if (b.Id == c.GoiXetNghiemId)
                     {
@@ -171,7 +171,7 @@
             }
             nd = "Chọn tất cả";
         }
-        
+
     }
     private async void add()
     {
@@ -181,12 +181,12 @@
             ChuaChonGoi = true;
             return;
         }
-        string id="";
+        string id = "";
         foreach (var student in itemsToRemove)
         {
-            id += student.id+";";    
-        } 
-        navigation.NavigateTo("ThanhToandxn/"+id);
+            id += student.id + ";";
+        }
+        navigation.NavigateTo("ThanhToandxn/" + id);
     }
     private async void DeleteSelected()
     {
