@@ -62,10 +62,11 @@ table {
 }
 
 .panel-header {
-    background-color: #E8E8E8;
+    background-color: #208095;
     padding: 10px;
     font-weight: bold;
     font-size: 20px;
+    color: #fff;
 }
 
 .panel-body {
@@ -98,7 +99,7 @@ table {
         padding: 8px 20px;
         border: none;
         cursor: pointer;
-        border: 1px solid #00ce00;
+        border: 1px solid #208095;
         margin: auto; /* Đảm bảo nút ở giữa trang */
     }
 
@@ -136,3 +137,28 @@ table {
     font-weight: lighter;
     margin-bottom: 10px;
 }
+
+.input-group-prepend {
+    margin-top: 10px;
+    display: inline-flex; /* Sử dụng inline-flex để phần tử nằm cạnh nhau */
+    align-items: center; /* Canh các phần tử theo chiều dọc */
+}
+
+    .input-group-prepend .input-group-text {
+        width: 80px; /* Thiết lập độ rộng cho phần tử "Copy" */
+        padding: 0.5rem 1rem; /* Điều chỉnh padding theo ý muốn */
+        background-color: #f8f9fa; /* Màu nền của phần tử "Copy" */
+        border: 1px solid #ced4da; /* Đường viền của phần tử "Copy" */
+        cursor: pointer;
+        color: #fff;
+        background-color: #208095;
+        height: 40px; /* Con trỏ chuột khi di chuột qua */
+    }
+
+    .input-group-prepend .form-control {
+        height: 40px;
+        flex: 1; /* Tự co dãn, lấp đầy phần còn lại của div cha */
+        margin: 0; /* Loại bỏ margin mặc định */
+    }
+
+

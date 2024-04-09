@@ -19,5 +19,6 @@ namespace Shared.ketnoi
         Task<gmail> guiemail(gmail gm);
         Task<List<KQandCS>> getallCSbyidAsync(int id);
         Task<KQandCS> addKQandCS(KQandCS kQandCs);
-    }
+		Task<List<TestKQ>> Testkq();
+	}
 }

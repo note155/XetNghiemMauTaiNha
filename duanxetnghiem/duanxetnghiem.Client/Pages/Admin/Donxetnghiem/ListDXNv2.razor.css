@@ -13,13 +13,16 @@
     .infoWindow.show {
         left: 20px;
     }
+
 .info {
-     /* Hiển thị trên cùng một dòng */
+    /* Hiển thị trên cùng một dòng */
     /* Tạo khoảng cách giữa các mục */
 }
+
 .modal-content {
     width: 900px;
 }
+
 .profile-form {
     display: flex;
     flex-direction: column;

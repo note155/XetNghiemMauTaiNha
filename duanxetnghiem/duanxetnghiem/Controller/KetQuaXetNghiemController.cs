@@ -29,9 +29,14 @@ namespace duanxetnghiem.Controller
             var users = await _KQXNRepository.getallCSbyidAsync(id);
             return Ok(users);
         }
+		[HttpGet("Testkq")]
+		public async Task<ActionResult<List<TestKQ>>> GetAllTestkqAsync()
+		{
+			var users = await _KQXNRepository.Testkq();
+			return Ok(users);
+		}
 
-
-        [HttpGet("Single-KQXN/{id}")]
+		[HttpGet("Single-KQXN/{id}")]
         public async Task<ActionResult<KetQuaXetNghiem>> GetSingleStudentAsync(int id)
         {
             var student = await _KQXNRepository.getbyid(id);

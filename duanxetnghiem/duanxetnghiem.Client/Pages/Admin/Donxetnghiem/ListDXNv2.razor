@@ -1,12 +1,13 @@
-﻿@page "/Duyetdon"
+﻿@page "/Duyetdonv2/{getngay}"
 @using Shared.form
 @inject IJSRuntime JsRuntime;
 @rendermode InteractiveAuto
 @attribute [Authorize]
 @layout AdminLayout
+@using System.Globalization
 
 <div class="row">
-    <h2>Toàn Bộ Danh Sách Đơn Cần Duyệt</h2>
+    <h2>Danh Sách Đơn Cần Duyệt Của Ngày @getngay</h2>
     @if (errloc != "")
     {
         <p style="color:red">Vui lòng chọn ngày</p>
@@ -20,8 +21,8 @@
                 <option value="@time.ToString("dd-MM-yyyy")">@time.ToString("dd/MM/yyyy")</option>
             }
         </select>
-        <button class="btn btn-info mx-3" @onclick="loc">Lọc</button>
-
+        <button class="btn btn-info mx-3" @onclick="loc">Lọc</button> 
+        
     </div>
 </div>
 
@@ -31,8 +32,8 @@
     <button class="btn btn-danger" id="closeBtn" onclick="toggleInfoWindowtat()">Đóng</button><button class="btn btn-success mx-3" @onclick="WriteToConsole">Thêm vào danh sách</button>
 </div>
 <div class="row" style="height:100px">
-    <a style="width:auto" href="/ListDXN"><button class="btn btn-info">Danh sách</button></a> <a style="width:auto" @onclick="duyet" ><button class="btn btn-info">Reload</button></a>
-    
+    <a style="width:auto" href="/ListDXN"><button class="btn btn-info">Danh sách</button></a> <a style="width:auto" @onclick="duyet"><button class="btn btn-info">Reload</button></a>
+
     <strong>Đang có @allDon.Count() cần được duyệt</strong>
 </div>
 <div class="row">
@@ -176,7 +177,7 @@
     protected static int i { get; set; } = 0;
     protected static int icheck { get; set; } = 0;
     [JSInvokable]
-    public static void CSCallBackMethod(int content)
+    public static void CSCallBackMethodhaha(int content)
     {
         // Xử lý giá trị content ở đây
         Console.WriteLine(content);
@@ -193,6 +194,8 @@
         i++;
 
     }
+    [Parameter]
+    public string getngay { get; set; }
     Boolean okgoi = false;
     string ngaychon = "";
     List<DateTime> allNgayDat { get; set; } = new();
@@ -223,11 +226,7 @@
         FilteredStaffMembers = AllBS;
         FilterStaffMembers();
         timeList = GenerateTimeList();
-        var ngay = allDon.Select(don => don.dxn.Ngaydat).ToList();
-        allNgayDat = ngay
-    .Select(date => date.Date)
-    .Distinct()
-    .ToList();
+
     }
 
     static List<string> GenerateTimeList()
@@ -260,7 +259,7 @@
             errloc = "1";
             return;
         }
-        navigation.NavigateTo("/Duyetdonv2/"+ngaychon, true);
+        navigation.NavigateTo("/Duyetdonv2/" + ngaychon, true);
     }
     private void FilterStaffMembers()
     {
@@ -289,12 +288,23 @@
         AllDXN.Clear();
         var DXN = await DXNservice.getallAsync();
         if (DXN is null) return;
+        string[] formats = { "dd/MM/yyyy", "d/M/yyyy", "dd-MM-yyyy" };
         foreach (var student in DXN)
         {
             if (student.Trangthai == "Đã Chuyển Tiền")
             {
                 AllDXN.Add(student);
             }
+        }
+        var ngay = AllDXN.Select(don => don.Ngaydat).ToList();
+        allNgayDat = ngay
+    .Select(date => date.Date)
+    .Distinct()
+    .ToList();
+        if (DateTime.TryParseExact(getngay, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime searchDate))
+        {
+            // Filter AllDXN based on the search date
+            AllDXN = AllDXN.Where(dx => dx.Ngaydat.Date == searchDate.Date).ToList();
         }
         allDon.Clear();
         foreach (var donxn in AllDXN)
@@ -477,10 +487,10 @@
 
                                 Microsoft.Maps.Events.addHandler(pin, 'click', function () {
                                     var content = `<div class="alert alert-success"> <strong>Thông tin khách hàng: </strong>@address.nguoi.Hoten</div>
-                                                             <p><strong>Số điện thoại: </strong>@address.nguoi.SDT</p>
-                                                             <p><strong>Địa chỉ: </strong>@address.diachi</p>
-                                                             <p><strong>Email: </strong>@address.nguoi.Email</p>
-                                                             <p><strong>Thời gian: </strong>@address.dxn.giolaymau @address.dxn.Ngaydat.ToString("dd/MM/yyyy")</p>`;
+                                                                     <p><strong>Số điện thoại: </strong>@address.nguoi.SDT</p>
+                                                                     <p><strong>Địa chỉ: </strong>@address.diachi</p>
+                                                                     <p><strong>Email: </strong>@address.nguoi.Email</p>
+                                                                     <p><strong>Thời gian: </strong>@address.dxn.giolaymau @address.dxn.Ngaydat.ToString("dd/MM/yyyy")</p>`;
 
 
                                     showInfoWindow(content);
@@ -491,11 +501,11 @@
                     });
         </text>
     }
-                        });
+                            });
 
     }
     function CSMethod1(content) {
-        DotNet.invokeMethodAsync('duanxetnghiem.Client', 'CSCallBackMethod', content).then(data => {
+        DotNet.invokeMethodAsync('duanxetnghiem.Client', 'CSCallBackMethodhaha', content).then(data => {
             console.log(data);
         });
     }

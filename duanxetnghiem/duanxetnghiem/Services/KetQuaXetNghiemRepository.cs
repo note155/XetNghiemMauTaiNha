@@ -87,7 +87,40 @@ namespace duanxetnghiem.Services
             return gm;
         }
 
-        public async Task<KetQuaXetNghiem> updateAsync(KetQuaXetNghiem ketQuaXetNghiem)
+		public async Task<List<TestKQ>> Testkq()
+		{
+			var cs = await _context.chisos.ToListAsync();
+            List<TestKQ> haha = new();
+            foreach(var c in cs)
+            {
+                TestKQ a = new();
+                a.ketqua = RandomNumberInRange(c.CSBT);
+                a.ten = c.ten;
+                a.id = c.Id;
+                haha.Add(a);
+			}
+            return haha;
+		}
+		static string RandomNumberInRange(string range)
+		{
+			string[] parts = range.Split('-');
+			double min = double.Parse(parts[0]);
+			double max = double.Parse(parts[1]);
+
+			// Tăng giảm min và max thêm 20%
+			double increasePercent = 0.20;
+			double minAdjusted = Math.Max(0, min * (1 - increasePercent));
+			double maxAdjusted = max * (1 + increasePercent);
+
+			Random random = new Random();
+			double randomNumber = random.NextDouble() * (maxAdjusted - minAdjusted) + minAdjusted;
+
+			// Giới hạn kết quả chỉ có 2 chữ số sau dấu phẩy
+			string result = randomNumber.ToString("F2");
+
+			return result;
+		}
+		public async Task<KetQuaXetNghiem> updateAsync(KetQuaXetNghiem ketQuaXetNghiem)
         {
             if (ketQuaXetNghiem == null) return null;
 

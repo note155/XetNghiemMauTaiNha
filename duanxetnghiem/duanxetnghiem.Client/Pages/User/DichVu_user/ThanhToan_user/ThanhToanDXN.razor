@@ -52,7 +52,7 @@
                         </tr>
                     </thead>
                     @foreach (var goi in AllHD)
-                            {
+                    {
                         <tr>
                             <td><a href="XCTDon/@goi.id">@goi.id</a></td>
                             <td>@goi.hoten</td>
@@ -73,13 +73,14 @@
                 <div class="panel-body payment-content">
                     <img src="QR.jpg" alt="QR Code" class="qr-code">
                     <div class="payment-info">
-                        <div>Nội Dung Chuyển Tiền : 
+                        <div>
+                            Nội Dung Chuyển Tiền :
                             <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                    <a> <div onclick="copyText()" class="input-group-text">copy</div></a>
+                                <div class="input-group-prepend">
+                                    <div onclick="copyText()" class="input-group-text">Copy</div>
+                                    <input value="@id" type="text" class="form-control" id="idTextbox">
+                                </div>
                             </div>
-                                <input value="@id" type="text" class="form-control" id="idTextbox">
-                          </div>
                         </div>
                         <!-- Bạn có thể thêm các phần khác tùy ý ở đây -->
                     </div>
@@ -180,8 +181,8 @@
             dxn.Trangthai = "Đã Chuyển Tiền";
             await DXNservice.updateAsync(dxn);
 
-        } 
-        foreach(var tt in AllTT)
+        }
+        foreach (var tt in AllTT)
         {
             tt.NgayTT1 = DateTime.Now;
             if (tientttruoc < tongtien)
@@ -192,7 +193,7 @@
                         DonXetNghiemId = tt.DonXetNghiemId,
                         thoigian = DateTime.Now,
                         trangthai = "Đơn đã được thanh toán 30% (" + tt.Tongtien * 30 / 100 + " VND)"
-            };
+                    };
                 await TTrangservice.addAsync(ttrang);
             }
             else
@@ -214,12 +215,12 @@
     }
     private async Task loadtongtien()
     {
-        foreach(var dxn in AllDXN)
+        foreach (var dxn in AllDXN)
         {
             var tt = await TTservice.getbyidDXNAsync(dxn.Id);
             tongtien += tt.Tongtien;
             AllTT.Add(tt);
-            foreach(var us in alluser)
+            foreach (var us in alluser)
             {
                 if (dxn.UserId == us.Id)
                 {
@@ -259,7 +260,7 @@
     }
     public class hd
     {
-        public int id{ get; set; }
+        public int id { get; set; }
         public long sotien { get; set; }
         public string hoten { get; set; }
     }

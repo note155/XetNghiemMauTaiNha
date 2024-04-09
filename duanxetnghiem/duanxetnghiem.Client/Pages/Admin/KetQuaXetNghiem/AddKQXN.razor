@@ -246,6 +246,16 @@
     }
     private async Task Nhankq()
     {
+        var lala = await KQXNservice.Testkq();
+        foreach(var s in lala){
+            foreach(var a in Inputkq.kQandCs)
+            {
+                if (a.id == s.id)
+                {
+                    a.kq = s.ketqua;
+                }
+            }
+        }
     }
     private async Task addkq()
     {

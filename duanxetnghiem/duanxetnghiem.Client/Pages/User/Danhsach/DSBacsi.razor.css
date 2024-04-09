@@ -11,44 +11,80 @@
     background-size: cover;
     background-position: center;
     height: 450px;
-    margin-bottom: 8rem;
+    margin-bottom: 10rem;
     text-align: center;
 }
 
 h4 {
-    font-family: 'Roboto';
-    font-style: normal;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 3.0rem;
     font-weight: 700;
-    font-size: 2.6rem;
-    line-height: 48px;
-    margin-top: 50px;
+    font-style: normal;
+    color: #fff;
+    margin-bottom: 30px;
+    margin-top: 40px;
 }
 
 p {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 1.1rem;
-    line-height: 24px;
+    font-family: 'Open Sans'sans-serif;
     text-align: center;
-}
-
-.btn-dark {
-    background-color: #000;
     color: #fff;
-    border-color: #fff;
-    height: 40px;
+    margin-bottom: 0.5em;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    font-weight: 700;
 }
 
-    .btn-dark:hover {
-        background-color: rgba(0, 0, 0, 0.5);
-        border-color: #fff;
+.button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 8px 20px;
+    border-radius: 4px;
+}
+
+.button-primary1 {
+    position: relative;
+    background-color: #208095;
+    color: #fff;
+    font-size: 1.4rem;
+    font-weight: 600;
+    transition: color 0.3s ease-in;
+    z-index: 1;
+}
+
+    .button-primary1:hover {
+        color: #208095;
+        text-decoration: none;
+    }
+
+    .button-primary1::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+        background-color: #fff;
+        border-radius: 4px;
+        opacity: 0;
+        -webkit-transform: scaleX(0.8);
+        -ms-transform: scaleX(0.8);
+        transform: scaleX(0.8);
+        transition: all 0.3s ease-in;
+        z-index: -1;
+    }
+
+    .button-primary1:hover::after {
+        opacity: 1;
+        -webkit-transform: scaleX(1);
+        -ms-transform: scaleX(1);
+        transform: scaleX(1);
     }
 
 /*Thanh tìm kiếm */
 
 .container {
-    margin-bottom: 8rem;
+    margin-bottom: 4rem;
 }
 
 .search-container {
@@ -61,43 +97,44 @@ p {
 
 input {
     width: 360px;
-    height: 50px;
+    height: 60px;
     border: 1px solid #808080;
     padding: 8px;
     border-radius: 5px;
     margin: 0px;
+    font-size: 1.0rem;
 }
 
-button {
-    height: 50px;
+.btn {
+    height: 60px;
     width: 150px;
-    padding: 10px 10px;
+    padding: 5px 5px;
     background-color: #007bff;
     color: #fff;
-    border-radius: 5px;
     cursor: pointer;
     outline: none;
     text-align: center;
+    font-size: 1.0rem;
+    box-sizing: border-box; /* Tính cả padding vào kích thước */
 }
 
-.btn-primary {
-    background-color: #007bff;
-    color: #fff;
-    padding: 2px;
-}
+@media only screen and (max-width: 768px) {
+    .search-container {
+        padding: 5px; /* Giảm padding cho màn hình nhỏ */
+    }
 
-.btn-secondary {
-    background-color: #6c757d;
-    color: #fff;
+    input, .btn {
+        height: 40px; /* Giảm chiều cao của input và button */
+        font-size: 0.9rem; /* Giảm kích thước chữ cho màn hình nhỏ */
+    }
 }
-
-button:hover {
-    background-color: #0056b3;
-}
-
 
 
 /*danh sach bác si*/
+.package-container {
+    margin-bottom: 6rem;
+}
+
 .team-items {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -114,7 +151,6 @@ button:hover {
 .team-item {
     font-weight: 500;
     line-height: 24px;
-    color: #132432;
     width: 25%;
     padding: 20px 30px 0;
     margin-bottom: 60px;
@@ -125,9 +161,8 @@ button:hover {
     max-width: 265px;
     margin-left: auto;
     margin-right: auto;
-    height: 283px;
     padding: 0;
-    height: 0;
+    height: auto;
     position: relative;
     padding-top: 113.75%;
     display: block;
@@ -139,6 +174,8 @@ button:hover {
         top: 0;
         width: 100%;
         height: 100%;
+        display: block; /* Đảm bảo hình ảnh hiển thị đúng cách như một phần tử block */
+        margin: 0 auto; /* Căn giữa hình ảnh trong phần tử cha */
         -o-object-fit: contain;
         object-fit: contain;
         -o-object-position: top center;
@@ -166,18 +203,10 @@ img {
 }
 
 .team-item-title {
-    line-height: 32px;
-    margin-bottom: 4px;
-    display: block;
-    position: relative;
-    z-index: 3;
-    font-weight: 600;
-    line-height: 32px;
-    margin: -25px 0 16px;
-    color: #1D93E3;
-    text-decoration: none;
-    background-color: transparent;
-    font-size: 1.8rem;
+    font-weight: 700;
+    font-size: 1.4rem;
+    width: 280px;
+    height: auto;
 }
 
 .team-item-meta {
@@ -189,36 +218,35 @@ img {
     font-size: 1.1rem;
 }
 
-.team-item-review {
-    display: block;
-    margin-bottom: 16px;
+.team-item-title {
+    font-weight: 700;
+    font-size: 1.4rem;
+    width: 280px;
+    height: auto;
 }
-
-.team-item-actions a {
-    display: inline-block;
-    font-weight: 600;
-    font-size: 1.1rem;
-    line-height: 24px;
-    text-decoration: none;
-    color: #1D93E3;
-    padding: 9px;
-    border: 1px solid #1D93E3;
-    border-radius: 4px;
-    min-width: 170px;
-    -webkit-transition: 0.2s;
-    transition: 0.2s;
-}
-
-    .team-item-actions a:hover,
-    .team-item-actions a:active {
-        background-color: #0079f4;
-        color: #fff; /* Thay đổi màu chữ khi nút được nhấn */
-    }
 
 .txtnamebs {
     color: #0e1012 !important;
 }
 
+.post-image-container1 {
+    position: relative;
+    background-color: #1D93E3;
+    color: #fff;
+    font-size: 1.3rem;
+    font-weight: 500;
+    transition: color 0.3s ease-in;
+    z-index: 1;
+    height: 50px;
+    border: 1px solid #208095;
+    border-radius: 5px;
+    width: 200px;
+}
+
+    .post-image-container1:hover {
+        background-color: #91E1F6; /* Thay đổi màu nền khi hover */
+        color: #fff; /* Thay đổi màu chữ khi hover */
+    }
 /* Responsive CSS for smaller screens */
 @media only screen and (max-width: 768px) {
     .team-item {

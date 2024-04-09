@@ -1,81 +1,4 @@
 ﻿
-/*xet nghiem mau tai nha*/
-.overlay {
-    position: absolute;
-    top: 0px;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Điều chỉnh độ mờ của overlay tại đây */
-    height: 500px;
-    background-image: url('imgtrangchu/hinhnen4.png');
-    background-size: cover;
-    background-position: center;
-}
-
-.container {
-    margin-top: 10.1rem;
-}
-
-.card-title {
-    font-size: 2.3rem;
-    margin-bottom: 1rem;
-    color: #000000;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 700;
-}
-
-.card-text {
-    font-size: 1.3rem;
-    margin-bottom: 1.5rem;
-    color: #fff;
-}
-
-.row {
-    margin-top: 5px;
-}
-
-.btn {
-    width: 250px;
-    margin-right: 10px;
-    font-size: 18px;
-}
-
-.btn-outline-dark {
-    color: #000000;
-    border-color: #000000;
-    margin-bottom: 5px;
-}
-
-    .btn-outline-dark:hover {
-        background-color: #fff;
-        color: #000;
-    }
-
-.btn-dark {
-    background-color: #000;
-    color: #fff;
-    border-color: #fff;
-    margin-bottom: 5px;
-}
-
-    .btn-dark:hover {
-        background-color: rgba(0, 0, 0, 0.5);
-        border-color: #fff;
-    }
-
-.xetnghiem-container {
-    margin-bottom: 50px; /* Điều chỉnh giảm khoảng cách dưới */
-    max-width: 600px; /* Đặt chiều rộng tối đa */
-    margin: 0 auto; /* Để căn giữa phần tử */
-    text-align: right; /* Căn nội dung về phía bên phải */
-}
-
-.card-body.overlay {
-    padding: 30px; /* Điều chỉnh khoảng cách bên trong của phần tử */
-}
-
 /*Thêm thông báo*/
 .notification-popup {
     position: fixed;
@@ -152,7 +75,6 @@
 
 
 /*Dịch vụ của chúng tôi*/
-
 @media (max-width: 767px) {
     .dichvu-container {
         flex-direction: column;
@@ -176,30 +98,78 @@
 }
 
 .dichvu-container {
-    background-image: url('imgtrangchu/hinhnen9.png');
+    background-image: url('imgtrangchu/hinhnen20.png');
     background-size: cover;
     background-position: center;
     height: auto;
     margin-bottom: 8rem;
     text-align: center;
+    margin-top: 100px;
 }
 
 h4 {
-    font-family: 'Roboto';
-    font-style: normal;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 3.0rem;
     font-weight: 700;
-    font-size: 2.5rem;
-    line-height: 48px;
+    font-style: normal;
+    color: black;
+    margin-bottom: 30px;
 }
 
-p {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 1.0rem;
-    line-height: 24px;
+.text1 {
+    font-family: 'Open Sans'sans-serif;
     text-align: center;
+    color: black;
+    margin-bottom: 0.5em;
+    font-size: 1.2rem;
+    line-height: 1.6;
 }
+
+.button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 8px 20px;
+    border-radius: 4px;
+}
+
+.button-primary1 {
+    position: relative;
+    background-color: #208095;
+    color: #fff;
+    font-size: 1.4rem;
+    font-weight: 600;
+    transition: color 0.3s ease-in;
+    z-index: 1;
+}
+
+    .button-primary1:hover {
+        color: #208095;
+        text-decoration: none;
+    }
+
+    .button-primary1::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+        background-color: #fff;
+        border-radius: 4px;
+        opacity: 0;
+        -webkit-transform: scaleX(0.8);
+        -ms-transform: scaleX(0.8);
+        transform: scaleX(0.8);
+        transition: all 0.3s ease-in;
+        z-index: -1;
+    }
+
+    .button-primary1:hover::after {
+        opacity: 1;
+        -webkit-transform: scaleX(1);
+        -ms-transform: scaleX(1);
+        transform: scaleX(1);
+    }
 
 .card1 {
     background-color: #fff; /* Màu nền trắng */
@@ -252,22 +222,22 @@ p {
 .package-item-photo:focus img {
     transform: scale(1.1); /* Phóng to hình ảnh khi hover hoặc focus */
 }
+
+
 /*Vì sao chọn chúng tôi*/
-.visao-container {
-    margin-bottom: 50px; /* Điều chỉnh giảm khoảng cách dưới */
-}
 
 .card {
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out, color 0.3s ease-in-out;
     height: 100%;
-    padding: 15px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     background-color: #ffffff;
+    color: black;
 }
 
-    .card:not(.no-hover):hover {
+    .card:hover {
         background-color: #66b2ff;
         color: #fff;
     }
@@ -345,7 +315,14 @@ p {
     font-size: 1.4rem;
     margin: 0px;
 }
+
+i {
+    font-size: 24px; /* Kích thước */
+    display: inline-block;
+    vertical-align: middle;
+}
 /*Lợi ích của việc lấy máu tại nhà*/
+
 .col-md-6 img {
     max-width: 100%;
     height: auto;
@@ -413,156 +390,84 @@ p {
     height: 100%;
     background: rgba(0, 0, 0, 0.5); /* Điều chỉnh độ mờ của overlay tại đây */
     height: auto;
-    background-image: url('imgtrangchu/hinhnen17.png');
+    /*background-image: url('imgtrangchu/hinhnen17.png');*/
+    background-image: url('imgtrangchu/hinhnen21.png');
     background-size: cover;
     background-position: center;
-    margin-bottom: 38rem;
 }
 
-.btn-outline-dark1 {
-    color: #fff;
-    border-color: #fff;
-    border-radius: 4px;
-    background-color: #000000;
-    text-align: center;
-    margin: 0 auto;
-}
-
-    .btn-outline-dark1:hover {
-        background-color: #0078b6;
-        color: #fff;
-    }
-
-/*quy trinh dat lich*/
-.card2 {
-    background-image: url('imgtrangchu/hinhnen19.png');
-    background-size: cover; /* Đảm bảo hình nền được phủ toàn bộ phần nền */
-    background-position: center; /* Căn giữa hình nền */
-    padding: 0px;
-    transition: transform 0.3s ease-in-out;
-    cursor: pointer;
-    background-color: #ffffff; /* Màu nền ban đầu */
-}
-
-.card2-title {
-    font-family: 'Roboto';
+.textdatlich {
+    font-family: 'Open Sans';
     font-style: normal;
-    font-weight: 600;
-    font-size: 2.0rem;
-    line-height: 28px;
-    margin: 10px;
-    color: #007bff;
-    text-align: center
-}
-
-.card-title1 {
-    font-size: 1.7rem;
+    font-weight: 800;
+    line-height: 32px;
+    color: #FFFFFF;
     text-align: center;
-}
-
-.card-text1 {
-    font-size: 1.3rem;
-    color: #ff1333;
-}
-
-.img-fluid rounded-start {
-    border-radius: 5px;
-}
-
-
-/* Liên hệ - địa chỉ goodMap*/
-.overlay2 {
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Điều chỉnh độ mờ của overlay tại đây */
-    height: auto;
-    background-image: url('imgtrangchu/hinhnen23.png');
-    background-size: cover;
-    background-position: center;
-    margin-bottom: 38rem;
-    height: auto;
-}
-
-.guithongtin {
-    margin-left: 40px;
-    width: 300px;
-}
-
-    .guithongtin h2 {
-        font-size: 2.4rem;
-        margin-bottom: 40px;
-    }
-
-
-.form-group {
-    margin-bottom: 10px;
-    font-size: 1.1rem;
-    padding: 6px 0;
-}
-
-.button-cell {
-    align-self: flex-end;
-    text-align: center
-}
-
-.form-container {
-    display: flex; /* Sử dụng flexbox để căn chỉnh nội dung */
-    flex-direction: column; /* Căn nội dung dọc theo trục chính */
-}
-
-.button-cell {
-    display: flex; /* Sử dụng flexbox cho nút "Gửi" */
-    justify-content: center; /* Căn nút "Gửi" ra giữa */
-    margin-top: 20px; /* Khoảng cách trên của nút "Gửi" */
-}
-
-.map-container {
-    max-width: 100%; /* Đảm bảo iframe không vượt quá chiều rộng của cột */
-    margin-top: 70px; /* Khoảng cách trên giữa iframe và văn bản dưới nó */
-}
-
-    .map-container iframe {
-        width: 100%; /* Đảm bảo iframe chiếm toàn bộ chiều rộng của phần tử cha */
-        height: 400px; /* Đặt chiều cao của iframe */
-    }
-}
-
-h1 {
     margin-bottom: 0.5em;
     font-size: 3.6rem;
 }
 
-p {
-    margin-bottom: 0.5em;
-    font-size: 1.6rem;
+h1 {
+    margin-bottom: 1.0em;
     line-height: 1.6;
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 420;
+    font-size: 1.6rem;
+    text-align: center;
+    color: #fdfdfd;
+    font-weight: 800;
 }
 
-.button {
-    display: inline-block;
+.logo-container {
+    width: 200px;
+    height: 200px;
+    border-radius: 50px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .logo-container img {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 50%;
+    }
+
+.col-md-6 h1 i {
+    width: 50px; /* Đặt chiều rộng của nút icon */
+    font-size: 1.9rem;
+}
+
+.button1 {
+    display: flex;
     margin-top: 20px;
-    padding: 8px 25px;
+    padding: 8px 20px;
     border-radius: 4px;
+    text-align: center;
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: center; /* Căn giữa theo chiều ngang */
 }
 
-.button-primary {
+.button-primary2 {
     position: relative;
     background-color: #c0ca33;
     color: #fff;
-    font-size: 1.8rem;
-    font-weight: 700;
+    font-size: 1.4rem;
+    font-weight: 600;
     transition: color 0.3s ease-in;
     z-index: 1;
+    display: flex;
+    justify-content: center;
 }
 
-    .button-primary:hover {
+    .button-primary2:hover {
         color: #c0ca33;
         text-decoration: none;
     }
 
-    .button-primary::after {
+    .button-primary2::after {
         content: '';
         position: absolute;
         bottom: 0;
@@ -579,19 +484,164 @@ p {
         z-index: -1;
     }
 
-    .button-primary:hover::after {
+    .button-primary2:hover::after {
         opacity: 1;
         -webkit-transform: scaleX(1);
         -ms-transform: scaleX(1);
         transform: scaleX(1);
     }
 
-.overlay::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: 0;
-    background-color: rgba(0, 0, 0, .3);
+/*quy trinh dat lich*/
+.card2 {
+    background-image: url('imgtrangchu/hinhnen19.png');
+    background-size: cover; /* Đảm bảo hình nền được phủ toàn bộ phần nền */
+    background-position: center; /* Căn giữa hình nền */
+    padding: 0px;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
 }
+
+h3 {
+    font-size: 2.1rem;
+    margin-bottom: 1.5em;
+    line-height: 1.6;
+    font-style: normal;
+    font-weight: 700;
+    text-align: center;
+    color: black;
+}
+
+.card-text1 {
+    font-size: 1.1rem;
+    color: black;
+    font-weight: 400;
+}
+
+.card-title1 {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 1.8rem;
+    line-height: 28px;
+    margin: 5px;
+    color: #fff;
+    text-align: center;
+}
+
+.card-header {
+    height: 50px;
+    background-color: #208095;
+}
+
+.card-body1 {
+    height: 92px;
+    padding: 20px;
+}
+
+.img-fluid rounded-start {
+    border-radius: 5px;
+}
+
+
+/* Liên hệ - địa chỉ goodMap*/
+.overlay2 {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Điều chỉnh độ mờ của overlay tại đây */
+    /*background-image: url('imgtrangchu/hinhnen23.png');*/
+    background-color: #208095;
+    background-size: cover;
+    background-position: center;
+    height: auto;
+}
+
+.guithongtin {
+    width: 300px;
+    color: #fff;
+}
+
+    .guithongtin h2 {
+        margin-top: 20px;
+        font-size: 2.4rem;
+        margin-bottom: 40px;
+    }
+
+.btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 10px;
+    border-radius: 4px;
+    height: 50px;
+    width: 100px;
+    text-align: center;
+}
+
+.btn-primary {
+    position: relative;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 700;
+    transition: color 0.3s ease-in;
+    z-index: 1;
+}
+
+    .btn-primary:hover {
+        color: #208095;
+        text-decoration: none;
+    }
+
+    .btn-primary::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+        background-color: #fff;
+        border-radius: 4px;
+        opacity: 0;
+        -webkit-transform: scaleX(0.8);
+        -ms-transform: scaleX(0.8);
+        transform: scaleX(0.8);
+        transition: all 0.3s ease-in;
+        z-index: -1;
+    }
+
+    .btn-primary:hover::after {
+        opacity: 1;
+        -webkit-transform: scaleX(1);
+        -ms-transform: scaleX(1);
+        transform: scaleX(1);
+    }
+
+
+.form-container {
+    display: flex; /* Sử dụng flexbox để căn chỉnh nội dung */
+    flex-direction: column; /* Căn nội dung dọc theo trục chính */
+}
+
+.button-cell {
+    display: flex; /* Sử dụng flexbox cho nút "Gửi" */
+    justify-content: center; /* Căn nút "Gửi" ra giữa */
+    margin-top: 20px; /* Khoảng cách trên của nút "Gửi" */
+}
+
+.Map {
+    margin-top: 20px;
+    color: #fff;
+    font-size: 1.5rem;
+}
+
+.map-container {
+    max-width: 100%; /* Đảm bảo iframe không vượt quá chiều rộng của cột */
+    margin-top: 70px; /* Khoảng cách trên giữa iframe và văn bản dưới nó */
+}
+
+    .map-container iframe {
+        width: 100%; /* Đảm bảo iframe chiếm toàn bộ chiều rộng của phần tử cha */
+        height: 400px; /* Đặt chiều cao của iframe */
+    }
+

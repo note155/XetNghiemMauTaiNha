@@ -1,211 +1,378 @@
 ﻿@page "/lala"
+@rendermode InteractiveAuto
 
-<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+<title>Chia màn hình thành 4 phần</title>
+<div class="container">
+    <div class="box">
+        <h3>Danh Sách Khoa</h3> <button class="button-89" role="button" @onclick="()=>add(4)"> Add</button>
+        <hr />
+        <input type="text" class="form-control" placeholder="Nhập từ khóa">
+        <select @bind:event="oninput" @bind="@idkhoa" class="form-select custom-select" size="5" aria-label="size 3 select example">
+            @foreach (var item in allKhoa)
+            {
+                <option @onclick="getkhoa" value="@item.Id">@item.ten</option>
+            }
+        </select>
+    </div>
+    <div class="box">
+        <h3>Danh Sách Phòng</h3> <button class="button-89" role="button" @onclick="()=>add(5)"> Add</button>
+        <p style="color:red">@erP</p>
+        <hr />
+        <input type="text" class="form-control" placeholder="Nhập từ khóa">
+        <select @bind:event="oninput" @bind="@idphong" class="form-select custom-select" size="5" aria-label="size 3 select example">
+            @foreach (var item in allPhong)
+            {
+                <option @onclick="getphong" value="@item.Id">@item.maphong - @item.ten</option>
+            }
+        </select>
+    </div>
+    <div class="box">
+        <h3>Danh Sách Máy</h3> <button class="button-89" role="button" @onclick="()=>add(6)"> Add</button>
+        <p style="color:red">@erM</p>
+        <hr />
+        <input type="text" class="form-control" placeholder="Nhập từ khóa">
+        <select @bind:event="oninput" @bind="@idmay" class="form-select custom-select" size="5" aria-label="size 3 select example">
+            @foreach (var item in allMXN)
+            {
+                <option @onclick="getmay" value="@item.Id">@item.Name</option>
+            }
+        </select>
+    </div>
+</div>
 <div class="row">
-	<div class="col-sm-6">
-		<div class="container">
-			<div class="header-wrapper">
-				<div class="title">Welcome back, Kelly!</div>
-				<div class="note">Recent: <span class="focus">$250 </span>to <span class="focus">Best Buy</span> on Saturday, June 5.</div>
-
-				<span class="material-button"></span>
-			</div>
-			<div class="content-wrapper">
-				<div class="table-wrapper">
-					<ul class="horizontal col header">
-						<li class="content">Payoff Date</li>
-						<li class="content">Payee</li>
-						<li class="content ">Description</li>
-						<li class="content right">Remaining</li>
-					</ul>
-					<ul class="data col horizontal">
-						<li class="content">
-							<div>Nov 3</div>
-							<div class="secondary">4 months</div>
-						</li>
-						<li class="content has-image">
-							<div>Best Buy</div>
-							<div class="secondary">Best Buy, LLC.</div>
-						</li>
-						<li class="content">
-							<div>Washer & Dryer</div>
-							<div class="secondary">Promotional Exp: 10/20/17</div>
-						</li>
-						<li class="content">
-							<div>$250</div>
-							<div class="secondary">2%</div>
-						</li>
-						<li class="content">
-							<div class="icon-wrapper">
-								<span class="icon edit" data-tooltip="Edit"></span><span class="icon delete" data-tooltip="Delete"></span>
-							</div>
-
-						</li>
-					</ul>
-					<ul class="data col horizontal">
-						<li class="content">
-							<div>Jan 15 <span class="year">'17</span></div>
-							<div class="secondary">6 months</div>
-						</li>
-						<li class="content has-image">
-							<div>Chase Auto</div>
-							<div class="secondary">JP Morgan Chase Bank</div>
-						</li>
-						<li class="content">
-							<div>Scion TC '12</div>
-							<div class="secondary">5 year loan</div>
-						</li>
-						<li class="content">
-							<div>$8,9120</div>
-							<div class="secondary">80%</div>
-						</li>
-						<li class="content">
-							<div class="icon-wrapper">
-								<span class="icon edit" data-tooltip="Edit"></span><span class="icon delete" data-tooltip="Delete"></span>
-							</div>
-
-						</li>
-					</ul>
-					<ul class="data col horizontal">
-						<li class="content">
-							<div>Mar 8 <span class="year">'17</span></div>
-							<div class="secondary">8 months</div>
-						</li>
-						<li class="content has-image">
-							<div>Macy's</div>
-							<div class="secondary">Macy's Inc.</div>
-						</li>
-						<li class="content">
-							<div>Couch</div>
-							<div class="secondary">Promotional Exp: 3/8/17</div>
-						</li>
-						<li class="content">
-							<div>$1,080</div>
-							<div class="secondary">19%</div>
-						</li>
-						<li class="content">
-
-							<div class="icon-wrapper">
-								<span class="icon edit" data-tooltip="Edit"></span><span class="icon delete" data-tooltip="Delete"></span>
-							</div>
-
-
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-6">
-		<div class="container">
-			<div class="header-wrapper">
-				<div class="title">Welcome back, Kelly!</div>
-				<div class="note">Recent: <span class="focus">$250 </span>to <span class="focus">Best Buy</span> on Saturday, June 5.</div>
-
-				<span class="material-button"></span>
-			</div>
-			<div class="content-wrapper">
-				<div class="table-wrapper">
-					<ul class="horizontal col header">
-						<li class="content">Payoff Date</li>
-						<li class="content">Payee</li>
-						<li class="content ">Description</li>
-						<li class="content right">Remaining</li>
-					</ul>
-					<ul class="data col horizontal">
-						<li class="content">
-							<div>Nov 3</div>
-							<div class="secondary">4 months</div>
-						</li>
-						<li class="content has-image">
-							<div>Best Buy</div>
-							<div class="secondary">Best Buy, LLC.</div>
-						</li>
-						<li class="content">
-							<div>Washer & Dryer</div>
-							<div class="secondary">Promotional Exp: 10/20/17</div>
-						</li>
-						<li class="content">
-							<div>$250</div>
-							<div class="secondary">2%</div>
-						</li>
-						<li class="content">
-							<div class="icon-wrapper">
-								<span class="icon edit" data-tooltip="Edit"></span><span class="icon delete" data-tooltip="Delete"></span>
-							</div>
-
-						</li>
-					</ul>
-					<ul class="data col horizontal">
-						<li class="content">
-							<div>Jan 15 <span class="year">'17</span></div>
-							<div class="secondary">6 months</div>
-						</li>
-						<li class="content has-image">
-							<div>Chase Auto</div>
-							<div class="secondary">JP Morgan Chase Bank</div>
-						</li>
-						<li class="content">
-							<div>Scion TC '12</div>
-							<div class="secondary">5 year loan</div>
-						</li>
-						<li class="content">
-							<div>$8,9120</div>
-							<div class="secondary">80%</div>
-						</li>
-						<li class="content">
-							<div class="icon-wrapper">
-								<span class="icon edit" data-tooltip="Edit"></span><span class="icon delete" data-tooltip="Delete"></span>
-							</div>
-
-						</li>
-					</ul>
-					<ul class="data col horizontal">
-						<li class="content">
-							<div>Mar 8 <span class="year">'17</span></div>
-							<div class="secondary">8 months</div>
-						</li>
-						<li class="content has-image">
-							<div>Macy's</div>
-							<div class="secondary">Macy's Inc.</div>
-						</li>
-						<li class="content">
-							<div>Couch</div>
-							<div class="secondary">Promotional Exp: 3/8/17</div>
-						</li>
-						<li class="content">
-							<div>$1,080</div>
-							<div class="secondary">19%</div>
-						</li>
-						<li class="content">
-
-							<div class="icon-wrapper">
-								<span class="icon edit" data-tooltip="Edit"></span><span class="icon delete" data-tooltip="Delete"></span>
-							</div>
-
-
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</div>
+    <h2>Quản lý</h2>
+    <div class="row">
+        <div class="col-sm-4">
+            <select @bind:event="oninput" @bind="@idchon" style="width:100%" class="form-select custom-select" size="5" aria-label="size 3 select example">
+                @if (idkhoa!=0)
+                {
+                    <option value="1">Khoa @khoadachon.ten</option>
+                }
+                @if (idphong!=0)
+                {
+                    <option value="2">@phongdachon.ten</option>
+                }
+                @if (idmay!=0)
+                {
+                    <option value="3">Máy @maydachon.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col-sm-8">
+            @if(idchon == 0)
+            {
+                    <div class="alert alert-success" role="alert">
+                        Quản lý danh mục
+                    </div>
+            }
+            @if (errors.Any())
+            {
+                <div class="alert alert-success" role="alert">
+                    @foreach (var err in errors)
+                    {
+                        @err
+                    }
+                </div>
+            }
+            @if(idchon == 1 ||idchon==4)
+            {
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h4>Thông Tin Khoa</h4>
+                    @if (idchon == 1)
+                    {
+                        <a @onclick="Xoa" class="btn btn-danger">Xóa</a>
+                    }
+                </div>
+                <hr/>
+                <EditForm Model="khoadachon" method="post" OnValidSubmit="Qlkhoa" FormName="khoa">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary class="text-danger" role="alert" />
+                    <div class="form-container">
+                        <div class="form-group">
+                            <label for="hoten">Tên Khoa :</label>
+                            <InputText @bind-Value="khoadachon.ten" class="form-control" placeholder="" />
+                            <ValidationMessage For="() => khoadachon.ten" class="text-danger" />
+                        </div>
+                        <div class="form-group button-cell">
+                            <button type="submit" class="btn btn-lg btn-primary">Hoàn Thành</button>
+                        </div>
+                    </div>
+                </EditForm>
+            }
+            @if(idchon == 2 ||idchon==5)
+            {
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h4>Thông Tin Phòng</h4>
+                    @if (idchon == 2)
+                    {
+                        <a @onclick="Xoa" class="btn btn-danger">Xóa</a>
+                    }
+                </div>
+                <hr />
+                <EditForm Model="phongdachon" method="post" OnValidSubmit="Qlphong" FormName="phong">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary class="text-danger" role="alert" />
+                    <div class="form-container">
+                        <div class="form-group">
+                            <label for="hoten">Mã Phòng :</label>
+                            <InputText @bind-Value="phongdachon.maphong" class="form-control" placeholder="" />
+                            <ValidationMessage For="() => phongdachon.maphong" class="text-danger" />
+                        </div>
+                        <div class="form-group">
+                            <label for="hoten">Tên Phòng :</label>
+                            <InputText @bind-Value="phongdachon.ten" class="form-control" placeholder="" />
+                            <ValidationMessage For="() => phongdachon.ten" class="text-danger" />
+                        </div>
+                        <div class="form-group button-cell">
+                            <button type="submit" class="btn btn-lg btn-primary">Hoàn Thành</button>
+                        </div>
+                    </div>
+                </EditForm>
+            }
+            @if (idchon == 3 || idchon == 6)
+            {
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h4>Thông Tin Máy</h4>
+                    @if (idchon == 3)
+                    {
+                        <a @onclick="Xoa" class="btn btn-danger">Xóa</a>
+                    }
+                </div>
+                <hr />
+                <EditForm Model="maydachon" method="post" OnValidSubmit="Qlmay" FormName="may">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary class="text-danger" role="alert" />
+                    <div class="form-container">
+                        <div class="form-group">
+                            <label for="hoten">Tên Máy :</label>
+                            <InputText @bind-Value="maydachon.Name" class="form-control" placeholder="" />
+                            <ValidationMessage For="() => maydachon.Name" class="text-danger" />
+                        </div>
+                        <div class="form-group button-cell">
+                            <button type="submit" class="btn btn-lg btn-primary">Hoàn Thành</button>
+                        </div>
+                    </div>
+                </EditForm>
+            }
+        </div>
+    </div>
 </div>
 
+@code{
+    public List<Khoa> allKhoa { get; set; } = new ();
+    public List<Phong> allPhong { get; set; } = new();
+    public List<MayXetNghiem> allMXN { get; set; } = new();
+    public List<Khoa> allKhoa1 { get; set; } = new();
+    public List<Phong> allPhong1 { get; set; } = new();
+    public List<MayXetNghiem> allMXN1 { get; set; } = new();
+    string erP = "", erM = "";
+    List<string> errors = new List<string>();
+    [SupplyParameterFromForm]
+    public MayXetNghiem maydachon { get; set; } = new();
+    [SupplyParameterFromForm]
+    public Phong phongdachon { get; set; } = new();
+    [SupplyParameterFromForm]
+    public Khoa khoadachon { get; set; } = new();
 
-<script>
-	setTimeout(function () {
-
-		$('.title').fadeOut("slow", function () {
-			var div = $("<div class='title'>My Dashboard</div>").hide();
-			$(this).replaceWith(div);
-			$('.title').fadeIn("slow");
-		});
-
-		// $(".title").html('My Dashboard');
-	}
-		, 1500);
-
-
-
-</script>
+    public int idkhoa = 0, idphong = 0, idmay = 0,idchon=0;
+    protected override async Task OnInitializedAsync()
+    {
+        allKhoa1 = await Khoaservice.getallAsync();
+        allPhong1 = await Phongservice.getallAsync();
+        allMXN1 = await MayXNservice.getallAsync();
+        allKhoa = allKhoa1;
+        allPhong = allPhong1;
+        allMXN = allMXN1;
+    }
+    public void getkhoa()
+    {
+        allPhong = allPhong1;
+        khoadachon = allKhoa.FirstOrDefault(a=>a.Id==idkhoa);
+        idchon = 1;
+        allPhong = allPhong.Where(a => a.Khoaid == idkhoa).ToList();
+        idmay = 0; idphong = 0;
+    }
+    public void getphong()
+    {
+        allMXN = allMXN1;
+        phongdachon = allPhong.FirstOrDefault(a=>a.Id==idphong);
+        allMXN = allMXN.Where(a => a.phongid == idphong).ToList();
+        idchon = 2;
+        idmay = 0;
+    }
+    public void getmay()
+    {
+        maydachon = allMXN.FirstOrDefault(a => a.Id == idmay);
+        idchon = 3;
+    }
+    private async Task Qlkhoa()
+    {
+        if (idchon == 1)
+        {
+            var haha = await Khoaservice.updateAsync(khoadachon);
+            if (haha != null)
+            {
+                errors.Add("Sửa Thành Công");
+            }
+        }
+        if (idchon == 4)
+        {
+            var haha =await Khoaservice.addAsync(khoadachon);
+            if (haha != null)
+            {
+                errors.Add("Thêm Thành Công");
+                allKhoa1.Add(haha);
+                khoadachon = new();
+                idkhoa = 0;
+                idchon = 0;
+            }
+        }
+    }
+    private async Task Qlphong()
+    {
+        errors.Clear();
+        if (idchon == 2)
+        {
+            var haha =await Phongservice.updateAsync(phongdachon);
+            if (haha != null)
+            {
+                errors.Add("Sữa Thành Công");
+            }
+        }
+        if (idchon == 5)
+        {
+            var haha= await Phongservice.addAsync(phongdachon);
+            if (haha != null)
+            {
+                errors.Add("Thêm Thành Công");
+                allPhong1.Add(haha);
+                allPhong.Add(haha);
+                phongdachon = new();
+                phongdachon.Khoaid = idkhoa;
+            }
+        }
+    }
+    private async Task Qlmay()
+    {
+        if (idchon == 3)
+        {
+            var haha = await MayXNservice.updateAsync(maydachon);
+            if (haha != null)
+            {
+                errors.Add("Sữa Thành Công");
+            }
+        }
+        if (idchon == 6)
+        {
+            var haha = await MayXNservice.addAsync(maydachon);
+            if (haha != null)
+            {
+                errors.Add("Thêm Thành Công");
+                allMXN1.Add(haha);
+                allMXN.Add(haha);
+                maydachon = new();
+                maydachon.phongid = idphong;
+            }
+        }
+    }
+    public void add(int id)
+    {
+        errors.Clear();
+        erM = "";
+        erP = "";
+        if (id == 4)
+        {
+            khoadachon = new();
+            idkhoa = 0;
+            idmay=0;
+            idphong = 0;
+            maydachon = new();
+            phongdachon = new();
+        }
+        if (id == 5)
+        {
+            if (idkhoa == 0)
+            {
+                idchon = 0;
+                erP = "Bạn chưa chọn Khoa";
+                return;
+            }
+            else
+            {
+                phongdachon = new();
+                phongdachon.Khoaid = idkhoa;
+            }
+        }
+        if (id == 6)
+        {
+            if (idkhoa == 0)
+            {
+                idchon = 0;
+                erM = "Bạn chưa chọn Khoa";
+                return;
+            }
+            if (idphong == 0)
+            {
+                idchon = 0;
+                erM = "Bạn chưa chọn Phòng";
+                return;
+            }
+            else
+            {
+                maydachon = new();
+                maydachon.phongid = idphong;
+            }
+        }
+        idchon = id;
+    }
+    private async Task Xoa()
+    {
+        errors.Clear();
+        if (idchon == 1)
+        {
+            if (idkhoa != 0)
+            {
+                await Khoaservice.deleteAsync(idkhoa);
+                allKhoa.RemoveAll(a=>a.Id==idkhoa);
+                errors.Add("Xóa Thành Công");
+                idkhoa = 0;
+                idmay = 0;
+                idphong = 0;
+                idchon = 4;
+                khoadachon = new();
+                allMXN.Clear();
+                allPhong.Clear();
+            }
+        }
+        if (idchon == 2)
+        {
+            if (idphong != 0)
+            {
+                await Phongservice.deleteAsync(idphong);
+                allPhong.RemoveAll(a => a.Id == idphong);
+                allPhong1.RemoveAll(a => a.Id == idphong);
+                errors.Add("Xóa Thành Công");
+                idmay = 0;
+                idphong = 0;
+                phongdachon = new();
+                phongdachon.Khoaid = idkhoa;
+                idchon = 5;
+                allMXN.Clear();
+            }
+        }
+        if (idchon == 3)
+        {
+            if (idmay != 0)
+            {
+                await MayXNservice.deleteAsync(idmay);
+                allMXN.RemoveAll(a => a.Id == idmay);
+                allMXN1.RemoveAll(a => a.Id == idmay);
+                errors.Add("Xóa Thành Công");
+                idmay=0;
+                maydachon = new();
+                maydachon.phongid = idphong;
+                idchon = 6;
+            }
+        }
+    }
+}

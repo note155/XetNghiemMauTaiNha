@@ -315,9 +315,9 @@
             "<h2 style=\"text-align: center;\">KẾT QUẢ XÉT NGHIỆM</h2>" +
             "<p style=\"text-align: center;\">Ngày có kết quả: " + Inputkq.ngaycoKQ + " -- Số :" + Input.Id + "</p>" +
             "<p> <span style=\"float: left;\">Họ Tên Người Bệnh:" + user.Hoten +
-            "</span><span style=\"float: right;\">Ngày sinh:" + user.Ngaysinh + "........................  Giới Tính: " + gioitinh(user.Gioitinh) + "</span></p>" +
+            "</span><span style=\"float: right;\">Ngày sinh:" + user.Ngaysinh.ToString("dd/MM/yyyy") + "&ensp;  Giới Tính: " + gioitinh(user.Gioitinh) + "</span></p>" +
             "<br><p >Địa Chỉ: " + user.Diachi +" / " +@user.CapXa+ " / "+ @user.CapHuyen +"/ Thành phố Huế" +"</p>" +
-            "<p>Khoa: "+Inputkq.khoa+"..............................................Nhóm máu: "+Inputkq.nhommau+"</p>"+
+            "<p>Khoa: " + loadkhoa(Inputkq.khoa) + "&ensp; Nhóm máu: " + Inputkq.nhommau + "</p>" +
             "<p>Ghi chú: "+Inputkq.ghiChu+"</p>"+
     "<br><h3>Danh sách Kết Quả và Chỉ Số</h3>" +
     "<table style=\"text-align: center;width:100%;border-collapse: collapse; border: 1px solid black;\">" +

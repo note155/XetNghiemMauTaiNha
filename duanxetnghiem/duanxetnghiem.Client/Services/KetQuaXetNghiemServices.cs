@@ -62,7 +62,14 @@ namespace duanxetnghiem.Client.Services
             return respone;
         }
 
-        public async Task<KetQuaXetNghiem> updateAsync(KetQuaXetNghiem User)
+		public async Task<List<TestKQ>> Testkq()
+		{
+			var allstudent = await _httpClient.GetAsync("api/KetQuaXetNghiem/Testkq");
+			var respone = await allstudent.Content.ReadFromJsonAsync<List<TestKQ>>();
+			return respone;
+		}
+
+		public async Task<KetQuaXetNghiem> updateAsync(KetQuaXetNghiem User)
         {
             var newstudent = await _httpClient.PostAsJsonAsync("api/KetQuaXetNghiem/Update-KQXN", User);
             var respone = await newstudent.Content.ReadFromJsonAsync<KetQuaXetNghiem>();
