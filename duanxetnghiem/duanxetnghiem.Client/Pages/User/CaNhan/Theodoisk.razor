@@ -5,9 +5,9 @@
 @using System.Globalization;
 @attribute [Authorize]
 <div class="container">
-    <h3>Theo dõi sức khỏe của bệnh nhân @user.Hoten</h3>
+    <h3>Theo dõi sức khỏe của bệnh nhân: <span class="highlight">@user.Hoten</span></h3>
     <div class="row">
-        @if (danhsach.Count!=0)
+        @if (danhsach.Count != 0)
         {
             @foreach (var dslon in danhsach)
             {
@@ -90,7 +90,7 @@
         allgoixn = await GXNservice.getallAsync();
         allchiso = await CSservice.getallAsync();
         var ds = await DXNservice.getallbyiduserAsync(user.Id);
-        foreach(var a in ds)
+        foreach (var a in ds)
         {
             if (a.Trangthai == "Hoàn thành")
             {
@@ -108,17 +108,17 @@
                 if (!existsInDanhsach)
                 {
                     haha dsa = new()
-                    {
-                        idgoi=goi.GoiXetNghiemId,
-                        tengoi = tengoixn(goi.GoiXetNghiemId),
-                        solan=1
-                    };
+                        {
+                            idgoi = goi.GoiXetNghiemId,
+                            tengoi = tengoixn(goi.GoiXetNghiemId),
+                            solan = 1
+                        };
                     dsa.dscs = new List<Chiso>();
                     dsa.danhSachChiso = new List<Chisotk>();
                     var ma = await GXNservice.getallCSbyidAsync(dsa.idgoi);
-                    foreach(var da in ma)
+                    foreach (var da in ma)
                     {
-                        foreach(var ka in allchiso)
+                        foreach (var ka in allchiso)
                         {
                             if (da.ChisoId == ka.Id)
                             {
@@ -131,12 +131,12 @@
                     {
 
                         Chisotk tk = new()
-                                {
+                            {
                                 idgoi = sa.idgoi ?? goi.GoiXetNghiemId,
-                                    idchiso = sa.ChisoId,
-                                    Ketqua = sa.KetQua,
-                                    Thoigian = b.ngaycoKQ
-                                };
+                                idchiso = sa.ChisoId,
+                                Ketqua = sa.KetQua,
+                                Thoigian = b.ngaycoKQ
+                            };
                         dsa.danhSachChiso.Add(tk);
                     }
                     danhsach.Add(dsa);
@@ -171,7 +171,7 @@
     }
     public string tengoixn(int id)
     {
-        foreach(var goi in allgoixn)
+        foreach (var goi in allgoixn)
         {
             if (goi.Id == id)
             {

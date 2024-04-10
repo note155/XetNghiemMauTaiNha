@@ -1,126 +1,478 @@
-﻿body, html {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-.container {
-    display: flex;
-    flex-wrap: wrap;
-    height: 100%;
-}
-
-.box {
-    width: 50%;
-    height: 50%;
-    box-sizing: border-box;
-    border: 1px solid #000;
-}
-.container {
-        display: flex;
-        justify-content: space-between; /* Khoảng cách giữa các ô */
-        padding: 20px; /* Thêm khoảng cách từ viền container đến các ô */
-    }
-
-    .box {
-        width: 33%; /* Định kích thước ô */
-        padding: 10px; /* Thêm khoảng cách bên trong ô */
-        box-sizing: border-box;
-        border: 1px solid #ccc; /* Thêm đường viền */
-    }
-@media (max-width: 768px) {
-    .box {
-        width: 100%;
-    }
-}
-.button-89 {
-    --b: 3px; /* border thickness */
-    --s: .45em; /* size of the corner */
-    --color: #373B44;
-    padding: calc(.5em + var(--s)) calc(.9em + var(--s));
-    color: var(--color);
-    --_p: var(--s);
-    background: conic-gradient(from 90deg at var(--b) var(--b),#0000 90deg,var(--color) 0) var(--_p) var(--_p)/calc(100% - var(--b) - 2*var(--_p)) calc(100% - var(--b) - 2*var(--_p));
-    transition: .3s linear, color 0s, background-color 0s;
-    outline: var(--b) solid #0000;
-    outline-offset: .6em;
+﻿
+body {
+    font-family: Arial, sans-serif;
     font-size: 16px;
-    border: 0;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
+    line-height: 1.6;
+    background-color: #f7f7f7;
+    color: #333;
 }
 
-.button-89:hover,
-.button-89:focus-visible {
-    --_p: 0px;
-    outline-color: var(--color);
-    outline-offset: .05em;
+.patient-registration-container {
+    display: flex;
+    align-items: flex-start; /* Căn phần tử theo phía trên */
 }
 
-.button-89:active {
-    background: var(--color);
-    color: #fff;
+.info {
+    max-height: 300px; /* Đặt chiều cao tối đa của phần hiển thị */
+    overflow: auto; /* Thêm thanh cuộn nếu nội dung vượt quá chiều cao */
 }
-/* Style for the row containing 'Quản lý' heading */
-.row > h2 {
-    font-size: 24px;
-    font-weight: bold;
+
+table {
+    width: 100%;
+}
+
+    table td {
+        padding: 10px;
+    }
+
+.patient-info {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
+    width: 500px;
+    flex: 1; /* Phần thông tin bệnh nhân co giãn để chiếm phần lớn không gian có sẵn */
+    max-width: 80%; /* Đặt chiều rộng tối đa */
 }
 
-/* Style for the select element */
-.form-select {
-    width: 100%;
+    .patient-info h2 {
+        color: #208095;
+        margin-bottom: 10px;
+    }
+
+    .patient-info .info {
+        margin-bottom: 10px;
+    }
+
+        .patient-info .info p {
+            margin-bottom: 5px;
+        }
+
+.test-registration-form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    width: 500px;
+    flex: 2; /* Phần thông tin đơn đăng ký xét nghiệm chiếm phần còn lại */
+    margin-left: 20px; /* Khoảng cách giữa hai phần tử */
+}
+
+    .test-registration-form h2 {
+        color: #208095;
+        margin-bottom: 20px;
+    }
+
+    .test-registration-form .form-group {
+        margin-bottom: 20px;
+    }
+
+    .test-registration-form label {
+        font-weight: bold;
+    }
+
+    .test-registration-form input[type="text"],
+    .test-registration-form textarea,
+    .test-registration-form select {
+        width: 100%;
+        padding: 15px; /* Increase padding for better spacing */
+        border: 1px solid #ccc;
+        border-radius: 8px; /* Increase border radius for smoother edges */
+        box-sizing: border-box;
+    }
+
+    .test-registration-form button {
+        padding: 15px 30px; /* Increase padding for better spacing */
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease; /* Add transition for smoother hover effect */
+    }
+
+        .test-registration-form button:hover {
+            background-color: #45a049;
+        }
+
+.doctor-info {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .doctor-info h3 {
+        color: #4CAF50;
+        margin-bottom: 10px;
+        font-size: 18px;
+    }
+
+    .doctor-info p {
+        margin-bottom: 5px;
+        font-size: 16px;
+    }
+
+    .doctor-info:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add hover effect for better interaction */
+        transform: translateY(-2px); /* Add hover effect for better interaction */
+    }
+
+
+    .doctor-info img {
+        max-width: 100%;
+        height: auto;
+        margin-top: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+.doctor-details {
+    flex: 1;
+    margin-right: 20px; /* Khoảng cách giữa hai phần tử */
+}
+
+.doctor-image img {
+    max-width: 100px; /* Đặt chiều rộng tối đa cho ảnh của bác sĩ */
     height: auto;
+}
+
+button.btn-primary {
+    width: 49%;
+    margin-top: 40px; /* Khoảng cách từ nút đến các phần tử khác */
+}
+
+.selected-packages {
+    margin-top: 10px; /* Add margin to create space between packages */
+}
+
+.price {
+    font-weight: bold; /* Make price bold */
+    color: #4CAF50; /* Set price color to green */
+}
+
+.total {
+    font-weight: bold; /* Make total bold */
+    font-size: 18px; /* Increase font size for total */
+    color: #f00; /* Set total color to red */
+}
+
+.total-mobile {
+    margin-top: 10px; /* Điều chỉnh khoảng cách với phần tổng tiền */
+}
+
+.package {
+    margin-bottom: 10px; /* Add margin to create space between packages */
     padding: 10px;
-    border: 1px solid #ced4da;
-    border-radius: .25rem;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-/* Style for the alert messages */
-.alert {
-    margin-top: 10px;
-    padding: 15px;
+.package-content {
+    flex: 1; /* Allow content to grow */
 }
 
-.alert-success {
-    background-color: #d4edda;
-    border-color: #c3e6cb;
-    color: #155724;
-}
-
-.alert-danger {
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
-    color: #721c24;
-}
-
-/* Style for the form inputs and buttons */
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-control {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ced4da;
-    border-radius: .25rem;
-}
-
-.btn-primary {
-    background-color: #007bff;
+.remove-btn {
+    background-color: #ff3333;
     color: #fff;
     border: none;
-    padding: 10px 20px;
-    border-radius: .25rem;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5px; /* Điều chỉnh khoảng cách với nội dung */
 }
 
-    .btn-primary:hover {
-        background-color: #0056b3;
+select.form-control option {
+    font-family: Arial, sans-serif; /* Font family */
+    font-size: 16px; /* Kích thước font */
+    color: #333; /* Màu chữ */
+    padding: 10px; /* Khoảng cách bên trong */
+}
+
+.select.form-control option .option-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.select.form-control option .option-name,
+.select.form-control option .option-price,
+.select.form-control option .option-time {
+    margin-bottom: 5px;
+}
+
+.select.form-control option .option-name {
+    font-weight: bold;
+}
+
+.select.form-control option:hover {
+    background-color: #ddd; /* Màu nền khi di chuột qua */
+}
+
+/* Điều chỉnh giao diện cho các thiết bị có độ rộng màn hình nhỏ hơn hoặc bằng 768px (tablets và mobile devices) */
+@media only screen and (max-width: 768px) {
+    .patient-registration-container {
+        flex-direction: column; /* Hiển thị các phần tử dọc theo nhau */
     }
 
-.button-cell {
-    text-align: right;
+    .patient-info,
+    .test-registration-form {
+        width: 95%; /* Đảm bảo rằng phần thông tin đơn đăng ký xét nghiệm chiếm toàn bộ chiều rộng của màn hình */
+        margin-right: 0; /* Xóa bỏ margin nếu cần thiết */
+    }
+
+    .test-registration-form {
+        margin-top: 20px; /* Tạo khoảng cách giữa các phần tử */
+    }
+
+    .patient-info {
+        max-width: 100%; /* Thiết lập chiều rộng tối đa là 100% */
+    }
+
+    .selected-packages {
+        flex-direction: column; /* Hiển thị các gói đã chọn dọc theo nhau */
+    }
+
+    .selected-packages {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .package {
+        margin-bottom: 10px;
+    }
+
+    .remove-btn {
+        margin-left: 0; /* Không cần thiết với thiết bị di động */
+        margin-top: 5px; /* Khoảng cách giữa nút "X" và nội dung */
+    }
+
+    .selected-packages-header {
+        margin-bottom: 10px;
+    }
+
+    .total-mobile {
+        margin-top: 20px; /* Khoảng cách từ phần tổng tiền đến các gói đã chọn */
+    }
+
+    .selected-packages {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .package {
+        margin-bottom: 10px; /* Tạo khoảng cách giữa các gói đã chọn */
+        padding: 10px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .remove-btn {
+        background-color: #ff3333;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .total-mobile {
+        margin-top: 20px; /* Khoảng cách từ phần tổng tiền đến các gói đã chọn */
+        order: 1; /* Đặt thứ tự xuất hiện của phần tổng tiền sau phần gói đã chọn */
+    }
+}
+body {
+    background-color: #65c3ca;
+    box-sizing: border-box;
+}
+
+.header {
+    background-color: #2f7e86;
+    color: white;
+    font-size: 1.5em;
+    padding: 1rem;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+img {
+    border-radius: 50%;
+    height: 60px;
+    width: 60px;
+}
+
+.table-users {
+    border: 1px solid #2f7e86;
+    border-radius: 10px;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
+    max-width: calc(100% - 2em);
+    margin: 1em auto;
+    overflow: hidden;
+    width: 800px;
+}
+
+    /* Modify other CSS selectors to be prefixed with the class */
+    .custom-table table {
+        width: 100%;
+    }
+
+.custom-table td,
+.custom-table th {
+    color: #275b60;
+    padding: 10px;
+    
+}
+
+    .custom-table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+.custom-table th {
+    background-color: #a6d1d4;
+    font-weight: 300;
+    text-align: center;
+}
+
+    .custom-table tr:nth-child(2n) {
+        background-color: white;
+    }
+
+    .custom-table tr:nth-child(2n+1) {
+        background-color: #cce0e1;
+    }
+
+@media screen and (max-width: 700px) {
+    .custom-table table,
+    .custom-table tr,
+    .custom-table td {
+        display: block;
+    }
+
+        .custom-table td:first-child {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100px;
+        }
+
+        .custom-table td:not(:first-child) {
+            clear: both;
+            margin-left: 100px;
+            padding: 4px 20px 4px 90px;
+            position: relative;
+            text-align: left;
+        }
+
+        .custom-table td:nth-child(2):before {
+            content: ' ';
+        }
+
+        .custom-table td:nth-child(3):before {
+            content: ' ';
+        }
+
+        .custom-table tr:first-child {
+            display: none;
+        }
+}
+
+@media screen and (max-width: 500px) {
+    .header {
+        background-color: transparent;
+        color: #89c1c7;
+        font-size: 2em;
+        font-weight: 700;
+        padding: 0;
+        text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    img {
+        border: 3px solid;
+        border-color: #cce0e1;
+        height: 100px;
+        margin: 0.5rem 0;
+        width: 100px;
+    }
+
+    .custom-table .header {
+        background-color: transparent;
+        color: #89c1c7;
+        font-size: 2em;
+        font-weight: 700;
+        padding: 0;
+        text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .custom-table img {
+        border: 3px solid;
+        border-color: #cce0e1;
+        height: 100px;
+        margin: 0.5rem 0;
+        width: 100px;
+    }
+
+    .custom-table td:first-child {
+        background-color: #b8dce0;
+        border-bottom: 1px solid #a6d1d4;
+        border-radius: 10px 10px 0 0;
+        position: relative;
+        top: 0;
+        transform: translateY(0);
+        width: 100%;
+    }
+
+    .custom-table td:not(:first-child) {
+        margin: 0;
+        padding: 5px 1em;
+        width: 100%;
+    }
+
+    .custom-table td:last-child {
+        padding-bottom: 1rem !important;
+    }
+
+    .custom-table tr {
+        background-color: white !important;
+        border: 1px solid #d2e4e5;
+        border-radius: 10px;
+        box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+        margin: 0.5rem 0;
+        padding: 0;
+    }
+
+    .custom-table .table-users {
+        border: none;
+        box-shadow: none;
+        overflow: visible;
+    }
+
+    .table-users {
+        border: none;
+        box-shadow: none;
+        overflow: visible;
+    }
 }

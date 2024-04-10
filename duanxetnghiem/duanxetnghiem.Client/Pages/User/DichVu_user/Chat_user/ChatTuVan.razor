@@ -3,8 +3,6 @@
 @rendermode InteractiveAuto
 @inject NavigationManager navigation
 
-
-
 <div class="row">
 	@if (idbs == 0)
 	{
@@ -35,7 +33,6 @@
 	<div class="col-sm-8">
 		<div style="width:100%" class="card-header">
 			#Room: @room.Name <button @onclick="keoxuong" style="width:auto;background-color:darkgrey">Kéo xuống</button>
-			<div class="float-right">Hãy đặt câu hỏi </div>
 		</div>
 
 		<div id="chat-container" class="chat-container" @ref="chatContainerRef">
@@ -69,7 +66,7 @@
 		</div>
 		<div class="row">
 			<div class="col-sm-10">
-				<input class="form-control" type="text" @bind="messageInput" @bind:event="oninput" @onkeypress="nhanenter"/>
+				<input placeholder="Hãy đặt câu hỏi của bạn" class="form-control" type="text" @bind="messageInput" @bind:event="oninput" @onkeypress="nhanenter" />
 			</div>
 			<div class="col-sm-2"><button @onclick="Send">Gửi</button></div>
 		</div>

@@ -1,10 +1,17 @@
-﻿.container {
+﻿
+.container {
     width: 80%;
     margin: 0 auto;
+    margin-top: 20px;
 }
 
 h3 {
     text-align: center;
+    margin-bottom: 40px;
+}
+
+.highlight {
+    color: #3398ff; /* Màu chữ bạn muốn áp dụng */
 }
 
 .goi-xet-nghiem {
@@ -47,6 +54,7 @@ h3 {
     font-weight: bold;
     color: #333;
 }
+
 @media screen and (max-width: 768px) {
     .container {
         width: 100%;

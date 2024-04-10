@@ -52,12 +52,15 @@
         <div class="test-registration-form">
             <h2>Đơn đăng ký đặt lịch xét nghiệm</h2>
             <div class="form-group">
-                <label for="Ngaydat">Ngày Lấy Máu</label>
+                <label for="Ngaydat">Ngày Lấy Máu <span style="color:red">*</span></label>
                 <InputDate @bind-Value="Input.Ngaydat" class="form-control" id="Ngaydat" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
                 <ValidationMessage For="() => Input.Ngaydat" class="text-danger" />
             </div>
+            @{
+                GenerateTimeList();
+            }
             <div class="form-group">
-                <label for="giolaymau">Giờ lấy máu</label>
+                <label for="giolaymau">Giờ lấy máu <span style="color:red">*</span></label>
                 <InputSelect id="giolaymau" @bind-Value="Input.giolaymau" class="form-control">
                     <option value="">Chọn</option>
                     @if (timeList.Any())
@@ -76,23 +79,33 @@
                 <ValidationMessage For="() => Input.ghiChu" class="text-danger" />
             </div>
             <div class="doctor-info">
-                <div class="selected-packages-header">
-                    <h3>Các gói đã chọn:</h3>
-                </div>
-                <div class="selected-packages">
-                    @foreach (var bs in gxndachon)
-                    {
-                        <div class="package">
-                            <div class="package-content">
-                                <p><strong>Tên Gói:</strong> @bs.TenGoi</p>
-                                <div class="price">Giá: @bs.Gia VND</div>
-                            </div>
-                            <button type="button" @onclick="@( () => remove(bs.Id) )" class="remove-btn">X</button>
-                        </div>
-                    }
-                </div>
-                <div class="total-mobile">
-                    <p>Tổng tiền: <span class="total">@tongtien VND</span></p>
+                <div class="table-users">
+                    <div class="header">Các gói đã chọn</div>
+
+                    <table cellspacing="0" class="custom-table">
+                        @if (gxndachon.Any())
+                        {
+                            <tr>
+                                <th>Tên gói</th>
+                                <th>Giá</th>
+                                <th></th>
+                            </tr>
+
+                            @foreach (var bs in gxndachon)
+                            {
+                                <tr>
+                                    <td><strong>Tên Gói:</strong> @bs.TenGoi</td>
+                                    <td><div class="price">Giá: @bs.Gia VND</div></td>
+                                    <td>
+                                        <button type="button" @onclick="@( () => remove(bs.Id) )" class="remove-btn">X</button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        <tr>
+                            <td colspan="3">Tổng tiền: <span class="total">@tongtien VND</span></td>
+                        </tr>
+                    </table>
                 </div>
             </div>
             <a href="/"><button style="background-color:red" class="btn btn-primary"> Hủy </button></a>
@@ -142,25 +155,34 @@
 
         Input.Ngaydat = DateTime.Now; 
         getid();
-        timeList = GenerateTimeList();
+        GenerateTimeList();
     }
-    static List<string> GenerateTimeList()
+    void GenerateTimeList()
     {
-        List<string> timeList = new List<string>();
+        timeList.Clear(); // Xóa danh sách thời gian cũ trước khi tạo mới
 
-        // Tạo danh sách thời gian từ 05:30 đến 21:00
-        TimeSpan time = TimeSpan.FromHours(5.5); // 05:30
+        TimeSpan startTime;
+        if (Input.Ngaydat.Date == DateTime.Today)
+        {
+            // Nếu ngày lấy máu là hôm nay, bắt đầu từ thời gian hiện tại cộng thêm 2 giờ
+            startTime = TimeSpan.FromHours(DateTime.Now.Hour + 2);
+        }
+        else
+        {
+            // Ngày lấy máu không phải hôm nay, bắt đầu từ 5:30 AM
+            startTime = TimeSpan.FromHours(5.5);
+        }
+
         TimeSpan endTime = TimeSpan.FromHours(20.8); // 21:00
+        TimeSpan time = startTime;
         while (time <= endTime)
         {
-            string startTime = time.ToString(@"hh\:mm");
+            string startTimeString = time.ToString(@"hh\:mm");
             string endTimeString = time.Add(TimeSpan.FromMinutes(15)).ToString(@"hh\:mm");
-            string timeRange = $"{startTime} - {endTimeString}";
+            string timeRange = $"{startTimeString} - {endTimeString}";
             timeList.Add(timeRange);
             time = time.Add(TimeSpan.FromMinutes(15)); // Tăng thêm 15 phút
         }
-
-        return timeList;
     }
     private void getds()
     {

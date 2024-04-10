@@ -1,378 +1,300 @@
 ﻿@page "/lala"
 @rendermode InteractiveAuto
+@using Shared.form
+@inject NavigationManager navigation;
+@attribute [Authorize]
+<EditForm Model="Input" method="post" OnValidSubmit="add" FormName="register" class="profile-form">
+    <DataAnnotationsValidator />
+    <hr />
 
-<title>Chia màn hình thành 4 phần</title>
-<div class="container">
-    <div class="box">
-        <h3>Danh Sách Khoa</h3> <button class="button-89" role="button" @onclick="()=>add(4)"> Add</button>
-        <hr />
-        <input type="text" class="form-control" placeholder="Nhập từ khóa">
-        <select @bind:event="oninput" @bind="@idkhoa" class="form-select custom-select" size="5" aria-label="size 3 select example">
-            @foreach (var item in allKhoa)
-            {
-                <option @onclick="getkhoa" value="@item.Id">@item.ten</option>
-            }
-        </select>
-    </div>
-    <div class="box">
-        <h3>Danh Sách Phòng</h3> <button class="button-89" role="button" @onclick="()=>add(5)"> Add</button>
-        <p style="color:red">@erP</p>
-        <hr />
-        <input type="text" class="form-control" placeholder="Nhập từ khóa">
-        <select @bind:event="oninput" @bind="@idphong" class="form-select custom-select" size="5" aria-label="size 3 select example">
-            @foreach (var item in allPhong)
-            {
-                <option @onclick="getphong" value="@item.Id">@item.maphong - @item.ten</option>
-            }
-        </select>
-    </div>
-    <div class="box">
-        <h3>Danh Sách Máy</h3> <button class="button-89" role="button" @onclick="()=>add(6)"> Add</button>
-        <p style="color:red">@erM</p>
-        <hr />
-        <input type="text" class="form-control" placeholder="Nhập từ khóa">
-        <select @bind:event="oninput" @bind="@idmay" class="form-select custom-select" size="5" aria-label="size 3 select example">
-            @foreach (var item in allMXN)
-            {
-                <option @onclick="getmay" value="@item.Id">@item.Name</option>
-            }
-        </select>
-    </div>
-</div>
-<div class="row">
-    <h2>Quản lý</h2>
-    <div class="row">
-        <div class="col-sm-4">
-            <select @bind:event="oninput" @bind="@idchon" style="width:100%" class="form-select custom-select" size="5" aria-label="size 3 select example">
-                @if (idkhoa!=0)
+    
+    <div class="patient-registration-container">
+        <div class="patient-info-container">
+            <div class="patient-info">
+                <h2>Thông tin bệnh nhân</h2>
+                @if (user != null)
                 {
-                    <option value="1">Khoa @khoadachon.ten</option>
+                    <div class="info">
+                        <p><strong>Họ tên:</strong> @user.Hoten</p>
+                        <p><strong>Ngày sinh:</strong> @user.Ngaysinh.ToString("dd/MM/yyyy")</p>
+                        <p><strong>Số điện thoại:</strong> @user.SDT</p>
+                        <p><strong>Địa chỉ:</strong> @user.Diachi, @user.CapXa, @user.CapHuyen, TT Huế</p>
+                        <p><strong>Email:</strong> @user.Email</p>
+                        <p><strong>Giới tính:</strong> @gioitinh(@user.Gioitinh)</p>
+                    </div>
                 }
-                @if (idphong!=0)
+            </div>
+            <div class="patient-info">
+                @if (err.Any())
                 {
-                    <option value="2">@phongdachon.ten</option>
+                    <div class="alert alert-danger" role="alert">
+                        @foreach (var error in err)
+                        {
+                            <p>@error</p>
+                        }
+                    </div>
                 }
-                @if (idmay!=0)
-                {
-                    <option value="3">Máy @maydachon.Name</option>
-                }
-            </select>
+                <h2>Các gói xét nghiệm</h2>
+                <div class="info" style="height: 360px; overflow-y: auto;">
+                    <table >
+                        @foreach (var ds in listgxn)
+                        {
+                            <tr>
+                                <td><input type="checkbox" @onchange="@(() => LoadBSInfo(ds.Id))" checked="@ds.IsSelected" /></td>
+                                <td>@ds.TenGoi</td>
+                                <td>@ds.Gia</td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
         </div>
-        <div class="col-sm-8">
-            @if(idchon == 0)
-            {
-                    <div class="alert alert-success" role="alert">
-                        Quản lý danh mục
-                    </div>
-            }
-            @if (errors.Any())
-            {
-                <div class="alert alert-success" role="alert">
-                    @foreach (var err in errors)
+        <div class="test-registration-form">
+            <h2>Đơn đăng ký đặt lịch xét nghiệm</h2>
+            <div class="form-group">
+                <label for="Ngaydat">Ngày Lấy Máu</label>
+                <InputDate @bind-Value="Input.Ngaydat" class="form-control" id="Ngaydat" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                <ValidationMessage For="() => Input.Ngaydat" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label for="giolaymau">Giờ lấy máu</label>
+                <InputSelect id="giolaymau" @bind-Value="Input.giolaymau" class="form-control">
+                    <option value="">Chọn</option>
+                    @if (timeList.Any())
                     {
-                        @err
+                        @foreach (var time in timeList)
+                        {
+                            <option value="@time">@time</option>
+                        }
                     }
+                </InputSelect>
+                <ValidationMessage For="() => Input.giolaymau" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label for="ghiChu">Ghi chú </label>
+                <InputTextArea @bind-Value="Input.ghiChu" class="form-control" id="ghiChu" />
+                <ValidationMessage For="() => Input.ghiChu" class="text-danger" />
+            </div>
+            <div class="doctor-info">
+                <div class="table-users">
+                    <div class="header">Các gói đã chọn</div>
+
+                    <table cellspacing="0" class="custom-table">
+                        @if (gxndachon.Any())
+                        {
+                            <tr>
+                                <th>Tên gói</th>
+                                <th>Giá</th>
+                                <th></th>
+                            </tr>
+
+                            @foreach (var bs in gxndachon)
+                            {
+                                <tr>
+                                    <td><strong>Tên Gói:</strong> @bs.TenGoi</td>
+                                    <td><div class="price">Giá: @bs.Gia VND</div></td>
+                                    <td>
+                                        <button type="button" @onclick="@( () => remove(bs.Id) )" class="remove-btn">X</button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        <tr >
+                            <td colspan="3">Tổng tiền: <span class="total">@tongtien VND</span></td>
+                        </tr>
+                    </table>
                 </div>
-            }
-            @if(idchon == 1 ||idchon==4)
-            {
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <h4>Thông Tin Khoa</h4>
-                    @if (idchon == 1)
-                    {
-                        <a @onclick="Xoa" class="btn btn-danger">Xóa</a>
-                    }
-                </div>
-                <hr/>
-                <EditForm Model="khoadachon" method="post" OnValidSubmit="Qlkhoa" FormName="khoa">
-                    <DataAnnotationsValidator />
-                    <ValidationSummary class="text-danger" role="alert" />
-                    <div class="form-container">
-                        <div class="form-group">
-                            <label for="hoten">Tên Khoa :</label>
-                            <InputText @bind-Value="khoadachon.ten" class="form-control" placeholder="" />
-                            <ValidationMessage For="() => khoadachon.ten" class="text-danger" />
-                        </div>
-                        <div class="form-group button-cell">
-                            <button type="submit" class="btn btn-lg btn-primary">Hoàn Thành</button>
-                        </div>
-                    </div>
-                </EditForm>
-            }
-            @if(idchon == 2 ||idchon==5)
-            {
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <h4>Thông Tin Phòng</h4>
-                    @if (idchon == 2)
-                    {
-                        <a @onclick="Xoa" class="btn btn-danger">Xóa</a>
-                    }
-                </div>
-                <hr />
-                <EditForm Model="phongdachon" method="post" OnValidSubmit="Qlphong" FormName="phong">
-                    <DataAnnotationsValidator />
-                    <ValidationSummary class="text-danger" role="alert" />
-                    <div class="form-container">
-                        <div class="form-group">
-                            <label for="hoten">Mã Phòng :</label>
-                            <InputText @bind-Value="phongdachon.maphong" class="form-control" placeholder="" />
-                            <ValidationMessage For="() => phongdachon.maphong" class="text-danger" />
-                        </div>
-                        <div class="form-group">
-                            <label for="hoten">Tên Phòng :</label>
-                            <InputText @bind-Value="phongdachon.ten" class="form-control" placeholder="" />
-                            <ValidationMessage For="() => phongdachon.ten" class="text-danger" />
-                        </div>
-                        <div class="form-group button-cell">
-                            <button type="submit" class="btn btn-lg btn-primary">Hoàn Thành</button>
-                        </div>
-                    </div>
-                </EditForm>
-            }
-            @if (idchon == 3 || idchon == 6)
-            {
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <h4>Thông Tin Máy</h4>
-                    @if (idchon == 3)
-                    {
-                        <a @onclick="Xoa" class="btn btn-danger">Xóa</a>
-                    }
-                </div>
-                <hr />
-                <EditForm Model="maydachon" method="post" OnValidSubmit="Qlmay" FormName="may">
-                    <DataAnnotationsValidator />
-                    <ValidationSummary class="text-danger" role="alert" />
-                    <div class="form-container">
-                        <div class="form-group">
-                            <label for="hoten">Tên Máy :</label>
-                            <InputText @bind-Value="maydachon.Name" class="form-control" placeholder="" />
-                            <ValidationMessage For="() => maydachon.Name" class="text-danger" />
-                        </div>
-                        <div class="form-group button-cell">
-                            <button type="submit" class="btn btn-lg btn-primary">Hoàn Thành</button>
-                        </div>
-                    </div>
-                </EditForm>
-            }
+                    
+            </div>
+            <a href="/"><button style="background-color:red" class="btn btn-primary"> Hủy </button></a>
+            <button type="submit" class="btn btn-primary">Đăng Ký</button>
         </div>
     </div>
-</div>
+</EditForm>
 
-@code{
-    public List<Khoa> allKhoa { get; set; } = new ();
-    public List<Phong> allPhong { get; set; } = new();
-    public List<MayXetNghiem> allMXN { get; set; } = new();
-    public List<Khoa> allKhoa1 { get; set; } = new();
-    public List<Phong> allPhong1 { get; set; } = new();
-    public List<MayXetNghiem> allMXN1 { get; set; } = new();
-    string erP = "", erM = "";
-    List<string> errors = new List<string>();
-    [SupplyParameterFromForm]
-    public MayXetNghiem maydachon { get; set; } = new();
-    [SupplyParameterFromForm]
-    public Phong phongdachon { get; set; } = new();
-    [SupplyParameterFromForm]
-    public Khoa khoadachon { get; set; } = new();
+@code {
+    [Inject]
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
-    public int idkhoa = 0, idphong = 0, idmay = 0,idchon=0;
+    private List<string> err = new List<string>();
+    private User user = new User();
+    public List<GoiXetNghiem> allGXN { get; set; } = new();
+    public List<BacSi> AllBS { get; set; } = new();
+    public string UserName { get; set; }
+    public List<GoiXetNghiem> gxndachon { get; set; } = new();
+    public List<GXNchon> listgxn { get; set; } = new();
+    int valor = 0, idbs;
+    public long tongtien = 0;
+    List<string> timeList = new();
+    [SupplyParameterFromForm]
+    public donXNform Input { get; set; } = new();
+
+
     protected override async Task OnInitializedAsync()
     {
-        allKhoa1 = await Khoaservice.getallAsync();
-        allPhong1 = await Phongservice.getallAsync();
-        allMXN1 = await MayXNservice.getallAsync();
-        allKhoa = allKhoa1;
-        allPhong = allPhong1;
-        allMXN = allMXN1;
-    }
-    public void getkhoa()
-    {
-        allPhong = allPhong1;
-        khoadachon = allKhoa.FirstOrDefault(a=>a.Id==idkhoa);
-        idchon = 1;
-        allPhong = allPhong.Where(a => a.Khoaid == idkhoa).ToList();
-        idmay = 0; idphong = 0;
-    }
-    public void getphong()
-    {
-        allMXN = allMXN1;
-        phongdachon = allPhong.FirstOrDefault(a=>a.Id==idphong);
-        allMXN = allMXN.Where(a => a.phongid == idphong).ToList();
-        idchon = 2;
-        idmay = 0;
-    }
-    public void getmay()
-    {
-        maydachon = allMXN.FirstOrDefault(a => a.Id == idmay);
-        idchon = 3;
-    }
-    private async Task Qlkhoa()
-    {
-        if (idchon == 1)
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        UserName = authState.User.Identity.Name;
+        user = await Usertservice.getuserbyemail(UserName);
+        if (user == null)
         {
-            var haha = await Khoaservice.updateAsync(khoadachon);
-            if (haha != null)
+            navigation.NavigateTo("/AddUser");
+        }
+        timeList = GenerateTimeList();
+        allGXN = await GXNservice.getallAsync();
+        getds();
+        Input.Ngaydat = DateTime.Now;
+    }
+    private void getds()
+    {
+        listgxn.Clear();
+        foreach (var a in allGXN)
+        {
+            listgxn.Add(new GXNchon
+                {
+                    Id = a.Id,
+                    IsSelected = false,
+                    Anh = a.Anh,
+                    TenGoi = a.TenGoi,
+                    Gia = a.Gia,
+                    Mota = a.Mota,
+                    ThoiGian = a.ThoiGian
+                });
+        }
+    }
+    private void remove(int id)
+    {
+        foreach (var gxn in gxndachon)
+        {
+            if (gxn.Id == id)
             {
-                errors.Add("Sửa Thành Công");
+                allGXN.Add(gxn);
+                tongtien -= gxn.Gia;
             }
         }
-        if (idchon == 4)
+        foreach (var gxn in listgxn)
         {
-            var haha =await Khoaservice.addAsync(khoadachon);
-            if (haha != null)
+            if (gxn.Id == id)
             {
-                errors.Add("Thêm Thành Công");
-                allKhoa1.Add(haha);
-                khoadachon = new();
-                idkhoa = 0;
-                idchon = 0;
+                gxn.IsSelected = false;
             }
+        }
+        gxndachon.RemoveAll(item => item.Id == id);
+
+    }
+    private async Task add()
+    {
+        err.Clear(); // Xóa danh sách lỗi trước đó
+                     // Kiểm tra ngày lấy máu
+                     // Kiểm tra giờ lấy máu
+
+        if (string.IsNullOrWhiteSpace(Input.giolaymau))
+        {
+            err.Add("Giờ lấy máu không được để trống.");
+        }
+        if (gxndachon.Count == 0)
+        {
+            err.Add("Vui lòng chọn gói xét nghiệm.");
+        }
+        if (err.Any())
+        {
+            return;
+        }
+        DonXetNghiem donXetNghiem = new DonXetNghiem
+            {
+                UserId = user.Id,
+                BacSiId = null,
+                Ngaydat = Input.Ngaydat,
+                ghiChu = Input.ghiChu,
+                Trangthai = "Chờ Thanh Toán",
+                giolaymau = Input.giolaymau,
+                ngaytaodon = DateTime.Now,
+            };
+        DonXetNghiem don = await DXNservice.addAsync(donXetNghiem);
+        foreach (var gxn in gxndachon)
+        {
+            DXNandGXN a = new DXNandGXN
+                {
+                    DonXetNghiemId = don.Id,
+                    GoiXetNghiemId = gxn.Id
+                };
+            await DXNservice.addnew(a);
+        }
+        ThanhToan tt = new ThanhToan
+            {
+                UserId = user.Id,
+                DonXetNghiemId = don.Id,
+                Tongtien = tongtien,
+                trangthai = "Chưa Thanh Toán"
+            };
+        await TTservice.addAsync(tt);
+        Tinhtrang ttrang = new Tinhtrang
+            {
+                DonXetNghiemId = don.Id,
+                thoigian = DateTime.Now,
+                trangthai = "Đơn đã được tạo"
+            };
+        await TTrangservice.addAsync(ttrang);
+        navigation.NavigateTo("/giohangdxn");
+    }
+    public String loadGXN(int id)
+    {
+        foreach (var gxn in allGXN)
+        {
+            if (gxn.Id == id)
+            {
+                return gxn.TenGoi;
+            }
+        }
+        return null;
+    }
+    private String gioitinh(bool a)
+    {
+        if (a)
+        {
+            return "Nam";
+        }
+        else
+        {
+            return "Nữ";
         }
     }
-    private async Task Qlphong()
+    private void LoadBSInfo(int id)
     {
-        errors.Clear();
-        if (idchon == 2)
+        var selectedPackage = listgxn.FirstOrDefault(p => p.Id == id);
+        var g = allGXN.FirstOrDefault(p => p.Id == id);
+        if (selectedPackage != null)
         {
-            var haha =await Phongservice.updateAsync(phongdachon);
-            if (haha != null)
+            selectedPackage.IsSelected = !selectedPackage.IsSelected;
+
+            if (selectedPackage.IsSelected == true)
             {
-                errors.Add("Sữa Thành Công");
-            }
-        }
-        if (idchon == 5)
-        {
-            var haha= await Phongservice.addAsync(phongdachon);
-            if (haha != null)
-            {
-                errors.Add("Thêm Thành Công");
-                allPhong1.Add(haha);
-                allPhong.Add(haha);
-                phongdachon = new();
-                phongdachon.Khoaid = idkhoa;
-            }
-        }
-    }
-    private async Task Qlmay()
-    {
-        if (idchon == 3)
-        {
-            var haha = await MayXNservice.updateAsync(maydachon);
-            if (haha != null)
-            {
-                errors.Add("Sữa Thành Công");
-            }
-        }
-        if (idchon == 6)
-        {
-            var haha = await MayXNservice.addAsync(maydachon);
-            if (haha != null)
-            {
-                errors.Add("Thêm Thành Công");
-                allMXN1.Add(haha);
-                allMXN.Add(haha);
-                maydachon = new();
-                maydachon.phongid = idphong;
-            }
-        }
-    }
-    public void add(int id)
-    {
-        errors.Clear();
-        erM = "";
-        erP = "";
-        if (id == 4)
-        {
-            khoadachon = new();
-            idkhoa = 0;
-            idmay=0;
-            idphong = 0;
-            maydachon = new();
-            phongdachon = new();
-        }
-        if (id == 5)
-        {
-            if (idkhoa == 0)
-            {
-                idchon = 0;
-                erP = "Bạn chưa chọn Khoa";
-                return;
+                gxndachon.Add(g);
+                tongtien += selectedPackage.Gia;
             }
             else
             {
-                phongdachon = new();
-                phongdachon.Khoaid = idkhoa;
+                gxndachon.Remove(g);
+                tongtien -= selectedPackage.Gia;
             }
         }
-        if (id == 6)
-        {
-            if (idkhoa == 0)
-            {
-                idchon = 0;
-                erM = "Bạn chưa chọn Khoa";
-                return;
-            }
-            if (idphong == 0)
-            {
-                idchon = 0;
-                erM = "Bạn chưa chọn Phòng";
-                return;
-            }
-            else
-            {
-                maydachon = new();
-                maydachon.phongid = idphong;
-            }
-        }
-        idchon = id;
     }
-    private async Task Xoa()
+  
+    static List<string> GenerateTimeList()
     {
-        errors.Clear();
-        if (idchon == 1)
+        List<string> timeList = new List<string>();
+
+        // Tạo danh sách thời gian từ 05:30 đến 21:00
+        TimeSpan time = TimeSpan.FromHours(5.5); // 05:30
+        TimeSpan endTime = TimeSpan.FromHours(20.8); // 21:00
+        while (time <= endTime)
         {
-            if (idkhoa != 0)
-            {
-                await Khoaservice.deleteAsync(idkhoa);
-                allKhoa.RemoveAll(a=>a.Id==idkhoa);
-                errors.Add("Xóa Thành Công");
-                idkhoa = 0;
-                idmay = 0;
-                idphong = 0;
-                idchon = 4;
-                khoadachon = new();
-                allMXN.Clear();
-                allPhong.Clear();
-            }
+            string startTime = time.ToString(@"hh\:mm");
+            string endTimeString = time.Add(TimeSpan.FromMinutes(15)).ToString(@"hh\:mm");
+            string timeRange = $"{startTime} - {endTimeString}";
+            timeList.Add(timeRange);
+            time = time.Add(TimeSpan.FromMinutes(15)); // Tăng thêm 15 phút
         }
-        if (idchon == 2)
-        {
-            if (idphong != 0)
-            {
-                await Phongservice.deleteAsync(idphong);
-                allPhong.RemoveAll(a => a.Id == idphong);
-                allPhong1.RemoveAll(a => a.Id == idphong);
-                errors.Add("Xóa Thành Công");
-                idmay = 0;
-                idphong = 0;
-                phongdachon = new();
-                phongdachon.Khoaid = idkhoa;
-                idchon = 5;
-                allMXN.Clear();
-            }
-        }
-        if (idchon == 3)
-        {
-            if (idmay != 0)
-            {
-                await MayXNservice.deleteAsync(idmay);
-                allMXN.RemoveAll(a => a.Id == idmay);
-                allMXN1.RemoveAll(a => a.Id == idmay);
-                errors.Add("Xóa Thành Công");
-                idmay=0;
-                maydachon = new();
-                maydachon.phongid = idphong;
-                idchon = 6;
-            }
-        }
+
+        return timeList;
     }
 }

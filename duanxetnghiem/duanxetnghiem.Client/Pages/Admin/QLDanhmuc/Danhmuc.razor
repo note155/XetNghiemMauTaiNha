@@ -6,7 +6,7 @@
     <div class="box">
         <h3>Danh Sách Khoa</h3> <button class="button-89" role="button" @onclick="()=>add(4)"> Add</button>
         <hr />
-        <input type="text" class="form-control" placeholder="Nhập từ khóa">
+        <input @bind:event="oninput" @bind="@tkkhoa" type="text" class="form-control" placeholder="Nhập từ khóa" @onkeypress="timkhiemkhoa">
         <select @bind:event="oninput" @bind="@idkhoa" class="form-select custom-select" size="5" aria-label="size 3 select example">
             @foreach (var item in allKhoa)
             {
@@ -18,7 +18,7 @@
         <h3>Danh Sách Phòng</h3> <button class="button-89" role="button" @onclick="()=>add(5)"> Add</button>
         <p style="color:red">@erP</p>
         <hr />
-        <input type="text" class="form-control" placeholder="Nhập từ khóa">
+        <input @bind:event="oninput" @bind="@tkphong" type="text" class="form-control" placeholder="Nhập từ khóa">
         <select @bind:event="oninput" @bind="@idphong" class="form-select custom-select" size="5" aria-label="size 3 select example">
             @foreach (var item in allPhong)
             {
@@ -30,7 +30,7 @@
         <h3>Danh Sách Máy</h3> <button class="button-89" role="button" @onclick="()=>add(6)"> Add</button>
         <p style="color:red">@erM</p>
         <hr />
-        <input type="text" class="form-control" placeholder="Nhập từ khóa">
+        <input @bind:event="oninput" @bind="@tkmay" type="text" class="form-control" placeholder="Nhập từ khóa">
         <select @bind:event="oninput" @bind="@idmay" class="form-select custom-select" size="5" aria-label="size 3 select example">
             @foreach (var item in allMXN)
             {
@@ -173,7 +173,7 @@
     public Phong phongdachon { get; set; } = new();
     [SupplyParameterFromForm]
     public Khoa khoadachon { get; set; } = new();
-
+    string tkkhoa = "", tkphong = "", tkmay = "";
     public int idkhoa = 0, idphong = 0, idmay = 0, idchon = 0;
     protected override async Task OnInitializedAsync()
     {
@@ -374,5 +374,9 @@
                 idchon = 6;
             }
         }
+    }
+    private async Task timkhiemkhoa()
+    {
+        
     }
 }

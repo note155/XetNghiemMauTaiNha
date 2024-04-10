@@ -88,6 +88,7 @@ button {
     width: 100%; /* Đặt chiều rộng của nút gửi */
 }
 /* General styles for responsiveness */
+/* General styles for responsiveness */
 @media (max-width: 768px) {
     .row {
         flex-direction: column;
@@ -101,15 +102,25 @@ button {
         max-width: 100%; /* Set the maximum width to 100% for mobile devices */
     }
 
+    .card {
+        margin: 10px; /* Add margin to cards for spacing */
+    }
+
+    .card-right {
+        margin-left: auto;
+    }
+
     input[type="text"] {
         width: calc(100% - 20px); /* Adjust the width of the input field */
-        margin-right: 0; /* Remove margin-right for better alignment */
-        margin-bottom: 10px; /* Add margin-bottom for spacing between input and button */
+        margin: 0 10px 10px; /* Add margin for spacing */
     }
 
     button {
         width: calc(100% - 20px); /* Adjust the width of the button */
-        margin-right: 0; /* Remove margin-right for better alignment */
+        margin: 0 10px; /* Add margin for spacing */
+    }
+
+    .chat-container .float-right {
+        text-align: right; /* Align the text to the right on mobile */
     }
 }
-

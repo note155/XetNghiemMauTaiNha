@@ -57,25 +57,30 @@
             </div>
             @if (gxndachon.Count != 0)
             {
-                <div class="doctor-info">
-                    <div class="selected-packages-header">
-                        <h3>Các gói đã chọn:</h3>
-                    </div>
-                    <div class="selected-packages">
-                        @foreach (var bs in gxndachon)
+                <div class="table-users">
+                    <div class="header">Các gói đã chọn</div>
+
+                    <table cellspacing="0" class="custom-table">
+                        @if (gxndachon.Any())
                         {
-                            <div class="package">
-                                <div class="package-content">
-                                    <p><strong>Tên Gói:</strong> @bs.TenGoi</p>
-                                    <div class="price">Giá: @bs.Gia VND</div>
-                                </div>
-                               
-                            </div>
+                            <tr>
+                                <th>Tên gói</th>
+                                <th>Giá</th>
+     
+                            </tr>
+
+                            @foreach (var bs in gxndachon)
+                            {
+                                <tr>
+                                    <td><strong>Tên Gói:</strong> @bs.TenGoi</td>
+                                    <td><div class="price">Giá: @bs.Gia VND</div></td>
+                                </tr>
+                            }
                         }
-                    </div>
-                    <div class="total-mobile">
-                        <p>Tổng tiền: <span class="total">@tongtien VND</span></p>
-                    </div>
+                        <tr>
+                            <td colspan="3">Tổng tiền: <span class="total">@tongtien VND</span></td>
+                        </tr>
+                    </table>
                 </div>
 
             }
@@ -154,37 +159,38 @@
                         <h3>Danh sách Kết Quả và Chỉ Số</h3>
                         @if (Inputkq.kQandCs != null)
                         {
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Chỉ Số</th>
-                                        <th>Kết Quả</th>
-                                        <th>CSBT</th>
-                                        <th>Đơn Vị</th>
-                                    </tr>
-                                </thead>
-                                @foreach (var kqandcs in Inputkq.kQandCs)
-                                {
-                                    if (kqandcs.goi != goi1)
+                            <div style="overflow-x:auto;">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Chỉ Số</th>
+                                            <th>Kết Quả</th>
+                                            <th>CSBT</th>
+                                            <th>Đơn Vị</th>
+                                        </tr>
+                                    </thead>
+                                    @foreach (var kqandcs in Inputkq.kQandCs)
                                     {
-                                        goi1 = kqandcs.goi;
-                                        <tr><td colspan="4"><strong>Gói Xét Nghiệm:</strong>@loadtengoi(goi1)</td></tr>
+                                        if (kqandcs.goi != goi1)
+                                        {
+                                            goi1 = kqandcs.goi;
+                                            <tr><td colspan="4"><strong>Gói Xét Nghiệm:</strong>@loadtengoi(goi1)</td></tr>
+                                        }
+                                        <tr>
+                                            <td>@loadtenchiso(kqandcs.id)</td>
+                                            <td>
+                                                @kqandcs.kq
+                                            </td>
+                                            <td>
+                                                @loadcsbt(kqandcs.id)
+                                            </td>
+                                            <td>
+                                                @loaddonvi(kqandcs.id)
+                                            </td>
+                                        </tr>
                                     }
-                                    <tr>
-                                        <td>@loadtenchiso(kqandcs.id)</td>
-                                        <td>
-                                            <InputText @bind-Value="kqandcs.kq" class="form-control" readonly />
-                                            <ValidationMessage For="() => kqandcs.kq" class="text-danger" />
-                                        </td>
-                                        <td>
-                                            @loadcsbt(kqandcs.id)
-                                        </td>
-                                        <td>
-                                            @loaddonvi(kqandcs.id)
-                                        </td>
-                                    </tr>
-                                }
-                            </table>
+                                </table>
+                            </div>
 
 
                         }
