@@ -1,300 +1,119 @@
 ﻿@page "/lala"
-@rendermode InteractiveAuto
-@using Shared.form
-@inject NavigationManager navigation;
-@attribute [Authorize]
-<EditForm Model="Input" method="post" OnValidSubmit="add" FormName="register" class="profile-form">
-    <DataAnnotationsValidator />
-    <hr />
+<div class="wrapper">
+    <!-- Sidebar  -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3>Bootstrap Sidebar</h3>
+        </div>
 
-    
-    <div class="patient-registration-container">
-        <div class="patient-info-container">
-            <div class="patient-info">
-                <h2>Thông tin bệnh nhân</h2>
-                @if (user != null)
-                {
-                    <div class="info">
-                        <p><strong>Họ tên:</strong> @user.Hoten</p>
-                        <p><strong>Ngày sinh:</strong> @user.Ngaysinh.ToString("dd/MM/yyyy")</p>
-                        <p><strong>Số điện thoại:</strong> @user.SDT</p>
-                        <p><strong>Địa chỉ:</strong> @user.Diachi, @user.CapXa, @user.CapHuyen, TT Huế</p>
-                        <p><strong>Email:</strong> @user.Email</p>
-                        <p><strong>Giới tính:</strong> @gioitinh(@user.Gioitinh)</p>
-                    </div>
-                }
-            </div>
-            <div class="patient-info">
-                @if (err.Any())
-                {
-                    <div class="alert alert-danger" role="alert">
-                        @foreach (var error in err)
-                        {
-                            <p>@error</p>
-                        }
-                    </div>
-                }
-                <h2>Các gói xét nghiệm</h2>
-                <div class="info" style="height: 360px; overflow-y: auto;">
-                    <table >
-                        @foreach (var ds in listgxn)
-                        {
-                            <tr>
-                                <td><input type="checkbox" @onchange="@(() => LoadBSInfo(ds.Id))" checked="@ds.IsSelected" /></td>
-                                <td>@ds.TenGoi</td>
-                                <td>@ds.Gia</td>
-                            </tr>
-                        }
-                    </table>
+        <ul class="list-unstyled components">
+            <p>Dummy Heading</p>
+            <li class="active">
+                <a  data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
+                <ul class="collapse list-unstyled" id="homeSubmenu">
+                    <li>
+                        <a href="#">Home 1</a>
+                    </li>
+                    <li>
+                        <a href="#">Home 2</a>
+                    </li>
+                    <li>
+                        <a href="#">Home 3</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">About</a>
+            </li>
+            <li>
+                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
+                <ul class="collapse list-unstyled" id="pageSubmenu">
+                    <li>
+                        <a href="#">Page 1</a>
+                    </li>
+                    <li>
+                        <a href="#">Page 2</a>
+                    </li>
+                    <li>
+                        <a href="#">Page 3</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">Portfolio</a>
+            </li>
+            <li>
+                <a href="#">Contact</a>
+            </li>
+        </ul>
+
+        <ul class="list-unstyled CTAs">
+            <li>
+                <a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a>
+            </li>
+            <li>
+                <a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Page Content  -->
+    <div id="content">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+
+                <button type="button" id="sidebarCollapse" class="btn btn-info">
+                    <i class="fas fa-align-left"></i>
+                    <span>Toggle Sidebar</span>
+                </button>
+                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-align-justify"></i>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Page</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Page</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Page</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Page</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </div>
-        <div class="test-registration-form">
-            <h2>Đơn đăng ký đặt lịch xét nghiệm</h2>
-            <div class="form-group">
-                <label for="Ngaydat">Ngày Lấy Máu</label>
-                <InputDate @bind-Value="Input.Ngaydat" class="form-control" id="Ngaydat" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
-                <ValidationMessage For="() => Input.Ngaydat" class="text-danger" />
-            </div>
-            <div class="form-group">
-                <label for="giolaymau">Giờ lấy máu</label>
-                <InputSelect id="giolaymau" @bind-Value="Input.giolaymau" class="form-control">
-                    <option value="">Chọn</option>
-                    @if (timeList.Any())
-                    {
-                        @foreach (var time in timeList)
-                        {
-                            <option value="@time">@time</option>
-                        }
-                    }
-                </InputSelect>
-                <ValidationMessage For="() => Input.giolaymau" class="text-danger" />
-            </div>
-            <div class="form-group">
-                <label for="ghiChu">Ghi chú </label>
-                <InputTextArea @bind-Value="Input.ghiChu" class="form-control" id="ghiChu" />
-                <ValidationMessage For="() => Input.ghiChu" class="text-danger" />
-            </div>
-            <div class="doctor-info">
-                <div class="table-users">
-                    <div class="header">Các gói đã chọn</div>
+        </nav>
 
-                    <table cellspacing="0" class="custom-table">
-                        @if (gxndachon.Any())
-                        {
-                            <tr>
-                                <th>Tên gói</th>
-                                <th>Giá</th>
-                                <th></th>
-                            </tr>
+        <h2>Collapsible Sidebar Using Bootstrap 4</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 
-                            @foreach (var bs in gxndachon)
-                            {
-                                <tr>
-                                    <td><strong>Tên Gói:</strong> @bs.TenGoi</td>
-                                    <td><div class="price">Giá: @bs.Gia VND</div></td>
-                                    <td>
-                                        <button type="button" @onclick="@( () => remove(bs.Id) )" class="remove-btn">X</button>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                        <tr >
-                            <td colspan="3">Tổng tiền: <span class="total">@tongtien VND</span></td>
-                        </tr>
-                    </table>
-                </div>
-                    
-            </div>
-            <a href="/"><button style="background-color:red" class="btn btn-primary"> Hủy </button></a>
-            <button type="submit" class="btn btn-primary">Đăng Ký</button>
-        </div>
+        <div class="line"></div>
+
+        <h2>Lorem Ipsum Dolor</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+        <div class="line"></div>
+
+        <h2>Lorem Ipsum Dolor</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+        <div class="line"></div>
+
+        <h3>Lorem Ipsum Dolor</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
     </div>
-</EditForm>
-
-@code {
-    [Inject]
-    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
-
-    private List<string> err = new List<string>();
-    private User user = new User();
-    public List<GoiXetNghiem> allGXN { get; set; } = new();
-    public List<BacSi> AllBS { get; set; } = new();
-    public string UserName { get; set; }
-    public List<GoiXetNghiem> gxndachon { get; set; } = new();
-    public List<GXNchon> listgxn { get; set; } = new();
-    int valor = 0, idbs;
-    public long tongtien = 0;
-    List<string> timeList = new();
-    [SupplyParameterFromForm]
-    public donXNform Input { get; set; } = new();
-
-
-    protected override async Task OnInitializedAsync()
-    {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        UserName = authState.User.Identity.Name;
-        user = await Usertservice.getuserbyemail(UserName);
-        if (user == null)
-        {
-            navigation.NavigateTo("/AddUser");
-        }
-        timeList = GenerateTimeList();
-        allGXN = await GXNservice.getallAsync();
-        getds();
-        Input.Ngaydat = DateTime.Now;
-    }
-    private void getds()
-    {
-        listgxn.Clear();
-        foreach (var a in allGXN)
-        {
-            listgxn.Add(new GXNchon
-                {
-                    Id = a.Id,
-                    IsSelected = false,
-                    Anh = a.Anh,
-                    TenGoi = a.TenGoi,
-                    Gia = a.Gia,
-                    Mota = a.Mota,
-                    ThoiGian = a.ThoiGian
-                });
-        }
-    }
-    private void remove(int id)
-    {
-        foreach (var gxn in gxndachon)
-        {
-            if (gxn.Id == id)
-            {
-                allGXN.Add(gxn);
-                tongtien -= gxn.Gia;
-            }
-        }
-        foreach (var gxn in listgxn)
-        {
-            if (gxn.Id == id)
-            {
-                gxn.IsSelected = false;
-            }
-        }
-        gxndachon.RemoveAll(item => item.Id == id);
-
-    }
-    private async Task add()
-    {
-        err.Clear(); // Xóa danh sách lỗi trước đó
-                     // Kiểm tra ngày lấy máu
-                     // Kiểm tra giờ lấy máu
-
-        if (string.IsNullOrWhiteSpace(Input.giolaymau))
-        {
-            err.Add("Giờ lấy máu không được để trống.");
-        }
-        if (gxndachon.Count == 0)
-        {
-            err.Add("Vui lòng chọn gói xét nghiệm.");
-        }
-        if (err.Any())
-        {
-            return;
-        }
-        DonXetNghiem donXetNghiem = new DonXetNghiem
-            {
-                UserId = user.Id,
-                BacSiId = null,
-                Ngaydat = Input.Ngaydat,
-                ghiChu = Input.ghiChu,
-                Trangthai = "Chờ Thanh Toán",
-                giolaymau = Input.giolaymau,
-                ngaytaodon = DateTime.Now,
-            };
-        DonXetNghiem don = await DXNservice.addAsync(donXetNghiem);
-        foreach (var gxn in gxndachon)
-        {
-            DXNandGXN a = new DXNandGXN
-                {
-                    DonXetNghiemId = don.Id,
-                    GoiXetNghiemId = gxn.Id
-                };
-            await DXNservice.addnew(a);
-        }
-        ThanhToan tt = new ThanhToan
-            {
-                UserId = user.Id,
-                DonXetNghiemId = don.Id,
-                Tongtien = tongtien,
-                trangthai = "Chưa Thanh Toán"
-            };
-        await TTservice.addAsync(tt);
-        Tinhtrang ttrang = new Tinhtrang
-            {
-                DonXetNghiemId = don.Id,
-                thoigian = DateTime.Now,
-                trangthai = "Đơn đã được tạo"
-            };
-        await TTrangservice.addAsync(ttrang);
-        navigation.NavigateTo("/giohangdxn");
-    }
-    public String loadGXN(int id)
-    {
-        foreach (var gxn in allGXN)
-        {
-            if (gxn.Id == id)
-            {
-                return gxn.TenGoi;
-            }
-        }
-        return null;
-    }
-    private String gioitinh(bool a)
-    {
-        if (a)
-        {
-            return "Nam";
-        }
-        else
-        {
-            return "Nữ";
-        }
-    }
-    private void LoadBSInfo(int id)
-    {
-        var selectedPackage = listgxn.FirstOrDefault(p => p.Id == id);
-        var g = allGXN.FirstOrDefault(p => p.Id == id);
-        if (selectedPackage != null)
-        {
-            selectedPackage.IsSelected = !selectedPackage.IsSelected;
-
-            if (selectedPackage.IsSelected == true)
-            {
-                gxndachon.Add(g);
-                tongtien += selectedPackage.Gia;
-            }
-            else
-            {
-                gxndachon.Remove(g);
-                tongtien -= selectedPackage.Gia;
-            }
-        }
-    }
-  
-    static List<string> GenerateTimeList()
-    {
-        List<string> timeList = new List<string>();
-
-        // Tạo danh sách thời gian từ 05:30 đến 21:00
-        TimeSpan time = TimeSpan.FromHours(5.5); // 05:30
-        TimeSpan endTime = TimeSpan.FromHours(20.8); // 21:00
-        while (time <= endTime)
-        {
-            string startTime = time.ToString(@"hh\:mm");
-            string endTimeString = time.Add(TimeSpan.FromMinutes(15)).ToString(@"hh\:mm");
-            string timeRange = $"{startTime} - {endTimeString}";
-            timeList.Add(timeRange);
-            time = time.Add(TimeSpan.FromMinutes(15)); // Tăng thêm 15 phút
-        }
-
-        return timeList;
-    }
-}
+</div>
+<script>
+    $(document).ready(function () {
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+    });
+</script>

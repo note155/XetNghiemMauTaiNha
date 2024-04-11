@@ -94,7 +94,11 @@
         {
             if (a.Trangthai == "Hoàn thành")
             {
-                dsdxn.Add(a);
+                var kttt = await TTservice.getbyidDXNAsync(a.Id);
+                if (kttt.trangthai == "Đã Thanh Toán")
+                {
+                    dsdxn.Add(a);
+                }                
             }
         }
         foreach (var a in dsdxn)

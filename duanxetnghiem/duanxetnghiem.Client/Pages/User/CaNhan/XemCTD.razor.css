@@ -184,7 +184,7 @@ button.btn-primary {
 }
 
 .doctor-image img {
-    max-width: 100px; /* Đặt chiều rộng tối đa cho ảnh của bác sĩ */
+    max-width: 200px; /* Đặt chiều rộng tối đa cho ảnh của bác sĩ */
     height: auto;
 }
 
@@ -273,6 +273,7 @@ button.btn-primary {
 .button-space {
     margin-right: 10px; /* Điều chỉnh khoảng cách theo nhu cầu */
 }
+
 @media only screen and (max-width: 768px) {
     .patient-registration-container {
         flex-direction: column; /* Hiển thị các phần tử dọc theo nhau */
@@ -338,11 +339,7 @@ body {
     text-transform: uppercase;
 }
 
-img {
-    border-radius: 50%;
-    height: 60px;
-    width: 60px;
-}
+
 
 .table-users {
     border: 1px solid #2f7e86;
@@ -385,8 +382,17 @@ table {
 .custom-table tr:nth-child(2n+1) {
     background-color: #cce0e1;
 }
-
+.info img {
+    width: 70%;
+}
 @media screen and (max-width: 700px) {
+    .info img {
+        border: 3px solid;
+        border-color: #cce0e1;
+        height: 100px;
+        margin: 0.5rem 0;
+        width: 100px;
+    }
     .custom-table table,
     .custom-table tr,
     .custom-table td {

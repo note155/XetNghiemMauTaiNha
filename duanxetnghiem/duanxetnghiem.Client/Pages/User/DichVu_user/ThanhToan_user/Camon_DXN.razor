@@ -88,7 +88,7 @@
     public ThanhToan tt { get; set; } = new ThanhToan();
 
     long datt, datt2;
-    DateTime ngaytt;
+    string ngaytt="";
     public List<hd> AllHD { get; set; } = new();
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -129,10 +129,10 @@
             }
         }
         await loadtongtien();
-        ngaytt = DateTime.Now;
+        ngaytt = DateTime.Now.ToString("dd/MM/yyyy");
         rawHtml = "<h3>CÔNG TY TNHH GIẢI PHÁP PHẦN MỀM ÂU LẠC</h1>" +
             "<h2 style=\"text-align: center;\">PHIẾU THU</h2>" +
-            "<p style=\"text-align: center;\">Ngày: " + ngaytt.ToString("dd/mm/yyyy") + " -- Số hóa đơn:" + tt.Id + "</p>" +
+            "<p style=\"text-align: center;\">Ngày: " + ngaytt + " -- Số hóa đơn:" + tt.Id + "</p>" +
             "<p> <span style=\"float: left;\">Họ Tên:" + user.Hoten +
             "</span><span style=\"float: right;\">Giới Tính: " + gioitinh(user.Gioitinh) + "</span></p>" +
             "<br><p >Địa Chỉ: " + user.Diachi + "</p>";

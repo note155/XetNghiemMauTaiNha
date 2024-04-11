@@ -200,7 +200,8 @@
             {
                 DonXetNghiemId = Input.Id,
                 thoigian = DateTime.Now,
-                trangthai = "Lấy mẫu thất bại - Lý do:"+Chuathanhcong.Lydo
+                trangthai = "Lấy mẫu thất bại - Lý do:"+Chuathanhcong.Lydo,
+                
             };
         await TTrangservice.addAsync(ttrang);
         navigation.NavigateTo("/DXNBS");
@@ -231,6 +232,7 @@
     {
         idbs = id;
         valor = id;
+        Chuathanhcong.Lydo = valor;
     }
 }
 <script>

@@ -94,6 +94,7 @@
     int stt = 0;
     long datt,datt2;
     DateTime ngaytt;
+    string ttngay = "";
     protected override async Task OnInitializedAsync()
     {
         Input = await DXNservice.getbyid(id);
@@ -109,6 +110,7 @@
             ngaytt = tt.NgayTT2 ?? DateTime.Now;
         }
         loadgxndachon();
+        ttngay = ngaytt.ToString("dd/MM/yyyy");
         rawHtml = "<h3>CÔNG TY TNHH GIẢI PHÁP PHẦN MỀM ÂU LẠC</h1>" +
             "<h2 style=\"text-align: center;\">PHIẾU THU</h2>" +
             "<p style=\"text-align: center;\">Ngày: " + ngaytt + " -- Số hóa đơn:" + tt.Id + "</p>" +

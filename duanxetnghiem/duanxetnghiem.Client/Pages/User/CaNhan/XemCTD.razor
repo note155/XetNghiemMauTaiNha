@@ -169,25 +169,27 @@
                                             <th>Đơn Vị</th>
                                         </tr>
                                     </thead>
-                                    @foreach (var kqandcs in Inputkq.kQandCs)
+                                    @foreach (var tl in gxndachon)
                                     {
-                                        if (kqandcs.goi != goi1)
+                                        <tr><td colspan="4"><strong>Gói Xét Nghiệm:</strong>@tl.TenGoi</td></tr>
+                                        @foreach (var kqandcs in Inputkq.kQandCs)
                                         {
-                                            goi1 = kqandcs.goi;
-                                            <tr><td colspan="4"><strong>Gói Xét Nghiệm:</strong>@loadtengoi(goi1)</td></tr>
+                                            if (kqandcs.goi == tl.Id)
+                                            {
+                                                <tr>
+                                                    <td>@loadtenchiso(kqandcs.id)</td>
+                                                    <td>
+                                                        @kqandcs.kq
+                                                    </td>
+                                                    <td>
+                                                        @loadcsbt(kqandcs.id)
+                                                    </td>
+                                                    <td>
+                                                        @loaddonvi(kqandcs.id)
+                                                    </td>
+                                                </tr>
+                                            }
                                         }
-                                        <tr>
-                                            <td>@loadtenchiso(kqandcs.id)</td>
-                                            <td>
-                                                @kqandcs.kq
-                                            </td>
-                                            <td>
-                                                @loadcsbt(kqandcs.id)
-                                            </td>
-                                            <td>
-                                                @loaddonvi(kqandcs.id)
-                                            </td>
-                                        </tr>
                                     }
                                 </table>
                             </div>
@@ -199,11 +201,11 @@
                     <div class="row">
                         @if (rooms == null)
                         {
-                            <button class="btn btn-success m-2" style="width:45%" @onclick="tuvan" data-toggle="modal" data-target="#myModal">Liên hệ tư vấn </button>
+                            <button class=" btn btn-success m-2" style="width:45%" @onclick="tuvan" data-toggle="modal" data-target="#myModal"> Tư vấn </button>
                         }
                         else
                         {
-                            <button class="btn btn-success m-2" style="width:45%" @onclick="tuvan" data-toggle="modal">Liên hệ tư vấn </button>
+                            <button class=" btn btn-success m-2" style="width:45%" @onclick="tuvan" data-toggle="modal"> Tư vấn </button>
                         }
                         <button style="width:45%" class="btn btn-success m-2" @onclick="@(_ => PrintingService.Print(rawHtml, PrintType.RawHtml))">
                             Tải Kết Quả
@@ -620,7 +622,7 @@
                 @if (bs != null)
                 {
                     <div class="info">
-                        <img style="width:70%" src="@bs.Anh">
+                        <img  src="@bs.Anh">
                         <p style="color:black" class="text-left"><strong>Họ tên:</strong> @bs.Hoten</p>
                         <p style="color:black" class="text-left"><strong>Chức vụ:</strong> @bs.Chucvu</p>
                         <p style="color:black" class="text-left"><strong>Số điện thoại:</strong> @bs.SDT</p>
